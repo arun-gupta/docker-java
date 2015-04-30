@@ -2,7 +2,7 @@
 
 ## Environment
 
-## BYOL
+Brying Your Own Laptop (BYOL)
 
 ### Hardware
 
@@ -14,7 +14,18 @@
 
 ### Software
 
-. Download `boot2docker.iso`
+. Docker client
++
+[source, text]
+----
+curl https://get.docker.com/builds/Darwin/x86_64/docker-latest > /usr/local/bin/docker
+chmod +x /usr/local/bin/docker
+----
++
+. ssh-keygen in PATH
+. https://github.com/boot2docker/boot2docker/releases[boot2docker.iso]
+. https://www.virtualbox.org/wiki/Downloads[VirtualBox]
+. https://docs.docker.com/machine/#installation[docker-machine] script
 
 ## Setup Docker
 
