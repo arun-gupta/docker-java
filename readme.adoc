@@ -2,17 +2,24 @@
 
 ## Environment
 
+### Attendees
+
 Brying Your Own Laptop (BYOL)
 
-### Hardware
+#### Hardware
 
 . Operating System
 .. Windows (minimum version?)
-.. Mac (what version?)
+.. Mac (minimum version?)
 .. Linux (what flavor?)
 . Memory
 
-### Software
+#### Software
+
+### Instructor
+
+. Setup private registry
+. Add instructions on how to access this registry
 
 . Docker client
 +
@@ -26,12 +33,15 @@ chmod +x /usr/local/bin/docker
 . https://github.com/boot2docker/boot2docker/releases[boot2docker.iso]
 . https://www.virtualbox.org/wiki/Downloads[VirtualBox]
 . https://docs.docker.com/machine/#installation[docker-machine] script
+. http://www.jboss.org/download-manager/file/jboss-devstudio-8.1.0.GA-jar_universal.jar[JBoss Developer Studio]
 
 ## Setup Docker
 
 Docker Machine: http://blog.arungupta.me/docker-machine-seutp-docker-host-techtip78/
 
-## Deploy Java EE 7 HOL
+Use the pre-downloaded `boot2docker.iso`
+
+## Run Java EE 7 Application
 
 http://blog.arungupta.me/javaee7-lab-wildfly-docker/
 
@@ -39,7 +49,7 @@ http://blog.arungupta.me/javaee7-lab-wildfly-docker/
 
 http://blog.arungupta.me/deploy-wildfly-docker-eclipse/
 
-## Docker Swarm
+## Docker Swarm Cluster
 
 . Docker Swarm: http://blog.arungupta.me/clustering-docker-swarm-techtip85/
 
