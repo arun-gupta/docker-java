@@ -1,0 +1,43 @@
+# Docker for Java Developers
+
+## Environment
+
+## BYOL
+
+### Hardware
+
+. Operating System
+.. Windows (minimum version?)
+.. Mac (what version?)
+.. Linux (what flavor?)
+. Memory
+
+### Software
+
+. Download `boot2docker.iso`
+
+## Setup Docker
+
+Docker Machine: http://blog.arungupta.me/docker-machine-seutp-docker-host-techtip78/
+
+## Deploy Java EE 7 HOL
+
+http://blog.arungupta.me/javaee7-lab-wildfly-docker/
+
+## Deploy an application from JBoss Developer Studio
+
+http://blog.arungupta.me/deploy-wildfly-docker-eclipse/
+
+## Docker Swarm
+
+. Docker Swarm: http://blog.arungupta.me/clustering-docker-swarm-techtip85/
+
+## OpenShift v3
+
+http://blog.arungupta.me/openshift-v3-getting-started-javaee7-wildfly-mysql/
+
+## References
+
+. JBoss and Docker: http://www.jboss.org/docker/
+
+
