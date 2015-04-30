@@ -49,6 +49,14 @@ http://blog.arungupta.me/javaee7-lab-wildfly-docker/
 
 http://blog.arungupta.me/deploy-wildfly-docker-eclipse/
 
+## Docker Compose
+
+http://blog.arungupta.me/docker-compose-orchestrate-containers-techtip77/
+
+## Test Java EE Applications
+
+http://blog.arungupta.me/run-javaee-tests-wildfly-docker-arquillian-cube/
+
 ## Docker Swarm Cluster
 
 . Docker Swarm: http://blog.arungupta.me/clustering-docker-swarm-techtip85/
