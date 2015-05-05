@@ -1,4 +1,11 @@
-# Docker for Java Developers
+# Docker and Kubernetes for Java Developers
+
+## Preface
+Containers are enabling developers to package their applications (and underlying dependencies) in new ways that are portable and work consistently everywhere? On your machine, in production, in your data center, and in the cloud. And Docker has become the de facto standard for those portable containers in the cloud.
+
+Docker is the developer-friendly Linux container technology that enables creation of your stack: OS, JVM, app server, app, and all your custom configuration. So with all it offers, how comfortable are you and your team taking Docker from development to production? Are you hearing developers say, “But it works on my machine!” when code breaks in production?
+
+This lab offers developers an intro-level, hands-on session with Docker, from installation, to exploring Docker Hub, to crafting their own images, to adding Java apps and running custom containers. It will also explain how to use Kubernetes to orchesorchestrate these containers together. This is a BYOL (bring your own laptop) session, so bring your Windows, OSX, or Linux laptop and be ready to dig into a tool that promises to be at the forefront of our industry for some time to come.
 
 ## Environment
 
