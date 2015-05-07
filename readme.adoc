@@ -13,6 +13,8 @@ This lab offers developers an intro-level, hands-on session with Docker, from in
 
 Brying Your Own Laptop (BYOL)
 
+link:attendees/readme.html[Attendee Setup]
+
 #### Hardware
 
 . Operating System

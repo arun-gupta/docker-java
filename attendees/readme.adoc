@@ -1,0 +1,18 @@
+# Docker for Java Developers
+
+This folder contains instructions to setup an attendee environment.
+
+## Install VirtualBox(tm)
+
+Downloads are available at <https://www.virtualbox.org/wiki/Downloads>
+
+## Install docker-machine
+
+Follow the steps described at <https://docs.docker.com/machine/#installation>
+
+[source, text]
+----
+docker-machine create --driver virtualbox --virtualbox-boot2docker-url http://<INSTRUCTOR_IP>:1500/boot2docker.iso lab
+docker-machine ssh lab "echo $'EXTRA_ARGS=\"--insecure-registry <INSTRUCTOR_IP>:5000\"' | sudo tee -a /var/lib/boot2docker/profile && sudo /etc/init.d/docker restart"
+eval "$(docker-machine env lab)" 
+----

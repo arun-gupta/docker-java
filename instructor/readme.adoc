@@ -1,0 +1,78 @@
+# Docker for Java Developers
+
+This folder contains instructions to setup an Instructor environment.
+
+Instructor will need:
+
+
+. A docker registry image
+. A Boot2docker served by a local HTTP Server
+
+## Install Boot2docker
+
+## Install Docker-machine
+
+## Create Machine
+
+[source, text]
+----
+docker-machine create --driver virtualbox mymachine
+----
+
+## Add extra args to docker host to allow insecure registry for external access via http:
+
+[source, text]
+----
+docker-machine ssh
+
+$ # add EXTRA_ARGS="--insecure-registry <YOUR INSECURE HOST>" 
+$ # to /var/lib/boot2docker/profile
+$ sudo /etc/init.d/docker restart
+----
+
+## Run local-registry
+
+Instructors should run a local registry to make all images locally available to attendees
+
+[source, text]
+----
+docker run -p 5000:5000 registry:2.0
+----
+
+
+
+## Build Boot2docker-http image
+
+[source, text]
+----
+docker build -t boot2docker-httpd:latest boot2docker-http/.
+----
+
+Check Image ID 
+
+## Tag Image for Local registry
+
+docker tag 02405e27bd54 192.168.99.100:5000/boot2docker-http:latest
+
+## Push Boot2docker-http image to local registry
+
+[source, text]
+----
+docker push 192.168.99.100:5000/boot2docker-httpd:latest
+----
+
+Check if image upload was a success
+[source, text]
+----
+http://192.168.99.100:5000/v2/boot2docker-http/tags/list
+----
+
+
+## Run boot2docker http server
+
+
+[source, text]
+----
+docker run -d --name="boot2docker-httpd" -p 1500:80 boot2docker-httpd
+docker run -p 1500:80 192.168.99.100:5000/boot2docker-http
+----
