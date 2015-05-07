@@ -2,11 +2,11 @@
 
 This folder contains instructions to setup an Instructor environment.
 
-Instructor will need:
+Instructor needs:
 
-
-. A docker registry image
+. A docker registry server
 . A Boot2docker served by a local HTTP Server
+. A Nexus Proxy
 
 ## Install Boot2docker
 
@@ -30,6 +30,14 @@ $ # to /var/lib/boot2docker/profile
 $ sudo /etc/init.d/docker restart
 ----
 
+Check machine IP
+[source, text]
+----
+docker-machine ip
+----
+
+Further on refered to as <HOST_IP>
+
 ## Run local-registry
 
 Instructors should run a local registry to make all images locally available to attendees
@@ -40,7 +48,6 @@ docker run -p 5000:5000 registry:2.0
 ----
 
 
-
 ## Build Boot2docker-http image
 
 [source, text]
@@ -48,31 +55,34 @@ docker run -p 5000:5000 registry:2.0
 docker build -t boot2docker-httpd:latest boot2docker-http/.
 ----
 
-Check Image ID 
+Check Image ID  and use subsequently, refered to as <IMAGE_ID>
 
 ## Tag Image for Local registry
 
-docker tag 02405e27bd54 192.168.99.100:5000/boot2docker-http:latest
+docker tag <IMAGE_ID> <HOST_IP>:5000/boot2docker-http:latest
 
 ## Push Boot2docker-http image to local registry
 
+The boot2docker-http server is pushed to local registry.
+
 [source, text]
 ----
-docker push 192.168.99.100:5000/boot2docker-httpd:latest
+docker push <HOST_IP>:5000/boot2docker-httpd:latest
 ----
 
 Check if image upload was a success
 [source, text]
 ----
-http://192.168.99.100:5000/v2/boot2docker-http/tags/list
+http://<HOST_IP>:5000/v2/boot2docker-http/tags/list
 ----
 
 
 ## Run boot2docker http server
 
+Run the boot2docker Apache server for attendees to download iso image.
 
 [source, text]
 ----
 docker run -d --name="boot2docker-httpd" -p 1500:80 boot2docker-httpd
-docker run -p 1500:80 192.168.99.100:5000/boot2docker-http
+docker run -p 1500:80 <HOST_IP>:5000/boot2docker-http
 ----
