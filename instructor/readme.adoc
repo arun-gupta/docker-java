@@ -93,12 +93,14 @@ Default credentials are: admin / admin123
 
 [source, text]
 ----
-mkdir /some/dir/nexus-data && chown -R 200 /some/dir/nexus-data
-
-docker run -d -p 8081:8081 --name nexus -v /some/dir/nexus-data:/sonatype-work sonatype/nexus:oss
-
-docker run -d -p 8081:8081 --name nexus sonatype/nexus:oss -v /some/dir/nexus-data:/sonatype-work sonatype/nexus
+docker run -d -p 8081:8081 --name nexus sonatype/nexus:oss
 ----
+
+TODO: 
+Storage directory:
+mkdir /some/dir/nexus-data && chown -R 200 /some/dir/nexus-data
+docker run -d -p 8081:8081 --name nexus sonatype/nexus:oss -v /some/dir/nexus-data:/sonatype-work sonatype/nexus
+
 
 Test if nexus is running:
 

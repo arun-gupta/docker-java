@@ -16,3 +16,62 @@ docker-machine create --driver virtualbox --virtualbox-boot2docker-url http://<I
 docker-machine ssh lab "echo $'EXTRA_ARGS=\"--insecure-registry <INSTRUCTOR_IP>:5000\"' | sudo tee -a /var/lib/boot2docker/profile && sudo /etc/init.d/docker restart"
 eval "$(docker-machine env lab)" 
 ----
+
+. Docker client
++
+[source, text]
+----
+curl https://get.docker.com/builds/Darwin/x86_64/docker-latest > /usr/local/bin/docker
+chmod +x /usr/local/bin/docker
+----
++
+. ssh-keygen in PATH
+. https://github.com/boot2docker/boot2docker/releases[boot2docker.iso]
+. https://www.virtualbox.org/wiki/Downloads[VirtualBox]
+. https://docs.docker.com/machine/#installation[docker-machine] script
+. http://www.jboss.org/download-manager/file/jboss-devstudio-8.1.0.GA-jar_universal.jar[JBoss Developer Studio]
+
+## Setup Docker
+
+Docker Machine: http://blog.arungupta.me/docker-machine-seutp-docker-host-techtip78/
+
+Use the pre-downloaded `boot2docker.iso`
+
+## Deploy Ticket Monster
+
+https://github.com/rafabene/devops-demo
+
+## Deploy an application from JBoss Developer Studio
+
+http://blog.arungupta.me/deploy-wildfly-docker-eclipse/
+
+## Cluster using Swarm
+
+We don't setup Kubernetes on Windows yet (might be an option to use jube someday)
+
+. https://github.com/rafabene/devops-demo
+. Docker Swarm: http://blog.arungupta.me/clustering-docker-swarm-techtip85/
+
+## Test Java EE Applications
+
+http://blog.arungupta.me/run-javaee-tests-wildfly-docker-arquillian-cube/
+
+
+## OpenShift v3 (Optional Part)
+
+http://blog.arungupta.me/openshift-v3-getting-started-javaee7-wildfly-mysql/
+
+
+## Docker Compose (Optional, No Windows Version without Python)
+
+http://blog.arungupta.me/docker-compose-orchestrate-containers-techtip77/
+
+
+
+
+
+## References
+
+. JBoss and Docker: http://www.jboss.org/docker/
+
+

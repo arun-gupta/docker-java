@@ -5,7 +5,7 @@ Containers are enabling developers to package their applications (and underlying
 
 Docker is the developer-friendly Linux container technology that enables creation of your stack: OS, JVM, app server, app, and all your custom configuration. So with all it offers, how comfortable are you and your team taking Docker from development to production? Are you hearing developers say, “But it works on my machine!” when code breaks in production?
 
-This lab offers developers an intro-level, hands-on session with Docker, from installation, to exploring Docker Hub, to crafting their own images, to adding Java apps and running custom containers. It will also explain how to use Kubernetes to orchesorchestrate these containers together. This is a BYOL (bring your own laptop) session, so bring your Windows, OSX, or Linux laptop and be ready to dig into a tool that promises to be at the forefront of our industry for some time to come.
+This lab offers developers an intro-level, hands-on session with Docker, from installation, to exploring Docker Hub, to crafting their own images, to adding Java apps and running custom containers. It will also explain how to use Swarm to orchesorchestrate these containers together. This is a BYOL (bring your own laptop) session, so bring your Windows, OSX, or Linux laptop and be ready to dig into a tool that promises to be at the forefront of our industry for some time to come.
 
 ## Environment
 
@@ -18,9 +18,9 @@ link:https://github.com/arun-gupta/docker-java/tree/master/attendees[Attendee Se
 #### Hardware
 
 . Operating System
-.. Windows (minimum version?)
-.. Mac (minimum version?)
-.. Linux (what flavor?)
+.. Windows 7
+.. Mac OS X
+.. Linux / Fedora 21
 . Memory
 
 #### Software
@@ -28,56 +28,4 @@ link:https://github.com/arun-gupta/docker-java/tree/master/attendees[Attendee Se
 ### Instructor
 
 link:https://github.com/arun-gupta/docker-java/tree/master/instructor[Instructor Setup]
-
-. Setup private registry
-. Add instructions on how to access this registry
-
-. Docker client
-+
-[source, text]
-----
-curl https://get.docker.com/builds/Darwin/x86_64/docker-latest > /usr/local/bin/docker
-chmod +x /usr/local/bin/docker
-----
-+
-. ssh-keygen in PATH
-. https://github.com/boot2docker/boot2docker/releases[boot2docker.iso]
-. https://www.virtualbox.org/wiki/Downloads[VirtualBox]
-. https://docs.docker.com/machine/#installation[docker-machine] script
-. http://www.jboss.org/download-manager/file/jboss-devstudio-8.1.0.GA-jar_universal.jar[JBoss Developer Studio]
-
-## Setup Docker
-
-Docker Machine: http://blog.arungupta.me/docker-machine-seutp-docker-host-techtip78/
-
-Use the pre-downloaded `boot2docker.iso`
-
-## Run Java EE 7 Application
-
-http://blog.arungupta.me/javaee7-lab-wildfly-docker/
-
-## Deploy an application from JBoss Developer Studio
-
-http://blog.arungupta.me/deploy-wildfly-docker-eclipse/
-
-## Docker Compose
-
-http://blog.arungupta.me/docker-compose-orchestrate-containers-techtip77/
-
-## Test Java EE Applications
-
-http://blog.arungupta.me/run-javaee-tests-wildfly-docker-arquillian-cube/
-
-## Docker Swarm Cluster
-
-. Docker Swarm: http://blog.arungupta.me/clustering-docker-swarm-techtip85/
-
-## OpenShift v3
-
-http://blog.arungupta.me/openshift-v3-getting-started-javaee7-wildfly-mysql/
-
-## References
-
-. JBoss and Docker: http://www.jboss.org/docker/
-
 
