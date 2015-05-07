@@ -13,7 +13,7 @@ This lab offers developers an intro-level, hands-on session with Docker, from in
 
 Brying Your Own Laptop (BYOL)
 
-link:attendees/readme.html[Attendee Setup]
+link:https://github.com/arun-gupta/docker-java/tree/master/attendees[Attendee Setup]
 
 #### Hardware
 
@@ -26,6 +26,8 @@ link:attendees/readme.html[Attendee Setup]
 #### Software
 
 ### Instructor
+
+link:https://github.com/arun-gupta/docker-java/tree/master/instructor[Instructor Setup]
 
 . Setup private registry
 . Add instructions on how to access this registry
