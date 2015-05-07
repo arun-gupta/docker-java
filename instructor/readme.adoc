@@ -86,3 +86,24 @@ Run the boot2docker Apache server for attendees to download iso image.
 docker run -d --name="boot2docker-httpd" -p 1500:80 boot2docker-httpd
 docker run -p 1500:80 <HOST_IP>:5000/boot2docker-http
 ----
+
+## Run Nexus On the instructor machine
+
+Default credentials are: admin / admin123
+
+[source, text]
+----
+mkdir /some/dir/nexus-data && chown -R 200 /some/dir/nexus-data
+
+docker run -d -p 8081:8081 --name nexus -v /some/dir/nexus-data:/sonatype-work sonatype/nexus:oss
+
+docker run -d -p 8081:8081 --name nexus sonatype/nexus:oss -v /some/dir/nexus-data:/sonatype-work sonatype/nexus
+----
+
+Test if nexus is running:
+
+[source, text]
+----
+ curl http://localhost:8081/service/local/status
+----
+
