@@ -56,6 +56,13 @@ We don't setup Kubernetes on Windows yet (might be an option to use jube someday
 
 http://blog.arungupta.me/run-javaee-tests-wildfly-docker-arquillian-cube/
 
+## Container Linking by adding a separate DB
+http://blog.arungupta.me/docker-mysql-persistence/
+http://blog.arungupta.me/docker-container-linking-across-multiple-hosts-techtip69/
+
+## Jenkins and staging through environments
+
+??
 
 ## OpenShift v3 (Optional Part)
 
