@@ -4,7 +4,15 @@ This folder contains instructions to setup an attendee environment.
 
 ## Install VirtualBox(tm)
 
-Downloads are available at <https://www.virtualbox.org/wiki/Downloads>
+Downloads are available at <http://<INSTRUCTOR_IP:1500/downloads/>
+
+_NOTE:_ Instalation should complete without any error!
+
+_NOTE: Linux Users _
+- Have your kernel updated
+- Users should have the GNU compiler, build and header files for your current Linux kernel
+- Create a /usr/src/linux link to the current kernel source
+
 
 ## Install docker-machine
 
@@ -12,7 +20,9 @@ Follow the steps described at <https://docs.docker.com/machine/#installation>
 
 [source, text]
 ----
-docker-machine create --driver virtualbox --virtualbox-boot2docker-url http://<INSTRUCTOR_IP>:1500/boot2docker.iso lab
+docker-machine create --driver virtualbox --virtualbox-boot2docker-url http://<INSTRUCTOR_IP>:8082/downloads/boot2docker.iso lab
+#TODO This boot2docker instruction is being overwritten. Docker-machine will profine flags for this configuration: https://github.com/docker/machine/pull/1040
+TODO To avoid it to be overwritten the parameter should be included manually. This issue should be fixed on next docker-machine release. 
 docker-machine ssh lab "echo $'EXTRA_ARGS=\"--insecure-registry <INSTRUCTOR_IP>:5000\"' | sudo tee -a /var/lib/boot2docker/profile && sudo /etc/init.d/docker restart"
 eval "$(docker-machine env lab)" 
 ----

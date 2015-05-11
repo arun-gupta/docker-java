@@ -16,9 +16,22 @@ Instructor needs:
 
 [source, text]
 ----
-docker-machine create --driver virtualbox mymachine
+docker-machine create --driver virtualbox --virtualbox-boot2docker-url https://github.com/boot2docker/boot2docker/releases/download/v1.5.0/boot2docker.iso mymachine
 ----
 
+## Expose the Virtual Box ports to other computer in the LAN
+
+VirtualBox will run docker container inside the newly create host called 'mymachine'. We need now to expose the ports used in this lab to the world.
+
+[source, text]
+----
+#Open Registry Server port
+VBoxManage controlvm "mymachine" natpf1 "tcp-port5000,tcp,,5000,,5000";
+#Open Nexus Server port
+VBoxManage controlvm "mymachine" natpf1 "tcp-port8081,tcp,,8081,,8081";
+#Open HTTP Server port
+VBoxManage controlvm "mymachine" natpf1 "tcp-port8082,tcp,,8082,,8082";
+----
 ## Add extra args to docker host to allow insecure registry for external access via http:
 
 [source, text]
@@ -44,7 +57,7 @@ Instructors should run a local registry to make all images locally available to 
 
 [source, text]
 ----
-docker run -p 5000:5000 registry:2.0
+docker run -dp --name="docker-registry" 5000:5000 registry:2.0
 ----
 
 
@@ -57,7 +70,7 @@ docker build -t lab-httpd-server:latest lab-httpd-server/.
 
 Check Image ID  and use subsequently, refered to as <IMAGE_ID>
 
-## Tag Image for Local registry
+## Tag Image for Local registry TODO - Remove this section
 
 docker tag <IMAGE_ID> <HOST_IP>:5000/lab-httpd-server:latest
 
@@ -77,14 +90,14 @@ http://<HOST_IP>:5000/v2/lab-httpd-server/tags/list
 ----
 
 
-## Run boot2docker http server
+## Run Http server with downloadables
 
-Run the boot2docker Apache server for attendees to download iso image.
+Run the Apache HTTPD server for attendees to download boot2docker iso image and Virtuabox binaries.
 
 [source, text]
 ----
-docker run -d --name="lab-httpd-server" -p 1500:80 lab-httpd-server
-docker run -p 1500:80 <HOST_IP>:5000/lab-httpd-server
+docker run -d --name="lab-httpd-server" -p 8082:80 lab-httpd-server
+docker run -p 8082:80 <HOST_IP>:5000/lab-httpd-server - TODO remove this section
 ----
 
 ## Run Nexus On the instructor machine

@@ -2,9 +2,10 @@ FROM fedora:21
 
 MAINTAINER Rafael Benevides <benevides@redhat.com>
 
-#Change Workdir to apache dir
-WORKDIR /var/www/html/
+RUN mkdir -p /var/www/html/downloads
 
+#Change Workdir to apache dir
+WORKDIR /var/www/html/downloads
 
 #Install wget and Apache HTTPD
 RUN yum -y update && yum clean all
@@ -13,7 +14,7 @@ RUN echo "Apache" >> /var/www/html/index.html
 RUN yum install -y wget
 
 #Get Boot2docker 1.5
-RUN wget https://github.com/boot2docker/boot2docker/releases/download/v1.5.0/boot2docker.iso
+RUN wget https://github.com/boot2docker/boot2docker/releases/download/v1.6.1/boot2docker.iso
 
 
 #Get VirtualBox for MAC
