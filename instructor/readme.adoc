@@ -15,6 +15,11 @@ Instructor needs:
 . Have https://www.virtualbox.org/[Oracle Virtualbox] installed and the install folder added to your PATH environment variable.
 . Have the https://github.com/arun-gupta/docker-java/ git repository checked out.
 . Have https://msysgit.github.io/ installed on windows
+. Have http://asciidoctor.org/ installed
+
+#Install asciidoctor
+
+gem install asciidoctor
 
 ## Install Docker Client
 
@@ -99,6 +104,15 @@ Instructors should run a local registry to make all images locally available to 
 docker run -d --name="docker-registry" -p 5000:5000 -v /registry:/tmp/registry-dev registry:2.0
 ----
 
+##Convert the Attendees instructions to HTML.
+
+This instructions will be placed inside the Lab HTTPD Server during the image build
+
+[source, text]
+----
+asciidoctor ../attendees/readme.adoc -o lab-httpd-server/index.html
+----
+
 ## Build the Lab HTTPD Server image
 
 Make sure to change to the cloned repository/instructor first.
@@ -119,7 +133,7 @@ docker run -d --name="lab-httpd-server" -p 8082:80 lab-httpd-server
 
 If you run into errors on Windows (eg, no such file or exec format error, check the line ending in the run-apache.sh).
 
-Check if the server is running: http://localhost:8082/downloads/
+Check if the server is running: http://localhost:8082/
 
 NOTE: Make sure to check your firewall settings. Attendees should be able to access this machine with your local IP.
 
