@@ -24,6 +24,9 @@ CAUTION: Linux Users
 . Users should have the GNU compiler, build and header files for your current Linux kernel
 . Create a /usr/src/linux link to the current kernel source
 
+CAUTION: Windows Users
+. Have https://msysgit.github.io/ installed
+
 
 ## Install docker-machine
 
@@ -52,6 +55,13 @@ On Windows put into and rename to: c:\docker\docker.exe
 ----
 
 On Windows put into and rename to: c:\docker\docker.exe
+
+## Understanding Docker
+
+TODO: Extract some basic information from https://docs.docker.com/introduction/understanding-docker/
+
+image:https://docs.docker.com/article-img/architecture.svg
+
 
 ## Create the lab host
 
