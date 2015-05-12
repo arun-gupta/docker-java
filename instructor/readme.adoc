@@ -96,9 +96,8 @@ Instructors should run a local registry to make all images locally available to 
 
 [source, text]
 ----
-docker run -d --name="docker-registry" -p 5000:5000 registry:2.0
+docker run -d --name="docker-registry" -p 5000:5000 -v /registry:/tmp/registry-dev registry:2.0
 ----
-
 
 ## Build the Lab HTTPD Server image
 
