@@ -9,8 +9,10 @@ Instructor needs:
 . A Nexus Proxy
 
 ## Prerequisites
-Have https://www.virtualbox.org/[Oracle Virtualbox] installed and the install folder added to your PATH environment variable.
 
+. Have https://www.virtualbox.org/[Oracle Virtualbox] installed and the install folder added to your PATH environment variable.
+. Have the https://github.com/arun-gupta/docker-java/ git repository checked out.
+. Have https://msysgit.github.io/ installed on windows
 
 ## Install Docker Client
 
@@ -96,6 +98,8 @@ docker run -d --name="docker-registry" -p 5000:5000 registry:2.0
 
 
 ## Build the Lab HTTPD Server image
+
+Make sure to change to the cloned repository/instructor first.
 
 [source, text]
 ----
