@@ -1,5 +1,7 @@
 # Docker and Kubernetes for Java Developers
 
+toc::[]
+
 ## Preface
 Containers are enabling developers to package their applications (and underlying dependencies) in new ways that are portable and work consistently everywhere? On your machine, in production, in your data center, and in the cloud. And Docker has become the de facto standard for those portable containers in the cloud.
 
@@ -7,7 +9,7 @@ Docker is the developer-friendly Linux container technology that enables creatio
 
 This lab offers developers an intro-level, hands-on session with Docker, from installation, to exploring Docker Hub, to crafting their own images, to adding Java apps and running custom containers. It will also explain how to use Swarm to orchesorchestrate these containers together. This is a BYOL (bring your own laptop) session, so bring your Windows, OSX, or Linux laptop and be ready to dig into a tool that promises to be at the forefront of our industry for some time to come.
 
-## Environment
+## Setup Environments
 
 ### Attendees
 
@@ -28,4 +30,60 @@ link:https://github.com/arun-gupta/docker-java/tree/master/attendees[Attendee Se
 ### Instructor
 
 link:https://github.com/arun-gupta/docker-java/tree/master/instructor[Instructor Setup]
+
+
+## The Lab
+
+### Docker Basics
+
+
+TODO: Extract some basic information from https://docs.docker.com/introduction/understanding-docker/
+
+image::https://docs.docker.com/article-img/architecture.svg[Docker, 200,300]
+
+
+
+## Deploy Ticket Monster
+
+https://github.com/rafabene/devops-demo
+
+## Deploy an application from JBoss Developer Studio
+
+http://blog.arungupta.me/deploy-wildfly-docker-eclipse/
+
+## Cluster using Swarm
+
+We don't setup Kubernetes on Windows yet (might be an option to use jube someday)
+
+. https://github.com/rafabene/devops-demo
+. Docker Swarm: http://blog.arungupta.me/clustering-docker-swarm-techtip85/
+
+## Test Java EE Applications
+
+http://blog.arungupta.me/run-javaee-tests-wildfly-docker-arquillian-cube/
+
+## Container Linking by adding a separate DB
+http://blog.arungupta.me/docker-mysql-persistence/
+http://blog.arungupta.me/docker-container-linking-across-multiple-hosts-techtip69/
+
+## Jenkins and staging through environments
+
+??
+
+## OpenShift v3 (Optional Part)
+
+http://blog.arungupta.me/openshift-v3-getting-started-javaee7-wildfly-mysql/
+
+
+## Docker Compose (Optional, No Windows Version without Python)
+
+http://blog.arungupta.me/docker-compose-orchestrate-containers-techtip77/
+
+
+
+
+
+## References
+
+. JBoss and Docker: http://www.jboss.org/docker/
 
