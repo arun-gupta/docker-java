@@ -9,7 +9,7 @@ Instructor needs:
 . A Nexus Proxy
 
 ## Prerequisites
-Have Oracle Virtualbox [https://www.virtualbox.org/] installed and the install folder added to your PATH environment variable.
+Have https://www.virtualbox.org/[Oracle Virtualbox] installed and the install folder added to your PATH environment variable.
 
 
 ## Install Docker Client
