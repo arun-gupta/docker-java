@@ -8,9 +8,35 @@ Instructor needs:
 . A Boot2docker served by a local HTTP Server
 . A Nexus Proxy
 
-## Install Boot2docker
+## Install Docker Client
+
+[source, text]
+----
+# Linux / MacOS
+curl -L  https://get.docker.com/builds/Darwin/x86_64/docker-latest > /usr/local/bin/docker
+
+#Windows 
+Download: 
+http://test.docker.com.s3.amazonaws.com/builds/Windows/x86_64/docker-1.6.0.exe 
+And save to c:/Users/<username>/docker/docker-machine.exe
+----
 
 ## Install Docker-machine
+
+Install the Docker machine client for your environment: a https://github.com/docker/machine/releases/[latest releases]
+
+[source, text]
+----
+# Linux / MacOS
+curl -L  https://github.com/docker/machine/releases/download/v0.2.0/docker-machine_darwin-amd64 > /usr/local/bin/docker-machine
+
+# Windows
+Download:
+https://github.com/docker/machine/releases/download/v0.2.0/docker-machine_windows-amd64.exe
+And save to c:/Users/<username>/docker/docker-machine.exe
+----
+
+For Windows, make sure to add c:/Users/<username>/docker to your %PATH% variable.
 
 ## Create Machine
 
