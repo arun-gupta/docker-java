@@ -60,7 +60,7 @@ On Windows put into and rename to: c:\docker\docker.exe
 
 TODO: Extract some basic information from https://docs.docker.com/introduction/understanding-docker/
 
-image::sunset.jpg[Docker Overview, 300, 200, link="https://docs.docker.com/article-img/architecture.svg"]
+image::https://docs.docker.com/article-img/architecture.svg[Docker, 200,300]
 
 image:
 

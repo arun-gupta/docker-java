@@ -2,6 +2,8 @@
 
 This folder contains instructions to setup an Instructor environment.
 
+IMPORTANT: Make sure to run these instructions prior to the lab already. Executing them might take up to 30 minutes.
+
 Instructor needs:
 
 . A docker registry server
@@ -23,7 +25,8 @@ curl -L  https://get.docker.com/builds/Darwin/x86_64/docker-latest > /usr/local/
 
 #Windows 
 Download: 
-http://test.docker.com.s3.amazonaws.com/builds/Windows/x86_64/docker-1.6.0.exe 
+https://get.docker.com/builds/Windows/x86_64/docker-latest.exe
+https://get.docker.com/builds/Windows/i386/docker-latest.exe
 And save to c:/Users/<username>/docker/docker.exe
 ----
 
