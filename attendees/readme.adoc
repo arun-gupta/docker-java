@@ -5,6 +5,9 @@ This folder contains instructions to setup an attendee environment.
 ## A word about licenses
 This tutorial only uses software which is open source or at least free to use in development and/or education.
 Please refer to the individual products/tools used in this tutorial.
+. Docker is Apache License Version 2.0, see it here: https://github.com/docker/docker/blob/master/LICENSE
+. VirtualBox base packages (everything but the extension pack) is released under the GNU General Public License V2, see it here: https://www.virtualbox.org/wiki/GPL
+. Msysgit is a fork of Git under the GNU General Public License version 2.0, see it here: http://opensource.org/licenses/GPL-2.0
 
 ## Install VirtualBox(tm)
 
@@ -14,12 +17,12 @@ Downloads are available at http://<INSTRUCTOR_IP:8082>/downloads/
 
 or directly from the https://www.virtualbox.org/[Oracle Virtualbox] website.
 
-_NOTE:_ Instalation should complete without any error!
+NOTE: Installation should complete without any error!
 
 CAUTION: Linux Users
-- Have your kernel updated
-- Users should have the GNU compiler, build and header files for your current Linux kernel
-- Create a /usr/src/linux link to the current kernel source
+. Have your kernel updated
+. Users should have the GNU compiler, build and header files for your current Linux kernel
+. Create a /usr/src/linux link to the current kernel source
 
 
 ## Install docker-machine
