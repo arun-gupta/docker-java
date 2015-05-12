@@ -56,15 +56,6 @@ On Windows put into and rename to: c:\docker\docker.exe
 
 On Windows put into and rename to: c:\docker\docker.exe
 
-## Understanding Docker
-
-TODO: Extract some basic information from https://docs.docker.com/introduction/understanding-docker/
-
-image::https://docs.docker.com/article-img/architecture.svg[Docker, 200,300]
-
-image:
-
-
 ## Create the lab host
 
 [source, text]
@@ -77,60 +68,8 @@ eval "$(docker-machine env lab)"
 ----
 
 
-. ssh-keygen in PATH
-. https://github.com/boot2docker/boot2docker/releases[boot2docker.iso]
-. https://www.virtualbox.org/wiki/Downloads[VirtualBox]
-. https://docs.docker.com/machine/#installation[docker-machine] script
-. http://www.jboss.org/download-manager/file/jboss-devstudio-8.1.0.GA-jar_universal.jar[JBoss Developer Studio]
+## Setup JBoss Developer Studio 
 
-## Setup Docker
-
-Docker Machine: http://blog.arungupta.me/docker-machine-seutp-docker-host-techtip78/
-
-Use the pre-downloaded `boot2docker.iso`
-
-## Deploy Ticket Monster
-
-https://github.com/rafabene/devops-demo
-
-## Deploy an application from JBoss Developer Studio
-
-http://blog.arungupta.me/deploy-wildfly-docker-eclipse/
-
-## Cluster using Swarm
-
-We don't setup Kubernetes on Windows yet (might be an option to use jube someday)
-
-. https://github.com/rafabene/devops-demo
-. Docker Swarm: http://blog.arungupta.me/clustering-docker-swarm-techtip85/
-
-## Test Java EE Applications
-
-http://blog.arungupta.me/run-javaee-tests-wildfly-docker-arquillian-cube/
-
-## Container Linking by adding a separate DB
-http://blog.arungupta.me/docker-mysql-persistence/
-http://blog.arungupta.me/docker-container-linking-across-multiple-hosts-techtip69/
-
-## Jenkins and staging through environments
-
-??
-
-## OpenShift v3 (Optional Part)
-
-http://blog.arungupta.me/openshift-v3-getting-started-javaee7-wildfly-mysql/
-
-
-## Docker Compose (Optional, No Windows Version without Python)
-
-http://blog.arungupta.me/docker-compose-orchestrate-containers-techtip77/
-
-
-
-
-
-## References
-
-. JBoss and Docker: http://www.jboss.org/docker/
+http://www.jboss.org/download-manager/file/jboss-devstudio-8.1.0.GA-jar_universal.jar[JBoss Developer Studio]
 
 
