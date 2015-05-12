@@ -115,7 +115,7 @@ Run the Apache HTTPD server for attendees to download boot2docker iso image and 
 docker run -d --name="lab-httpd-server" -p 8082:80 lab-httpd-server
 ----
 
-If you run into errors on windows (eg, no such file or exec format error, check the line ending in the run-apache.sh.
+If you run into errors on Windows (eg, no such file or exec format error, check the line ending in the run-apache.sh).
 
 Check if the server is running: http://localhost:8082/downloads/
 

@@ -2,13 +2,21 @@
 
 This folder contains instructions to setup an attendee environment.
 
+## A word about licenses
+This tutorial only uses software which is open source or at least free to use in development and/or education.
+Please refer to the individual products/tools used in this tutorial.
+
 ## Install VirtualBox(tm)
 
-Downloads are available at <http://<INSTRUCTOR_IP:1500/downloads/>
+Docker currently runs only on Linux, but you can use VirtualBox to run Docker in a virtual machine on your box, and get the best of both worlds. This is why Virtualbox is a requirement to have on your machine. Get the latest downloads from the instructur machine:
+
+Downloads are available at http://<INSTRUCTOR_IP:8082>/downloads/
+
+or directly from the https://www.virtualbox.org/[Oracle Virtualbox] website.
 
 _NOTE:_ Instalation should complete without any error!
 
-_NOTE: Linux Users _
+CAUTION: Linux Users
 - Have your kernel updated
 - Users should have the GNU compiler, build and header files for your current Linux kernel
 - Create a /usr/src/linux link to the current kernel source
