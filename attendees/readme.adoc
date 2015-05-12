@@ -27,7 +27,33 @@ CAUTION: Linux Users
 
 ## Install docker-machine
 
-Follow the steps described at <https://docs.docker.com/machine/#installation>
+Download your binary from http://<INSTRUCTOR_IP:8082>/downloads/
+
+On Windows put into and rename to: c:\docker\docker-machine.exe
+Add c:\docker to your PATH variable
+
+[source, text]
+----
+set PATH=%PATH%;c:\docker
+----
+
+## Install Docker client
+
+Download your binary from http://<INSTRUCTOR_IP:8082>/downloads/
+
+[source, text]
+----
+# Linux / MacOS
+curl -L  https://get.docker.com/builds/Darwin/x86_64/docker-latest > /usr/local/bin/docker
+
+#Windows 
+curl http://<INSTRUCTOR_IP:8082>/docker-1.6.0.exe 
+On Windows put into and rename to: c:\docker\docker.exe
+----
+
+On Windows put into and rename to: c:\docker\docker.exe
+
+## Create the lab host
 
 [source, text]
 ----
@@ -38,14 +64,7 @@ docker-machine ssh lab "echo $'EXTRA_ARGS=\"--insecure-registry <INSTRUCTOR_IP>:
 eval "$(docker-machine env lab)" 
 ----
 
-. Docker client
-+
-[source, text]
-----
-curl https://get.docker.com/builds/Darwin/x86_64/docker-latest > /usr/local/bin/docker
-chmod +x /usr/local/bin/docker
-----
-+
+
 . ssh-keygen in PATH
 . https://github.com/boot2docker/boot2docker/releases[boot2docker.iso]
 . https://www.virtualbox.org/wiki/Downloads[VirtualBox]

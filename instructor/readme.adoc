@@ -24,7 +24,7 @@ curl -L  https://get.docker.com/builds/Darwin/x86_64/docker-latest > /usr/local/
 #Windows 
 Download: 
 http://test.docker.com.s3.amazonaws.com/builds/Windows/x86_64/docker-1.6.0.exe 
-And save to c:/Users/<username>/docker/docker-machine.exe
+And save to c:/Users/<username>/docker/docker.exe
 ----
 
 ## Install Docker-machine
@@ -119,6 +119,8 @@ If you run into errors on Windows (eg, no such file or exec format error, check 
 
 Check if the server is running: http://localhost:8082/downloads/
 
+NOTE: Make sure to check your firewall settings. Attendees should be able to access this machine with your local IP.
+
 ## Run Nexus On the instructor machine
 
 Default credentials are: admin / admin123
@@ -129,7 +131,6 @@ Use a data volume container. Since data volumes are persistent until no containe
 ----
 docker run -d --name nexus-data sonatype/nexus:oss echo "data-only container for Nexus"
 docker run -d -p 8081:8081 --name nexus --volumes-from nexus-data sonatype/nexus:oss
-
 ----
 
 Test if nexus is running:
