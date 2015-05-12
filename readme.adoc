@@ -1,11 +1,4 @@
-Markus Eisele, Rafael Benevides
-v0.0.1, 2015-05-12
-:toc:
-:toc-placement!:
-
 # Docker and Kubernetes for Java Developers
-
-toc::[]
 
 ## Preface
 Containers are enabling developers to package their applications (and underlying dependencies) in new ways that are portable and work consistently everywhere? On your machine, in production, in your data center, and in the cloud. And Docker has become the de facto standard for those portable containers in the cloud.
@@ -16,26 +9,35 @@ This lab offers developers an intro-level, hands-on session with Docker, from in
 
 ## Setup Environments
 
+This section describes the relevant steps for both attendees and instructors to setup the environments. Please follow the parts, that are appropriate for you.
+
 ### Attendees
 
-Brying Your Own Laptop (BYOL)
+This lab is designed for a BYOL (Brying Your Own Laptop) style hands-on-lab. We did our best to support a wide range of client configurations but only did test on machines as stated in the hardware section. Please make sure to double check your configuration.
 
-link:https://github.com/arun-gupta/docker-java/tree/master/attendees[Attendee Setup]
+link:https://github.com/arun-gupta/docker-java/tree/master/attendees[Go directly to the attendee Setup]
 
 #### Hardware
 
-. Operating System
-.. Windows 7
-.. Mac OS X
-.. Linux / Fedora 21
+. CPU
+.. x86
+.. x64
 . Memory
+.. min 8 GB for attendees
+.. min 16 GB for instructors
 
 #### Software
 
+. Operating System
+.. Windows 7 (SP1)
+.. Mac OS X
+.. Linux / Fedora 21
+
 ### Instructor
 
-link:https://github.com/arun-gupta/docker-java/tree/master/instructor[Instructor Setup]
+The instructor setup is designed to make the lab most reliable even with bad internet connections. Most if not all of the software can be directly downloaded from the instructor machine. The machine is setup as docker host and also runs a docker registry. Please make sure to execute these instructions way prior to the lab to provide a good experience to the attendees.
 
+link:https://github.com/arun-gupta/docker-java/tree/master/instructor[Go directly to the Instructor Setup]
 
 ## The Lab
 
