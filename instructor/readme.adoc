@@ -8,6 +8,10 @@ Instructor needs:
 . A Boot2docker served by a local HTTP Server
 . A Nexus Proxy
 
+## Prerequisites
+Have https://www.virtualbox.org/ [Oracle Virtualbox] installed and the install folder added to your PATH environment variable.
+
+
 ## Install Docker Client
 
 [source, text]
@@ -23,7 +27,7 @@ And save to c:/Users/<username>/docker/docker-machine.exe
 
 ## Install Docker-machine
 
-Install the Docker machine client for your environment: a https://github.com/docker/machine/releases/[latest releases]
+Install the Docker machine client for your environment: https://github.com/docker/machine/releases/[latest releases]
 
 [source, text]
 ----
@@ -107,16 +111,13 @@ docker run -d --name="lab-httpd-server" -p 8082:80 lab-httpd-server
 
 Default credentials are: admin / admin123
 
-Map the local path <USER_HOME_DIR>/nexus_work to the nexus work directory of the container.
-Attention, this is different for boot2docker based Docker hosts.
+Use a data volume container. Since data volumes are persistent until no containers use them, a container can created specifically for this purpose. 
 
 [source, text]
 ----
-# On Windows Machines
-docker run -d -p 8081:8081 -v /c/Users/<username>/nexus_work:/sonatype-work --name nexus sonatype/nexus:oss
+docker run -d --name nexus-data sonatype/nexus:oss echo "data-only container for Nexus"
+docker run -d -p 8081:8081 --name nexus --volumes-from nexus-data sonatype/nexus:oss
 
-# On Linux/MaxOS
-docker run -d -p 8081:8081 -v /Users/<username>/nexus_work:/sonatype-work --name nexus sonatype/nexus:oss
 ----
 
 Test if nexus is running:
