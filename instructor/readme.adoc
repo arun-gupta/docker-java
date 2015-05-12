@@ -62,7 +62,18 @@ VBoxManage controlvm "mymachine" natpf1 "tcp-port8081,tcp,,8081,,8081";
 #Open HTTP Server port
 VBoxManage controlvm "mymachine" natpf1 "tcp-port8082,tcp,,8082,,8082";
 ----
+
+
+Check machine IP
+[source, text]
+----
+docker-machine ip
+----
+
+Further on refered to as <HOST_IP>
+
 ## Add extra args to docker host to allow insecure registry for external access via http:
+You can either insert your <HOST_IP> or the complete subnet e.g. 192.168.99.100 maps to 192.168.99.0/24
 
 [source, text]
 ----
@@ -73,13 +84,6 @@ $ # to /var/lib/boot2docker/profile
 $ sudo /etc/init.d/docker restart
 ----
 
-Check machine IP
-[source, text]
-----
-docker-machine ip
-----
-
-Further on refered to as <HOST_IP>
 
 ## Run local-registry
 
@@ -87,7 +91,7 @@ Instructors should run a local registry to make all images locally available to 
 
 [source, text]
 ----
-docker run -dp --name="docker-registry" 5000:5000 registry:2.0
+docker run -d --name="docker-registry" -p 5000:5000 registry:2.0
 ----
 
 
