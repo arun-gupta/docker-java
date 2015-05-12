@@ -68,28 +68,6 @@ docker run -dp --name="docker-registry" 5000:5000 registry:2.0
 docker build -t lab-httpd-server:latest lab-httpd-server/.
 ----
 
-Check Image ID  and use subsequently, refered to as <IMAGE_ID>
-
-## Tag Image for Local registry TODO - Remove this section
-
-docker tag <IMAGE_ID> <HOST_IP>:5000/lab-httpd-server:latest
-
-## Push Boot2docker-http image to local registry
-
-The boot2docker-http server is pushed to local registry.
-
-[source, text]
-----
-docker push <HOST_IP>:5000/lab-httpd-server:latest
-----
-
-Check if image upload was a success
-[source, text]
-----
-http://<HOST_IP>:5000/v2/lab-httpd-server/tags/list
-----
-
-
 ## Run Http server with downloadables
 
 Run the Apache HTTPD server for attendees to download boot2docker iso image and Virtuabox binaries.
@@ -97,23 +75,23 @@ Run the Apache HTTPD server for attendees to download boot2docker iso image and 
 [source, text]
 ----
 docker run -d --name="lab-httpd-server" -p 8082:80 lab-httpd-server
-docker run -p 8082:80 <HOST_IP>:5000/lab-httpd-server - TODO remove this section
 ----
 
 ## Run Nexus On the instructor machine
 
 Default credentials are: admin / admin123
 
+Map the local path <USER_HOME_DIR>/nexus_work to the nexus work directory of the container.
+Attention, this is different for boot2docker based Docker hosts.
+
 [source, text]
 ----
-docker run -d -p 8081:8081 --name nexus sonatype/nexus:oss
+# On Windows Machines
+docker run -d -p 8081:8081 -v /c/Users/<username>/nexus_work:/sonatype-work --name nexus sonatype/nexus:oss
+
+# On Linux/MaxOS
+docker run -d -p 8081:8081 -v /Users/<username>/nexus_work:/sonatype-work --name nexus sonatype/nexus:oss
 ----
-
-TODO: 
-Storage directory:
-mkdir /some/dir/nexus-data && chown -R 200 /some/dir/nexus-data
-docker run -d -p 8081:8081 --name nexus sonatype/nexus:oss -v /some/dir/nexus-data:/sonatype-work sonatype/nexus
-
 
 Test if nexus is running:
 
