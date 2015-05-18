@@ -124,9 +124,11 @@ docker-compose up -d
 
 Test if the servers are running:
 
-Access the docker registry [http://localhost:5000/v2/]
+Access the docker registry [http://localhost:5000/v2/].
+
 Access the nexus console [http://localhost:8081/].
-Access the webserver [http://localhost:8082]
+
+Access the webserver [http://localhost:8082].
 
 
 ## Build ticketmonster-pgsql-widlfly image
