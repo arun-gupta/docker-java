@@ -1,0 +1,19 @@
+dockerregistry:
+  image: registry:2.0
+  volumes:
+    - /registry:/tmp/registry-dev
+  ports: 
+    - "5000:5000"
+httpserver:
+  build: lab-httpd-server/
+  ports: 
+    - "8082:80"
+nexusdata:
+  image: sonatype/nexus:oss
+  command: echo "data-only container for Nexus"
+nexus:
+  image: sonatype/nexus:oss
+  ports:
+    - "8081:8081"
+  volumes_from: 
+    - nexusdata
