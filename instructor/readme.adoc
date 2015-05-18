@@ -19,7 +19,10 @@ Instructor needs:
 
 ## Install asciidoctor
 
+[source,text]
+----
 gem install asciidoctor
+----
 
 ## Install Docker Client
 
