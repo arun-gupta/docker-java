@@ -83,6 +83,9 @@ VBoxManage controlvm "mymachine" natpf1 "tcp-port5000,tcp,,5000,,5000";
 VBoxManage controlvm "mymachine" natpf1 "tcp-port8081,tcp,,8081,,8081";
 #Open HTTP Server port
 VBoxManage controlvm "mymachine" natpf1 "tcp-port8082,tcp,,8082,,8082";
+#Open gitlab ports
+VBoxManage controlvm "mymachine" natpf1 "tcp-port10022,tcp,,10022,,10022";
+VBoxManage controlvm "mymachine" natpf1 "tcp-port10080,tcp,,10080,,10080";
 ----
 
 
@@ -128,14 +131,48 @@ Access the docker registry [http://localhost:5000/v2/].
 
 Access the nexus console [http://localhost:8081/].
 
-Access the webserver [http://localhost:8082].
+Access the webserver [http://localhost:8082/].
 
+Access the gitlab server [http://localhost:10080/].
+
+
+## Populate Gitlab with Ticket-monster sources
+
+Execute:
+
+[source,text]
+----
+docker exec instructor_gitlab_1 bash -c "cd /home/git/data/repositories/root; git clone --bare https://github.com/jboss-developer/ticket-monster.git; chown git:git -R /home/git/data/repositories; cd /home/git/gitlab; sudo -u git -H bundle exec rake -v gitlab:import:repos RAILS_ENV=production"
+----
+
+## Build TicketMonster from the sources
+
+1. Clone TicketMonster from the existing gitlab container
+
+[source, text]
+----
+git clone -b WFLY8.1 http://root:dockeradmin@localhost:10080/root/ticket-monster.git
+----
+
+2. Build TicketMonster
+
+[source, text]
+----
+mvn -s settings.xml -f ticket-monster/demo/pom.xml package
+----
+
+3. Copy TicketMonster war to the docker ticketmonster-pgsql-widlfly image folder
+
+[souce, text]
+----
+cp ticket-monster/demo/target/ticket-monster.war dockerfiles/ticketmonster-pgsql-wildfly/
+----
 
 ## Build ticketmonster-pgsql-widlfly image
 
 [source, text]
 ----
-docker build -t "instructor/ticketmonster-pgsql-wildfly" ticketmonster-pgsql-wildfly/
+docker build -t "instructor/ticketmonster-pgsql-wildfly" dockerfiles/ticketmonster-pgsql-wildfly/
 ----
 
 ## Put the ticketmonster-pgsql-wildfly and postgres images on the local registry
