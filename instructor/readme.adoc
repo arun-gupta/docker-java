@@ -149,24 +149,15 @@ docker exec instructor_gitlab_1 bash -c "cd /home/git/data/repositories/root; gi
 
 1. Clone TicketMonster from the existing gitlab container
 
-  [source, text]
-  ----
   git clone -b WFLY8.1 http://root:dockeradmin@localhost:10080/root/ticket-monster.git
-  ----
 
 2. Build TicketMonster
 
-  [source, text]
-  ----
   mvn -s settings.xml -f ticket-monster/demo/pom.xml package
-  ----
 
 3. Copy TicketMonster war to the docker ticketmonster-pgsql-widlfly image folder
 
-  [souce, text]
-  ----
   cp ticket-monster/demo/target/ticket-monster.war dockerfiles/ticketmonster-pgsql-wildfly/
-  ----
 
 ## Build ticketmonster-pgsql-widlfly image
 
