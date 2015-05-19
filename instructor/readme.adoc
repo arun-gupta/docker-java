@@ -183,7 +183,7 @@ docker build -t "instructor/ticketmonster-pgsql-wildfly" dockerfiles/ticketmonst
 docker tag instructor/ticketmonster-pgsql-wildfly localhost:5000/ticketmonster-pgsql-wildfly
 docker push localhost:5000/ticketmonster-pgsql-wildfly
 
-#Postgres
+# Postgres
 docker pull postgres
 docker tag postgres localhost:5000/postgres
 docker push localhost:5000/postgres
