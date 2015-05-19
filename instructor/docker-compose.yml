@@ -8,9 +8,6 @@ httpserver:
   build: dockerfiles/lab-httpd-server/
   ports: 
     - "8082:80"
-nexusdata:
-  image: sonatype/nexus:oss
-  command: echo "data-only container for Nexus"
 nexus:
   image: sonatype/nexus:oss
   ports:

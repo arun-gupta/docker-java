@@ -118,7 +118,16 @@ This instructions will be placed inside the Lab HTTPD Server during the image bu
 asciidoctor ../attendees/readme.adoc -o lab-httpd-server/index.html
 ----
 
+## Create a container with Nexus dependencies
+
+[source, text]
+----
+docker run --name="nexusdata" -v $(pwd):/backup sonatype/nexus:oss bash -c "tar xvf  /backup/nexusbackup.tar -C /"
+----
+
 ## Start the Instructor environment
+
+_Note: This command should take some time to execute_
 
 [source, text]
 ----
@@ -129,7 +138,7 @@ Test if the servers are running:
 
 Access the docker registry [http://localhost:5000/v2/].
 
-Access the nexus console [http://localhost:8081/].
+Access the nexus console [http://localhost:8081/content/groups/public/].
 
 Access the webserver [http://localhost:8082/].
 
@@ -179,3 +188,10 @@ docker pull postgres
 docker tag postgres localhost:5000/postgres
 docker push localhost:5000/postgres
 -----
+
+## Backing upd Nexus
+
+[source, text]
+----
+docker run --rm --volumes-from nexusdata -v  $(pwd):/backup ubuntu tar cvf /backup/nexusbackup.tar /sonatype-work
+----
