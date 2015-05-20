@@ -5,7 +5,7 @@ This are some instructions to keep the instructor environment
 
 ## Uptating the attendees instructions served by the instructor httpd server
 
-The instructor webserver [http://localhost:8082/] provides the <<..\attendees\readme.adoc#,attendes instructions>> in the HTML format.
+The instructor webserver [http://localhost:8082/] provides the link:..\attendees\readme.adoc[attendes instructions] in the HTML format.
 
 To update the HTML have http://asciidoctor.org/ installed and run the following command:
 

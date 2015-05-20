@@ -179,4 +179,4 @@ If you need some extra information like:
 - Uptating the attendees instructions served by the instructor httpd server
 - Backing up Nexus data container to a file
 
-Please, check the <<extra.adoc#, extra instructions>>
+Please, check the link:extra.adoc[extra instructions].
