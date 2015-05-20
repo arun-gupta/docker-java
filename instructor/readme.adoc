@@ -60,7 +60,7 @@ For Windows, make sure to add c:/Users/<username>/docker to your %PATH% variable
 
 [source, text]
 ----
-docker-machine create --driver virtualbox --virtualbox-boot2docker-url https://github.com/boot2docker/boot2docker/releases/download/v1.5.0/boot2docker.iso mymachine
+docker-machine create --driver virtualbox mymachine
 ----
 
 ## Expose the Virtual Box ports to other computer in the LAN
