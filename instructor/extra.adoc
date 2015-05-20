@@ -7,13 +7,19 @@ This are some instructions to keep the instructor environment
 
 The instructor webserver [http://localhost:8082/] provides the link:https://github.com/arun-gupta/docker-java/blob/master/attendees/readme.adoc[attendes instructions] in the HTML format.
 
-To update the HTML have http://asciidoctor.org/ installed and run the following command:
+To update the HTML, have http://asciidoctor.org/ installed and run the following command:
 
 [source, text]
 ----
 asciidoctor ../attendees/readme.adoc -o dockerfiles/lab-httpd-server/index.html
 ----
 
+After that, you will need to build the services again running
+
+[source, text]
+----
+docker-compose build
+----
 
 
 ## Backing up Nexus data container to a file
