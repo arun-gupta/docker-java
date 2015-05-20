@@ -15,14 +15,6 @@ Instructor needs:
 . Have https://www.virtualbox.org/[Oracle Virtualbox] installed and the install folder added to your PATH environment variable.
 . Have the https://github.com/arun-gupta/docker-java/ git repository checked out.
 . Have https://msysgit.github.io/ installed on windows
-. Have http://asciidoctor.org/ installed
-
-## Install asciidoctor
-
-[source,text]
-----
-gem install asciidoctor
-----
 
 ## Install Docker Client
 
@@ -109,15 +101,6 @@ $ # to /var/lib/boot2docker/profile
 $ sudo /etc/init.d/docker restart
 ----
 
-## Convert the Attendees instructions to HTML.
-
-This instructions will be placed inside the Lab HTTPD Server during the image build
-
-[source, text]
-----
-asciidoctor ../attendees/readme.adoc -o lab-httpd-server/index.html
-----
-
 ## Create a container with Nexus dependencies
 
 [source, text]
@@ -189,9 +172,11 @@ docker tag postgres localhost:5000/postgres
 docker push localhost:5000/postgres
 ----
 
-## Backing upd Nexus
+## More information
 
-[source, text]
-----
-docker run --rm --volumes-from nexusdata -v  $(pwd):/backup ubuntu tar cvf /backup/nexusbackup.tar /sonatype-work
-----
+If you need some extra information like:
+
+- Uptating the attendees instructions served by the instructor httpd server
+- Backing up Nexus data container to a file
+
+Please, check the <<extra.adoc, extra instructions>>

@@ -1,3 +1,2 @@
 ticket-monster
 dockerfiles/ticketmonster-pgsql-wildfly/ticket-monster.war
-dockerfiles/lab-httpd-server/index.html
