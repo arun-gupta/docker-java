@@ -27,7 +27,7 @@ curl -L  https://get.docker.com/builds/Darwin/x86_64/docker-latest > /usr/local/
 Download: 
 https://get.docker.com/builds/Windows/x86_64/docker-latest.exe
 https://get.docker.com/builds/Windows/i386/docker-latest.exe
-And save to c:/Users/<username>/docker/docker.exe
+And save to c:\Users\<username>\docker\docker.exe
 ----
 
 ## Install Docker compose
@@ -51,10 +51,10 @@ curl -L  https://github.com/docker/machine/releases/download/v0.2.0/docker-machi
 # Windows
 Download:
 https://github.com/docker/machine/releases/download/v0.2.0/docker-machine_windows-amd64.exe
-And save to c:/Users/<username>/docker/docker-machine.exe
+And save to c:\Users\<username>\docker\docker-machine.exe
 ----
 
-For Windows, make sure to add c:/Users/<username>/docker to your %PATH% variable.
+For Windows, make sure to add c:\Users\<username>\docker to your %PATH% variable.
 
 ## Create Machine
 
