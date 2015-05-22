@@ -13,25 +13,50 @@ toc::[]
 
 ## Prerequisites
 This lab can be executed on a netbook with x86 architecture. For it to
-be fun, you should have a decent hardware available. Beside the operating system of choice, there's only one other thing you should have installed already: A JDK.
+be fun, you should have a decent hardware available. Beside the operating system of choice, there's only a couple of other thing you should have installed already:
 
 ### Hardware
+
+#### Mac
+. CPU
+.. PowerPC G4
+. Memory
+.. 4 to 8 GB for attendees
+.. 8 to 16 GB for instructors
+
+#### Linux / Windows
+
 . CPU
 .. x86 (Intel Pentium)
 .. x64 (i7 and comparable)
-.. PowerPC G4
+
 . Memory
 .. 4 to 8 GB for attendees
 .. 8 to 16 GB for instructors
 
 ### Software
 
+#### Mac
 . Operating System
-.. Windows 7 (SP1)
 .. Mac OS X (10.6.8)
+. Java
+.. Oracle JDK 8u45 link:http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html[Java SE 8 Development Kit]
+.. OpenJDK
+. Webbrowser
+.. Chrome link:https://www.google.com/chrome/browser/desktop/[for Mac OS X 10.6 or later]
+.. Firefox 31
+
+#### Linux / Windows
+. Operating System
+.. Windows 7/ (SP1)
 .. Fedora 21
 . Java
-.. Oracle JDK 8u45 or a comparable OpenJDK
+.. Oracle JDK 8u45 link:http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html[Java SE 8 Development Kit]
+.. comparable OpenJDK
+. Webbrowser
+.. Chrome 43 link:https://www.google.com/chrome/browser/desktop/[Windows 8/7 64-bit]
+.. Firefox 31
+
 
 ## Setup Environments
 
@@ -225,6 +250,12 @@ If the machine state is stopped, starte it with
 ----
 docker-machine start
 ----
+After it is started you can find out about the IP address of your host with
+[source, text]
+----
+docker-machine ip
+----
+We'll use this from now on as <HOST_IP> in the commands.
 
 Now we need a WildFly and a database. Start with the Postgres database.
 
@@ -246,18 +277,44 @@ The "-f" flag keeps refreshing the logs and pushes new events directly out to th
 After the database server is up and running we now need the WildFly.
 [source, text]
 ----
-docker run -d --name wildfly --link db:db <INSTRUCTOR_IP>:5000/wildfly-ticketmonster
+docker run -d --name wildfly -p 8080:8080 --link db:db <INSTRUCTOR_IP>:5000/wildfly
+----
+This command starts a container named "wildfly" and links this container to the db container we started earlier. The other options are known to you already.
+Check the logs if the server is started.
+[source, text]
+----
+docker logs -f wildfly
 ----
 
+And access the http://<HOST_IP>:8080 with your webbrowser to make sure the instance is up and running.
+
+Now you're ready to deploy the application for the first time. Let's use JBoss Developer Studio for this............................................................................
+
+## Deploy an application from JBoss Developer Studio
+
+Start JDBS if not started. And create a server adaptor first.
+
+.Server adapter
+image::images/jbds1.png[]
+
+Assign or create a WildFly 8.x runtime (Changed properties are highlighted.)
+
+.WildFly Runtime Properties
+image::images/jbds2.png[]
+
+Setup the server properties in the following image.  The two properties on the left are automatically propagated from the previous dialog. Additional two properties on the right side are required to disable to keep deployment scanners in sync with the server.
+
+.Server properties
+image::images/jbds3.png[]
+
+
+http://blog.arungupta.me/deploy-wildfly-docker-eclipse/
 
 
 ### Deploy Ticket Monster
 
 https://github.com/rafabene/devops-demo
 
-## Deploy an application from JBoss Developer Studio
-
-http://blog.arungupta.me/deploy-wildfly-docker-eclipse/
 
 ## Cluster using Swarm
 
