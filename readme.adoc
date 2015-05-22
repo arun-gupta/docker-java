@@ -291,7 +291,7 @@ docker logs -f wildfly
 
 And access the http://<HOST_IP>:8080 with your webbrowser to make sure the instance is up and running.
 
-Now you're ready to deploy the application for the first time. Let's use JBoss Developer Studio for this............................................................................
+Now you're ready to deploy the application for the first time. Let's use JBoss Developer Studio for this.
 
 ## Deploy an application from JBoss Developer Studio
 
