@@ -128,6 +128,19 @@ These instructions are stored in a file called a Dockerfile. Docker reads this D
 
 A container consists of an operating system, user-added files, and meta-data. As we've seen, each container is built from an image. That image tells Docker what the container holds, what process to run when the container is launched, and a variety of other configuration data. The Docker image is read-only. When Docker runs a container from an image, it adds a read-write layer on top of the image (using a union file system as we saw earlier) in which your application can then run.
 
+### Docker Machine
+
+Machine makes it really easy to create Docker hosts on your computer, on cloud providers and inside your own data center. It creates servers, installs Docker on them, then configures the Docker client to talk to them.
+
+Once your Docker host has been created, it then has a number of commands for managing them:
+
+. Starting, stopping, restarting
+. Upgrading Docker
+. Configuring the Docker client to talk to your host
+
+You used Docker Machine already during the attendee setup. We won't need it too much further on. But if you need to create hosts, it's a very handy tool to know about.
+Find out more about the details at the link:https://docs.docker.com/machine/[Official Docker Machine Website]
+
 ### Ticket Monster
 
 ### Deploy Ticket Monster

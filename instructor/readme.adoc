@@ -1,6 +1,10 @@
-# Docker for Java Developers
+= Docker for Java Developers - Instructor Setup
+:toc:
+:toc-placement!:
 
 This folder contains instructions to setup an Instructor environment.
+
+toc::[]
 
 IMPORTANT: Make sure to run these instructions prior to the lab already. Executing them might take up to 30 minutes.
 
@@ -23,8 +27,8 @@ Instructor needs:
 # Linux / MacOS
 curl -L  https://get.docker.com/builds/Darwin/x86_64/docker-latest > /usr/local/bin/docker
 
-#Windows 
-Download: 
+#Windows
+Download:
 https://get.docker.com/builds/Windows/x86_64/docker-latest.exe
 https://get.docker.com/builds/Windows/i386/docker-latest.exe
 And save to c:\Users\<username>\docker\docker.exe
@@ -96,7 +100,7 @@ You can either insert your <HOST_IP> or the complete subnet e.g. 192.168.99.100 
 ----
 docker-machine ssh
 
-$ # add EXTRA_ARGS="--insecure-registry <YOUR INSECURE HOST>" 
+$ # add EXTRA_ARGS="--insecure-registry <YOUR INSECURE HOST>"
 $ # to /var/lib/boot2docker/profile
 $ sudo /etc/init.d/docker restart
 ----
