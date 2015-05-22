@@ -9,7 +9,7 @@ This lab offers developers an intro-level, hands-on session with Docker, from in
 
 ## Requirements
 This lab can be executed on a netbook with x86 architecture. For it to
-be fun, you should have a decent hardware available.
+be fun, you should have a decent hardware available. Beside the operating system of choice, there's only one other thing you should have installed already: A JDK.
 
 ### Hardware
 . CPU
