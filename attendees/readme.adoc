@@ -1,8 +1,13 @@
-# Docker for Java Developers
+= Docker for Java Developers - Attendee Setup
+:toc:
+:toc-placement!:
 
 This folder contains instructions to setup an attendee environment. Please note, that it is only intended to setup the environment for this lab. The lab itself is in the link:https://github.com/arun-gupta/docker-java/blob/master/readme.adoc[main readme]. Continue with it after you finished this setup.
+You'll learn about all the software you installed here during the lab. For now just go through this document and let#s get ready as fast as possible for the lab.
 
 Your instructor will have a a machine setup with all the relevant downloads and needed infrastructures. The IP will change depending on the network used. In this guide, it's refered to as <INSTRUCTOR_IP> make sure to replace this with the actuall IP address you get from your instructor.
+
+toc::[]
 
 ## A word about licenses
 This tutorial only uses software which is open source or at least free to use in development and/or education.
