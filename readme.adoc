@@ -11,7 +11,7 @@ This lab offers developers an intro-level, hands-on session with Docker, from in
 
 toc::[]
 
-## Requirements
+## Prerequisites
 This lab can be executed on a netbook with x86 architecture. For it to
 be fun, you should have a decent hardware available. Beside the operating system of choice, there's only one other thing you should have installed already: A JDK.
 
@@ -24,7 +24,7 @@ be fun, you should have a decent hardware available. Beside the operating system
 .. 4 to 8 GB for attendees
 .. 8 to 16 GB for instructors
 
-#### Software
+### Software
 
 . Operating System
 .. Windows 7 (SP1)
@@ -37,18 +37,18 @@ be fun, you should have a decent hardware available. Beside the operating system
 
 This section describes the relevant steps for both attendees and instructors to setup the environments. Please follow the parts, that are appropriate for you.
 
-### Attendees
-
-This lab is designed for a BYOL (Brying Your Own Laptop) style hands-on-lab. We did our best to support a wide range of client configurations but only did test on machines as stated in the hardware section. Please make sure to double check your configuration.
-
-link:https://github.com/arun-gupta/docker-java/tree/master/attendees[Go directly to the attendee Setup]
-
-
 ### Instructor
 
 The instructor setup is designed to make the lab most reliable even with bad internet connections. Most if not all of the software can be directly downloaded from the instructor machine. The machine is setup as docker host and also runs a docker registry. Please make sure to execute these instructions way prior to the lab to provide a good experience to the attendees.
 
 link:https://github.com/arun-gupta/docker-java/tree/master/instructor[Go directly to the Instructor Setup]
+
+
+### Attendees
+
+This lab is designed for a BYOL (Brying Your Own Laptop) style hands-on-lab. We did our best to support a wide range of client configurations but only did test on machines as stated in the hardware section. Please make sure to double check your configuration.
+
+link:https://github.com/arun-gupta/docker-java/tree/master/attendees[Go directly to the attendee Setup]
 
 ## The Lab
 
@@ -105,9 +105,32 @@ image::images/docker-architecture.png[]
 
 Client communicates with Daemon, either co-located on the same host, or on a different host. It requests the Daemon to pull an image from the repository using `pull` command. The Daemon then downloads the image from Docker Hub, or whatever registry is configured. Multiple images can be downloaded from the registry and installed on Daemon host. Images are run using `run` command to create containers on demand.
 
+**How does a Docker Image work?**
 
+We've already seen that Docker images are read-only templates from which Docker containers are launched. Each image consists of a series of layers. Docker makes use of union file systems to combine these layers into a single image. Union file systems allow files and directories of separate file systems, known as branches, to be transparently overlaid, forming a single coherent file system.
 
-## Deploy Ticket Monster
+One of the reasons Docker is so lightweight is because of these layers. When you change a Docker image—for example, update an application to a new version— a new layer gets built. Thus, rather than replacing the whole image or entirely rebuilding, as you may do with a virtual machine, only that layer is added or updated. Now you don't need to distribute a whole new image, just the update, making distributing Docker images faster and simpler.
+
+Every image starts from a base image, for example ubuntu, a base Ubuntu image, or fedora, a base Fedora image. You can also use images of your own as the basis for a new image, for example if you have a base Apache image you could use this as the base of all your web application images.
+
+_Note: Docker usually gets these base images from Docker Hub._
+
+Docker images are then built from these base images using a simple, descriptive set of steps we call instructions. Each instruction creates a new layer in our image. Instructions include actions like:
+
+. Run a command.
+. Add a file or directory.
+. Create an environment variable.
+. What process to run when launching a container from this image.
+
+These instructions are stored in a file called a Dockerfile. Docker reads this Dockerfile when you request a build of an image, executes the instructions, and returns a final image.
+
+**How does a container work?**
+
+A container consists of an operating system, user-added files, and meta-data. As we've seen, each container is built from an image. That image tells Docker what the container holds, what process to run when the container is launched, and a variety of other configuration data. The Docker image is read-only. When Docker runs a container from an image, it adds a read-write layer on top of the image (using a union file system as we saw earlier) in which your application can then run.
+
+### Ticket Monster
+
+### Deploy Ticket Monster
 
 https://github.com/rafabene/devops-demo
 

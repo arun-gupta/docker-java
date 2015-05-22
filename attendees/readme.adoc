@@ -71,11 +71,15 @@ eval "$(docker-machine env lab)"
 
 
 ## Setup JBoss Developer Studio
-Download your platform binary from http://<INSTRUCTOR_IP:8082>/downloads/
+
+To install JBoss Developer Studio stand-alone, complete the following steps:
+. Download http://<INSTRUCTOR_IP:8082>/downloads/jboss-devstudio-8.1.0.GA-jar_universal.jar
+. Start the installer (see below)
+. Follow the on-screen instructions to complete the installation process.
 
 [source, text]
 ----
-# Linux / MacOS
-
-http://www.jboss.org/download-manager/file/jboss-devstudio-8.1.0.GA-jar_universal.jar[JBoss Developer Studio]
+# Linux / MacOS / windows
+cd /download/path/
+java -jar jboss-devstudio-8.1.0.GA-jar_universal.jar
 ----
