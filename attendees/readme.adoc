@@ -74,6 +74,19 @@ docker-machine ssh lab "echo $'EXTRA_ARGS=\"--insecure-registry <INSTRUCTOR_IP>:
 eval "$(docker-machine env lab)"
 ----
 
+## Install Maven
+Download apache-maven-3.3.3-bin[.zip|tar.gz] from the instructor PC.
+[source, text]
+----
+curl http://<INSTRUCTOR_IP:8082>/apache-maven-3.3.3-bin[.zip|tar.gz]
+----
+
+unzip to a folder of your choice and add the folder to your PATH environment variable.
+
+[source, text]
+----
+set PATH=%PATH%;c:/apache-maven-3.3.3
+----
 
 ## Setup JBoss Developer Studio
 

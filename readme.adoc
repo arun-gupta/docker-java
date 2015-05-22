@@ -184,10 +184,11 @@ The administration site is centered around CRUD use cases, so instead of writing
 Monitoring sales requires staying in touch with the latest changes on the server side, so this part of the application will be developed in HTML5 and JavaScript using a polling solution.
 
 ### Build Ticket Monster
-First thing, you're going to do is to build the application from source. Create a folder for the source
+First thing, you're going to do is to build the application from source. Create a folder for the source and change to it
 [source, text]
 ----
 mkdir /docker-java/
+cd /docker-java/
 ----
 And checkout the sources from the instructor git repository.
 [source, text]
@@ -195,7 +196,7 @@ And checkout the sources from the instructor git repository.
 git clone -b WFLY8.1 http://root:dockeradmin@<INSTRUCTOR_IP>:10080/root/ticket-monster.git
 ----
 
-
+From here, you're free to explore the application a bit. Open it with JBDS and
 
 ### Deploy Ticket Monster
 
