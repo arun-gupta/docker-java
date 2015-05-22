@@ -45,6 +45,7 @@ be fun, you should have a decent hardware available. Beside the operating system
 . Java
 .. Oracle JDK 8u45 link:http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html[Java SE 8 Development Kit]
 .. OpenJDK link:http://openjdk.java.net/install/index.html[Download instructions]
+.. Maven link:http://maven.apache.org/download.cgi[3.0 or later]
 
 . Webbrowser
 .. Chrome link:https://www.google.com/chrome/browser/desktop/[for Mac OS X 10.6 or later]
@@ -52,12 +53,13 @@ be fun, you should have a decent hardware available. Beside the operating system
 
 #### Linux / Windows
 . Operating System
-.. Windows 7/ (SP1)
+.. Windows 7 (SP1)
 .. Fedora 21
 
 . Java
 .. Oracle JDK 8u45 link:http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html[Java SE 8 Development Kit]
 .. OpenJDK link:http://openjdk.java.net/install/index.html[Download instructions]
+.. Maven link:http://maven.apache.org/download.cgi[3.0 or later]
 
 . Webbrowser
 .. Chrome 43 link:https://www.google.com/chrome/browser/desktop/[Windows 8/7 64-bit]
