@@ -20,6 +20,8 @@ be fun, you should have a decent hardware available. Beside the operating system
 #### Mac
 . CPU
 .. PowerPC G4
+.. x64 (i5 and comparable)
+
 . Memory
 .. 4 to 8 GB for attendees
 .. 8 to 16 GB for instructors
@@ -28,7 +30,7 @@ be fun, you should have a decent hardware available. Beside the operating system
 
 . CPU
 .. x86 (Intel Pentium)
-.. x64 (i7 and comparable)
+.. x64 (i5 and comparable)
 
 . Memory
 .. 4 to 8 GB for attendees
@@ -38,24 +40,29 @@ be fun, you should have a decent hardware available. Beside the operating system
 
 #### Mac
 . Operating System
-.. Mac OS X (10.6.8)
+.. Mac OS X (10.6 or later)
+
 . Java
 .. Oracle JDK 8u45 link:http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html[Java SE 8 Development Kit]
-.. OpenJDK
+.. OpenJDK link:http://openjdk.java.net/install/index.html[Download instructions]
+
 . Webbrowser
 .. Chrome link:https://www.google.com/chrome/browser/desktop/[for Mac OS X 10.6 or later]
-.. Firefox 31
+.. Firefox link:http://www.getfirefox.com[Firefox 31 or later]
 
 #### Linux / Windows
 . Operating System
 .. Windows 7/ (SP1)
 .. Fedora 21
+
 . Java
 .. Oracle JDK 8u45 link:http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html[Java SE 8 Development Kit]
-.. comparable OpenJDK
+.. OpenJDK link:http://openjdk.java.net/install/index.html[Download instructions]
+
 . Webbrowser
 .. Chrome 43 link:https://www.google.com/chrome/browser/desktop/[Windows 8/7 64-bit]
-.. Firefox 31
+.. Firefox link:http://www.getfirefox.com[Firefox 31 or later]
+
 
 
 ## Setup Environments
