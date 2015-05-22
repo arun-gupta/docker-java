@@ -267,6 +267,11 @@ This command starts a container named "db" from the image in your instructor's r
 The two "-e" options define environment variables which are read by the db at startup and allow us to access the database with this user and password.
 Finally, the "-d" option tells docker to start a demon process. "-p" maps container ports to host ports and allows other containers on our host to access it.
 
+TODO: do we need to talk more about container linking?
+http://blog.arungupta.me/docker-mysql-persistence/
+http://blog.arungupta.me/docker-container-linking-across-multiple-hosts-techtip69/
+
+
 This should have worked. To double check if it did, you can see the server logs
 [source, text]
 ----
@@ -345,9 +350,13 @@ Let's explore deeper, what other deployment options we have
 
 http://blog.arungupta.me/deploy-wildfly-docker-eclipse/
 
-
+## Ticket-Monster Docker Cluster
 
 https://github.com/rafabene/devops-demo
+
+## Test Java EE Applications on Docker
+
+http://blog.arungupta.me/run-javaee-tests-wildfly-docker-arquillian-cube/
 
 
 ## Cluster using Swarm
@@ -357,17 +366,7 @@ We don't setup Kubernetes on Windows yet (might be an option to use jube someday
 . https://github.com/rafabene/devops-demo
 . Docker Swarm: http://blog.arungupta.me/clustering-docker-swarm-techtip85/
 
-## Test Java EE Applications
 
-http://blog.arungupta.me/run-javaee-tests-wildfly-docker-arquillian-cube/
-
-## Container Linking by adding a separate DB
-http://blog.arungupta.me/docker-mysql-persistence/
-http://blog.arungupta.me/docker-container-linking-across-multiple-hosts-techtip69/
-
-## Jenkins and staging through environments
-
-??
 
 ## OpenShift v3 (Optional Part)
 
