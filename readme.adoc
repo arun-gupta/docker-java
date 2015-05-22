@@ -206,6 +206,26 @@ cd /docker-java/ticket-monster
 mvn -s settings.xml -f demo/pom.xml package
 ----
 
+Congratulations: You just build the applications war file. Let's see if this can be deployed.
+
+### Run Ticket Monster For The First Time
+The application needs two things from an infrastructure perspective. A WildFly application server and a Postgress Database.
+Let Docker do the magic for us.
+
+Check if your docker host is running
+
+[source, text]
+----
+docker-machine ls
+----
+
+If the machine state is stopped, starte it with
+
+[source, text]
+----
+docker-machine start
+----
+
 
 
 ### Deploy Ticket Monster
