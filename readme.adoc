@@ -326,12 +326,26 @@ The project runs and displays the start page of ticket-monster
 .Start Server
 image::images/jbds6.png[]
 
-Congratulations! You've just deployed your first application to a WildFly running in a Docker container............................................................................
+Congratulations! You've just deployed your first application to a WildFly running in a Docker container.
+
+Stop wildfly
+[source, text]
+----
+docker stop wildfly
+----
+
+### Other Deployment options
+Let's explore deeper, what other deployment options we have
+
+**Deployment to WildFly Container using Management API**
+
+**Using the CLI**
+
+**Using the web console**
 
 http://blog.arungupta.me/deploy-wildfly-docker-eclipse/
 
 
-### Deploy Ticket Monster
 
 https://github.com/rafabene/devops-demo
 
