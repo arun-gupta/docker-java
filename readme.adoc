@@ -277,10 +277,13 @@ The "-f" flag keeps refreshing the logs and pushes new events directly out to th
 After the database server is up and running we now need the WildFly.
 [source, text]
 ----
-docker run -d --name wildfly -p 8080:8080 --link db:db <INSTRUCTOR_IP>:5000/wildfly
+docker run -d --name wildfly -p 8080:8080 --link db:db -v /Users/youruser/tmp/deployments:/opt/jboss/wildfly/standalone/deployments/:rw <INSTRUCTOR_IP>:5000/wildfly
 ----
-This command starts a container named "wildfly" and links this container to the db container we started earlier. The other options are known to you already.
+This command starts a container named "wildfly" and links this container to the db container we started earlier.
+The "-v" flag maps a local directory into the host. This will be the place to put the deployments. Please make sure to use `-v /c/Users/` notation for drive letters on windows.
+The other options are known to you already.
 Check the logs if the server is started.
+
 [source, text]
 ----
 docker logs -f wildfly
@@ -307,6 +310,23 @@ Setup the server properties in the following image.  The two properties on the l
 .Server properties
 image::images/jbds3.png[]
 
+Specify a custom deployment folder on Deployment tab of Server Editor
+
+.Server Editor
+image::images/jbds4.png[]
+
+Right-click on the newly created server adapter and click “Start”.
+
+.Start Server
+image::images/jbds5.png[]
+
+Now you need to right-click, Run on Server on the ticket-monster application and chose this server.
+The project runs and displays the start page of ticket-monster
+
+.Start Server
+image::images/jbds6.png[]
+
+Congratulations! You've just deployed your first application to a WildFly running in a Docker container............................................................................
 
 http://blog.arungupta.me/deploy-wildfly-docker-eclipse/
 

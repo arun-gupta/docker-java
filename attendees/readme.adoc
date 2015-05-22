@@ -101,3 +101,20 @@ To install JBoss Developer Studio stand-alone, complete the following steps:
 cd /download/path/
 java -jar jboss-devstudio-8.1.0.GA-jar_universal.jar
 ----
+
+## Add a host entry for your dockerhost
+To make it easiert to access the containers we add an entry into the host mapping table............................................................................
+First, find out the IP address of your machine:
+
+
+[source, text]
+----
+docker-machine ip
+----
+
+And edit the /etc/hosts (Mac OS) or C:\Windows\System32\drivers\etc\hosts (Windows)
+and add
+[source, text]
+----
+<OUTPUT OF DOCKER MACHINE COMMAND>  dockerhost
+----
