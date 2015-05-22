@@ -165,7 +165,7 @@ docker exec instructor_gitlab_1 bash -c "cd /home/git/data/repositories/root; gi
 docker build -t "instructor/ticketmonster-pgsql-wildfly" dockerfiles/ticketmonster-pgsql-wildfly/
 ----
 
-## Put the wildfly, ticketmonster-pgsql-wildfly and postgres images on the local registry
+## Put the wildfly, ticketmonster-pgsql-wildfly, postgres and modcluster images on the local registry
 
 [source, text]
 ----
@@ -182,6 +182,11 @@ docker push localhost:5000/ticketmonster-pgsql-wildfly
 docker pull postgres
 docker tag postgres localhost:5000/postgres
 docker push localhost:5000/postgres
+
+# Modcluster
+docker pull goldmann/mod_cluster
+docker tag goldmann/mod_cluster localhost:5000/mod_cluster
+docker push localhost:5000/mod_cluster
 ----
 
 ## More information
