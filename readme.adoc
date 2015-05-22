@@ -226,6 +226,29 @@ If the machine state is stopped, starte it with
 docker-machine start
 ----
 
+Now we need a WildFly and a database. Start with the Postgres database.
+
+[source, text]
+----
+docker run --name db -d -p 5432:5432 -e POSTGRES_USER=ticketmonster -e POSTGRES_PASSWORD=ticketmonster-docker <INSTRUCTOR_IP>:5000/postgres
+----
+This command starts a container named "db" from the image in your instructor's registry "<INSTRUCTOR_IP>:5000/postgres". As this will not be present locally, it needs to be downloaded first. But you'll have a very quick connection to the instructor registry and this shouldn't take long.
+The two "-e" options define environment variables which are read by the db at startup and allow us to access the database with this user and password.
+Finally, the "-d" option tells docker to start a demon process. "-p" maps container ports to host ports and allows other containers on our host to access it.
+
+This should have worked. To double check if it did, you can see the server logs
+[source, text]
+----
+docker logs -f db
+----
+The "-f" flag keeps refreshing the logs and pushes new events directly out to the console.
+
+After the database server is up and running we now need the WildFly.
+[source, text]
+----
+docker run -d --name wildfly --link db:db <INSTRUCTOR_IP>:5000/wildfly-ticketmonster
+----
+
 
 
 ### Deploy Ticket Monster
