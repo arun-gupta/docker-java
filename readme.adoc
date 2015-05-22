@@ -1,4 +1,10 @@
+= Docker and Kubernetes for Java Developers
+:toc:
+:toc-placement!:
+
 # Docker and Kubernetes for Java Developers
+
+toc::[]
 
 ## Preface
 Containers are enabling developers to package their applications (and underlying dependencies) in new ways that are portable and work consistently everywhere? On your machine, in production, in your data center, and in the cloud. And Docker has become the de facto standard for those portable containers in the cloud.
@@ -56,6 +62,33 @@ Docker simplifies software delivery by making it easy to build and share images 
 Your application typically require a specific version of operating system, application server, JDK, database server, may require to tune the configuration files, and similarly multiple other dependencies. The application may need binding to specific ports and certain amount of memory. The components and configuration together required to run your application is what is referred to as application operating system.
 
 You can certainly provide an installation script that will download and install these components. Docker simplifies this process by allowing to create an image that contains your application and infrastructure together, managed as one component. These images are then used to create Docker containers which run on the container virtualization platform, provided by Docker.
+
+**What can a Java Developer use Docker for?**
+
+__Faster delivery of your applications__
+
+Docker helps you with the development lifecycle.
+Docker allows you to develop on local containers that contain your applications
+and services. It can then integrate into a continuous integration and
+deployment workflow.
+
+For example, you write code locally and share the development stack
+via Docker with colleagues. When everybody is ready, you push the
+code and the stack you all are developing onto a test environment
+and execute any required tests.
+From the testing environment, you can then push the Docker images
+into production and deploy your code.
+
+__Deploying and scaling more easily__
+
+Docker's container-based platform allows for portable workloads.
+Docker containers can run on a developer's local host, on physical
+or virtual machines in a data center, or in the Cloud.
+
+Docker's portability and lightweight nature also make dynamically
+managing workloads easy. You can use Docker to quickly scale up or
+tear down applications and services.
+Docker is so fast, that scaling can be near real time.
 
 **How is it different from VM?**
 
