@@ -36,7 +36,7 @@ And save to c:\Users\<username>\docker\docker.exe
 ----
 
 ## Install Docker compose
-We use compose to make the setup for the instructor as easy as possible. The link:https://github.com/arun-gupta/docker-java/blob/master/instructor/docker-compose.yml[docker-compose.yml] contains all the instructions for the tool to setup and start the infrastructure............................................................................
+We use compose to make the setup for the instructor as easy as possible. The link:https://github.com/arun-gupta/docker-java/blob/master/instructor/docker-compose.yml[docker-compose.yml] contains all the instructions for the tool to setup and start the infrastructure.
 Learn more about it by visiting the link:https://docs.docker.com/compose/[Docker Compose Website].
 
 
@@ -165,10 +165,15 @@ docker exec instructor_gitlab_1 bash -c "cd /home/git/data/repositories/root; gi
 docker build -t "instructor/ticketmonster-pgsql-wildfly" dockerfiles/ticketmonster-pgsql-wildfly/
 ----
 
-## Put the ticketmonster-pgsql-wildfly and postgres images on the local registry
+## Put the wildfly, ticketmonster-pgsql-wildfly and postgres images on the local registry
 
 [source, text]
 ----
+# Wildfly
+docker pull jboss/wildfly
+docker tag  jboss/wildfly localhost:5000/wildfly
+docker push localhost:5000/wildfly
+
 # Ticket-monster+PGSQ+WildFly
 docker tag instructor/ticketmonster-pgsql-wildfly localhost:5000/ticketmonster-pgsql-wildfly
 docker push localhost:5000/ticketmonster-pgsql-wildfly

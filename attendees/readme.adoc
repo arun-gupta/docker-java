@@ -103,7 +103,7 @@ java -jar jboss-devstudio-8.1.0.GA-jar_universal.jar
 ----
 
 ## Add a host entry for your dockerhost
-To make it easiert to access the containers we add an entry into the host mapping table............................................................................
+To make it easiert to access the containers we add an entry into the host mapping table.
 First, find out the IP address of your machine:
 
 
