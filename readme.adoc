@@ -232,12 +232,14 @@ git clone -b WFLY8.1 http://root:dockeradmin@<INSTRUCTOR_IP>:10080/root/ticket-m
 
 From here, you're free to explore the application a bit. Open it with JBDS and find more background about the use-cases and how the application is designed at the link:http://www.jboss.org/ticket-monster/whatisticketmonster/[Ticket Monster Website].
 
+Copy the Maven lab-settings.xml file that you have downloaded from the instructor machine and place it inside /docker-java
+
 When you're ready, it is time to build the application. Switch to the checkout directory and run maven package.
 
 [source, text]
 ----
 cd /docker-java/ticket-monster
-mvn -s settings.xml -f demo/pom.xml package
+mvn -s lab-settings.xml -f demo/pom.xml package
 ----
 
 Congratulations: You just build the applications war file. Let's see if this can be deployed.

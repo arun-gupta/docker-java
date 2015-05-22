@@ -41,6 +41,10 @@ RUN wget http://test.docker.com.s3.amazonaws.com/builds/Windows/x86_64/docker-1.
 RUN wget http://apache.mirrors.ionfish.org/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.zip
 RUN wget http://apache.mirrors.ionfish.org/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz
 
+#Add other files to downloads
+ADD lab-settings.xml /var/www/html/downloads
+
+
 EXPOSE 80
 
 # Simple startup script to avoid some issues observed with container restart 

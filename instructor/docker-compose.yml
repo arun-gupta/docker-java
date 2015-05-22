@@ -1,7 +1,7 @@
 dockerregistry:
   image: registry:2.0
   volumes:
-    - /registry:/tmp/registry-dev
+    - /srv/docker/registry:/tmp/registry-dev
   ports: 
     - "5000:5000"
 httpserver:

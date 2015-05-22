@@ -50,7 +50,7 @@
       <repositories>
         <repository>
           <id>instructor-nexus-repository</id>
-          <url>http://localhost:8081/content/groups/public/</url>
+          <url>http://<INSTRUCTOR_IP>:8081/content/groups/public/</url>
           <releases>
             <enabled>true</enabled>
           </releases>
@@ -62,7 +62,7 @@
       <pluginRepositories>
         <pluginRepository>
           <id>instructor-plugin-repository</id>
-          <url>http://localhost:8081/content/groups/public/</url>
+          <url>http://<INSTRUCTOR_IP>:8081/content/groups/public/</url>
           <releases>
             <enabled>true</enabled>
           </releases>

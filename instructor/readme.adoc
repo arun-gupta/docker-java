@@ -137,6 +137,8 @@ Access the gitlab server [http://localhost:10080/].
 
 ## Populate Gitlab with Ticket-monster sources
 In order to allow a complete offline experience, we also host our own git repository for the demo application on the instructor machine.
+
+_Note: Gitlab must have completed his startup. It usually takes 3 minutes to do so._
 Execute:
 
 [source,text]

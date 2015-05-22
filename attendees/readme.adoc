@@ -49,7 +49,7 @@ set PATH=%PATH%;c:\docker
 
 ## Install Docker client
 
-Download your binary from http://<INSTRUCTOR_IP:8082>/downloads/
+Download your binary from http://<INSTRUCTOR_IP>:8082/downloads/
 
 [source, text]
 ----
@@ -57,7 +57,7 @@ Download your binary from http://<INSTRUCTOR_IP:8082>/downloads/
 curl -L  https://get.docker.com/builds/Darwin/x86_64/docker-latest > /usr/local/bin/docker
 
 #Windows
-curl http://<INSTRUCTOR_IP:8082>/docker-1.6.0.exe
+curl http://<INSTRUCTOR_IP>:8082/docker-1.6.0.exe
 On Windows put into and rename to: c:\docker\docker.exe
 ----
 
@@ -78,7 +78,7 @@ eval "$(docker-machine env lab)"
 Download apache-maven-3.3.3-bin[.zip|tar.gz] from the instructor PC.
 [source, text]
 ----
-curl http://<INSTRUCTOR_IP:8082>/apache-maven-3.3.3-bin[.zip|tar.gz]
+curl http://<INSTRUCTOR_IP>:8082/downloads/apache-maven-3.3.3-bin[.zip|tar.gz]
 ----
 
 unzip to a folder of your choice and add the folder to your PATH environment variable.
@@ -87,6 +87,13 @@ unzip to a folder of your choice and add the folder to your PATH environment var
 ----
 set PATH=%PATH%;c:/apache-maven-3.3.3
 ----
+
+## Prepare Maven settings.xml file
+
+Download the lab-settings.xml file from http://<INSTRUCTOR_IP>:8082/downloads/lab-settings.xml
+
+Edit the model file and replace the <INSTRUCTOR_IP>.
+
 
 ## Setup JBoss Developer Studio
 
