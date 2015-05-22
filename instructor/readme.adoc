@@ -18,9 +18,10 @@ Instructor needs:
 
 . Have https://www.virtualbox.org/[Oracle Virtualbox] installed and the install folder added to your PATH environment variable.
 . Have the https://github.com/arun-gupta/docker-java/ git repository checked out.
-. Have https://msysgit.github.io/ installed on windows
+. Have https://msysgit.github.io/ installed on Windows
 
 ## Install Docker Client
+The docker client is the minimum requirement to have. Download and install by just copying and renaming it accordingly.
 
 [source, text]
 ----
@@ -35,6 +36,9 @@ And save to c:\Users\<username>\docker\docker.exe
 ----
 
 ## Install Docker compose
+We use compose to make the setup for the instructor as easy as possible. The link:https://github.com/arun-gupta/docker-java/blob/master/instructor/docker-compose.yml[docker-compose.yml] contains all the instructions for the tool to setup and start the infrastructure............................................................................
+Learn more about it by visiting the link:https://docs.docker.com/compose/[Docker Compose Website].
+
 
 [source, text]
 ----
@@ -44,7 +48,6 @@ chmod +x /usr/local/bin/docker-compose
 ----
 
 ## Install Docker-machine
-
 Install the Docker machine client for your environment: https://github.com/docker/machine/releases/[latest releases]
 
 [source, text]
@@ -61,7 +64,7 @@ And save to c:\Users\<username>\docker\docker-machine.exe
 For Windows, make sure to add c:\Users\<username>\docker to your %PATH% variable.
 
 ## Create Machine
-
+This creates your instructor host which will run the complete infrastructure.
 [source, text]
 ----
 docker-machine create --driver virtualbox mymachine
@@ -106,14 +109,14 @@ $ sudo /etc/init.d/docker restart
 ----
 
 ## Create a container with Nexus dependencies
-
+We want to provide the option to run this lab without any internet access at all. So, the instructor machine will contain everything that the attendees will need to run this lab.
 [source, text]
 ----
 docker run --name="nexusdata" -v $(pwd):/backup sonatype/nexus:oss bash -c "tar xvf  /backup/nexusbackup.tar -C /"
 ----
 
 ## Start the Instructor environment
-
+Use the following compose command to startup the complete environment at once.
 _Note: This command should take some time to execute_
 
 [source, text]
@@ -133,7 +136,7 @@ Access the gitlab server [http://localhost:10080/].
 
 
 ## Populate Gitlab with Ticket-monster sources
-
+In order to allow a complete offline experience, we also host our own git repository for the demo application on the instructor machine.
 Execute:
 
 [source,text]
