@@ -196,7 +196,17 @@ And checkout the sources from the instructor git repository.
 git clone -b WFLY8.1 http://root:dockeradmin@<INSTRUCTOR_IP>:10080/root/ticket-monster.git
 ----
 
-From here, you're free to explore the application a bit. Open it with JBDS and
+From here, you're free to explore the application a bit. Open it with JBDS and find more background about the use-cases and how the application is designed at the link:http://www.jboss.org/ticket-monster/whatisticketmonster/[Ticket Monster Website].
+
+When you're ready, it is time to build the application. Switch to the checkout directory and run maven package.
+
+[source, text]
+----
+cd /docker-java/ticket-monster
+mvn -s settings.xml -f demo/pom.xml package
+----
+
+
 
 ### Deploy Ticket Monster
 
