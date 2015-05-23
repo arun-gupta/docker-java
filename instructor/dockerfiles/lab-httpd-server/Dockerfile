@@ -42,7 +42,7 @@ RUN wget http://apache.mirrors.ionfish.org/maven/maven-3/3.3.3/binaries/apache-m
 RUN wget http://apache.mirrors.ionfish.org/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz
 
 #Add other files to downloads
-ADD lab-settings.xml /var/www/html/downloads
+ADD lab-settings.xml /var/www/html/downloads/
 
 
 EXPOSE 80
