@@ -13,7 +13,7 @@ USER root
 
 # Run customization scripts as root
 RUN chmod +x /opt/jboss/wildfly/customization/execute.sh
-RUN /opt/jboss/wildfly/customization/execute.sh standalone
+RUN /opt/jboss/wildfly/customization/execute.sh standalone standalone-ha.xml
 
 ADD ticket-monster.war /opt/jboss/wildfly/standalone/deployments/
 
@@ -29,5 +29,5 @@ EXPOSE 8080 9990
 
 # Set the default command to run on boot
 # This will boot WildFly in the standalone mode and bind to external interface and enable HA
-CMD /opt/jboss/wildfly/bin/standalone.sh -b `hostname -i` -bmanagement `hostname -i`
+CMD /opt/jboss/wildfly/bin/standalone.sh -b `hostname -i` -bmanagement `hostname -i` -c standalone-ha.xml
 

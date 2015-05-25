@@ -67,7 +67,7 @@ For Windows, make sure to add c:\Users\<username>\docker to your %PATH% variable
 This creates your instructor host which will run the complete infrastructure.
 [source, text]
 ----
-docker-machine create --driver virtualbox mymachine
+docker-machine create --driver=virtualbox --virtualbox-memory=4096 mymachine
 ----
 
 ## Expose the Virtual Box ports to other computer in the LAN
@@ -166,7 +166,7 @@ docker exec instructor_gitlab_1 bash -c "cd /home/git/data/repositories/root; gi
 
 [source, text]
 ----
-docker build -t "instructor/managed-wildfly" dockerfiles/managed-wildfly/
+docker build -t "instructor/wildfly-management" dockerfiles/wildfly-management/
 docker build -t "instructor/ticketmonster-pgsql-wildfly" dockerfiles/ticketmonster-pgsql-wildfly/
 ----
 
@@ -174,10 +174,14 @@ docker build -t "instructor/ticketmonster-pgsql-wildfly" dockerfiles/ticketmonst
 
 [source, text]
 ----
+# Wildfly
+docker pull jboss/wildfly
+docker tag jboss/wildfly localhost:5000/wildfly
+docker push localhost:5000/wildfly
 
 # Managed WildFly
-docker tag instructor/managed-wildfly localhost:5000/managed-wildfly
-docker push localhost:5000/managed-wildfly
+docker tag instructor/wildfly-management localhost:5000/wildfly-management
+docker push localhost:5000/wildfly-management
 
 # Ticket-monster+PGSQ+WildFly
 docker tag instructor/ticketmonster-pgsql-wildfly localhost:5000/ticketmonster-pgsql-wildfly

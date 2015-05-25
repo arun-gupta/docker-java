@@ -1,6 +1,10 @@
 # Mark the commands below to be run as a batch
 batch
 
+# Configure mod_cluster to no use tcp advertisement
+/subsystem=modcluster/mod-cluster-config=configuration:write-attribute(name=advertise,value=false)
+/subsystem=modcluster/mod-cluster-config=configuration:write-attribute(name=proxy-list,value=${modcluster.host:modcluster}:80)
+
 # Add Postgres JDBC Driver as a module
 module add --name=org.postgresql --resources=/opt/jboss/wildfly/customization/postgresql-9.4-1201.jdbc41.jar --dependencies=javax.api,javax.transaction.api
 
