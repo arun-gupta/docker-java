@@ -162,21 +162,22 @@ docker exec instructor_gitlab_1 bash -c "cd /home/git/data/repositories/root; gi
 
   cp ticket-monster/demo/target/ticket-monster.war dockerfiles/ticketmonster-pgsql-wildfly/
 
-## Build ticketmonster-pgsql-widlfly image
+## Build managed-widlfly and ticketmonster-pgsql-widlfly images
 
 [source, text]
 ----
+docker build -t "instructor/managed-wildfly" dockerfiles/managed-wildfly/
 docker build -t "instructor/ticketmonster-pgsql-wildfly" dockerfiles/ticketmonster-pgsql-wildfly/
 ----
 
-## Put the wildfly, ticketmonster-pgsql-wildfly, postgres and modcluster images on the local registry
+## Put the managed-wildfly, ticketmonster-pgsql-wildfly, postgres and modcluster images on the local registry
 
 [source, text]
 ----
-# Wildfly
-docker pull jboss/wildfly
-docker tag  jboss/wildfly localhost:5000/wildfly
-docker push localhost:5000/wildfly
+
+# Managed WildFly
+docker tag instructor/managed-wildfly localhost:5000/managed-wildfly
+docker push localhost:5000/managed-wildfly
 
 # Ticket-monster+PGSQ+WildFly
 docker tag instructor/ticketmonster-pgsql-wildfly localhost:5000/ticketmonster-pgsql-wildfly
