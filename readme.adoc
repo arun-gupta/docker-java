@@ -503,10 +503,29 @@ You do already know the command syntax. Beside linking the db, we also link the 
 .Loadbalancer registered first WildFly instance.
 image::images/wildfly_cluster3.png[]
 
+To make sure the Ticket Monster App is also running just visit http://dockerhost/ticket-monster and you will be presented with the ticket monster welcome screen.
 
+.Clustered Ticket Monster Application
+image::images/wildfly_cluster4.png[]
 
+You can now start as many wildfly instances you want (and your computer memory can handle):
+[source, text]
+----
+docker run -d --name server2 --link db:db --link modcluster:modcluster <INSTRUCTOR_IP>:5000/ticketmonster-pgsql-wildfly
+docker run -d --name server3 --link db:db --link modcluster:modcluster <INSTRUCTOR_IP>:5000/ticketmonster-pgsql-wildfly
+docker run -d --name server4 --link db:db --link modcluster:modcluster <INSTRUCTOR_IP>:5000/ticketmonster-pgsql-wildfly
+----
 
-https://github.com/rafabene/devops-demo
+You can stop some servers and check the application behavior:
+[source, text]
+----
+docker stop server1
+docker stop server3
+
+----
+
+TODO: Pick, which parts we want to describe in more detail from here: https://goldmann.pl/blog/2013/10/07/wildfly-cluster-using-docker-on-fedora/
+
 
 ## Test Java EE Applications on Docker
 
