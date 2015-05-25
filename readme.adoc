@@ -451,8 +451,9 @@ And again, keep the container running, we're going to look into the last deploym
 The build in Web-Console also relies on the same management APIs that we've already been using via JBoss Developer Tools and the CLI. It does provide a nice web-based way to administrate your instance and if you've already exposed the container ports, you can simply access it via the URL: http://dockerhost:9990 in your webbrowser.
 This will point you to the management interface
 
-.Start Server
+.The Web Console
 image::images/console1.png[]
+
 
 If you're prompted for username and password enter "admin" as username and "docker#admin" as password. Now navigate through it and execute the following steps:
 
@@ -462,8 +463,36 @@ If you're prompted for username and password enter "admin" as username and "dock
 . On the "Step 2/2" screen, click "Next" again.
 
 Now you've been successfully deploying the Ticket Monster application in three different ways. Time to look at some more features, that Docker can provide to Java developers.
+Make sure to stop the WildFly instance after this last option.
+
+Stop wildfly when you're done.
+[source, text]
+----
+docker stop wildfly
+----
 
 ## Ticket-Monster Docker Cluster
+Another frequent requirement for Java EE based applications is clustering. While setup and test can be complicated on developer machines, this is where Docker can play to it's full potential. With the help of images and automatic port mapping, we're ready to test Ticket-Monster on a couple of WildFly instances and add and remove them randomly.
+Here is the rough architecture, of what we're going to do:
+
+.Standalone Cluster with WildFly and mod_cluster
+image::images/wildfly_cluster1.png[]
+
+
+We're going to start with the Apache HTTPD server.
+[source, text]
+----
+docker run -d --name modcluster -p 80:80 <INSTRUCTOR_IP>:5000/mod_cluster
+----
+
+To see if everything worked out the way we wanted it, open http://dockerhost/mod_cluster_manager with your browser. This should show the empty console:
+
+.Apache HTTPD runing mod_cluster_manager interface
+image::images/wildfly_cluster2.png[]
+
+
+
+
 
 https://github.com/rafabene/devops-demo
 
