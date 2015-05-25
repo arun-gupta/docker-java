@@ -491,6 +491,18 @@ To see if everything worked out the way we wanted it, open http://dockerhost/mod
 image::images/wildfly_cluster2.png[]
 
 
+Now we need the first WildFly instance:
+
+[source, text]
+----
+docker run -d --name server1 --link db:db --link modcluster:modcluster <INSTRUCTOR_IP>:5000/ticketmonster-pgsql-wildfly
+----
+
+You do already know the command syntax. Beside linking the db, we also link the modcluster container. This should be done very quickly and if you now revisit link:http://dockerhost/mod_cluster_manager/[the mod_cluster_manager] website in your browser, you can see, that the first server was registered to the loadbalancer:
+
+.Loadbalancer registered first WildFly instance.
+image::images/wildfly_cluster3.png[]
+
 
 
 
