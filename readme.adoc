@@ -300,11 +300,6 @@ Docker also has a linking system that allows you to link multiple containers tog
 See more about container communication on the Docker website link:https://docs.docker.com/userguide/dockerlinks/[Linking Containers Together]
 ===============================
 
-TODO: do we need to talk more about container linking?
-http://blog.arungupta.me/docker-mysql-persistence/
-http://blog.arungupta.me/docker-container-linking-across-multiple-hosts-techtip69/
-
-
 The "-v" flag maps a local directory into the host. This will be the place to put the deployments. Please make sure to use `-v /c/Users/` notation for drive letters on windows.
 The other options are known to you already.
 Check the logs if the server is started.
@@ -353,18 +348,85 @@ image::images/jbds6.png[]
 
 Congratulations! You've just deployed your first application to a WildFly running in a Docker container.
 
-Stop wildfly
+Stop wildfly when you're done.
 [source, text]
 ----
 docker stop wildfly
 ----
 
 ### Other Deployment options
-Let's explore deeper, what other deployment options we have
+For the first deployment we used a shared volumen on the host computer. Let's explore deeper, what other deployment options we have
 
 **Deployment to WildFly Container using Management API**
 
+A standalone WildFly process, process can be configured to listen for remote management requests using its "native management interface".
+The CLI tool that comes with the application server uses this interface, and user can develop custom clients that use it as well. In order to use this, the wildfly management interface listen IP needs to be changed from 127.0.0.1 to 0.0.0.0 which basically means, that it is not only listening on the localhost but also on all publicly assigned IP addresses.
+
+The database server is still up an running. Now we're starting another WildFly instance again:
+[source, text]
+----
+docker run -d --name wildfly -p 8080:8080 -p 9990:9990 --link db:db <INSTRUCTOR_IP>:5000/wildfly-management
+----
+As you can see, there is no mapped volume in this case but an additional port exposed. The WildFly image that is used makes ist easier for you to play around with the deployment via the management API. It has a tweaked start script which changes the management interface according to the behavior described in the first sentence.
+Now go and create another new server adapter in JBoss Developer Studio.
+
+.Create New Server Adapter
+image::images/jbds7.png[]
+
+Keep the defaults in the adapter properties.
+
+.Adapter Properties
+image::images/jbds8.png[]
+
+Set up server properties by specifying the admin credentials (Admin#70365). Note, you need to delete the existing password and use this instead:
+
+.Management Login Credentials
+image::images/jbds9.png[]
+
+Right-click on the newly created server adapter and click “Start”.Status quickly changes to “Started, Synchronized” as shown.
+
+.Start Server
+image::images/jbds10.png[]
+
+Now you need to right-click, Run on Server on the ticket-monster application and chose this server.
+The project runs and displays the start page of ticket-monster.
+
+Keep the WildFly instance up and running this time. We will re-use it for the next deployment option.
+
 **Using the CLI**
+
+The Command Line Interface (CLI) is a tool for connecting to WildFly instances to manage all tasks from command line environment. Some of the tasks that you can do using the CLI are:
+
+. Deploy/Undeploy web application in standalone/Domain Mode.
+. View all information about the deployed application on runtime.
+. Start/Stop/Restart Nodes in respective mode i.e. Standalone/Domain.
+. Adding/Deleting resource or subsystems to servers.
+
+In order to work with the CLI you need to have it locally installed on your machine. Your instructor has a download prepared for you at http://<INSTRUCTOR_IP:8082>/downloads/
+Unzip into a folder of your choice (e.g. /Users/arungupta/WildFly82/). This folder is named $WIDLFY_HOME from here on. Make sure to add the /Users/arungupta/WildFly82/bin to your path environment variable.
+
+[source, text]
+----
+# Windows Example
+set PATH=%PATH%;%WILDFLY_HOME%/bin
+----
+
+Now run the `jboss-cli` command and connect to the running WildFly instance.
+
+[source, text]
+----
+cd %WIDLFY_HOME%/bin
+./jboss-cli.sh --controller=dockerhost:9990  -u=admin -p=docker#admin -c
+----
+
+Once that you're connected through the `jboss-cli`, run:
+
+[source, text]
+----
+deploy <TICKET_MONSTER_PATH>/ticket-monster.war --force
+----
+
+Now you've been sucessfully using the CLI to remotely deploy the ticket-monster application to a running docker container.
 
 **Using the web console**
 
