@@ -278,11 +278,6 @@ This command starts a container named "db" from the image in your instructor's r
 The two "-e" options define environment variables which are read by the db at startup and allow us to access the database with this user and password.
 Finally, the "-d" option tells docker to start a demon process. "-p" maps container ports to host ports and allows other containers on our host to access it.
 
-TODO: do we need to talk more about container linking?
-http://blog.arungupta.me/docker-mysql-persistence/
-http://blog.arungupta.me/docker-container-linking-across-multiple-hosts-techtip69/
-
-
 This should have worked. To double check if it did, you can see the server logs
 [source, text]
 ----
@@ -295,7 +290,21 @@ After the database server is up and running we now need the WildFly.
 ----
 docker run -d --name wildfly -p 8080:8080 --link db:db -v /Users/youruser/tmp/deployments:/opt/jboss/wildfly/standalone/deployments/:rw <INSTRUCTOR_IP>:5000/wildfly
 ----
-This command starts a container named "wildfly" and links this container to the db container we started earlier.
+This command starts a container named "wildfly" and links this container to the db (--link option) container we started earlier.
+
+.More Information about container linking
+[NOTE]
+===============================
+You saw how you can connect to a service running inside a Docker container via a network port. But a port connection is only one way you can interact with services and applications running inside Docker containers.
+Docker also has a linking system that allows you to link multiple containers together and send connection information from one to another. When containers are linked, information about a source container can be sent to a recipient container. This allows the recipient to see selected data describing aspects of the source container.
+See more about container communication on the Docker website link:https://docs.docker.com/userguide/dockerlinks/[Linking Containers Together]
+===============================
+
+TODO: do we need to talk more about container linking?
+http://blog.arungupta.me/docker-mysql-persistence/
+http://blog.arungupta.me/docker-container-linking-across-multiple-hosts-techtip69/
+
+
 The "-v" flag maps a local directory into the host. This will be the place to put the deployments. Please make sure to use `-v /c/Users/` notation for drive letters on windows.
 The other options are known to you already.
 Check the logs if the server is started.
