@@ -543,6 +543,21 @@ We don't setup Kubernetes on Windows yet (might be an option to use jube someday
 
 ## OpenShift v3 (Optional Part)
 
+1) Download and install GO https://golang.org/dl/
+2) git clone https://github.com/openshift/origin.git
+3) make release
+4) docker run -d --name "openshift-origin" --net=host --privileged -v /var/run/docker.sock:/var/run/docker.sock  -v /Users/arungupta/workspaces/openshift:/workspaces/openshift -v /usr/local/bin/docker:/usr/bin/docker openshift/origin start --public-master=$(boot2docker ip)
+
+ssh origin beta1
+
+export CERT_DIR=/var/lib/openshift/openshift.local.certificates/openshift-client && \
+export KUBECONFIG=/var/lib/openshift/openshift.local.certificates/admin/.kubeconfig && \
+cd /workspaces/openshift/origin && hack/install-registry.sh
+
+
+osc get pods
+
+
 http://blog.arungupta.me/openshift-v3-getting-started-javaee7-wildfly-mysql/
 
 
