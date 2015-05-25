@@ -266,9 +266,18 @@ After it is started you can find out about the IP address of your host with
 ----
 docker-machine ip
 ----
-We'll use this from now on as <HOST_IP> in the commands.
+We already did this during the setup document, remember? So, this is a good chance to check, if you already added this IP to your hosts file.
+Type:
 
-Now we need a WildFly and a database. Start with the Postgres database.
+[source, text]
+----
+ping dockerhost
+----
+
+and see if this resolves to the IP address that the docker-machine command printed out.
+If it does, you're ready to start over with the lab. Let's get started with the real work.
+
+Time to bring in WildFly and a database. You'll start with the database. We choose Postgres as our database for the Ticketmonster application.
 
 [source, text]
 ----
@@ -276,7 +285,15 @@ docker run --name db -d -p 5432:5432 -e POSTGRES_USER=ticketmonster -e POSTGRES_
 ----
 This command starts a container named "db" from the image in your instructor's registry "<INSTRUCTOR_IP>:5000/postgres". As this will not be present locally, it needs to be downloaded first. But you'll have a very quick connection to the instructor registry and this shouldn't take long.
 The two "-e" options define environment variables which are read by the db at startup and allow us to access the database with this user and password.
-Finally, the "-d" option tells docker to start a demon process. "-p" maps container ports to host ports and allows other containers on our host to access it.
+Finally, the "-d" option tells docker to start a demon process. Which means, that the console window, you're running this command in, will be available again after it is issued. If you skip this parameter, the console will be directly showing the output from the process.
+"-p" option maps container ports to host ports and allows other containers on our host to access them.
+
+.More Information about port mapping
+[NOTE]
+===============================
+Port exposure and mapping are the keys to successful work with Docker.
+See more about networking on the Docker website link:https://docs.docker.com/articles/networking/[Advanced Networking]
+===============================
 
 This should have worked. To double check if it did, you can see the server logs
 [source, text]
@@ -309,7 +326,7 @@ Check the logs if the server is started.
 docker logs -f wildfly
 ----
 
-And access the http://<HOST_IP>:8080 with your webbrowser to make sure the instance is up and running.
+And access the http://dockerhost:8080 with your webbrowser to make sure the instance is up and running.
 
 Now you're ready to deploy the application for the first time. Let's use JBoss Developer Studio for this.
 
