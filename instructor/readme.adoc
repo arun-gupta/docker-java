@@ -116,6 +116,8 @@ docker run --name="nexusdata" -v $(pwd):/backup sonatype/nexus:oss bash -c "tar 
 ----
 
 ## Start the Instructor environment
+Download link:https://www.jboss.org/download-manager/content/origin/files/sha256/0e/0e3e78a641196d21742730f23a6e1c9aa04e0596c16349e74dbd4ea2d1109d40/jboss-devstudio-8.1.0.GA-installer-standalone.jar[JBDS 8.10.GA - 567 MB] and place it inside *dockerfiles/lab-httpd-server/downloads* folder.
+
 Use the following compose command to startup the complete environment at once.
 _Note: This command should take some time to execute_
 

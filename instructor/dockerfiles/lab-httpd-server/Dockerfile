@@ -12,9 +12,11 @@ RUN mkdir -p /var/www/html/downloads
 #Change Workdir to apache dir
 WORKDIR /var/www/html/downloads
 
-#Get Boot2docker 1.5
-RUN wget https://github.com/boot2docker/boot2docker/releases/download/v1.6.1/boot2docker.iso
+#Place JBDS inside the image
+ADD downloads/jboss-devstudio-8.1.0.GA-installer-standalone.jar /var/www/html/downloads/
 
+#Get Boot2docker 1.6.1
+RUN wget https://github.com/boot2docker/boot2docker/releases/download/v1.6.1/boot2docker.iso
 
 #Get VirtualBox for MAC
 RUN wget http://download.virtualbox.org/virtualbox/4.3.26/VirtualBox-4.3.26-98988-OSX.dmg
@@ -42,7 +44,7 @@ RUN wget http://apache.mirrors.ionfish.org/maven/maven-3/3.3.3/binaries/apache-m
 RUN wget http://apache.mirrors.ionfish.org/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz
 
 #Add other files to downloads
-ADD lab-settings.xml /var/www/html/downloads/
+ADD downloads/lab-settings.xml /var/www/html/downloads/
 
 
 EXPOSE 80
