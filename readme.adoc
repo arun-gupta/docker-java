@@ -120,7 +120,7 @@ or virtual machines in a data center, or in the Cloud.
 Docker's portability and lightweight nature also make dynamically
 managing workloads easy. You can use Docker to quickly scale up or
 tear down applications and services.
-Docker is so fast, that scaling can be near real time.
+<Docker is so fast, that scaling can be near real time.
 
 **How is it different from VM?**
 
@@ -444,10 +444,24 @@ deploy <TICKET_MONSTER_PATH>/ticket-monster.war --force
 ----
 
 Now you've been sucessfully using the CLI to remotely deploy the ticket-monster application to a running docker container.
+And again, keep the container running, we're going to look into the last deployment option you have.
 
 **Using the web console**
 
-http://blog.arungupta.me/deploy-wildfly-docker-eclipse/
+The build in Web-Console also relies on the same management APIs that we've already been using via JBoss Developer Tools and the CLI. It does provide a nice web-based way to administrate your instance and if you've already exposed the container ports, you can simply access it via the URL: http://dockerhost:9990 in your webbrowser.
+This will point you to the management interface
+
+.Start Server
+image::images/console1.png[]
+
+If you're prompted for username and password enter "admin" as username and "docker#admin" as password. Now navigate through it and execute the following steps:
+
+. Go to the "Deployments tab".
+. Click on "Replace" button.
+. On the "Step 1/2" screen, select the <TICKET_MONSTER_PATH>/ticket-monster.war file on your computer and click "Next".
+. On the "Step 2/2" screen, click "Next" again.
+
+Now you've been successfully deploying the Ticket Monster application in three different ways. Time to look at some more features, that Docker can provide to Java developers.
 
 ## Ticket-Monster Docker Cluster
 
