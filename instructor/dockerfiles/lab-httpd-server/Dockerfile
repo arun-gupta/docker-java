@@ -15,6 +15,9 @@ WORKDIR /var/www/html/downloads
 #Place JBDS inside the image
 ADD downloads/jboss-devstudio-8.1.0.GA-installer-standalone.jar /var/www/html/downloads/
 
+#Get WildFly 8.2
+RUN wget http://download.jboss.org/wildfly/8.2.0.Final/wildfly-8.2.0.Final.zip
+
 #Get Boot2docker 1.6.1
 RUN wget https://github.com/boot2docker/boot2docker/releases/download/v1.6.1/boot2docker.iso
 

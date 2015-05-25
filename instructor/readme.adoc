@@ -6,7 +6,7 @@ This folder contains instructions to setup an Instructor environment.
 
 toc::[]
 
-IMPORTANT: Make sure to run these instructions prior to the lab already. Executing them might take up to 30 minutes.
+IMPORTANT: Make sure to run these instructions prior to the lab already. Executing them might take up to 60 minutes.
 
 Instructor needs:
 
