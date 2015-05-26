@@ -238,8 +238,8 @@ When you're ready, it is time to build the application. Switch to the checkout d
 
 [source, text]
 ----
-cd /docker-java/ticket-monster
-mvn -s lab-settings.xml -f demo/pom.xml package
+cd /docker-java/
+mvn -s lab-settings.xml -f ticket-monster/demo/pom.xml -Ppostgresql clean package
 ----
 
 Congratulations: You just build the applications war file. Let's see if this can be deployed.

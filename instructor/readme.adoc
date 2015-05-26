@@ -156,7 +156,7 @@ docker exec instructor_gitlab_1 bash -c "cd /home/git/data/repositories/root; gi
 
 2. Build TicketMonster
 
-  mvn -s settings.xml -f ticket-monster/demo/pom.xml package
+  mvn -s settings.xml -f ticket-monster/demo/pom.xml -Ppostgresql clean package
 
 3. Copy TicketMonster war to the docker ticketmonster-pgsql-widlfly image folder
 
