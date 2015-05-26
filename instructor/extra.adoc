@@ -11,7 +11,7 @@ To update the HTML, have http://asciidoctor.org/ installed and run the following
 
 [source, text]
 ----
-asciidoctor ../attendees/readme.adoc -o dockerfiles/lab-httpd-server/index.html
+asciidoctor ../readme.adoc  -a data-uri -o dockerfiles/lab-httpd-server/index.html
 ----
 
 After that, you will need to build the services again running
