@@ -145,14 +145,14 @@ Execute:
 
 [source,text]
 ----
-docker exec instructor_gitlab_1 bash -c "cd /home/git/data/repositories/root; git clone --bare https://github.com/jboss-developer/ticket-monster.git; chown git:git -R /home/git/data/repositories; cd /home/git/gitlab; sudo -u git -H bundle exec rake -v gitlab:import:repos RAILS_ENV=production"
+docker exec instructor_gitlab_1 bash -c "cd /home/git/data/repositories/root; git clone --bare https://github.com/rafabene/ticket-monster.git; chown git:git -R /home/git/data/repositories; cd /home/git/gitlab; sudo -u git -H bundle exec rake -v gitlab:import:repos RAILS_ENV=production"
 ----
 
 ## Build TicketMonster from the sources
 
 1. Clone TicketMonster from the existing gitlab container
 
-  git clone -b WFLY8.1 http://root:dockeradmin@localhost:10080/root/ticket-monster.git
+  git clone -b WildFly-docker-test http://root:dockeradmin@localhost:10080/root/ticket-monster.git
 
 2. Build TicketMonster
 

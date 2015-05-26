@@ -227,7 +227,7 @@ cd /docker-java/
 And checkout the sources from the instructor git repository.
 [source, text]
 ----
-git clone -b WFLY8.1 http://root:dockeradmin@<INSTRUCTOR_IP>:10080/root/ticket-monster.git
+git clone -b WildFly-docker-test http://root:dockeradmin@<INSTRUCTOR_IP>:10080/root/ticket-monster.git
 ----
 
 From here, you're free to explore the application a bit. Open it with JBDS and find more background about the use-cases and how the application is designed at the link:http://www.jboss.org/ticket-monster/whatisticketmonster/[Ticket Monster Website].
