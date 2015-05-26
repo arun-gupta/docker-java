@@ -570,11 +570,79 @@ image::images/swarm1.png[]
 
 There are lots of other concepts but these are the main ones.
 
+First thing to do is, to create a Swarm cluster. The easiest way of using Swarm is, by using the official Docker image:
 
-. https://github.com/rafabene/devops-demo
-. Docker Swarm: http://blog.arungupta.me/clustering-docker-swarm-techtip85/
+[source, text]
+----
+docker run swarm create
+----
 
+This command returns a <TOKEN> and is the unique cluster id. It will be used when creating master and nodes later. This cluster id is returned by the hosted discovery service on Docker Hub.
 
+_Note: Make sure to note this cluster id now as there is no means to list it later._
+
+Swarm is fully integrated with Docker Machine, and so is the easiest way to get started. Let's create a Swarm Master next:
+
+[source, text]
+----
+docker-machine create -d virtualbox --swarm --swarm-master --swarm-discovery token://<TOKEN> swarm-master
+----
+
+The option "--swarm" configures the machine with Swarm, "--swarm-master" configures the created machine to be Swarm master. Make sure to replace cluster id after token:// with that obtained in the previous step. Swarm master creation talks to the hosted service on Docker Hub and informs that a master is created in the cluster.
+
+Now connect to this newly created master and find some more information about it:
+
+[source, text]
+----
+eval "$(docker-machine env swarm-master)"
+docker info
+----
+
+_NOTE: If you're on Windows, use the "docker-machine env swarm-master" command only and copy the output into an editor to replace all appearances of EXPORT with SET and issue the three commands at your command prompt._
+
+Looks, like everything is working fine. Now we need the Swarm nodes.
+
+[source, text]
+----
+docker-machine create -d virtualbox --swarm --swarm-discovery token://<TOKEN> swarm-node-01
+----
+
+Node creation talks to the hosted service at Docker Hub and joins the previously created cluster. This is specified by --swarm-discovery token://... and specifying the cluster id obtained earlier.
+
+To make it a real cluster, let's just create a second node:
+
+[source, text]
+----
+docker-machine create -d virtualbox --swarm --swarm-discovery token://<TOKEN> swarm-node-02
+----
+
+And list all the nodes / Docker machines, that has been created so far.
+The machines that are part of the cluster have the cluster’s name in the SWARM column, blank otherwise. For example, mymachine is a standalone machine where as all other machines are part of swarm-master cluster. The Swarm master is also identified by (master) in the SWARM column.
+
+Connect to the Swarm cluster and find some information about it:
+
+[source, text]
+----
+eval "$(docker-machine env --swarm swarm-master)"
+docker info
+----
+
+There are 3 nodes – one Swarm master and 2 Swarm nodes. There is a total of 4 containers running in this cluster – one Swarm agent on master and each node, and there is an additional swarm-agent-master running on the master. This can be verified by connecting to the master and listing all the containers:
+
+[source, text]
+----
+eval "$(docker-machine env swarm-master)"
+docker info
+----
+
+List the nodes in the cluster with the following command:
+
+[source, text]
+----
+docker run swarm list token://<TOKEN>
+----
+
+TODO: Running Ticket Monster on Swarm Cluster
 
 ## OpenShift v3 (Optional Part, No Windows )
 If you are on a Mac or Linux system, you can also try out clustering with OpenShift V3 and Kubernetes. For this is an optional step in the lab, you can follow these separate instructions.
