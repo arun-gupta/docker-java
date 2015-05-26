@@ -528,13 +528,48 @@ TODO: Pick, which parts we want to describe in more detail from here: https://go
 
 
 ## Test Java EE Applications on Docker
+Testing Java EE applications is a very important aspect. Especially when it comes to in-container tests, link:http://www.arquillian.org[JBoss Arquillian] is well known to make this very easy.
+Picking up where unit tests leave off, Arquillian handles all the plumbing of container management, deployment and framework initialization so you can focus on the task at hand, writing your tests. Real tests.
+
+Arquillian brings the test to the runtime so you don’t have to manage the runtime from the test (or the build). Arquillian eliminates this burden by covering all aspects of test execution, which entails:
+
+. Managing the lifecycle of the container (or containers)
+. Bundling the test case, dependent classes and resources into a ShrinkWrap archive (or archives)
+. Deploying the archive (or archives) to the container (or containers)
+. Enriching the test case by providing dependency injection and other declarative services
+. Executing the tests inside (or against) the container
+. Capturing the results and returning them to the test runner for reporting
+. To avoid introducing unnecessary complexity into the developer’s build environment, Arquillian integrates seamlessly with familiar testing frameworks (e.g., JUnit 4, TestNG 5), allowing tests to be launched using existing IDE, Ant and Maven test plugins — without any add-ons.
+
+Basically, you can just use Arquillian with the link:http://arquillian.org/modules/wildfly-arquillian-wildfly-remote-container-adapter/[WildFly Remote container adapter] and connect to any WildFly instance running in a Docker container. But this wouldn't help with the Docker container lifycycle management.
+This is where a new Arquillian extension, named link:http://arquillian.org/blog/2014/11/17/arquillian-cube-1-0-0-Alpha1/["Cube"] comes in.
+With this extension you can start a Docker container with a server installed, deploy the required deployable file within it and execute Arquillian tests.
+
+The key point here is that if Docker is used as deployable platform in production, your tests are executed in a the same container as it will be in production, so your tests are even more real than before.
+
+TODO: Finalize the Cubification of Ticket Monster and describe it.
 
 http://blog.arungupta.me/run-javaee-tests-wildfly-docker-arquillian-cube/
 
 
 ## Cluster using Swarm
+One of the key updates as part of Docker 1.6 is Docker Swarm 0.2.0. Docker Swarm solves one of the fundamental limitations of Docker where the containers could only run on a single Docker host. Docker Swarm is native clustering for Docker. It turns a pool of Docker hosts into a single, virtual host.
 
-We don't setup Kubernetes on Windows yet (might be an option to use jube someday)
+.Key Components of Docker Swarm
+image::images/swarm1.png[]
+
+**Swarm Manager:** Docker Swarm has a Master or Manager, that is a pre-defined Docker Host, and is a single point for all administration. Currently only a single instance of manager is allowed in the cluster. This is a SPOF for high availability architectures and additional managers will be allowed in a future version of Swarm with #598.
+
+**Swarm Nodes:** The containers are deployed on Nodes that are additional Docker Hosts. Each Swarm Node  must be accessible by the manager, each node must listen to the same network interface (TCP port). Each node runs a node agent that registers the referenced Docker daemon, monitors it, and updates the discovery backend with the node’s status. The containers run on a node.
+
+**Scheduler Strategy:** Different scheduler strategies (binpack, spread, and random) can be applied to pick the best node to run your container. The default strategy is spread which optimizes the node for least number of running containers. There are multiple kinds of filters, such as constraints and affinity.  This should allow for a decent scheduling algorithm.
+
+**Node Discovery Service:** By default, Swarm uses hosted discovery service, based on Docker Hub, using tokens to discover nodes that are part of a cluster. However etcd, consul, and zookeeper can be also be used for service discovery as well. This is particularly useful if there is no access to Internet, or you are running the setup in a closed network. A new discovery backend can be created as explained here. It would be useful to have the hosted Discovery Service inside the firewall and #660 will discuss this.
+
+**Standard Docker API:** Docker Swarm serves the standard Docker API and thus any tool that talks to a single Docker host will seamlessly scale to multiple hosts now. That means if you were using shell scripts using Docker CLI to configure multiple Docker hosts, the same CLI would can now talk to Swarm cluster and Docker Swarm will then act as proxy and run it on the cluster.
+
+There are lots of other concepts but these are the main ones.
+
 
 . https://github.com/rafabene/devops-demo
 . Docker Swarm: http://blog.arungupta.me/clustering-docker-swarm-techtip85/
