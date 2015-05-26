@@ -17,20 +17,9 @@ be fun, you should have a decent hardware available. Beside the operating system
 
 ### Hardware
 
-#### Mac
 . CPU
-.. PowerPC G4
-.. x64 (i5 and comparable)
-
-. Memory
-.. 4 to 8 GB for attendees
-.. 8 to 16 GB for instructors
-
-#### Linux / Windows
-
-. CPU
-.. x86 (Intel Pentium)
-.. x64 (i5 and comparable)
+.. Mac: PowerPC G4 or x64 (i5 and comparable)
+.. Linux / Windows: x86 (Intel Pentium) or x64 (i5 and comparable)
 
 . Memory
 .. 4 to 8 GB for attendees
@@ -38,33 +27,15 @@ be fun, you should have a decent hardware available. Beside the operating system
 
 ### Software
 
-#### Mac
 . Operating System
-.. Mac OS X (10.6 or later)
-
+.. Mac OS X (10.6 or later), Windows 7 (SP1), Fedora 21
 . Java
-.. Oracle JDK 8u45 link:http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html[Java SE 8 Development Kit]
-.. OpenJDK link:http://openjdk.java.net/install/index.html[Download instructions]
-.. Maven link:http://maven.apache.org/download.cgi[3.0 or later]
-
+.. http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html[Oracle JDK 8u45]
+.. http://openjdk.java.net/install/index.html[OpenJDK]
+.. link:http://maven.apache.org/download.cgi[Maven 3.0 or later]
 . Webbrowser
-.. Chrome link:https://www.google.com/chrome/browser/desktop/[for Mac OS X 10.6 or later]
-.. Firefox link:http://www.getfirefox.com[Firefox 31 or later]
-
-#### Linux / Windows
-. Operating System
-.. Windows 7 (SP1)
-.. Fedora 21
-
-. Java
-.. Oracle JDK 8u45 link:http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html[Java SE 8 Development Kit]
-.. OpenJDK link:http://openjdk.java.net/install/index.html[Download instructions]
-.. Maven link:http://maven.apache.org/download.cgi[3.0 or later]
-
-. Webbrowser
-.. Chrome 43 link:https://www.google.com/chrome/browser/desktop/[Windows 8/7 64-bit]
-.. Firefox link:http://www.getfirefox.com[Firefox 31 or later]
-
+.. https://www.google.com/chrome/browser/desktop/[Chrome]
+.. link:http://www.getfirefox.com[Firefox]
 
 
 ## Setup Environments
