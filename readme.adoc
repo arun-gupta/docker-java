@@ -382,7 +382,7 @@ The CLI tool that comes with the application server uses this interface, and use
 The database server is still up an running. Now we're starting another WildFly instance again:
 [source, text]
 ----
-docker run -d --name wildfly -p 8080:8080 -p 9990:9990 --link db:db <INSTRUCTOR_IP>:5000/wildfly-management
+docker run -d --name wildflymngm -p 8080:8080 -p 9990:9990 --link db:db <INSTRUCTOR_IP>:5000/wildfly-management
 ----
 As you can see, there is no mapped volume in this case but an additional port exposed. The WildFly image that is used makes ist easier for you to play around with the deployment via the management API. It has a tweaked start script which changes the management interface according to the behavior described in the first sentence.
 Now go and create another new server adapter in JBoss Developer Studio.
@@ -468,7 +468,7 @@ Make sure to stop the WildFly instance after this last option.
 Stop wildfly when you're done.
 [source, text]
 ----
-docker stop wildfly
+docker stop wildflymngm
 ----
 
 ## Ticket-Monster Docker Cluster
