@@ -44,11 +44,15 @@ This section describes the relevant steps for both attendees and instructors to 
 
 ### Instructor
 
-The instructor setup is designed to make the lab most reliable even with bad Internet connections. Most if not all of the software can be directly downloaded from the instructor's machine. The machine is setup as _Docker Host_ and also runs a _Docker Registry_. Please make sure to execute https://github.com/arun-gupta/docker-java/tree/master/instructor[instructor setup instructions] at least a day before the lab in order to provide a good experience to the attendees.
+The instructor setup is designed to make the lab most reliable even with bad Internet connections. Most if not all of the software can be directly downloaded from the instructor's machine. The machine is setup as _Docker Host_ and also runs a _Docker Registry_.
+
+Execute https://github.com/arun-gupta/docker-java/tree/master/instructor[instructor setup instructions] at least a day before the lab.
 
 ### Attendees
 
-This lab is designed for a BYOL (Brying Your Own Laptop) style hands-on-lab. We did our best to support a wide range of client configurations but only did test on machines as stated in the hardware section. Please make sure to double check your configuration and perform the https://github.com/arun-gupta/docker-java/tree/master/attendees[required attendee setup].
+This lab is designed for a BYOL (Brying Your Own Laptop) style hands-on-lab. We did our best to support a wide range of client configurations but only did test on machines as stated in the hardware section.
+
+https://github.com/arun-gupta/docker-java/tree/master/attendees[Download and setup attendee laptop].
 
 ## The Lab
 
