@@ -53,8 +53,12 @@ Download your binary from http://<INSTRUCTOR_IP>:8082/downloads/
 
 [source, text]
 ----
-# Linux / MacOS
-curl -L  https://get.docker.com/builds/Darwin/x86_64/docker-latest > /usr/local/bin/docker
+#Linux (Fedora only)
+yum install docker-io
+
+# MacOS / Linux (other distros)
+curl -L  https://get.docker.com/builds/`uname -s`/x86_64/docker-latest > /usr/local/bin/docker
+chmod +x /usr/local/bin/docker
 
 #Windows
 curl http://<INSTRUCTOR_IP>:8082/docker-1.6.0.exe

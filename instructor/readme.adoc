@@ -25,8 +25,12 @@ The docker client is the minimum requirement to have. Download and install by ju
 
 [source, text]
 ----
-# Linux / MacOS
-curl -L  https://get.docker.com/builds/Darwin/x86_64/docker-latest > /usr/local/bin/docker
+#Linux (Fedora only)
+yum install docker-io
+
+# MacOS / Linux (other distros)
+curl -L  https://get.docker.com/builds/`uname -s`/x86_64/docker-latest > /usr/local/bin/docker
+chmod +x /usr/local/bin/docker
 
 #Windows
 Download:
@@ -52,8 +56,13 @@ Install the Docker machine client for your environment: https://github.com/docke
 
 [source, text]
 ----
-# Linux / MacOS
+# MacOS
 curl -L  https://github.com/docker/machine/releases/download/v0.2.0/docker-machine_darwin-amd64 > /usr/local/bin/docker-machine
+chmod +x /usr/local/bin/docker-machine
+
+# Linux
+curl -L https://github.com/docker/machine/releases/download/v0.2.0/docker-machine_linux-amd64 > /usr/local/bin/docker-machine 
+chmod +x /usr/local/bin/docker-machine
 
 # Windows
 Download:
