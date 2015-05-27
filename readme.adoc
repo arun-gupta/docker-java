@@ -18,7 +18,7 @@ be fun, you should have a decent hardware available. Beside the operating system
 ### Hardware
 
 . CPU
-.. Mac: PowerPC G4 or x64 (i5 and comparable)
+.. Mac: X64 (i5 or superior)
 .. Linux / Windows: x86 (Intel Pentium) or x64 (i5 and comparable)
 
 . Memory
