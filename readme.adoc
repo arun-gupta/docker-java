@@ -44,7 +44,7 @@ This section describes the relevant steps for both attendees and instructors to 
 
 ### Instructor
 
-The instructor setup is designed to make the lab most reliable even with bad internet connections. Most if not all of the software can be directly downloaded from the instructor machine. The machine is setup as docker host and also runs a docker registry. Please make sure to execute these instructions way prior to the lab to provide a good experience to the attendees.
+The instructor setup is designed to make the lab most reliable even with bad Internet connections. Most if not all of the software can be directly downloaded from the instructor machine. The machine is setup as docker host and also runs a docker registry. Please make sure to execute these instructions way prior to the lab to provide a good experience to the attendees.
 
 link:https://github.com/arun-gupta/docker-java/tree/master/instructor[Go directly to the Instructor Setup]
 
