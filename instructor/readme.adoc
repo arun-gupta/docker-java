@@ -61,7 +61,7 @@ https://github.com/docker/machine/releases/download/v0.2.0/docker-machine_window
 And save to c:\Users\<username>\docker\docker-machine.exe
 ----
 
-For Windows, make sure to add c:\Users\<username>\docker to your %PATH% variable.
+For Windows, make sure to add c:\Users\<username>\docker to your %PATH% variable. This was already done for Linux / MacOs when you downloaded docker-machine to /usr/local/bin/docker-machine .
 
 ## Create Machine
 This creates your instructor host which will run the complete infrastructure.
