@@ -79,10 +79,10 @@ eval "$(docker-machine env lab)"
 ----
 
 ## Install Maven
-Download apache-maven-3.3.3-bin[.zip|tar.gz] from the instructor PC.
+Download apache-maven-3.3.3-bin.zip from the instructor PC.
 [source, text]
 ----
-curl http://<INSTRUCTOR_IP>:8082/downloads/apache-maven-3.3.3-bin[.zip|tar.gz]
+curl http://<INSTRUCTOR_IP>:8082/downloads/apache-maven-3.3.3-bin.zip
 ----
 
 unzip to a folder of your choice and add the folder to your PATH environment variable.
