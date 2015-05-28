@@ -20,6 +20,32 @@ Instructor needs:
 . Have the https://github.com/arun-gupta/docker-java/ git repository checked out.
 . Have https://msysgit.github.io/ installed on Windows
 
+This lab can be executed on a netbook with x86 architecture. For it to
+be fun, you should have a decent hardware available. Beside the operating system of choice, there's only a couple of other thing you should have installed already:
+
+### Hardware
+
+. CPU
+.. Mac: X64 (i5 or superior)
+.. Linux / Windows: x86 (Intel Pentium) or x64 (i5 and comparable)
+
+. Memory
+.. 4 to 8 GB for attendees
+.. 8 to 16 GB for instructors
+
+### Software
+
+. Operating System
+.. Mac OS X (10.8 or later), Windows 7 (SP1), Fedora (21 or later)
+. Java
+.. http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html[Oracle JDK 8u45]
+.. link:http://maven.apache.org/download.cgi[Maven 3.0 or later]
+. Webbrowser
+.. https://www.google.com/chrome/browser/desktop/[Chrome]
+.. link:http://www.getfirefox.com[Firefox]
+
+
+
 ## Install Docker Client
 The docker client is the minimum requirement to have. Download and install by just copying and renaming it accordingly.
 
@@ -61,7 +87,7 @@ curl -L  https://github.com/docker/machine/releases/download/v0.2.0/docker-machi
 chmod +x /usr/local/bin/docker-machine
 
 # Linux
-curl -L https://github.com/docker/machine/releases/download/v0.2.0/docker-machine_linux-amd64 > /usr/local/bin/docker-machine 
+curl -L https://github.com/docker/machine/releases/download/v0.2.0/docker-machine_linux-amd64 > /usr/local/bin/docker-machine
 chmod +x /usr/local/bin/docker-machine
 
 # Windows
