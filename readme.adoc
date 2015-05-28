@@ -343,41 +343,6 @@ docker stop wildfly
 ### Other Deployment options
 For the first deployment we used a shared volumen on the host computer. Let's explore deeper, what other deployment options we have
 
-**Deployment to WildFly Container using Management API**
-
-A standalone WildFly process, process can be configured to listen for remote management requests using its "native management interface".
-The CLI tool that comes with the application server uses this interface, and user can develop custom clients that use it as well. In order to use this, the wildfly management interface listen IP needs to be changed from 127.0.0.1 to 0.0.0.0 which basically means, that it is not only listening on the localhost but also on all publicly assigned IP addresses.
-
-The database server is still up an running. Now we're starting another WildFly instance again:
-[source, text]
-----
-docker run -d --name wildflymngm -p 8080:8080 -p 9990:9990 --link db:db <INSTRUCTOR_IP>:5000/wildfly-management
-----
-As you can see, there is no mapped volume in this case but an additional port exposed. The WildFly image that is used makes ist easier for you to play around with the deployment via the management API. It has a tweaked start script which changes the management interface according to the behavior described in the first sentence.
-Now go and create another new server adapter in JBoss Developer Studio.
-
-.Create New Server Adapter
-image::images/jbds7.png[]
-
-Keep the defaults in the adapter properties.
-
-.Adapter Properties
-image::images/jbds8.png[]
-
-Set up server properties by specifying the admin credentials (Admin#70365). Note, you need to delete the existing password and use this instead:
-
-.Management Login Credentials
-image::images/jbds9.png[]
-
-Right-click on the newly created server adapter and click “Start”.Status quickly changes to “Started, Synchronized” as shown.
-
-.Start Server
-image::images/jbds10.png[]
-
-Now you need to right-click, Run on Server on the ticket-monster application and chose this server.
-The project runs and displays the start page of ticket-monster.
-
-Keep the WildFly instance up and running this time. We will re-use it for the next deployment option.
 
 **Using the CLI**
 
@@ -432,7 +397,42 @@ If you're prompted for username and password enter "admin" as username and "dock
 . On the "Step 2/2" screen, click "Next" again.
 
 Now you've been successfully deploying the Ticket Monster application in three different ways. Time to look at some more features, that Docker can provide to Java developers.
-Make sure to stop the WildFly instance after this last option.
+
+Keep the WildFly instance up and running this time. We will re-use it for the next deployment option.
+
+**Deployment to WildFly Container using Management API (Optional Task if you have time)**
+
+A standalone WildFly process, process can be configured to listen for remote management requests using its "native management interface".
+The CLI tool that comes with the application server uses this interface, and user can develop custom clients that use it as well. In order to use this, the wildfly management interface listen IP needs to be changed from 127.0.0.1 to 0.0.0.0 which basically means, that it is not only listening on the localhost but also on all publicly assigned IP addresses.
+
+The database server is still up an running. Now we're starting another WildFly instance again:
+[source, text]
+----
+docker run -d --name wildflymngm -p 8080:8080 -p 9990:9990 --link db:db <INSTRUCTOR_IP>:5000/wildfly-management
+----
+As you can see, there is no mapped volume in this case but an additional port exposed. The WildFly image that is used makes ist easier for you to play around with the deployment via the management API. It has a tweaked start script which changes the management interface according to the behavior described in the first sentence.
+Now go and create another new server adapter in JBoss Developer Studio.
+
+.Create New Server Adapter
+image::images/jbds7.png[]
+
+Keep the defaults in the adapter properties.
+
+.Adapter Properties
+image::images/jbds8.png[]
+
+Set up server properties by specifying the admin credentials (Admin#70365). Note, you need to delete the existing password and use this instead:
+
+.Management Login Credentials
+image::images/jbds9.png[]
+
+Right-click on the newly created server adapter and click “Start”.Status quickly changes to “Started, Synchronized” as shown.
+
+.Start Server
+image::images/jbds10.png[]
+
+Now you need to right-click, Run on Server on the ticket-monster application and chose this server.
+The project runs and displays the start page of ticket-monster.
 
 Stop wildfly when you're done.
 [source, text]
