@@ -251,6 +251,25 @@ Now we're ready to test http://dockerhost:8080 again. Which works with the expos
 .Welcome WildFly
 image::images/plain-wildfly1.png[]
 
+### Running the Java EE 7 Samples
+link:https://github.com/javaee-samples/javaee7-hol[Java EE 7 Hands-on Lab] has been delivered all around the world and is a pretty standard application that shows design patterns and anti-patterns for a typical Java EE 7 application.
+Docker containers allows you to simplify application delivery by packaging all the key components together in an image. So how do you get the first feel of Java EE 7 hands-on lab with Docker ?
+Pull the Docker image that contains WildFly and pre-built Java EE 7 hands-on lab WAR file as shown
+[source, text]
+----
+docker pull localhost:5000/javaee7-hol
+----
+
+The javaee7-hol link:https://github.com/arun-gupta/docker-images/blob/master/javaee7-hol/Dockerfile[Dockerfile] is based on jboss/wildfly and adds the movieplex7 application as war file.
+
+Run it as:
+
+[source, text]
+----
+docker run -it -p 80:8080 arungupta/javaee7-hol
+----
+
+See the application in action at http://dockerhost:8080/movieplex7/
 
 ### Ticket Monster
 TicketMonster is an example application that focuses on Java EE6 - JPA 2, CDI, EJB 3.1 and JAX-RS along with HTML5 and jQuery Mobile. It is a moderately complex application that demonstrates how to build modern web applications optimized for mobile & desktop. TicketMonster is representative of an online ticketing broker - providing access to events (e.g. concerts, shows, etc) with an online booking application.
