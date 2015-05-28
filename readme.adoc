@@ -160,7 +160,7 @@ At first, this list ist empty. Now, let's get a plain jboss/wildfly image from y
 
 [source, text]
 ----
-docker pull localhost:5000/wildfly
+docker pull <INSTRUCTOR_IP>:5000/wildfly
 ----
 
 You can see, that Docker is downloading the immage with it's different layers.
@@ -190,14 +190,14 @@ When the download is done, you can list the images again and will see the follow
 docker images
 
 REPOSITORY              TAG     IMAGE ID       CREATED       VIRTUAL SIZE
-localhost:5000/wildfly  latest  2ac466861ca1   10 weeks ago  951.3 MB
+<INSTRUCTOR_IP>:5000/wildfly  latest  2ac466861ca1   10 weeks ago  951.3 MB
 
 ----
 
 Run WildFly in the container:
 [source, text]
 ----
-docker run -it localhost:5000/wildfly
+docker run -it <INSTRUCTOR_IP>:5000/wildfly
 ----
 
 Seems the server started correclty. We can check it by issuing the docker ps command which retrieves the images process which are running and the ports engaged by the process:
@@ -243,7 +243,7 @@ Now let's make sure, we're exposing the correct port, that we want to access dur
 
 [source, text]
 ----
-docker run -it -p 8080:8080 localhost:5000/wildfly
+docker run -it -p 8080:8080 <INSTRUCTOR_IP>:5000/wildfly
 ----
 
 Now we're ready to test http://dockerhost:8080 again. Which works with the exposed port, as expected.
@@ -257,7 +257,7 @@ Docker containers allows you to simplify application delivery by packaging all t
 Pull the Docker image that contains WildFly and pre-built Java EE 7 hands-on lab WAR file as shown
 [source, text]
 ----
-docker pull localhost:5000/javaee7-hol
+docker pull <INSTRUCTOR_IP>:5000/javaee7-hol
 ----
 
 The javaee7-hol link:https://github.com/arun-gupta/docker-images/blob/master/javaee7-hol/Dockerfile[Dockerfile] is based on jboss/wildfly and adds the movieplex7 application as war file.
@@ -539,6 +539,67 @@ Stop wildfly when you're done.
 docker stop wildflymngm
 ----
 
+### Add the Docker Tools To JBoss Developer Studio
+The Docker tooling is aimed at providing at minimum the same basic level features as the command-line interface, but also provide some advantages by having access to a full fledged UI.
+As this is still in early access stage, you will have to install it first:
+
+. Open JDBS
+. Add a new site using the  command link Install/Update > Available Software Sites preference page.
+. Use the URL http://download.eclipse.org/linuxtools/updates-docker-nightly/
+. Name it Docker-Nightly
+. Select "Docker Tooling" form the Linux Tools and click next.
+
+.Add Docker Tooling To JDBS
+image::images/jdbs-docker-tools1.png[]
+
+**Docker Explorer**
+
+The Docker Explorer provides a wizard to establish a new connection to a Docker daemon. This wizard can detect default settings if the user’s machine runs Docker natively or in a VM using Boot2Docker. Both Unix sockets on Linux machines and the REST API on other OSes are detected and supported. The wizard also allows remote connections using custom settings.
+
+.The Docker Explorer
+image::images/jdbs-docker-tools2.png[]
+
+The Docker Explorer itself is a tree view that handles multiple connections and provides users with quick overview of the existing images and containers.
+
+.The Docker Explorer Tree View
+image::images/jdbs-docker-tools3.png[]
+
+Built-in filters can show/hide intermediate and 'dangling' images as well as stopped containers.
+
+**Managing Docker Images**
+
+The Docker Images view lists all images in the Docker host selected in the Docker Explorer view. This view allows user to manage images, including:
+
+. Pulling images from the Docker Hub Registry (other registries will be supported as well)
+. Uploading images to the Docker Hub Registry
+. Building images from a Dockerfile
+. Creating a container from an image
+
+.Docker Images View
+image::images/jdbs-docker-tools4.png[]
+
+A wizard lets the user input all the arguments to create a new container from an image. When the container is started, all the logs can be streamed into the Eclipse Console:
+
+.Streaming Logs
+image::images/jdbs-docker-tools5.png[]
+
+**Managing Docker Containers**
+
+The Docker Containers view lets the user manage her containers. The view toolbar provides commands to start, stop, pause, unpause, display the logs and kill containers.
+
+.Docker Containers View
+image::images/jdbs-docker-tools6.png[]
+
+This view also provides a filter to show/hide stopped containers. Users can also attach an Eclipse console to a running Docker container to follow the logs and use the STDIN to interact with it.
+
+**Info and Inspect on Images and Containers**
+
+We also integrate with the Eclipse Properties view to provide users with info and 'inspect' data about a selected container or image.
+
+.Eclipse Properties View
+image::images/jdbs-docker-tools7.png[]
+
+
 ## Ticket-Monster Docker Cluster
 Another frequent requirement for Java EE based applications is clustering. While setup and test can be complicated on developer machines, this is where Docker can play to it's full potential. With the help of images and automatic port mapping, we're ready to test Ticket-Monster on a couple of WildFly instances and add and remove them randomly.
 Here is the rough architecture, of what we're going to do:
@@ -594,7 +655,6 @@ docker stop server3
 
 TODO: Pick, which parts we want to describe in more detail from here: https://goldmann.pl/blog/2013/10/07/wildfly-cluster-using-docker-on-fedora/
 
-
 ## Test Java EE Applications on Docker
 Testing Java EE applications is a very important aspect. Especially when it comes to in-container tests, link:http://www.arquillian.org[JBoss Arquillian] is well known to make this very easy.
 Picking up where unit tests leave off, Arquillian handles all the plumbing of container management, deployment and framework initialization so you can focus on the task at hand, writing your tests. Real tests.
@@ -615,7 +675,11 @@ With this extension you can start a Docker container with a server installed, de
 
 The key point here is that if Docker is used as deployable platform in production, your tests are executed in a the same container as it will be in production, so your tests are even more real than before.
 
-TODO: Finalize the Cubification of Ticket Monster and describe it.
+[source, text]
+----
+mvn -s settings.xml -f ticket-monster/demo/pom.xml -Pdocker-test test
+----
+
 
 http://blog.arungupta.me/run-javaee-tests-wildfly-docker-arquillian-cube/
 
