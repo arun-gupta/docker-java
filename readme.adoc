@@ -146,6 +146,112 @@ Get a full list of available commands with
 docker
 ----
 
+### Running A Pre-Baked WildFly on Docker
+The first step in running any application on Docker is to get hands on an image. There are plenty of images available from the official Docker registry (aka link:https://hub.docker.com[Docker Hub]). To download any of them, you just have to download it.
+Let's first check, if there are any images already available:
+
+
+[source, text]
+----
+docker images
+----
+
+At first, this list ist empty. Now, let's get a plain jboss/wildfly image from your instructor's registry:
+
+[source, text]
+----
+docker pull localhost:5000/wildfly
+----
+
+You can see, that Docker is downloading the immage with it's different layers.
+In a traditional Linux boot, the kernel first mounts the root File System as read-only, checks its integrity, and then switches the whole rootfs volume to read-write mode.
+When Docker mounts the rootfs, it starts read-only, as in a traditional Linux boot, but then, instead of changing the file system to read-write mode, it takes advantage of a union mount to add a read-write file system over the read-only file system. In fact there may be multiple read-only file systems stacked on top of each other. We think of each one of these file systems as a layer.
+At first, the top read-write layer has nothing in it, but any time a process creates a file, this happens in the top layer. And if something needs to update an existing file in a lower layer, then the file gets copied to the upper layer and changes go into the copy. The version of the file on the lower layer cannot be seen by the applications anymore, but it is there, unchanged.
+We call the union of the read-write layer and all the read-only layers a union file system.
+
+.Docker Layers
+image::images/plain-wildfly0.png[]
+
+In our particular case, the jboss/wildfly image extends the link:https://github.com/jboss-dockerfiles/base/blob/master/Dockerfile[jboss/base-jdk:7] image which adds the OpenJDK distribution on top of the link:https://github.com/jboss-dockerfiles/base/blob/master/Dockerfile[jboss/base] image.
+The base image is used for all JBoss community images. It provides a base layer that includes:
+
+. A jboss user (uid/gid 1000) with home directory set to /opt/jboss
+. A few tools that may be useful when extending the image or installing software, like unzip.
+
+The jboss/base-jdk:7 image adds:
+
+. Latest OpenJDK distribution
+. And adds a JAVA_HOME environment variable
+
+When the download is done, you can list the images again and will see the following:
+
+[source, text]
+----
+docker images
+
+REPOSITORY              TAG     IMAGE ID       CREATED       VIRTUAL SIZE
+localhost:5000/wildfly  latest  2ac466861ca1   10 weeks ago  951.3 MB
+
+----
+
+Run WildFly in the container:
+[source, text]
+----
+docker run -it localhost:5000/wildfly
+----
+
+Seems the server started correclty. We can check it by issuing the docker ps command which retrieves the images process which are running and the ports engaged by the process:
+[source, text]
+----
+docker ps
+
+CONTAINER ID        IMAGE                  COMMAND                CREATED             STATUS              PORTS               NAMES
+48f473979e50        jboss/wildfly:latest   "/opt/jboss/wildfly/   4 minutes ago       Up 4 minutes        8080/tcp            cranky_al
+meida
+----
+
+If you have noticed the startup log of the server, you should have discovered that the server is located in the /opt/jboss/wildfly and that by default the public interfaces are bound to the 0.0.0.0 address whilst the admin interfaces are bound just to localhost. This information will be useful to learn how to customize the server.
+
+So, in order to access to our wildfly server, we need to know which address has been chosen by the application server for socket binding. We will use the docker inspect command passing as parameter the ID of the running Container we have already found (48f473979e50):
+
+[source, text]
+----
+docker inspect --format "{{.NetworkSettings.IPAddress}}" 48f473979e50
+----
+
+The above command outputs an IP address (maybe 172.17.0.1)
+That means, the server is available at the 172.17.0.1 IP Address.
+Now let's open the console at that address: http://172.17.0.1:8080
+
+That did not work. You'll get a "This webpage is not available - ERR_CONNECTION_TIMED_OUT" error. But why? Docker runs containers in the host, who is running in a guest system.
+
+When Docker starts, it creates a virtual interface named docker0 on the host machine. It randomly chooses an address and subnet from the private range defined by RFC 1918 that are not in use on the host machine, and assigns it to docker0. Docker made the choice 172.17.0.1 in this example.
+But docker0 is no ordinary interface. It is a virtual Ethernet bridge that automatically forwards packets between any other network interfaces that are attached to it. This lets containers communicate both with the host machine and with each other. But nothing more.
+Speaking, by default Docker containers can make connections to the outside world, but the outside world cannot connect to containers.
+This get's another layer of indirection, if you are using boot2docker on for example Mac or Windows. In this case, we don't even care for the Docker generated IP address, but want to know the address, the host is running at.
+
+We did find it out earlier with `docker-machine ip` which gave us the host IP address. We added it to the hosts file. So, we can give it another try by accessing: http://dockerhost:8080
+This will not work either. If you want containers to accept incoming connections, you will need to provide special options when invoking `docker run`.
+The container, we just started, can't be accessed by our browser. We need to stop it again and restart with different options.
+
+[source, text]
+----
+docker stop 48f473979e50
+----
+
+Now let's make sure, we're exposing the correct port, that we want to access during startup:
+
+[source, text]
+----
+docker run -it -p 8080:8080 localhost:5000/wildfly
+----
+
+Now we're ready to test http://dockerhost:8080 again. Which works with the exposed port, as expected.
+
+.Welcome WildFly
+image::images/plain-wildfly1.png[]
+
+
 ### Ticket Monster
 TicketMonster is an example application that focuses on Java EE6 - JPA 2, CDI, EJB 3.1 and JAX-RS along with HTML5 and jQuery Mobile. It is a moderately complex application that demonstrates how to build modern web applications optimized for mobile & desktop. TicketMonster is representative of an online ticketing broker - providing access to events (e.g. concerts, shows, etc) with an online booking application.
 
