@@ -807,11 +807,10 @@ http://blog.arungupta.me/openshift-v3-getting-started-javaee7-wildfly-mysql/
 
 
 ## Docker Compose (Optional, No Windows Version without Python)
+Docker Orchestration using Fig showed how to defining and control a multi-container service using Fig. Since then, Fig has been renamed to Docker Compose, or Compose for short.
+If you have some additional time, you can take this part of the lab:
 
 http://blog.arungupta.me/docker-compose-orchestrate-containers-techtip77/
-
-
-
 
 
 ## References
