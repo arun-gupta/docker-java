@@ -66,12 +66,16 @@ Download your binary from http://<INSTRUCTOR_IP:8082>/downloads/
 
 [source, text]
 ----
-# MacOS / Linux (other distros)
-curl -L  http://<INSTRUCTOR_IP>:8082/docker-machine_darwin-amd64 > /usr/local/bin/docker-machine
+# MacOS
+curl -L  http://<INSTRUCTOR_IP>:8082/downloads/docker-machine_darwin-amd64 > /usr/local/bin/docker-machine
+chmod +x /usr/local/bin/docker-machine
+
+# Linux
+curl -L  http://<INSTRUCTOR_IP>:8082/downloads/docker-machine_linux-amd64 > /usr/local/bin/docker-machine
 chmod +x /usr/local/bin/docker-machine
 
 #Windows
-curl http://<INSTRUCTOR_IP>:8082/docker-machine_windows-amd64.exe
+curl http://<INSTRUCTOR_IP>:8082/downloads/docker-machine_windows-amd64.exe
 ----
 
 On Windows put into and rename to: c:\docker\docker-machine.exe and add c:\docker to your PATH variable
