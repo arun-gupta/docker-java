@@ -231,6 +231,11 @@ docker push localhost:5000/postgres
 docker pull goldmann/mod_cluster
 docker tag goldmann/mod_cluster localhost:5000/mod_cluster
 docker push localhost:5000/mod_cluster
+
+#Java EE 7 hol
+docker pull arungupta/javaee7-hol
+docker tag arungupta/javaee7-hol localhost:5000/javaee7-hol
+docker push localhost:5000/javaee7-hol
 ----
 
 ## More information
