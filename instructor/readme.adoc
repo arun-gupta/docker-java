@@ -189,26 +189,54 @@ We want to provide an option to run this lab without any Internet access. So, th
 docker run --name="nexusdata" -v $(pwd):/backup sonatype/nexus:oss bash -c "tar xvf  /backup/nexusbackup.tar -C /"
 ----
 
-This will download the Nexus image on your Docker host.
+This will download the Nexus image on Docker host and populate it with the Nexus dependencies.
 
 ## Start the Instructor Environment
 
 Download link:http://www.jboss.org/download-manager/file/jboss-devstudio-8.1.0.GA-standalone_jar.jar[JBoss Developer Studio 8.10.GA - 567 MB] and place it inside `dockerfiles/lab-httpd-server/downloads` folder.
 
 Use the following compose command to startup the complete environment at once.
-_Note: This command should take some time to execute_
+
+NOTE: This command should take some time to execute as it will download the required Docker images.
 
 [source, text]
 ----
 docker-compose up -d
 ----
 
+The status of different servers can be verified as:
+
+[source, text]
+----
+dockerfiles> cd ..
+instructor> docker ps
+CONTAINER ID        IMAGE                          COMMAND                CREATED              STATUS              PORTS                                                   NAMES
+7b847ca4554e        registry:2.0                   "registry cmd/regist   45 seconds ago       Up 45 seconds       0.0.0.0:5000->5000/tcp                                  instructor_dockerregistry_1     
+3704d3205eac        sameersbn/gitlab:7.10.4        "/app/init app:start   About a minute ago   Up About a minute   443/tcp, 0.0.0.0:10022->22/tcp, 0.0.0.0:10080->80/tcp   instructor_gitlab_1             
+66ac375ecd8d        sameersbn/postgresql:9.4       "/start"               2 minutes ago        Up 2 minutes        5432/tcp                                                instructor_postgresqlgitlab_1   
+b4a36e701386        sonatype/nexus:oss             "/bin/sh -c 'java      4 minutes ago        Up 4 minutes        0.0.0.0:8081->8081/tcp                                  instructor_nexus_1              
+5986b380732c        sameersbn/redis:latest         "/start"               4 minutes ago        Up 4 minutes        6379/tcp                                                instructor_redisgitlab_1        
+a041b58ceff1        instructor_httpserver:latest   "/run-apache.sh"       5 minutes ago        Up 5 minutes        0.0.0.0:8082->80/tcp                                    instructor_httpserver_1         
+----
+
 Test if the servers are running:
 
-. Access the docker registry [http://localhost:5000/v2/]
-. Access the nexus console [http://localhost:8081/content/groups/public/]
-. Access the webserver [http://localhost:8082/]
-. Access the gitlab server [http://localhost:10080/]
+. Docker Registry [http://localhost:5000/v2/]
++
+image::images/registry-default-output.png[]
++
+. Nexus Console [http://localhost:8081/content/groups/public/]
++
+image::images/nexus-default-output.png[]
++
+. Apache Webserver [http://localhost:8082/]
++
+image::images/webserver-default-output.png[]
++
+. Gitlab server [http://localhost:10080/]
++
+image::images/gitlab-default-output.png[]
+
 
 ## Populate Gitlab with Ticket-monster sources
 In order to allow a complete offline experience, we also host our own git repository for the demo application on the instructor machine.
