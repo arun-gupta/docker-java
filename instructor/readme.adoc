@@ -238,10 +238,11 @@ image::images/webserver-default-output.png[]
 image::images/gitlab-default-output.png[]
 
 
-## Populate Gitlab with Ticket-monster sources
+## Populate Gitlab with Ticket Monster Source Code
 In order to allow a complete offline experience, we also host our own git repository for the demo application on the instructor machine.
 
-_Note: Gitlab must have completed his startup. It usually takes 3 minutes to do so._
+NOTE: Gitlab must have completed his startup. It usually takes 3 minutes to do so.
+
 Execute:
 
 [source,text]
@@ -249,7 +250,17 @@ Execute:
 docker exec instructor_gitlab_1 bash -c "cd /home/git/data/repositories/root; git clone --bare https://github.com/rafabene/ticket-monster.git; chown git:git -R /home/git/data/repositories; cd /home/git/gitlab; sudo -u git -H bundle exec rake -v gitlab:import:repos RAILS_ENV=production"
 ----
 
-## Build TicketMonster from the sources
+This will show the output as:
+
+[source, text]
+----
+Cloning into bare repository 'ticket-monster.git'...
+Processing root/ticket-monster.git
+ * Created ticket-monster (root/ticket-monster.git)
+Done!
+----
+
+## Build TicketMonster from Source Code
 
 1. Clone TicketMonster from the existing gitlab container
 
