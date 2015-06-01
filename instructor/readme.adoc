@@ -30,7 +30,6 @@ be fun, you should have a decent hardware available. Beside the operating system
 .. Linux / Windows: x86 (Intel Pentium) or x64 (i5 and comparable)
 
 . Memory
-.. 4 to 8 GB for attendees
 .. 8 to 16 GB for instructors
 
 ### Software
@@ -45,9 +44,8 @@ be fun, you should have a decent hardware available. Beside the operating system
 .. link:http://www.getfirefox.com[Firefox]
 
 
-
 ## Install Docker Client
-The docker client is the minimum requirement to have. Download and install by just copying and renaming it accordingly.
+Docker Client allows to interact with Docker Host. Download and install by just copying and renaming it accordingly.
 
 [source, text]
 ----
@@ -65,9 +63,10 @@ https://get.docker.com/builds/Windows/i386/docker-latest.exe
 And save to c:\Users\<username>\docker\docker.exe
 ----
 
-## Install Docker compose
-We use compose to make the setup for the instructor as easy as possible. The link:https://github.com/arun-gupta/docker-java/blob/master/instructor/docker-compose.yml[docker-compose.yml] contains all the instructions for the tool to setup and start the infrastructure.
-Learn more about it by visiting the link:https://docs.docker.com/compose/[Docker Compose Website].
+## Install Docker Compose
+Docker Compose simplifies instructor's setup. The link:https://github.com/arun-gupta/docker-java/blob/master/instructor/docker-compose.yml[docker-compose.yml] contains all the instructions for the tool to setup and start the infrastructure.
+
+Learn more about the tool on link:https://docs.docker.com/compose/[Docker Compose Website].
 
 
 [source, text]
@@ -77,7 +76,9 @@ curl -L https://github.com/docker/compose/releases/download/1.3.0rc1/docker-comp
 chmod +x /usr/local/bin/docker-compose
 ----
 
-## Install Docker-machine
+Docker Compose is not natively supported on Windows and thus requires a workaround as specfied at https://registry.hub.docker.com/u/dduportal/docker-compose/.
+
+## Install Docker Machine
 Install the Docker machine client for your environment: https://github.com/docker/machine/releases/[latest releases]
 
 [source, text]
@@ -96,7 +97,7 @@ https://github.com/docker/machine/releases/download/v0.3.0-rc1/docker-machine_wi
 And save to c:\Users\<username>\docker\docker-machine.exe
 ----
 
-For Windows, make sure to add c:\Users\<username>\docker to your %PATH% variable. This was already done for Linux / MacOs when you downloaded docker-machine to /usr/local/bin/docker-machine .
+For Windows, make sure to add `c:\Users\<username>\docker` to your `%PATH%` variable. This was already done for Linux / MacOs when you downloaded `docker-machine` script to `/usr/local/bin/docker-machine`.
 
 ## Create Machine
 This creates your instructor host which will run the complete infrastructure.
@@ -105,7 +106,9 @@ This creates your instructor host which will run the complete infrastructure.
 docker-machine create --driver=virtualbox --virtualbox-memory=4096 mymachine
 ----
 
-## Expose the Virtual Box ports to other computer in the LAN
+## Virtual Box Configuration
+
+Expose the Virtual Box ports to other computer in the LAN
 
 VirtualBox will run docker container inside the newly create host called 'mymachine'. We need now to expose the ports used in this lab to the world.
 
@@ -122,24 +125,43 @@ VBoxManage controlvm "mymachine" natpf1 "tcp-port10022,tcp,,10022,,10022";
 VBoxManage controlvm "mymachine" natpf1 "tcp-port10080,tcp,,10080,,10080";
 ----
 
+This is available as a script in https://github.com/arun-gupta/docker-java/blob/master/instructor/virtualbox-ports.sh.
 
 Check machine IP
 [source, text]
 ----
-docker-machine ip
+docker-machine ip mymachine
 ----
 
-Further on refered to as <HOST_IP>
+This IP address is referred as <HOST_IP> in this document.
 
-## Add extra args to docker host to allow insecure registry for external access via http:
-You can either insert your <HOST_IP> or the complete subnet e.g. 192.168.99.100 maps to 192.168.99.0/24
+## Configure Docker Host
 
+Add extra args to Docker Host to allow insecure registry for external access via `http://`. You can either insert your <HOST_IP> or the complete subnet e.g. 192.168.99.100 maps to 192.168.99.0/24.
+
+. Edit `/var/lib/boot2docker/profile` as:
++
 [source, text]
 ----
-docker-machine ssh
-
-$ # add EXTRA_ARGS="--insecure-registry <YOUR INSECURE HOST>"
-$ # to /var/lib/boot2docker/profile
+docker-machine ssh mymachine
+sudo vi /var/lib/boot2docker/profile
+----
++
+. Add insecure registry settings such that `/var/lib/boot2docker/profile` looks like:
++
+[source, text]
+----
+EXTRA_ARGS='
+--label provider=virtualbox
+--insecure-registry 192.168.99.100
+'
+----
++
+Leave other key/value in the file as is. Save and quit the editor
+. Restart the docker daemon:
++
+[source, text]
+----
 $ sudo /etc/init.d/docker restart
 ----
 
