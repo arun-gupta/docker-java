@@ -78,7 +78,7 @@ chmod +x /usr/local/bin/docker-compose
 
 Docker Compose is not natively supported on Windows and thus requires a workaround as specfied at https://registry.hub.docker.com/u/dduportal/docker-compose/.
 
-## Install Docker Machine
+## Install and Configure Docker Machine
 Install the Docker machine client for your environment: https://github.com/docker/machine/releases/[latest releases]
 
 [source, text]
@@ -99,14 +99,23 @@ And save to c:\Users\<username>\docker\docker-machine.exe
 
 For Windows, make sure to add `c:\Users\<username>\docker` to your `%PATH%` variable. This was already done for Linux / MacOs when you downloaded `docker-machine` script to `/usr/local/bin/docker-machine`.
 
-## Create Machine
-This creates your instructor host which will run the complete infrastructure.
+### Create Machine
+
+. This creates your instructor host which will run the complete infrastructure.
++
 [source, text]
 ----
 docker-machine create --driver=virtualbox --virtualbox-memory=4096 mymachine
 ----
++
+. Configure Docker client to run the commands on this newly created machine as:
++
+[source, text]
+----
+eval "$(docker-machine env mymachine)"
+----
 
-## Virtual Box Configuration
+### Virtual Box Configuration
 
 Expose the Virtual Box ports to other computer in the LAN
 
@@ -147,33 +156,44 @@ docker-machine ssh mymachine
 sudo vi /var/lib/boot2docker/profile
 ----
 +
-. Add insecure registry settings such that `/var/lib/boot2docker/profile` looks like:
+. Add insecure registry settings such that the file `/var/lib/boot2docker/profile` looks like:
 +
 [source, text]
 ----
 EXTRA_ARGS='
 --label provider=virtualbox
---insecure-registry 192.168.99.100
+--insecure-registry <HOST_IP>
 '
 ----
 +
-Leave other key/value in the file as is. Save and quit the editor
+Make sure to substitute `<HOST_IP>` with the IP address obtained earlier. 
++
+Leave other key/value in the file as is. Save and quit the editor.
++
 . Restart the docker daemon:
 +
 [source, text]
 ----
 $ sudo /etc/init.d/docker restart
 ----
++
+. Exit out of the shell by typing `exit`.
 
-## Create a container with Nexus dependencies
-We want to provide the option to run this lab without any internet access at all. So, the instructor machine will contain everything that the attendees will need to run this lab.
+## Container with Nexus Dependencies
+
+Create a container with Nexus dependencies.
+
+We want to provide an option to run this lab without any Internet access. So, the instructor machine will contain everything that the attendees will need to run this lab.
 [source, text]
 ----
 docker run --name="nexusdata" -v $(pwd):/backup sonatype/nexus:oss bash -c "tar xvf  /backup/nexusbackup.tar -C /"
 ----
 
-## Start the Instructor environment
-Download link:https://www.jboss.org/download-manager/content/origin/files/sha256/0e/0e3e78a641196d21742730f23a6e1c9aa04e0596c16349e74dbd4ea2d1109d40/jboss-devstudio-8.1.0.GA-installer-standalone.jar[JBDS 8.10.GA - 567 MB] and place it inside *dockerfiles/lab-httpd-server/downloads* folder.
+This will download the Nexus image on your Docker host.
+
+## Start the Instructor Environment
+
+Download link:http://www.jboss.org/download-manager/file/jboss-devstudio-8.1.0.GA-standalone_jar.jar[JBoss Developer Studio 8.10.GA - 567 MB] and place it inside `dockerfiles/lab-httpd-server/downloads` folder.
 
 Use the following compose command to startup the complete environment at once.
 _Note: This command should take some time to execute_
@@ -185,14 +205,10 @@ docker-compose up -d
 
 Test if the servers are running:
 
-Access the docker registry [http://localhost:5000/v2/].
-
-Access the nexus console [http://localhost:8081/content/groups/public/].
-
-Access the webserver [http://localhost:8082/].
-
-Access the gitlab server [http://localhost:10080/].
-
+. Access the docker registry [http://localhost:5000/v2/]
+. Access the nexus console [http://localhost:8081/content/groups/public/]
+. Access the webserver [http://localhost:8082/]
+. Access the gitlab server [http://localhost:10080/]
 
 ## Populate Gitlab with Ticket-monster sources
 In order to allow a complete offline experience, we also host our own git repository for the demo application on the instructor machine.
