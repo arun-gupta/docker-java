@@ -251,7 +251,7 @@ REPOSITORY              TAG     IMAGE ID       CREATED       VIRTUAL SIZE
 
 ### Run the WildFly Container
 
-#### Run Interactively
+#### Run Interactive Container
 
 Run WildFly container in an interactive mode.
 
@@ -296,7 +296,7 @@ Hit Ctrl+C to stop the container.
 
 #### Run Detached Container
 
-Restart the container in a detached mode:
+Restart the container in detached mode:
 
 [source, text]
 ----
@@ -304,7 +304,7 @@ Restart the container in a detached mode:
 972f51cc8422eec0a7ea9a804a55a2827b5537c00a6bfd45f8646cb764bc002a
 ----
 
-`-d` runs the container in a detached mode.
+`-d` runs the container in detached mode.
 
 The output is the unique id assigned to the container. Check the logs as:
 
@@ -335,14 +335,16 @@ Also try `docker ps -a` to see all the containers on this machine.
 
 If you have noticed the startup log of the server, you should have discovered that the server is located in the `/opt/jboss/wildfly` and that by default the public interfaces are bound to the `0.0.0.0` address while the admin interfaces are bound just to `localhost`. This information will be useful to learn how to customize the server.
 
-So, in order to access to WildFly server, we need to know which address has been chosen by the application server for socket binding. We will use the docker inspect command passing as parameter the ID of the running Container we have already found (0bc123a8ece0):
+So, in order to access to WildFly server, we need to know which address has been chosen by the application server for socket binding. We will use the `docker inspect` command to find the assigned IP address:
 
 [source, text]
 ----
 docker inspect --format "{{.NetworkSettings.IPAddress}}" 0bc123a8ece0
 ----
 
-The above command outputs an IP address, such as ``172.17.0.1''. That means, the server is available at the 172.17.0.1 IP Address. 
+The argument is the container id obtained earlier.
+
+The above command outputs an IP address, such as ``172.17.0.1''. That means, the server is available at 172.17.0.1.
 
 Now let's open the console at that address: http://172.17.0.1:8080
 
@@ -354,7 +356,7 @@ Docker runs all containers in the host, which is running in a guest system.
 
 When Docker starts, it creates a virtual interface named ``docker0'' on the host machine. It randomly chooses an address and subnet from the private range defined by RFC 1918 that are not in use on the host machine, and assigns it to docker0. Docker made the choice 172.17.0.1 in this example.
 
-But ``docker0'' is no ordinary interface. It is a virtual Ethernet bridge that automatically forwards packets between any other network interfaces that are attached to it. This lets containers communicate both with the host machine and with each other. But nothing more.
+But ``docker0'' is no ordinary interface. It is a virtual Ethernet bridge that automatically forwards packets between any other network interfaces that are attached to it. This lets containers communicate both with the host machine and with each other, and nothing more.
 
 Speaking, by default Docker containers can make connections to the outside world, but the outside world cannot connect to containers. This get's another layer of indirection, if you are using boot2docker on for example Mac or Windows. In this case, we don't even care for the Docker generated IP address, but want to know the address, the host is running at.
 
@@ -376,7 +378,7 @@ docker run -it -p 8080:8080 <INSTRUCTOR_IP>:5000/wildfly
 
 The format is `-p hostPort:containerPort`. This option maps container ports to host ports and allows other containers on our host to access them.
 
-.More Information about port mapping
+.Docker Port Mapping
 [NOTE]
 ===============================
 Port exposure and mapping are the keys to successful work with Docker.
@@ -388,9 +390,66 @@ Now we're ready to test http://dockerhost:8080 again. This works with the expose
 .Welcome WildFly
 image::images/plain-wildfly1.png[]
 
-### Remove Container
+### Enabling WildFly Admin Console (TODO)
 
-How to selectively remove container
+[source, text]
+----
+docker run -P -d jboss/wildfly /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0
+----
+
+ `-P` flag map any network ports inside the image it to a random high port from the range 49153 to 65535 on Docker host.
+
+ http://blog.arungupta.me/wildfly-admin-console-docker-image-techtip66/
+
+### Stop and Remove Container
+
+#### Stop Container
+
+. Stop a specific container:
++
+[source, text]
+----
+docker stop 0bc123a8ece0
+----
++
+. Stop all the running containers
++
+[source, text]
+----
+docker rm $(docker stop $(docker ps -q))
+----
++
+. Stop only the exited containers
++
+[source, text]
+----
+docker ps -a -f "exited=-1"
+----
+
+#### Remove Container
+
+. Remove a specific container:
++
+[source, text]
+----
+docker rm 0bc123a8ece0
+----
++
+. Containers meeting a regular expression
++
+[source, text]
+----
+docker ps -a | grep wildfly | awk '{print $1}' | xargs docker rm
+----
++
+. All running containers, without any criteria
++
+[source, text]
+----
+docker rm $(docker ps -aq)
+----
+
+Common Docker commands are available in link:command-cheatsheet.adoc[Docker Command Cheatsheet].
 
 ## Running the Java EE 7 Samples
 
