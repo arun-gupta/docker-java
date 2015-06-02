@@ -88,9 +88,9 @@ We've already seen that Docker images are read-only templates from which Docker 
 
 One of the reasons Docker is so lightweight is because of these layers. When you change a Docker image—for example, update an application to a new version— a new layer gets built. Thus, rather than replacing the whole image or entirely rebuilding, as you may do with a virtual machine, only that layer is added or updated. Now you don't need to distribute a whole new image, just the update, making distributing Docker images faster and simpler.
 
-Every image starts from a base image, for example ubuntu, a base Ubuntu image, or fedora, a base Fedora image. You can also use images of your own as the basis for a new image, for example if you have a base Apache image you could use this as the base of all your web application images.
+Every image starts from a base image, for example `ubuntu`, a base Ubuntu image, or `fedora`, a base Fedora image. You can also use images of your own as the basis for a new image, for example if you have a base Apache image you could use this as the base of all your web application images.
 
-_Note: Docker usually gets these base images from Docker Hub._
+NOTE: By default, Docker obtains these base images from Docker Hub.
 
 Docker images are then built from these base images using a simple, descriptive set of steps we call instructions. Each instruction creates a new layer in our image. Instructions include actions like:
 
@@ -118,7 +118,7 @@ Once your Docker host has been created, it then has a number of commands for man
 You used Docker Machine already during the attendee setup. We won't need it too much further on. But if you need to create hosts, it's a very handy tool to know about. From now on we're mostly going to use the docker client.
 Find out more about the details at the link:https://docs.docker.com/machine/[Official Docker Machine Website]
 
-Check if docker machine is working with
+Check if docker machine is working using the following command:
 
 [source, text]
 ----
@@ -126,8 +126,10 @@ docker-machine -v
 ----
 
 ### Docker Client
+
 The client communicates with the demon process on your host and let's you work with images and containers.
-Check if your client is working with
+
+Check if your client is working using the following command:
 
 [source, text]
 ----
@@ -147,21 +149,24 @@ docker
 ----
 
 ### Running A Pre-Baked WildFly on Docker
-The first step in running any application on Docker is to get hands on an image. There are plenty of images available from the official Docker registry (aka link:https://hub.docker.com[Docker Hub]). To download any of them, you just have to download it.
-Let's first check, if there are any images already available:
 
+The first step in running any application on Docker is to run an image. There are plenty of images available from the official Docker registry (aka link:https://hub.docker.com[Docker Hub]). To run any of them, you just have to ask the Docker Client to run it. The client will check if the image already exists on Docker Host. If it exists then it'll run it, otherwise the host will download the image and then run it.
+
+Let's first check, if there are any images already available:
 
 [source, text]
 ----
 docker images
 ----
 
-At first, this list ist empty. Now, let's get a plain jboss/wildfly image from your instructor's registry:
+At first, this list ist empty. Now, let's get a plain `jboss/wildfly` image from your instructor's registry:
 
 [source, text]
 ----
 docker pull <INSTRUCTOR_IP>:5000/wildfly
 ----
+
+Typically, you'll 
 
 You can see, that Docker is downloading the immage with it's different layers.
 In a traditional Linux boot, the kernel first mounts the root File System as read-only, checks its integrity, and then switches the whole rootfs volume to read-write mode.
@@ -172,16 +177,16 @@ We call the union of the read-write layer and all the read-only layers a union f
 .Docker Layers
 image::images/plain-wildfly0.png[]
 
-In our particular case, the jboss/wildfly image extends the link:https://github.com/jboss-dockerfiles/base/blob/master/Dockerfile[jboss/base-jdk:7] image which adds the OpenJDK distribution on top of the link:https://github.com/jboss-dockerfiles/base/blob/master/Dockerfile[jboss/base] image.
+In our particular case, the https://github.com/jboss-dockerfiles/wildfly/blob/master/Dockerfile[jboss/wildfly] image extends the link:https://github.com/jboss-dockerfiles/base/blob/master/Dockerfile[jboss/base-jdk:7] image which adds the OpenJDK distribution on top of the link:https://github.com/jboss-dockerfiles/base/blob/master/Dockerfile[jboss/base] image.
 The base image is used for all JBoss community images. It provides a base layer that includes:
 
-. A jboss user (uid/gid 1000) with home directory set to /opt/jboss
+. A jboss user (uid/gid 1000) with home directory set to `/opt/jboss`
 . A few tools that may be useful when extending the image or installing software, like unzip.
 
 The jboss/base-jdk:7 image adds:
 
 . Latest OpenJDK distribution
-. And adds a JAVA_HOME environment variable
+. Adds a JAVA_HOME environment variable
 
 When the download is done, you can list the images again and will see the following:
 
@@ -200,7 +205,8 @@ Run WildFly in the container:
 docker run -it <INSTRUCTOR_IP>:5000/wildfly
 ----
 
-Seems the server started correclty. We can check it by issuing the docker ps command which retrieves the images process which are running and the ports engaged by the process:
+Seems the server started correctly. We can check it by issuing the `docker ps` command which retrieves the images process which are running and the ports engaged by the process:
+
 [source, text]
 ----
 docker ps
@@ -210,29 +216,35 @@ CONTAINER ID        IMAGE                  COMMAND                CREATED       
 meida
 ----
 
-If you have noticed the startup log of the server, you should have discovered that the server is located in the /opt/jboss/wildfly and that by default the public interfaces are bound to the 0.0.0.0 address whilst the admin interfaces are bound just to localhost. This information will be useful to learn how to customize the server.
+If you have noticed the startup log of the server, you should have discovered that the server is located in the `/opt/jboss/wildfly` and that by default the public interfaces are bound to the `0.0.0.0` address whilst the admin interfaces are bound just to localhost. This information will be useful to learn how to customize the server.
 
-So, in order to access to our wildfly server, we need to know which address has been chosen by the application server for socket binding. We will use the docker inspect command passing as parameter the ID of the running Container we have already found (48f473979e50):
+So, in order to access to WildFly server, we need to know which address has been chosen by the application server for socket binding. We will use the docker inspect command passing as parameter the ID of the running Container we have already found (48f473979e50):
 
 [source, text]
 ----
 docker inspect --format "{{.NetworkSettings.IPAddress}}" 48f473979e50
 ----
 
-The above command outputs an IP address (maybe 172.17.0.1)
-That means, the server is available at the 172.17.0.1 IP Address.
+The above command outputs an IP address (maybe 172.17.0.1) That means, the server is available at the 172.17.0.1 IP Address. 
+
 Now let's open the console at that address: http://172.17.0.1:8080
 
-That did not work. You'll get a "This webpage is not available - ERR_CONNECTION_TIMED_OUT" error. But why? Docker runs containers in the host, who is running in a guest system.
+That did not work. You'll get a ``This webpage is not available - ERR_CONNECTION_TIMED_OUT'' error.
 
-When Docker starts, it creates a virtual interface named docker0 on the host machine. It randomly chooses an address and subnet from the private range defined by RFC 1918 that are not in use on the host machine, and assigns it to docker0. Docker made the choice 172.17.0.1 in this example.
-But docker0 is no ordinary interface. It is a virtual Ethernet bridge that automatically forwards packets between any other network interfaces that are attached to it. This lets containers communicate both with the host machine and with each other. But nothing more.
-Speaking, by default Docker containers can make connections to the outside world, but the outside world cannot connect to containers.
-This get's another layer of indirection, if you are using boot2docker on for example Mac or Windows. In this case, we don't even care for the Docker generated IP address, but want to know the address, the host is running at.
+But why?
 
-We did find it out earlier with `docker-machine ip` which gave us the host IP address. We added it to the hosts file. So, we can give it another try by accessing: http://dockerhost:8080
-This will not work either. If you want containers to accept incoming connections, you will need to provide special options when invoking `docker run`.
-The container, we just started, can't be accessed by our browser. We need to stop it again and restart with different options.
+Docker runs all containers in the host, which is running in a guest system.
+
+When Docker starts, it creates a virtual interface named ``docker0'' on the host machine. It randomly chooses an address and subnet from the private range defined by RFC 1918 that are not in use on the host machine, and assigns it to docker0. Docker made the choice 172.17.0.1 in this example.
+
+But ``docker0'' is no ordinary interface. It is a virtual Ethernet bridge that automatically forwards packets between any other network interfaces that are attached to it. This lets containers communicate both with the host machine and with each other. But nothing more.
+
+Speaking, by default Docker containers can make connections to the outside world, but the outside world cannot connect to containers. This get's another layer of indirection, if you are using boot2docker on for example Mac or Windows. In this case, we don't even care for the Docker generated IP address, but want to know the address, the host is running at.
+
+`docker-machine ip` gives us the host IP address and this was already added to the hosts file. So, we can give it another try by accessing: http://dockerhost:8080.
+This will not work either.
+
+If you want containers to accept incoming connections, you will need to provide special options when invoking `docker run`. The container, we just started, can't be accessed by our browser. We need to stop it again and restart with different options.
 
 [source, text]
 ----
@@ -246,32 +258,38 @@ Now let's make sure, we're exposing the correct port, that we want to access dur
 docker run -it -p 8080:8080 <INSTRUCTOR_IP>:5000/wildfly
 ----
 
-Now we're ready to test http://dockerhost:8080 again. Which works with the exposed port, as expected.
+The format is `-p hostPort:containerPort`.
+
+Now we're ready to test http://dockerhost:8080 again. This works with the exposed port, as expected.
 
 .Welcome WildFly
 image::images/plain-wildfly1.png[]
 
 ### Running the Java EE 7 Samples
+
 link:https://github.com/javaee-samples/javaee7-hol[Java EE 7 Hands-on Lab] has been delivered all around the world and is a pretty standard application that shows design patterns and anti-patterns for a typical Java EE 7 application.
-Docker containers allows you to simplify application delivery by packaging all the key components together in an image. So how do you get the first feel of Java EE 7 hands-on lab with Docker ?
-Pull the Docker image that contains WildFly and pre-built Java EE 7 hands-on lab WAR file as shown
+Docker containers allows you to simplify application delivery by packaging all the key components together in an image. So how do you get the first feel of this Java EE 7 application with Docker ?
+
+Pull the Docker image that contains WildFly and pre-built Java EE 7 application WAR file as shown:
+
 [source, text]
 ----
 docker pull <INSTRUCTOR_IP>:5000/javaee7-hol
 ----
 
-The javaee7-hol link:https://github.com/arun-gupta/docker-images/blob/master/javaee7-hol/Dockerfile[Dockerfile] is based on jboss/wildfly and adds the movieplex7 application as war file.
+The javaee7-hol link:https://github.com/arun-gupta/docker-images/blob/master/javaee7-hol/Dockerfile[Dockerfile] is based on `jboss/wildfly` and adds the movieplex7 application as war file.
 
 Run it as:
 
 [source, text]
 ----
-docker run -it -p 80:8080 arungupta/javaee7-hol
+docker run -it -p 8080:8080 arungupta/javaee7-hol
 ----
 
 See the application in action at http://dockerhost:8080/movieplex7/
 
 ### Ticket Monster
+
 TicketMonster is an example application that focuses on Java EE6 - JPA 2, CDI, EJB 3.1 and JAX-RS along with HTML5 and jQuery Mobile. It is a moderately complex application that demonstrates how to build modern web applications optimized for mobile & desktop. TicketMonster is representative of an online ticketing broker - providing access to events (e.g. concerts, shows, etc) with an online booking application.
 
 Apart from being a demo, TicketMonster provides an already existing application structure that you can use as a starting point for your app. You could try out your use cases, test your own ideas, or, contribute improvements back to the community.
@@ -711,7 +729,7 @@ docker run swarm create
 
 This command returns a <TOKEN> and is the unique cluster id. It will be used when creating master and nodes later. This cluster id is returned by the hosted discovery service on Docker Hub.
 
-_Note: Make sure to note this cluster id now as there is no means to list it later._
+NOTE: Make sure to note this cluster id now as there is no means to list it later.
 
 Swarm is fully integrated with Docker Machine, and so is the easiest way to get started. Let's create a Swarm Master next:
 
