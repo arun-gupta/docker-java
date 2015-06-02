@@ -30,7 +30,7 @@ be fun, you should have a decent hardware available. Beside the operating system
 .. Linux / Windows: x86 (Intel Pentium) or x64 (i5 and comparable)
 
 . Memory
-.. 8 to 16 GB for instructors
+.. At least 8 to 16 GB
 
 ### Software
 
