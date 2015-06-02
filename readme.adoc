@@ -40,30 +40,23 @@ You can certainly provide an installation script that will download and install 
 
 **What can a Java Developer use Docker for?**
 
-__Faster delivery of your applications__
-
-Docker helps you with the development lifecycle.
+. *Faster delivery of your applications*: Docker helps you with the development lifecycle.
 Docker allows you to develop on local containers that contain your applications
 and services. It can then integrate into a continuous integration and
 deployment workflow.
-
++
 For example, you write code locally and share the development stack
 via Docker with colleagues. When everybody is ready, you push the
 code and the stack you all are developing onto a test environment
 and execute any required tests.
++
 From the testing environment, you can then push the Docker images
 into production and deploy your code.
-
-__Deploying and scaling more easily__
-
-Docker's container-based platform allows for portable workloads.
-Docker containers can run on a developer's local host, on physical
++
+. *Deploying and scaling more easily*: Docker's container-based platform allows for portable workloads. Docker containers can run on a developer's local host, on physical
 or virtual machines in a data center, or in the Cloud.
-
-Docker's portability and lightweight nature also make dynamically
-managing workloads easy. You can use Docker to quickly scale up or
-tear down applications and services.
-<Docker is so fast, that scaling can be near real time.
++
+Docker's portability and lightweight nature also make dynamically managing workloads easy. You can use Docker to quickly scale up or tear down applications and services. Docker is so fast, that scaling can be near real time.
 
 **How is it different from VM?**
 
@@ -303,36 +296,44 @@ The administration site is centered around CRUD use cases, so instead of writing
 
 Monitoring sales requires staying in touch with the latest changes on the server side, so this part of the application will be developed in HTML5 and JavaScript using a polling solution.
 
-### Build Ticket Monster
-First thing, you're going to do is to build the application from source. Create a folder for the source and change to it
+#### Build Ticket Monster
+
+First thing, you're going to do is to build the application from source. Create a directory for the source and change to it:
+
 [source, text]
 ----
-mkdir /docker-java/
-cd /docker-java/
+mkdir docker-java/
+cd docker-java/
 ----
+
 And checkout the sources from the instructor git repository.
+
 [source, text]
 ----
 git clone -b WildFly-docker-test http://root:dockeradmin@<INSTRUCTOR_IP>:10080/root/ticket-monster.git
 ----
 
+`-b WildFly-docker-test` is a branch of Ticket Monster that contains a ``docker-test'' profile to run Arquillian Cube test. More on this later.
+
 From here, you're free to explore the application a bit. Open it with JBDS and find more background about the use-cases and how the application is designed at the link:http://www.jboss.org/ticket-monster/whatisticketmonster/[Ticket Monster Website].
 
-Copy the Maven lab-settings.xml file that you have downloaded from the instructor machine and place it inside /docker-java
+Copy the Maven lab-settings.xml file that you have downloaded from the instructor machine and place it inside `docker-java` directory.
 
 When you're ready, it is time to build the application. Switch to the checkout directory and run maven package.
 
 [source, text]
 ----
-cd /docker-java/
+cd docker-java/
 mvn -s lab-settings.xml -f ticket-monster/demo/pom.xml -Ppostgresql clean package
 ----
 
-Congratulations: You just build the applications war file. Let's see if this can be deployed.
+NOTE: Make sure you've changed <INSTRUCTOR_IP> to the IP address of instructor's machine.
 
-### Run Ticket Monster For The First Time
-The application needs two things from an infrastructure perspective. A WildFly application server and a Postgress Database.
-Let Docker do the magic for us.
+Congratulations! You just build the applications war file. Let's see if this can be deployed.
+
+#### Run Ticket Monster For The First Time
+
+The application needs two things from an infrastructure perspective. A WildFly application server and a Postgress Database. Let Docker do the magic for us.
 
 Check if your docker host is running
 
@@ -341,18 +342,30 @@ Check if your docker host is running
 docker-machine ls
 ----
 
-If the machine state is stopped, starte it with
+You should see the output similar to:
 
 [source, text]
 ----
-docker-machine start
+NAME        ACTIVE   DRIVER       STATE     URL                         SWARM
+lab                  virtualbox   Running   tcp://192.168.99.101:2376   
 ----
-After it is started you can find out about the IP address of your host with
+
+If the machine state is stopped, start it with:
+
 [source, text]
 ----
-docker-machine ip
+docker-machine start lab
 ----
+
+After it is started you can find out about the IP address of your host with
+
+[source, text]
+----
+docker-machine ip lab
+----
+
 We already did this during the setup document, remember? So, this is a good chance to check, if you already added this IP to your hosts file.
+
 Type:
 
 [source, text]
@@ -360,10 +373,21 @@ Type:
 ping dockerhost
 ----
 
-and see if this resolves to the IP address that the docker-machine command printed out.
-If it does, you're ready to start over with the lab. Let's get started with the real work.
+and see if this resolves to the IP address that the docker-machine command printed out. You should see an output as:
 
-Time to bring in WildFly and a database. You'll start with the database. We choose Postgres as our database for the Ticketmonster application.
+[source, text]
+----
+> ping dockerhost
+PING dockerhost (192.168.99.101): 56 data bytes
+64 bytes from 192.168.99.101: icmp_seq=0 ttl=64 time=0.394 ms
+64 bytes from 192.168.99.101: icmp_seq=1 ttl=64 time=0.387 ms
+----
+
+If it does, you're ready to start over with the lab. If it does not, make sure you've followed the steps to https://github.com/arun-gupta/docker-java/tree/master/attendees#configure-host[configure your host].
+
+Let's get started with the real work.
+
+Time to bring in WildFly and a database. You'll start with the database. Postgres is used as the database for Ticketmonster application.
 
 [source, text]
 ----

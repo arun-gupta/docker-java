@@ -33,9 +33,9 @@ be fun, you should have a decent hardware available. Beside the operating system
 .. link:http://www.getfirefox.com[Firefox]
 
 
-## A word about licenses
-This tutorial only uses software which is open source or at least free to use in development and/or education.
-Please refer to the individual products/tools used in this tutorial.
+## A Word About Licenses
+This tutorial only uses software which is open source or at least free to use in development and/or education. Please refer to the individual products/tools used in this tutorial.
+
 . Docker is Apache License Version 2.0, see it here: https://github.com/docker/docker/blob/master/LICENSE
 . VirtualBox base packages (everything but the extension pack) is released under the GNU General Public License V2, see it here: https://www.virtualbox.org/wiki/GPL
 . Msysgit is a fork of Git under the GNU General Public License version 2.0, see it here: http://opensource.org/licenses/GPL-2.0
@@ -48,16 +48,20 @@ Downloads are available at http://<INSTRUCTOR_IP:8082>/downloads/
 
 or directly from the https://www.virtualbox.org/[Oracle Virtualbox] website.
 
-NOTE: Installation should complete without any error!
+Installation should complete without any error.
 
-CAUTION: Linux Users
+[WARNING]
+====
+Linux Users
+
 . Have your kernel updated
 . Users should have the GNU compiler, build and header files for your current Linux kernel
-. Create a /usr/src/linux link to the current kernel source
+. Create a `/usr/src/linux` link to the current kernel source
+====
 
-CAUTION: Windows Users
-. Have https://msysgit.github.io/ installed
+## Install Git Client
 
+Install Git Client as explained at: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
 
 ## Install Docker Machine
 
@@ -114,9 +118,7 @@ docker-machine create --driver virtualbox --virtualbox-boot2docker-url http://<I
 +
 [source, text]
 ----
-#TODO This boot2docker instruction is being overwritten. Docker-machine will profine flags for this configuration: https://github.com/docker/machine/pull/1040
-TODO To avoid it to be overwritten the parameter should be included manually. This issue should be fixed on next docker-machine release.
-docker-machine ssh lab "echo $'EXTRA_ARGS=\"--insecure-registry <INSTRUCTOR_IP>:5000\"' | sudo tee -a /var/lib/boot2docker/profile && sudo /etc/init.d/docker restart"
+docker-machine ssh lab "echo $'EXTRA_ARGS=\"$EXTRA_ARGS --insecure-registry <INSTRUCTOR_IP>:5000\"' | sudo tee -a /var/lib/boot2docker/profile && sudo /etc/init.d/docker restart"
 eval "$(docker-machine env lab)"
 ----
 
