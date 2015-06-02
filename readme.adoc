@@ -387,16 +387,41 @@ Now we're ready to test http://dockerhost:8080 again. This works with the expose
 .Welcome WildFly
 image::images/plain-wildfly1.png[]
 
-### Enabling WildFly Admin Console (TODO)
+### Enabling WildFly Admin Console
+
+The following command will override the default command in Docker file, explicitly starting WildFly, and binding application and management port to all network interfaces.
 
 [source, text]
 ----
-docker run -P -d jboss/wildfly /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0
+docker run -P -d <INSTRUCTOR_IP>:5000/wildfly /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0
 ----
 
- `-P` flag map any network ports inside the image it to a random high port from the range 49153 to 65535 on Docker host.
+Accessing WildFly Administration Console require a user in administration realm. So instead a pre-created image, with username/password, is used to start WildFly as:
 
- http://blog.arungupta.me/wildfly-admin-console-docker-image-techtip66/
+[source, text]
+----
+docker run -P -d 192.168.99.100:5000/wildfly-management
+----
+
+`-P` flag map any network ports inside the image it to a random high port from the range 49153 to 65535 on Docker host.
+
+Look at the exposed ports as:
+
+[source, text]
+----
+ docker ps
+CONTAINER ID        IMAGE                                           COMMAND                CREATED             STATUS              PORTS                                              NAMES
+6f610b310a46        192.168.99.100:5000/wildfly-management:latest   "/bin/sh -c '/opt/jb   6 seconds ago       Up 6 seconds        0.0.0.0:32769->8080/tcp, 0.0.0.0:32770->9990/tcp   determined_darwin 
+----
+
+Look for the host port that is mapped in the container, `32770` in this case. Access the admin console at http://dockerhost:32770
+
+The exact port can also be found as:
+
+[source, text]
+----
+docker inspect --format='{{(index (index .NetworkSettings.Ports "9990/tcp") 0).HostPort}}' 6f610b310a46
+----
 
 ### Stop and Remove Container
 

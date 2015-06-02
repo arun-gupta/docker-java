@@ -286,7 +286,16 @@ docker build -t "instructor/ticketmonster-pgsql-wildfly" dockerfiles/ticketmonst
 
 ## Push Images to Registry
 
-Put the ``managed-wildfly'', ``ticketmonster-pgsql-wildfly'', ``postgres'' and ``modcluster'' images to the local registry. These commands are available in https://github.com/arun-gupta/docker-java/blob/master/instructor/push-images-to-registry.sh[push-images-to-registry.sh].
+Put the following images to the local registry:
+
+. ``jboss/wildfly''
+. ``managed-wildfly''
+. ``ticketmonster-pgsql-wildfly''
+. ``postgres''
+. ``modcluster''
+. ``javaee7-hol''
+
+These commands are available in https://github.com/arun-gupta/docker-java/blob/master/instructor/push-images-to-registry.sh[push-images-to-registry.sh].
 
 [source, text]
 ----
