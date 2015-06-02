@@ -262,6 +262,10 @@ Done!
 
 ## Build TicketMonster from Source Code
 
+1. Login to the Docker Machine
+
+  docker-machine ssh mymachine
+
 1. Clone TicketMonster from the existing gitlab container
 
   git clone -b WildFly-docker-test http://root:dockeradmin@localhost:10080/root/ticket-monster.git
@@ -270,11 +274,13 @@ Done!
 
   mvn -s settings.xml -f ticket-monster/demo/pom.xml -Ppostgresql clean package
 
-3. Copy TicketMonster war to the docker ticketmonster-pgsql-widlfly image folder
+3. Copy TicketMonster war to the Docker ticketmonster-pgsql-widlfly image folder
 
   cp ticket-monster/demo/target/ticket-monster.war dockerfiles/ticketmonster-pgsql-wildfly/
 
-## Build managed-widlfly and ticketmonster-pgsql-widlfly images
+## Build Images
+
+Build ``managed-widlfly'' and ``ticketmonster-pgsql-widlfly'' images
 
 [source, text]
 ----
@@ -282,7 +288,9 @@ docker build -t "instructor/wildfly-management" dockerfiles/wildfly-management/
 docker build -t "instructor/ticketmonster-pgsql-wildfly" dockerfiles/ticketmonster-pgsql-wildfly/
 ----
 
-## Put the managed-wildfly, ticketmonster-pgsql-wildfly, postgres and modcluster images on the local registry
+## Push Images to Registry
+
+Put the ``managed-wildfly'', ``ticketmonster-pgsql-wildfly'', ``postgres'' and ``modcluster'' images on the local registry
 
 [source, text]
 ----
