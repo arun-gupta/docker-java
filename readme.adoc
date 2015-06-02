@@ -418,9 +418,26 @@ Look for the host port that is mapped in the container, `32770` in this case. Ac
 
 The exact port can also be found as:
 
+. Using `docker inspect`:
++
 [source, text]
 ----
 docker inspect --format='{{(index (index .NetworkSettings.Ports "9990/tcp") 0).HostPort}}' 6f610b310a46
+----
++
+. Using `docker port`:
++
+[source, text]
+----
+docker port 6f610b310a46
+----
++
+to see the output as:
++
+[source, text]
+----
+0.0.0.0:32769->8080/tcp
+0.0.0.0:32770->9990/tcp
 ----
 
 The username/password credentials are:
@@ -561,6 +578,8 @@ NOTE: You're free to explore the application. Open it with with the favorite IDE
 
 Copy the Maven lab-settings.xml file that you have downloaded from the instructor machine and place it inside `docker-java` directory.
 
+NOTE: Make sure <INSTRUCTOR_IP> in `lab-settings.xml` is changed to match the IP address of instructor's machine.
+
 When you're ready, it is time to build the application. Switch to the checkout directory and run maven package.
 
 [source, text]
@@ -568,8 +587,6 @@ When you're ready, it is time to build the application. Switch to the checkout d
 cd docker-java/
 mvn -s lab-settings.xml -f ticket-monster/demo/pom.xml -Ppostgresql clean package
 ----
-
-NOTE: Make sure <INSTRUCTOR_IP> in `lab-settings.xml` is changed to match the IP address of instructor's machine.
 
 Congratulations! You just build the applications war file. Let's deploy it!
 
@@ -697,9 +714,9 @@ Stop WildFly container when you're done.
 docker stop wildfly
 ----
 
-### Other Deployment options (OPTIONAL)
+### Other Deployment Options (OPTIONAL)
 
-For the first deployment we used a shared volumen on the host computer. Let's explore deeper, what other deployment options we have
+For the first deployment we used a shared volumen on the host computer. Let's explore deeper, what other deployment options we have.
 
 #### Using the CLI
 
@@ -710,7 +727,8 @@ The Command Line Interface (CLI) is a tool for connecting to WildFly instances t
 . Start/Stop/Restart Nodes in respective mode i.e. Standalone/Domain.
 . Adding/Deleting resource or subsystems to servers.
 
-In order to work with the CLI you need to have it locally installed on your machine. Your instructor has a download prepared for you at http://<INSTRUCTOR_IP:8082>/downloads/
+CLI needs to be locally installed and comes as part of WildFly. Download WildFly 8.2 from http://<INSTRUCTOR_IP>:8082/downloads/wildfly-8.2.0.Final.zip.
+
 Unzip into a folder of your choice (e.g. /Users/arungupta/WildFly82/). This folder is named $WIDLFY_HOME from here on. Make sure to add the /Users/arungupta/WildFly82/bin to your $PATH.
 
 [source, text]
