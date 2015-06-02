@@ -262,10 +262,6 @@ Done!
 
 ## Build TicketMonster from Source Code
 
-1. Login to the Docker Machine
-
-  docker-machine ssh mymachine
-
 1. Clone TicketMonster from the existing gitlab container
 
   git clone -b WildFly-docker-test http://root:dockeradmin@localhost:10080/root/ticket-monster.git
@@ -290,7 +286,7 @@ docker build -t "instructor/ticketmonster-pgsql-wildfly" dockerfiles/ticketmonst
 
 ## Push Images to Registry
 
-Put the ``managed-wildfly'', ``ticketmonster-pgsql-wildfly'', ``postgres'' and ``modcluster'' images on the local registry
+Put the ``managed-wildfly'', ``ticketmonster-pgsql-wildfly'', ``postgres'' and ``modcluster'' images to the local registry. These commands are available in https://github.com/arun-gupta/docker-java/blob/master/instructor/push-images-to-registry.sh[push-images-to-registry.sh].
 
 [source, text]
 ----
@@ -327,7 +323,7 @@ docker push localhost:5000/javaee7-hol
 
 If you need some extra information like:
 
-- Uptating the attendees instructions served by the instructor httpd server
+- Updating the attendees instructions served by the instructor httpd server
 - Backing up Nexus data container to a file
 
 Please, check the link:extra.adoc[extra instructions].
