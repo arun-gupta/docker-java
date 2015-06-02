@@ -1,0 +1,20 @@
+# Docker Command Cheatsheet
+
+[width="100%", options="header"]
+|==================
+| Purpose| Command
+| Build an image| `docker build --rm=true .`
+| Install an image | `docker pull ${IMAGE}`
+| List of installed images | `docker images`
+| List of installed images (detailed listing) | `docker images --no-trunc`
+| Remove an image | `docker rmi ${IMAGE_ID}`
+| Remove all untagged images | `docker rmi $(docker images \| grep “^” \| awk “{print $3}”)`
+| Remove all images | `docker rm $(docker ps -aq)`
+| Run a container | `docker run`
+| List containers | `docker ps`
+| Stop a container | `docker stop ${CID}`
+| Find IP address of the container | `docker inspect --format '{{ .NetworkSettings.IPAddress }}' ${CID}`
+| Attach to a container | `docker attach ${CID}`
+| Remove a container | `docker rm ${CID}`
+| Remove all containers | `docker rm $(docker ps -aq)`
+|==================
