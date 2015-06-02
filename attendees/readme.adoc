@@ -121,29 +121,26 @@ eval "$(docker-machine env lab)"
 ----
 
 ## Install Maven
-Download apache-maven-3.3.3-bin.zip from the instructor PC.
-[source, text]
-----
-curl http://<INSTRUCTOR_IP>:8082/downloads/apache-maven-3.3.3-bin.zip
-----
 
-unzip to a folder of your choice and add the folder to your PATH environment variable.
+. Download `apache-maven-3.3.3-bin.zip` from the instructor PC.
 
-[source, text]
-----
-set PATH=%PATH%;c:/apache-maven-3.3.3
-----
+  curl http://<INSTRUCTOR_IP>:8082/downloads/apache-maven-3.3.3-bin.zip
 
-## Prepare Maven settings.xml file
+. Unzip to a folder of your choice and add the folder to your PATH environment variable. For example, do the following on Windows:
 
-Download the lab-settings.xml file from http://<INSTRUCTOR_IP>:8082/downloads/lab-settings.xml
+  set PATH=%PATH%;c:/apache-maven-3.3.3
 
-Edit the model file and replace the <INSTRUCTOR_IP>.
+## Prepare Maven Settings
+
+Download `lab-settings.xml` file from http://<INSTRUCTOR_IP>:8082/downloads/lab-settings.xml
+
+Edit the model file and replace the `<INSTRUCTOR_IP>` with the accurate value.
 
 
 ## Setup JBoss Developer Studio
 
 To install JBoss Developer Studio stand-alone, complete the following steps:
+
 . Download http://<INSTRUCTOR_IP:8082>/downloads/jboss-devstudio-8.1.0.GA-jar_universal.jar
 . Start the installer (see below)
 . Follow the on-screen instructions to complete the installation process.
@@ -155,18 +152,20 @@ cd /download/path/
 java -jar jboss-devstudio-8.1.0.GA-jar_universal.jar
 ----
 
-## Add a host entry for your dockerhost
-To make it easiert to access the containers we add an entry into the host mapping table.
-First, find out the IP address of your machine:
+## Configure Host
 
+Add a host entry for your Docker Host. To make it easier to access the containers, we add an entry into the host mapping table of your host operating system.
+
+First, find out the IP address of your machine:
 
 [source, text]
 ----
-docker-machine ip
+docker-machine ip lab
 ----
 
-And edit the /etc/hosts (Mac OS) or C:\Windows\System32\drivers\etc\hosts (Windows)
+And edit the `/etc/hosts` (Mac OS) or `C:\Windows\System32\drivers\etc\hosts` (Windows)
 and add
+
 [source, text]
 ----
 <OUTPUT OF DOCKER MACHINE COMMAND>  dockerhost
