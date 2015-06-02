@@ -27,9 +27,7 @@ This lab is designed for a BYOL (Brying Your Own Laptop) style hands-on-lab. We 
 
 https://github.com/arun-gupta/docker-java/tree/master/attendees[Download and setup attendee laptop].
 
-## The Lab
-
-### Docker Basics
+## Docker Basics
 Docker simplifies software delivery by making it easy to build and share images that contain your application’s entire environment, or application operating system.
 
 **What does it mean by application operating system ?**
@@ -94,11 +92,11 @@ Docker images are then built from these base images using a simple, descriptive 
 
 These instructions are stored in a file called a Dockerfile. Docker reads this Dockerfile when you request a build of an image, executes the instructions, and returns a final image.
 
-**How does a container work?**
+**How does a Container work?**
 
 A container consists of an operating system, user-added files, and meta-data. As we've seen, each container is built from an image. That image tells Docker what the container holds, what process to run when the container is launched, and a variety of other configuration data. The Docker image is read-only. When Docker runs a container from an image, it adds a read-write layer on top of the image (using a union file system as we saw earlier) in which your application can then run.
 
-### Docker Machine
+## Docker Machine
 
 Machine makes it really easy to create Docker hosts on your computer, on cloud providers and inside your own data center. It creates servers, installs Docker on them, then configures the Docker client to talk to them.
 
@@ -118,7 +116,7 @@ Check if docker machine is working using the following command:
 docker-machine -v
 ----
 
-### Docker Client
+## Docker Client
 
 The client communicates with the demon process on your host and let's you work with images and containers.
 
@@ -141,9 +139,11 @@ Get a full list of available commands with
 docker
 ----
 
-### Running A Pre-Baked WildFly on Docker
+## Running A Pre-Baked WildFly on Docker
 
 The first step in running any application on Docker is to run an image. There are plenty of images available from the official Docker registry (aka link:https://hub.docker.com[Docker Hub]). To run any of them, you just have to ask the Docker Client to run it. The client will check if the image already exists on Docker Host. If it exists then it'll run it, otherwise the host will download the image and then run it.
+
+### Pull the WildFly Image
 
 Let's first check, if there are any images already available:
 
@@ -152,20 +152,21 @@ Let's first check, if there are any images already available:
 docker images
 ----
 
-At first, this list ist empty. Now, let's get a plain `jboss/wildfly` image from your instructor's registry:
+At first, this list is empty. Now, let's get a plain `jboss/wildfly` image from your instructor's registry:
 
 [source, text]
 ----
 docker pull <INSTRUCTOR_IP>:5000/wildfly
 ----
 
-Typically, you'll 
+You can see, that Docker is downloading the image with it's different layers.
 
-You can see, that Docker is downloading the immage with it's different layers.
 In a traditional Linux boot, the kernel first mounts the root File System as read-only, checks its integrity, and then switches the whole rootfs volume to read-write mode.
 When Docker mounts the rootfs, it starts read-only, as in a traditional Linux boot, but then, instead of changing the file system to read-write mode, it takes advantage of a union mount to add a read-write file system over the read-only file system. In fact there may be multiple read-only file systems stacked on top of each other. We think of each one of these file systems as a layer.
+
 At first, the top read-write layer has nothing in it, but any time a process creates a file, this happens in the top layer. And if something needs to update an existing file in a lower layer, then the file gets copied to the upper layer and changes go into the copy. The version of the file on the lower layer cannot be seen by the applications anymore, but it is there, unchanged.
-We call the union of the read-write layer and all the read-only layers a union file system.
+
+We call the union of the read-write layer and all the read-only layers a _union file system_.
 
 .Docker Layers
 image::images/plain-wildfly0.png[]
@@ -189,16 +190,76 @@ docker images
 
 REPOSITORY              TAG     IMAGE ID       CREATED       VIRTUAL SIZE
 <INSTRUCTOR_IP>:5000/wildfly  latest  2ac466861ca1   10 weeks ago  951.3 MB
-
 ----
 
-Run WildFly in the container:
+### Run the WildFly Container
+
+#### Run Interactively
+
+Run WildFly container in an interactive mode.
+
 [source, text]
 ----
 docker run -it <INSTRUCTOR_IP>:5000/wildfly
 ----
 
-Seems the server started correctly. We can check it by issuing the `docker ps` command which retrieves the images process which are running and the ports engaged by the process:
+This will show the output as:
+
+[source, text]
+----
+> docker run -it 192.168.99.100:5000/wildfly
+=========================================================================
+
+  JBoss Bootstrap Environment
+
+  JBOSS_HOME: /opt/jboss/wildfly
+
+  JAVA: /usr/lib/jvm/java/bin/java
+
+  JAVA_OPTS:  -server -Xms64m -Xmx512m -XX:MaxPermSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true
+
+=========================================================================
+
+17:58:58,353 INFO  [org.jboss.modules] (main) JBoss Modules version 1.3.3.Final
+17:58:58,891 INFO  [org.jboss.msc] (main) JBoss MSC version 1.2.2.Final
+17:58:59,056 INFO  [org.jboss.as] (MSC service thread 1-2) JBAS015899: WildFly 8.2.0.Final "Tweek" starting
+
+. . .
+
+17:59:03,211 INFO  [org.jboss.as] (Controller Boot Thread) JBAS015961: Http management interface listening on http://127.0.0.1:9990/management
+17:59:03,212 INFO  [org.jboss.as] (Controller Boot Thread) JBAS015951: Admin console listening on http://127.0.0.1:9990
+17:59:03,213 INFO  [org.jboss.as] (Controller Boot Thread) JBAS015874: WildFly 8.2.0.Final "Tweek" started in 5310ms - Started 184 of 234 services (82 services are lazy, passive or on-demand)
+----
+
+This shows that the server started correctly, congratulations!
+
+Hit Ctrl+C to stop the container.
+
+#### Run as a Daemon
+
+Restart the container in a daemon mode:
+
+[source, text]
+----
+> docker run -d 192.168.99.100:5000/wildfly
+972f51cc8422eec0a7ea9a804a55a2827b5537c00a6bfd45f8646cb764bc002a
+----
+
+The output is the unique id assigned to the container. Check the logs as:
+
+[source, text]
+----
+> docker logs 972f51cc8422eec0a7ea9a804a55a2827b5537c00a6bfd45f8646cb764bc002a
+=========================================================================
+
+  JBoss Bootstrap Environment
+
+  JBOSS_HOME: /opt/jboss/wildfly
+
+. . .
+----
+
+We can check it by issuing the `docker ps` command which retrieves the images process which are running and the ports engaged by the process:
 
 [source, text]
 ----
@@ -209,7 +270,9 @@ CONTAINER ID        IMAGE                  COMMAND                CREATED       
 meida
 ----
 
-If you have noticed the startup log of the server, you should have discovered that the server is located in the `/opt/jboss/wildfly` and that by default the public interfaces are bound to the `0.0.0.0` address whilst the admin interfaces are bound just to localhost. This information will be useful to learn how to customize the server.
+#### Access WildFly Server
+
+If you have noticed the startup log of the server, you should have discovered that the server is located in the `/opt/jboss/wildfly` and that by default the public interfaces are bound to the `0.0.0.0` address while the admin interfaces are bound just to localhost. This information will be useful to learn how to customize the server.
 
 So, in order to access to WildFly server, we need to know which address has been chosen by the application server for socket binding. We will use the docker inspect command passing as parameter the ID of the running Container we have already found (48f473979e50):
 
@@ -258,10 +321,9 @@ Now we're ready to test http://dockerhost:8080 again. This works with the expose
 .Welcome WildFly
 image::images/plain-wildfly1.png[]
 
-### Running the Java EE 7 Samples
+## Running the Java EE 7 Samples
 
 link:https://github.com/javaee-samples/javaee7-hol[Java EE 7 Hands-on Lab] has been delivered all around the world and is a pretty standard application that shows design patterns and anti-patterns for a typical Java EE 7 application.
-Docker containers allows you to simplify application delivery by packaging all the key components together in an image. So how do you get the first feel of this Java EE 7 application with Docker ?
 
 Pull the Docker image that contains WildFly and pre-built Java EE 7 application WAR file as shown:
 
@@ -393,6 +455,7 @@ Time to bring in WildFly and a database. You'll start with the database. Postgre
 ----
 docker run --name db -d -p 5432:5432 -e POSTGRES_USER=ticketmonster -e POSTGRES_PASSWORD=ticketmonster-docker <INSTRUCTOR_IP>:5000/postgres
 ----
+
 This command starts a container named "db" from the image in your instructor's registry "<INSTRUCTOR_IP>:5000/postgres". As this will not be present locally, it needs to be downloaded first. But you'll have a very quick connection to the instructor registry and this shouldn't take long.
 The two "-e" options define environment variables which are read by the db at startup and allow us to access the database with this user and password.
 Finally, the "-d" option tells docker to start a demon process. Which means, that the console window, you're running this command in, will be available again after it is issued. If you skip this parameter, the console will be directly showing the output from the process.
