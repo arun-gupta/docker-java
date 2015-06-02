@@ -195,7 +195,7 @@ If it does, you're ready to start over with the lab. If it does not, make sure y
 
 The first step in running any application on Docker is to run an image. There are plenty of images available from the official Docker registry (aka link:https://hub.docker.com[Docker Hub]). To run any of them, you just have to ask the Docker Client to run it. The client will check if the image already exists on Docker Host. If it exists then it'll run it, otherwise the host will download the image and then run it.
 
-### Pull the WildFly Image
+### Pull Image
 
 Let's first check, if there are any images already available:
 
@@ -249,9 +249,9 @@ REPOSITORY              TAG     IMAGE ID       CREATED       VIRTUAL SIZE
 <INSTRUCTOR_IP>:5000/wildfly  latest  2ac466861ca1   10 weeks ago  951.3 MB
 ----
 
-### Run the WildFly Container
+### Run Container
 
-#### Run Interactive Container
+#### Interactive Container
 
 Run WildFly container in an interactive mode.
 
@@ -294,7 +294,7 @@ By default, Docker runs in the foreground. `-i` allows to interact with the STDI
 
 Hit Ctrl+C to stop the container.
 
-#### Run Detached Container
+#### Detached Container
 
 Restart the container in detached mode:
 
@@ -331,36 +331,11 @@ CONTAINER ID        IMAGE                                 COMMAND               
 
 Also try `docker ps -a` to see all the containers on this machine.
 
-#### Access WildFly Server
+### Run Container with Default Port
 
-If you have noticed the startup log of the server, you should have discovered that the server is located in the `/opt/jboss/wildfly` and that by default the public interfaces are bound to the `0.0.0.0` address while the admin interfaces are bound just to `localhost`. This information will be useful to learn how to customize the server.
+Startup log of the server shows that the server is located in the `/opt/jboss/wildfly`. It also shows that the public interfaces are bound to the `0.0.0.0` address while the admin interfaces are bound just to `localhost`. This information will be useful to learn how to customize the server.
 
-So, in order to access to WildFly server, we need to know which address has been chosen by the application server for socket binding. We will use the `docker inspect` command to find the assigned IP address:
-
-[source, text]
-----
-docker inspect --format "{{.NetworkSettings.IPAddress}}" 0bc123a8ece0
-----
-
-The argument is the container id obtained earlier.
-
-The above command outputs an IP address, such as ``172.17.0.1''. That means, the server is available at 172.17.0.1.
-
-Now let's open the console at that address: http://172.17.0.1:8080
-
-That did not work. You'll get a ``This webpage is not available - ERR_CONNECTION_TIMED_OUT'' error.
-
-But why?
-
-Docker runs all containers in the host, which is running in a guest system.
-
-When Docker starts, it creates a virtual interface named ``docker0'' on the host machine. It randomly chooses an address and subnet from the private range defined by RFC 1918 that are not in use on the host machine, and assigns it to docker0. Docker made the choice 172.17.0.1 in this example.
-
-But ``docker0'' is no ordinary interface. It is a virtual Ethernet bridge that automatically forwards packets between any other network interfaces that are attached to it. This lets containers communicate both with the host machine and with each other, and nothing more.
-
-Speaking, by default Docker containers can make connections to the outside world, but the outside world cannot connect to containers. This get's another layer of indirection, if you are using boot2docker on for example Mac or Windows. In this case, we don't even care for the Docker generated IP address, but want to know the address, the host is running at.
-
-`docker-machine ip <machine-name>` gives us the host IP address and this was already added to the hosts file. So, we can give it another try by accessing: http://dockerhost:8080. This will not work either.
+`docker-machine ip <machine-name>` gives us the Docker Host IP address and this was already added to the hosts file. So, we can give it another try by accessing: http://dockerhost:8080. However, this will not work either.
 
 If you want containers to accept incoming connections, you will need to provide special options when invoking `docker run`. The container, we just started, can't be accessed by our browser. We need to stop it again and restart with different options.
 
@@ -369,7 +344,29 @@ If you want containers to accept incoming connections, you will need to provide 
 docker stop 0bc123a8ece0
 ----
 
-Now let's make sure, we're exposing the correct port, that we want to access during startup:
+Restart the container as:
+
+[source, text]
+----
+> docker ps
+CONTAINER ID        IMAGE                                 COMMAND                CREATED             STATUS              PORTS                     NAMES
+4545ced66242        192.168.99.100:5000/wildfly:latest    "/opt/jboss/wildfly/   3 seconds ago       Up 3 seconds        0.0.0.0:32768->8080/tcp   suspicious_wozniak   
+----
+
+`-P` flag map any network ports inside the image it to a random high port from the range 49153 to 65535 on Docker host.
+
+The port mapping is shown in the `PORTS` column. Access the WildFly server at http://dockerhost:32768:8080. Make sure to use the correct port number as shown in your case.
+
+### Run Container with Specified Port
+
+Lets stop the previously running container as:
+
+[source, text]
+----
+docker stop 4545ced66242
+----
+
+Restart the container as:
 
 [source, text]
 ----
