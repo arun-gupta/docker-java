@@ -423,6 +423,15 @@ The exact port can also be found as:
 docker inspect --format='{{(index (index .NetworkSettings.Ports "9990/tcp") 0).HostPort}}' 6f610b310a46
 ----
 
+The username/password credentials are:
+
+[options="header"]
+|====
+| Field | Value
+| Username | admin
+| Password | docker#admin
+|====
+
 ### Stop and Remove Container
 
 #### Stop Container
@@ -473,9 +482,12 @@ docker rm $(docker ps -aq)
 
 Common Docker commands are available in link:command-cheatsheet.adoc[Docker Command Cheatsheet].
 
-## Running the Java EE 7 Samples
+## Deploy Java EE 7 Application (Pre-Built WAR)
 
 https://github.com/javaee-samples/javaee7-hol[Java EE 7 Hands-on Lab] has been delivered all around the world and is a pretty standard application that shows design patterns and anti-patterns for a typical Java EE 7 application.
+
+.Java EE 7 Application Architecture
+image::images/javaee7-hol.png[]
 
 Pull the Docker image that contains WildFly and pre-built Java EE 7 application WAR file as shown:
 
@@ -511,7 +523,7 @@ CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-c", "standalone-full.xml", "-b", 
 RUN curl -L https://github.com/javaee-samples/javaee7-hol/blob/jrebel/solution/movieplex7-1.0-SNAPSHOT.war?raw=true -o /opt/jboss/wildfly/standalone/deployments/movieplex7-1.0-SNAPSHOT.war
 ----
 
-## Ticket Monster
+## Build and Deploy Java EE 6 Application (Ticket Monster)
 
 TicketMonster is an example application that focuses on Java EE6 - JPA 2, CDI, EJB 3.1 and JAX-RS along with HTML5 and jQuery Mobile. It is a moderately complex application that demonstrates how to build modern web applications optimized for mobile & desktop. TicketMonster is representative of an online ticketing broker - providing access to events (e.g. concerts, shows, etc) with an online booking application.
 
@@ -526,7 +538,7 @@ The administration site is centered around CRUD use cases, so instead of writing
 
 Monitoring sales requires staying in touch with the latest changes on the server side, so this part of the application will be developed in HTML5 and JavaScript using a polling solution.
 
-### Build Ticket Monster
+### Build Application
 
 First thing, you're going to do is to build the application from source. Create a directory for the source and change to it:
 
@@ -545,7 +557,7 @@ git clone -b WildFly-docker-test http://root:dockeradmin@<INSTRUCTOR_IP>:10080/r
 
 `-b WildFly-docker-test` is a branch of Ticket Monster that contains a ``docker-test'' profile to run Arquillian Cube test. More on this later.
 
-From here, you're free to explore the application a bit. Open it with JBDS and find more background about the use-cases and how the application is designed at the link:http://www.jboss.org/ticket-monster/whatisticketmonster/[Ticket Monster Website].
+NOTE: You're free to explore the application. Open it with with the favorite IDE of your choice. Find more background about the use-cases and how the application is designed at http://www.jboss.org/ticket-monster/whatisticketmonster/[Ticket Monster Website].
 
 Copy the Maven lab-settings.xml file that you have downloaded from the instructor machine and place it inside `docker-java` directory.
 
@@ -557,15 +569,15 @@ cd docker-java/
 mvn -s lab-settings.xml -f ticket-monster/demo/pom.xml -Ppostgresql clean package
 ----
 
-NOTE: Make sure you've changed <INSTRUCTOR_IP> to the IP address of instructor's machine.
+NOTE: Make sure <INSTRUCTOR_IP> in `lab-settings.xml` is changed to match the IP address of instructor's machine.
 
-Congratulations! You just build the applications war file. Let's see if this can be deployed.
+Congratulations! You just build the applications war file. Let's deploy it!
 
-### Run Ticket Monster For The First Time
+### Start Database Server
 
-The application needs two things from an infrastructure perspective. A WildFly application server and a Postgress Database. Let Docker do the magic for us.
+The application require an application server and a database server. This lab will use WildFly and Postgres for them respectively.
 
-Time to bring in WildFly and a database. You'll start with the database. Postgres is used as the database for Ticketmonster application.
+Start Postgres database as:
 
 [source, text]
 ----
@@ -580,7 +592,16 @@ Finally, the `-d` option tells docker to start a demon process. Which means, tha
 
 `-p` option maps container ports to host ports and allows other containers on our host to access them.
 
-This should have worked. To double check if it did, you can see the server logs as:
+This starts the database container. It can be confirmed as:
+
+[source, text]
+----
+> docker ps
+CONTAINER ID        IMAGE                                           COMMAND                CREATED             STATUS              PORTS                                              NAMES
+047bab6a86fe        192.168.99.100:5000/postgres:latest             "/docker-entrypoint.   42 seconds ago      Up 3 seconds        0.0.0.0:5432->5432/tcp                             db   
+----
+
+Server logs can be viewed as:
 
 [source, text]
 ----
@@ -589,26 +610,34 @@ docker logs -f db
 
 The `-f` flag keeps refreshing the logs and pushes new events directly out to the console.
 
-After the database server is up and running we now need the WildFly.
+### Start Application Server
+
+Start WildFly server as:
 
 [source, text]
 ----
 docker run -d --name wildfly -p 8080:8080 --link db:db -v /Users/youruser/tmp/deployments:/opt/jboss/wildfly/standalone/deployments/:rw <INSTRUCTOR_IP>:5000/wildfly
 ----
 
-This command starts a container named ``wildfly'' and links this container to the db (using `--link` option) container we started earlier.
+Make sure to replace `/Users/youruser/tmp/deployments` to a directory on your local machine. Also, make sure this directory already exists.
 
-.More Information about container linking
+This command starts a container named ``wildfly''. `--link` takes two parameters - first is name of the container we're linking to and second is the alias for the link name.
+
+.Container Linking
 [NOTE]
 ===============================
-Docker has a linking system that allows you to link multiple containers together and send connection information from one to another. When containers are linked, information about a source container can be sent to a recipient container. This allows the recipient to see selected data describing aspects of the source container.
+Creating a link between two containers creates a conduit between a source container and a target container and securely transfer information about source container to target container.
+
+In our case, target container (WildFly) can see information about source container (Postgres). When containers are linked, information about a source container can be sent to a recipient container. This allows the recipient to see selected data describing aspects of the source container.
 
 See more about container communication on the Docker website link:https://docs.docker.com/userguide/dockerlinks/[Linking Containers Together]
 ===============================
 
-The "-v" flag maps a local directory into the host. This will be the place to put the deployments. Please make sure to use `-v /c/Users/` notation for drive letters on windows.
-The other options are known to you already.
-Check the logs if the server is started.
+The `-v` flag maps a directory from the host into the container. This will be the directory to put the deployments. `rw` ensures that the Docker container can write to it.
+
+WARNING: Windows users, please make sure to use `-v /c/Users/` notation for drive letters.
+
+Check logs to verify if the server has started.
 
 [source, text]
 ----
@@ -619,52 +648,60 @@ And access the http://dockerhost:8080 with your webbrowser to make sure the inst
 
 Now you're ready to deploy the application for the first time. Let's use JBoss Developer Studio for this.
 
-## Deploy an application from JBoss Developer Studio
+### Configure JBoss Developer Studio
 
-Start JDBS if not started. And create a server adaptor first.
+Start JBoss Developer Studio, if not already started.
 
+. Create a server adapter
++
 .Server adapter
 image::images/jbds1.png[]
-
-Assign or create a WildFly 8.x runtime (Changed properties are highlighted.)
-
++
+. Assign or create a WildFly 8.x runtime (changed properties are highlighted.)
++
 .WildFly Runtime Properties
 image::images/jbds2.png[]
-
-Setup the server properties in the following image.  The two properties on the left are automatically propagated from the previous dialog. Additional two properties on the right side are required to disable to keep deployment scanners in sync with the server.
-
++
+. Setup server properties as shown in the following image.
++
+Two properties on the left are automatically propagated from the previous dialog. Additional two properties on the right side are required to disable to keep deployment scanners in sync with the server.
++
 .Server properties
 image::images/jbds3.png[]
-
-Specify a custom deployment folder on Deployment tab of Server Editor
-
++
+. Specify a custom deployment folder on Deployment tab of Server Editor
++
 .Server Editor
 image::images/jbds4.png[]
-
-Right-click on the newly created server adapter and click “Start”.
-
++
+. Right-click on the newly created server adapter and click ``Start''.
++
 .Start Server
 image::images/jbds5.png[]
 
-Now you need to right-click, Run on Server on the ticket-monster application and chose this server.
-The project runs and displays the start page of ticket-monster
+### Deploy Application
+
+Open Ticket Monster application source code. Right-click on the project, select ``Run on Server'' and chose the previously created server.
+
+The project runs and displays the start page of Ticket Monster application.
 
 .Start Server
 image::images/jbds6.png[]
 
-Congratulations! You've just deployed your first application to a WildFly running in a Docker container.
+Congratulations! You've just deployed your first application to WildFly running in a Docker container from JBoss Developer Studio.
 
-Stop wildfly when you're done.
+Stop WildFly container when you're done.
+
 [source, text]
 ----
 docker stop wildfly
 ----
 
-### Other Deployment options
+### Other Deployment options (OPTIONAL)
+
 For the first deployment we used a shared volumen on the host computer. Let's explore deeper, what other deployment options we have
 
-
-**Using the CLI**
+#### Using the CLI
 
 The Command Line Interface (CLI) is a tool for connecting to WildFly instances to manage all tasks from command line environment. Some of the tasks that you can do using the CLI are:
 
@@ -674,7 +711,7 @@ The Command Line Interface (CLI) is a tool for connecting to WildFly instances t
 . Adding/Deleting resource or subsystems to servers.
 
 In order to work with the CLI you need to have it locally installed on your machine. Your instructor has a download prepared for you at http://<INSTRUCTOR_IP:8082>/downloads/
-Unzip into a folder of your choice (e.g. /Users/arungupta/WildFly82/). This folder is named $WIDLFY_HOME from here on. Make sure to add the /Users/arungupta/WildFly82/bin to your path environment variable.
+Unzip into a folder of your choice (e.g. /Users/arungupta/WildFly82/). This folder is named $WIDLFY_HOME from here on. Make sure to add the /Users/arungupta/WildFly82/bin to your $PATH.
 
 [source, text]
 ----
