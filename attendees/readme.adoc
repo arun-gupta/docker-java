@@ -20,8 +20,7 @@ be fun, you should have a decent hardware available. Beside the operating system
 .. Linux / Windows: x86 (Intel Pentium) or x64 (i5 and comparable)
 
 . Memory
-.. 4 to 8 GB for attendees
-.. 8 to 16 GB for instructors
+.. At least 4 to 8 GB
 
 ### Software
 
@@ -41,9 +40,9 @@ Please refer to the individual products/tools used in this tutorial.
 . VirtualBox base packages (everything but the extension pack) is released under the GNU General Public License V2, see it here: https://www.virtualbox.org/wiki/GPL
 . Msysgit is a fork of Git under the GNU General Public License version 2.0, see it here: http://opensource.org/licenses/GPL-2.0
 
-## Install VirtualBox(tm)
+## Install VirtualBox
 
-Docker currently runs only on Linux, but you can use VirtualBox to run Docker in a virtual machine on your box, and get the best of both worlds. This is why Virtualbox is a requirement to have on your machine. Get the latest downloads from the instructur machine:
+Docker currently runs natively on Linux, but you can use VirtualBox to run Docker in a virtual machine on your box, and get the best of both worlds. This is why Virtualbox is a requirement to have on your machine. Get the latest downloads from the instructur machine:
 
 Downloads are available at http://<INSTRUCTOR_IP:8082>/downloads/
 
@@ -60,7 +59,7 @@ CAUTION: Windows Users
 . Have https://msysgit.github.io/ installed
 
 
-## Install docker-machine
+## Install Docker Machine
 
 Download your binary from http://<INSTRUCTOR_IP:8082>/downloads/
 
@@ -78,7 +77,7 @@ chmod +x /usr/local/bin/docker-machine
 curl http://<INSTRUCTOR_IP>:8082/downloads/docker-machine_windows-amd64.exe
 ----
 
-On Windows put into and rename to: c:\docker\docker-machine.exe and add c:\docker to your PATH variable
+On Windows copy the script into `C:\docker` directory and rename to: `docker-machine.exe`. Add `C:\docker` to your `PATH` variable.
 
 [source, text]
 ----
@@ -86,7 +85,7 @@ On Windows put into and rename to: c:\docker\docker-machine.exe and add c:\docke
 set PATH=%PATH%;c:\docker
 ----
 
-## Install Docker client
+## Install Docker Client
 
 Download your binary from http://<INSTRUCTOR_IP>:8082/downloads/
 
@@ -100,13 +99,21 @@ chmod +x /usr/local/bin/docker
 curl http://<INSTRUCTOR_IP>:8082/docker-1.6.0.exe
 ----
 
-On Windows put into and rename to: c:\docker\docker.exe
+On Windows put into and rename to `C:\docker\docker.exe`.
 
-## Create the lab host
+## Create Lab Docker Host
 
+. Create the Docker Host to be used in the lab:
++
 [source, text]
 ----
 docker-machine create --driver virtualbox --virtualbox-boot2docker-url http://<INSTRUCTOR_IP>:8082/downloads/boot2docker.iso lab
+----
++
+. Setup the host to connect to insecure registries:
++
+[source, text]
+----
 #TODO This boot2docker instruction is being overwritten. Docker-machine will profine flags for this configuration: https://github.com/docker/machine/pull/1040
 TODO To avoid it to be overwritten the parameter should be included manually. This issue should be fixed on next docker-machine release.
 docker-machine ssh lab "echo $'EXTRA_ARGS=\"--insecure-registry <INSTRUCTOR_IP>:5000\"' | sudo tee -a /var/lib/boot2docker/profile && sudo /etc/init.d/docker restart"
