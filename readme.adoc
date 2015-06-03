@@ -953,6 +953,10 @@ We also integrate with the Eclipse Properties view to provide users with info an
 .Eclipse Properties View
 image::images/jbds-docker-tools7.png[]
 
+## Docker Tools in NetBeans
+
+## Docker Tools in IntelliJ
+
 ## Test Java EE Applications on Docker
 
 Testing Java EE applications is a very important aspect. Especially when it comes to in-container tests, link:http://www.arquillian.org[JBoss Arquillian] is well known to make this very easy.
