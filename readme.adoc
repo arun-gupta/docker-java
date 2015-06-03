@@ -929,7 +929,7 @@ Lets take a look at it.
 .Docker Images View
 image::images/jbds-docker-tools4.png[]
 +
-. Right-click on the image ending with ``wildfly:latest'' and click on the green arrow in the tab with mouse hover text as ``Create Container''. This will show the following wizard:
+. Right-click on the image ending with ``wildfly:latest'' and click on the green arrow in the toolbar. This will show the following wizard:
 +
 .Docker Run Container Wizard
 image::images/jbds-docker-tools-run-container-wizard.png[]
@@ -947,19 +947,39 @@ image::images/jbds-docker-tools5.png[]
 
 Docker Containers view lets the user manage the containers. The view toolbar provides commands to start, stop, pause, unpause, display the logs and kill containers.
 
-. Use the menu ``Window'', ``Show View'', ``Other...'', select ``Docker Containers''.
+. Use the menu ``Window'', ``Show View'', ``Other...'', select ``Docker Containers''. It shows the list of running containers on Docker Host:
 +
 .Docker Containers View
 image::images/jbds-docker-tools6.png[]
++ 
+. Pause the container by clicking on the ``pause'' button in the toolbar (https://bugs.eclipse.org/bugs/show_bug.cgi?id=[#469310]). Show the complete list of containers by clicking on the ``View Menu'', ``Show all containers''.
++
+.All Docker Containers
+image::images/jbds-docker-tools-all-containers.png[]
++
+. Select the paused container, and click on the green arrow in the toolbar to restart the container.
+. Right-click on any running container and select ``Display Log'' to view the log for this container.
++
+.Eclipse Properties View
+image::images/jbds-docker-tools-display-log.png[]
 
-This view also provides a filter to show/hide stopped containers. Users can also attach an Eclipse console to a running Docker container to follow the logs and use the STDIN to interact with it.
+TODO: Users can also attach an Eclipse console to a running Docker container to follow the logs and use the STDIN to interact with it.
 
 ### Information and Inspect on Images and Containers
 
-We also integrate with the Eclipse Properties view to provide users with info and 'inspect' data about a selected container or image.
+Eclipse Properties view is used to provide more information about the containers and images.
 
-.Eclipse Properties View
-image::images/jbds-docker-tools7.png[]
+. Just open the Properties View and click on a Connection, Container, or Image in any of the Docker Explorer View, Docker Containers View, or Docker Images View. This will fill in data in the Properties view.
++
+Info view is shown as:
++
+.Docker Container Properties View Info
+image::images/jbds-docker-tools-properties-info.png[]
++
+Inspect view is shown as:
++
+.Docker Container Properties View Inspect
+image::images/jbds-docker-tools-properties-inspect.png[]
 
 ## Docker Tools in NetBeans
 
