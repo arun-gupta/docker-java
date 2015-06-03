@@ -849,7 +849,11 @@ http://blog.arungupta.me/javaee-docker-maven-plugin/
 
 ## Docker Tools in Eclipse
 
-The Docker tooling is aimed at providing at minimum the same basic level features as the command-line interface, but also provide some advantages by having access to a full fledged UI. As this is still in early access stage, you will have to install it first:
+The Docker tooling is aimed at providing at minimum the same basic level features as the command-line interface, but also provide some advantages by having access to a full fledged UI.
+
+### Install Docker Tools Plugins
+
+As this is still in early access stage, you will have to install it first:
 
 . Download and Install https://devstudio.redhat.com/9.0/snapshots/builds/devstudio.product_master/latest/installer/[JBoss Developer Studio 9.0 Nightly], take defaults through out the installation.
 . Open JBoss Developer Studio 9.0 Nightly
@@ -862,14 +866,40 @@ image::images/jbds-docker-tools1.png[]
 +
 .Add Docker Tooling
 image::images/jbds-docker-tools-nightly-setup.png[]
-
++
+. Click on ``Next >'', ``Next >'', accept the terms of the license agreement, and click on ``Finish''. This will complete the installation of plugins.
++
+Restart the IDE for the changes to take effect.
 
 ### Docker Explorer
 
 The Docker Explorer provides a wizard to establish a new connection to a Docker daemon. This wizard can detect default settings if the user’s machine runs Docker natively (such as in Linux) or in a VM using Boot2Docker (such as in Mac or Windows). Both Unix sockets on Linux machines and the REST API on other OSes are detected and supported. The wizard also allows remote connections using custom settings.
 
-.The Docker Explorer
+. Use the menu ``Window'', ``Show View'', ``Other...''. Type ``docker'' to see the output as:
++
+image::images/jbds-docker-tools-docker-view.png[]
++
+. Select ``Docker Explorer'' to open Docker Explorer.
++
+image::images/jbds-docker-tools-docker-explorer-view.png[]
++
+. Click on the link in this window to create a connection to Docker Host. Specify the settings as shown:
++
+.Docker Explorer
 image::images/jbds-docker-tools2.png[]
++
+Make sure to get the IP address of Docker Host as:
++
+[source, text]
+----
+docker-machine ip lab
+----
++
+. Click on ``Test Connection'' to check the connection. This should show the output as:
++
+.Docker Explorer
+image::images/jbds-docker-tools-test-connection-output.png[]
+
 
 The Docker Explorer itself is a tree view that handles multiple connections and provides users with quick overview of the existing images and containers.
 
