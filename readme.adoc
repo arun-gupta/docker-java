@@ -1,4 +1,4 @@
-= Docker and Kubernetes for Java Developers
+= Docker and Kubernetes for Java EE Developers
 :toc:
 :toc-placement!:
 
@@ -722,7 +722,7 @@ image::images/jbds4.png[]
 .Start Server
 image::images/jbds5.png[]
 
-### Deploy Application
+### Deploy Application Using Shared Volumes
 
 Open Ticket Monster application source code. Right-click on the project, select ``Run on Server'' and chose the previously created server.
 
@@ -740,11 +740,7 @@ Stop WildFly container when you're done.
 docker stop wildfly
 ----
 
-### Other Deployment Options (OPTIONAL)
-
-For the first deployment we used a shared volumen on the host computer. Let's explore some additional ways to deploy your Java EE applications.
-
-#### Using the CLI
+### Deploy Application Using CLI (OPTIONAL)
 
 The Command Line Interface (CLI) is a tool for connecting to WildFly instances to manage all tasks from command line environment. Some of the tasks that you can do using the CLI are:
 
@@ -790,7 +786,7 @@ Now you've sucessfully used the CLI to remote deploy the Ticket Monster applicat
 
 And again, keep the container running, we're going to look into the last deployment option you have.
 
-#### Using the Web Console
+### Deploy Application Using Web Console (OPTIONAL)
 
 WildFly comes with a web-based administration console. It also relies on the same management APIs that we've already been using via JBoss Developer Tools and the CLI. It does provide a nice web-based way to administrate your instance and if you've already exposed the container ports, you can simply access it via the URL: http://dockerhost:9990 in your web browser.
 
@@ -806,7 +802,7 @@ Username and password credentials are shown in <<WildFly_Administration_Credenti
 
 This will complete the deployment of Ticket Monster using Admin Console.
 
-#### Using Management API
+### Deploy Application Using Management API (OPTIONAL)
 
 A standalone WildFly process, process can be configured to listen for remote management requests using its ``native management interface''. The CLI tool that comes with the application server uses this interface, and user can develop custom clients that use it as well. In order to use this, WildFly management interface listen IP needs to be changed from 127.0.0.1 to 0.0.0.0 which basically means, that it is not only listening on the localhost but also on all publicly assigned IP addresses.
 
@@ -861,9 +857,9 @@ As this is still in early access stage, you will have to install it first:
 .Add Docker Tooling To JDBS
 image::images/jdbs-docker-tools1.png[]
 
-**Docker Explorer**
+### Docker Explorer
 
-The Docker Explorer provides a wizard to establish a new connection to a Docker daemon. This wizard can detect default settings if the user’s machine runs Docker natively or in a VM using Boot2Docker. Both Unix sockets on Linux machines and the REST API on other OSes are detected and supported. The wizard also allows remote connections using custom settings.
+The Docker Explorer provides a wizard to establish a new connection to a Docker daemon. This wizard can detect default settings if the user’s machine runs Docker natively (such as in Linux) or in a VM using Boot2Docker (such as in Mac or Windows). Both Unix sockets on Linux machines and the REST API on other OSes are detected and supported. The wizard also allows remote connections using custom settings.
 
 .The Docker Explorer
 image::images/jdbs-docker-tools2.png[]
@@ -875,7 +871,7 @@ image::images/jdbs-docker-tools3.png[]
 
 Built-in filters can show/hide intermediate and 'dangling' images as well as stopped containers.
 
-**Managing Docker Images**
+### Managing Docker Images
 
 The Docker Images view lists all images in the Docker host selected in the Docker Explorer view. This view allows user to manage images, including:
 
@@ -892,7 +888,7 @@ A wizard lets the user input all the arguments to create a new container from an
 .Streaming Logs
 image::images/jdbs-docker-tools5.png[]
 
-**Managing Docker Containers**
+### Managing Docker Containers
 
 The Docker Containers view lets the user manage her containers. The view toolbar provides commands to start, stop, pause, unpause, display the logs and kill containers.
 
@@ -901,70 +897,15 @@ image::images/jdbs-docker-tools6.png[]
 
 This view also provides a filter to show/hide stopped containers. Users can also attach an Eclipse console to a running Docker container to follow the logs and use the STDIN to interact with it.
 
-**Info and Inspect on Images and Containers**
+### Information and Inspect on Images and Containers
 
 We also integrate with the Eclipse Properties view to provide users with info and 'inspect' data about a selected container or image.
 
 .Eclipse Properties View
 image::images/jdbs-docker-tools7.png[]
 
-
-## Ticket-Monster Docker Cluster
-Another frequent requirement for Java EE based applications is clustering. While setup and test can be complicated on developer machines, this is where Docker can play to it's full potential. With the help of images and automatic port mapping, we're ready to test Ticket-Monster on a couple of WildFly instances and add and remove them randomly.
-Here is the rough architecture, of what we're going to do:
-
-.Standalone Cluster with WildFly and mod_cluster
-image::images/wildfly_cluster1.png[]
-
-
-We're going to start with the Apache HTTPD server.
-[source, text]
-----
-docker run -d --name modcluster -p 80:80 <INSTRUCTOR_IP>:5000/mod_cluster
-----
-
-To see if everything worked out the way we wanted it, open http://dockerhost/mod_cluster_manager with your browser. This should show the empty console:
-
-.Apache HTTPD runing mod_cluster_manager interface
-image::images/wildfly_cluster2.png[]
-
-
-Now we need the first WildFly instance:
-
-[source, text]
-----
-docker run -d --name server1 --link db:db --link modcluster:modcluster <INSTRUCTOR_IP>:5000/ticketmonster-pgsql-wildfly
-----
-
-You do already know the command syntax. Beside linking the db, we also link the modcluster container. This should be done very quickly and if you now revisit link:http://dockerhost/mod_cluster_manager/[the mod_cluster_manager] website in your browser, you can see, that the first server was registered to the loadbalancer:
-
-.Loadbalancer registered first WildFly instance.
-image::images/wildfly_cluster3.png[]
-
-To make sure the Ticket Monster App is also running just visit http://dockerhost/ticket-monster and you will be presented with the ticket monster welcome screen.
-
-.Clustered Ticket Monster Application
-image::images/wildfly_cluster4.png[]
-
-You can now start as many wildfly instances you want (and your computer memory can handle):
-[source, text]
-----
-docker run -d --name server2 --link db:db --link modcluster:modcluster <INSTRUCTOR_IP>:5000/ticketmonster-pgsql-wildfly
-docker run -d --name server3 --link db:db --link modcluster:modcluster <INSTRUCTOR_IP>:5000/ticketmonster-pgsql-wildfly
-docker run -d --name server4 --link db:db --link modcluster:modcluster <INSTRUCTOR_IP>:5000/ticketmonster-pgsql-wildfly
-----
-
-You can stop some servers and check the application behavior:
-[source, text]
-----
-docker stop server1
-docker stop server3
-
-----
-
-TODO: Pick, which parts we want to describe in more detail from here: https://goldmann.pl/blog/2013/10/07/wildfly-cluster-using-docker-on-fedora/
-
 ## Test Java EE Applications on Docker
+
 Testing Java EE applications is a very important aspect. Especially when it comes to in-container tests, link:http://www.arquillian.org[JBoss Arquillian] is well known to make this very easy.
 Picking up where unit tests leave off, Arquillian handles all the plumbing of container management, deployment and framework initialization so you can focus on the task at hand, writing your tests. Real tests.
 
@@ -989,101 +930,179 @@ The key point here is that if Docker is used as deployable platform in productio
 mvn -s settings.xml -f ticket-monster/demo/pom.xml -Pdocker-test test
 ----
 
-
 http://blog.arungupta.me/run-javaee-tests-wildfly-docker-arquillian-cube/
 
+[[JavaEE_Application_Docker_Cluster]]
+## Java EE Application on Container Cluster
 
-## Cluster using Swarm
-One of the key updates as part of Docker 1.6 is Docker Swarm 0.2.0. Docker Swarm solves one of the fundamental limitations of Docker where the containers could only run on a single Docker host. Docker Swarm is native clustering for Docker. It turns a pool of Docker hosts into a single, virtual host.
+A frequent requirement for Java EE based applications is running them on a cluster of application server. While setup and test can be complicated on developer machines, this is where Docker can play to it's full potential. With the help of images and automatic port mapping, we're ready to test Ticket Monster on a couple of WildFly instances and add and remove them randomly.
+
+The diagram below shows what will be achieved in this section:
+
+.Standalone Cluster with WildFly and mod_cluster
+image::images/wildfly_cluster1.png[]
+
+. Start Apache HTTPD server
++
+[source, text]
+----
+docker run -d --name modcluster -p 80:80 <INSTRUCTOR_IP>:5000/mod_cluster
+----
++
+. Open http://dockerhost/mod_cluster_manager in your browser to see the empty console as:
++
+.Apache HTTPD runing mod_cluster_manager interface
+image::images/wildfly_cluster2.png[]
++
+. Start the first WildFly instance:
++
+[source, text]
+----
+docker run -d --name server1 --link db:db --link modcluster:modcluster <INSTRUCTOR_IP>:5000/ticketmonster-pgsql-wildfly
+----
++
+Besides linking the database container using `--link db:db`, we also link the ``modcluster'' container. This should be done rather quickly and if you now revisit the http://dockerhost/mod_cluster_manager/[mod_cluster_manager] in your browser, then you can see that the first server was registered with the loadbalancer:
++
+.First WildFly instance registered with Load Balancer
+image::images/wildfly_cluster3.png[]
++
+. To make sure the Ticket Monster application is also running just visit http://dockerhost/ticket-monster and you will be presented with the Ticket Monster welcome screen.
++
+.Clustered Ticket Monster Application
+image::images/wildfly_cluster4.png[]
++
+. Start as many WildFly instances as you want (and your computer memory can handle):
++
+[source, text]
+----
+docker run -d --name server2 --link db:db --link modcluster:modcluster <INSTRUCTOR_IP>:5000/ticketmonster-pgsql-wildfly
+docker run -d --name server3 --link db:db --link modcluster:modcluster <INSTRUCTOR_IP>:5000/ticketmonster-pgsql-wildfly
+docker run -d --name server4 --link db:db --link modcluster:modcluster <INSTRUCTOR_IP>:5000/ticketmonster-pgsql-wildfly
+----
++
+. Stop some servers and check the application behavior:
++
+[source, text]
+----
+docker stop server1
+docker stop server3
+----
+
+TODO: Pick the parts that need to be described in more detail from https://goldmann.pl/blog/2013/10/07/wildfly-cluster-using-docker-on-fedora/
+
+## Java EE Application on Docker Swarm Cluster
+
+Docker Swarm solves one of the fundamental limitations of Docker where the containers could only run on a single Docker host. Docker Swarm is native clustering for Docker. It turns a pool of Docker hosts into a single, virtual host.
 
 .Key Components of Docker Swarm
 image::images/swarm1.png[]
 
-**Swarm Manager:** Docker Swarm has a Master or Manager, that is a pre-defined Docker Host, and is a single point for all administration. Currently only a single instance of manager is allowed in the cluster. This is a SPOF for high availability architectures and additional managers will be allowed in a future version of Swarm with #598.
+*Swarm Manager*: Docker Swarm has a Master or Manager, that is a pre-defined Docker Host, and is a single point for all administration. Currently only a single instance of manager is allowed in the cluster. This is a SPOF for high availability architectures and additional managers will be allowed in a future version of Swarm with #598. TODO: ADD LINK.
 
-**Swarm Nodes:** The containers are deployed on Nodes that are additional Docker Hosts. Each Swarm Node  must be accessible by the manager, each node must listen to the same network interface (TCP port). Each node runs a node agent that registers the referenced Docker daemon, monitors it, and updates the discovery backend with the node’s status. The containers run on a node.
+*Swarm Nodes*: The containers are deployed on Nodes that are additional Docker Hosts. Each Swarm Node must be accessible by the manager, each node must listen to the same network interface (TCP port). Each node runs a node agent that registers the referenced Docker daemon, monitors it, and updates the discovery backend with the node’s status. The containers run on a node.
 
-**Scheduler Strategy:** Different scheduler strategies (binpack, spread, and random) can be applied to pick the best node to run your container. The default strategy is spread which optimizes the node for least number of running containers. There are multiple kinds of filters, such as constraints and affinity.  This should allow for a decent scheduling algorithm.
+*Scheduler Strategy*: Different scheduler strategies (``binpack'', ``spread'' (default), and ``random'') can be applied to pick the best node to run your container. The default strategy optimizes the node for least number of running containers. There are multiple kinds of filters, such as constraints and affinity.  This should allow for a decent scheduling algorithm.
 
-**Node Discovery Service:** By default, Swarm uses hosted discovery service, based on Docker Hub, using tokens to discover nodes that are part of a cluster. However etcd, consul, and zookeeper can be also be used for service discovery as well. This is particularly useful if there is no access to Internet, or you are running the setup in a closed network. A new discovery backend can be created as explained here. It would be useful to have the hosted Discovery Service inside the firewall and #660 will discuss this.
+*Node Discovery Service*: By default, Swarm uses hosted discovery service, based on Docker Hub, using tokens to discover nodes that are part of a cluster. However etcd, consul, and zookeeper can be also be used for service discovery as well. This is particularly useful if there is no access to Internet, or you are running the setup in a closed network. A new discovery backend can be created as explained here. It would be useful to have the hosted Discovery Service inside the firewall and #660 will discuss this.
 
 **Standard Docker API:** Docker Swarm serves the standard Docker API and thus any tool that talks to a single Docker host will seamlessly scale to multiple hosts now. That means if you were using shell scripts using Docker CLI to configure multiple Docker hosts, the same CLI would can now talk to Swarm cluster and Docker Swarm will then act as proxy and run it on the cluster.
 
 There are lots of other concepts but these are the main ones.
 
-First thing to do is, to create a Swarm cluster. The easiest way of using Swarm is, by using the official Docker image:
-
+. Create a Swarm cluster. The easiest way of using Swarm is, by using the official Docker image:
++
 [source, text]
 ----
 docker run swarm create
 ----
-
++
 This command returns a <TOKEN> and is the unique cluster id. It will be used when creating master and nodes later. This cluster id is returned by the hosted discovery service on Docker Hub.
-
++
 NOTE: Make sure to note this cluster id now as there is no means to list it later.
-
-Swarm is fully integrated with Docker Machine, and so is the easiest way to get started. Let's create a Swarm Master next:
-
++
+. Swarm is fully integrated with Docker Machine, and so is the easiest way to get started. Let's create a Swarm Master next:
++
 [source, text]
 ----
 docker-machine create -d virtualbox --swarm --swarm-master --swarm-discovery token://<TOKEN> swarm-master
 ----
-
++
 The option "--swarm" configures the machine with Swarm, "--swarm-master" configures the created machine to be Swarm master. Make sure to replace cluster id after token:// with that obtained in the previous step. Swarm master creation talks to the hosted service on Docker Hub and informs that a master is created in the cluster.
-
-Now connect to this newly created master and find some more information about it:
-
++
+. Connect to this newly created master and find some more information about it:
++
 [source, text]
 ----
 eval "$(docker-machine env swarm-master)"
 docker info
 ----
-
-_NOTE: If you're on Windows, use the "docker-machine env swarm-master" command only and copy the output into an editor to replace all appearances of EXPORT with SET and issue the three commands at your command prompt, remove the quotes and all duplicate appearences of "/" _
-
-Looks, like everything is working fine. Now we need the Swarm nodes.
-
++
+NOTE: If you're on Windows, use the "docker-machine env swarm-master" command only and copy the output into an editor to replace all appearances of EXPORT with SET and issue the three commands at your command prompt, remove the quotes and all duplicate appearences of "/".
++
+. Create Swarm nodes.
++
 [source, text]
 ----
 docker-machine create -d virtualbox --swarm --swarm-discovery token://<TOKEN> swarm-node-01
 ----
-
++
 Node creation talks to the hosted service at Docker Hub and joins the previously created cluster. This is specified by --swarm-discovery token://... and specifying the cluster id obtained earlier.
-
-To make it a real cluster, let's just create a second node:
-
++
+. To make it a real cluster, let's create a second node:
++
 [source, text]
 ----
 docker-machine create -d virtualbox --swarm --swarm-discovery token://<TOKEN> swarm-node-02
 ----
-
-And list all the nodes / Docker machines, that has been created so far.
-The machines that are part of the cluster have the cluster’s name in the SWARM column, blank otherwise. For example, mymachine is a standalone machine where as all other machines are part of swarm-master cluster. The Swarm master is also identified by (master) in the SWARM column.
-
-Connect to the Swarm cluster and find some information about it:
-
++
+. List all the nodes / Docker machines, that has been created so far.
++
+[source, text]
+----
+TODO: ADD CODE
+----
++
+This shows the output as:
++
+[source, text]
+----
+TODO: ADD CODE
+----
++
+The machines that are part of the cluster have the cluster’s name in the SWARM column, blank otherwise. For example, ``mymachine'' is a standalone machine where as all other machines are part of swarm-master cluster. The Swarm master is also identified by (master) in the SWARM column.
++
+. Connect to the Swarm cluster and find some information about it:
++
 [source, text]
 ----
 eval "$(docker-machine env --swarm swarm-master)"
 docker info
 ----
-
++
+This shows the output as:
++
+[source, text]
+----
+TODO: ADD CODE
+----
++
 There are 3 nodes – one Swarm master and 2 Swarm nodes. There is a total of 4 containers running in this cluster – one Swarm agent on master and each node, and there is an additional swarm-agent-master running on the master. This can be verified by connecting to the master and listing all the containers:
-
++
 [source, text]
 ----
 eval "$(docker-machine env swarm-master)"
 docker info
 ----
-
-List the nodes in the cluster with the following command:
-
++
+. List nodes in the cluster with the following command:
++
 [source, text]
 ----
 docker run swarm list token://<TOKEN>
 ----
-
++
 The complete cluster is in place now, and we need to deploy the Ticket Monster application to it.
+
 Swarm takes care for the distribution of the deployments across the nodes. The only thing, we need to do is to deploy the application as explained already:
 
 Double check, if the db instance is still running. If not, start it again.
@@ -1109,18 +1128,28 @@ docker start server2
 docker start server3
 ----
 
-## OpenShift v3 (Optional Part, No Windows )
-If you are on a Mac or Linux system, you can also try out clustering with OpenShift V3 and Kubernetes. For this is an optional step in the lab, you can follow these separate instructions.
+TODO: Is there any way to visualize containers in a cluster? Use Docker REST API?
 
-http://blog.arungupta.me/openshift-v3-getting-started-javaee7-wildfly-mysql/
+## Starting Multiple Containers Using Docker Compose
 
+Docker Compose script is only downloadable for OSX and Linux.
 
-## Docker Compose (Optional, No Windows Version without Python)
-Docker Orchestration using Fig showed how to defining and control a multi-container service using Fig. Since then, Fig has been renamed to Docker Compose, or Compose for short.
+TODO: What are the exact steps to get it running on Windows?
+
+Multiple containers, as in <<JavaEE_Application_Docker_Cluster>> can be easily started using Docker Compose, or Compose for short.
+
 If you have some additional time, you can take this part of the lab:
 
 http://blog.arungupta.me/docker-compose-orchestrate-containers-techtip77/
 
+## Java EE Application on Kubernetes
+
+
+## OpenShift v3 (Optional Part, No Windows)
+
+If you are on a Mac or Linux system, you can also try out clustering with OpenShift V3 and Kubernetes. For this is an optional step in the lab, you can follow these separate instructions.
+
+http://blog.arungupta.me/openshift-v3-getting-started-javaee7-wildfly-mysql/
 
 ## References
 
