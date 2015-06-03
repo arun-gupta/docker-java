@@ -912,7 +912,15 @@ Click on ``OK'' and ``Finish'' to exit out of the wizard.
 .Docker Explorer Tree View
 image::images/jbds-docker-tools3.png[]
 +
+. Customize the view by clicking on the arrow in toolbar:
++
+.Docker Explorer Customize View
+image::images/jbds-docker-tools-customize-view-option.png[]
++
 Built-in filters can show/hide intermediate and `dangling' images, as well as stopped containers.
++
+.Docker Explorer Customize View Wizard
+image::images/jbds-docker-tools-customize-view-wizard.png[]
 
 ### Docker Images
 
