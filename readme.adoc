@@ -898,6 +898,8 @@ Make sure to get IP address of the Docker Host as:
 docker-machine ip lab
 ----
 +
+Also, make sure to specify the correct directory for `.docker` on your machine.
++
 . Click on ``Test Connection'' to check the connection. This should show the output as:
 +
 .Docker Explorer
@@ -910,34 +912,40 @@ Click on ``OK'' and ``Finish'' to exit out of the wizard.
 .Docker Explorer Tree View
 image::images/jbds-docker-tools3.png[]
 +
-Built-in filters can show/hide intermediate and 'dangling' images as well as stopped containers.
+Built-in filters can show/hide intermediate and `dangling' images, as well as stopped containers.
 
-### Managing Docker Images
+### Docker Images
 
 The Docker Images view lists all images in the Docker host selected in the Docker Explorer view. This view allows user to manage images, including:
 
-. Pull images from the Docker Hub Registry (other registries will be supported as well)
-. Upload images to the Docker Hub Registry
+. Pull/push images from/to the Docker Hub Registry (other registries will be supported as well, https://bugs.eclipse.org/bugs/show_bug.cgi?id=469306[#469306])
 . Build images from a Dockerfile
 . Create a container from an image
 
 Lets take a look at it.
 
-. Use the menu ``Window'', ``Show View'', ``Other...'', select ``Docker Images''.
+. Use the menu ``Window'', ``Show View'', ``Other...'', select ``Docker Images''. It shows the list of images on Docker Host:
 +
 .Docker Images View
 image::images/jbds-docker-tools4.png[]
 +
-. A wizard lets the user input all the arguments to create a new container from an image. Right-click on the image ending with ``wildfly:latest'' and click on the green arrow in the tab with mouse hover text as ``Create Container''.
-
-. When the container is started, all the logs can be streamed into the Eclipse Console:
-
-.Streaming Logs
+. Right-click on the image ending with ``wildfly:latest'' and click on the green arrow in the tab with mouse hover text as ``Create Container''. This will show the following wizard:
++
+.Docker Run Container Wizard
+image::images/jbds-docker-tools-run-container-wizard.png[]
++
+By default, all exports ports from the image are mapped to random ports on the host interface. This setting can be changed by unselecting the first checkbox and specify exact port mapping.
++
+Click on ``Finish'' to start the container.
++
+. When the container is started, all logs are streamed into Eclipse Console:
++
+.Docker Container Logs
 image::images/jbds-docker-tools5.png[]
 
-### Managing Docker Containers
+### Docker Containers
 
-The Docker Containers view lets the user manage her containers. The view toolbar provides commands to start, stop, pause, unpause, display the logs and kill containers.
+Docker Containers view lets the user manage the containers. The view toolbar provides commands to start, stop, pause, unpause, display the logs and kill containers.
 
 . Use the menu ``Window'', ``Show View'', ``Other...'', select ``Docker Containers''.
 +
@@ -956,6 +964,8 @@ image::images/jbds-docker-tools7.png[]
 ## Docker Tools in NetBeans
 
 ## Docker Tools in IntelliJ
+
+http://blog.jetbrains.com/idea/2015/03/docker-support-in-intellij-idea-14-1/
 
 ## Test Java EE Applications on Docker
 
