@@ -15,7 +15,7 @@ At first, this list is empty. Now, let's get a plain `jboss/wildfly` image from 
 
 [source, text]
 ----
-docker pull <INSTRUCTOR_IP>:5000/wildfly
+docker pull dockerlab:5000/wildfly
 ----
 
 By default, docker images are retrieved from https://hub.docker.com/[Docker Hub]. This lab is pre-congfigured to run such that everything can be pulled from instructor's machine.
@@ -53,7 +53,7 @@ When the download is done, you can list the images again and will see the follow
 docker images
 
 REPOSITORY              TAG     IMAGE ID       CREATED       VIRTUAL SIZE
-<INSTRUCTOR_IP>:5000/wildfly  latest  2ac466861ca1   10 weeks ago  951.3 MB
+dockerlab:5000/wildfly  latest  2ac466861ca1   10 weeks ago  951.3 MB
 ----
 
 ### Run Container
@@ -64,7 +64,7 @@ Run WildFly container in an interactive mode.
 
 [source, text]
 ----
-docker run -it <INSTRUCTOR_IP>:5000/wildfly
+docker run -it dockerlab:5000/wildfly
 ----
 
 This will show the output as:
@@ -177,7 +177,7 @@ Restart the container as:
 
 [source, text]
 ----
-docker run -it -p 8080:8080 <INSTRUCTOR_IP>:5000/wildfly
+docker run -it -p 8080:8080 dockerlab:5000/wildfly
 ----
 
 The format is `-p hostPort:containerPort`. This option maps container ports to host ports and allows other containers on our host to access them.
@@ -204,7 +204,7 @@ The following command will override the default command in Docker file, explicit
 
 [source, text]
 ----
-docker run -P -d <INSTRUCTOR_IP>:5000/wildfly /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0
+docker run -P -d dockerlab:5000/wildfly /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0
 ----
 
 Accessing WildFly Administration Console require a user in administration realm. A pre-created image, with appropriate username/password credentials, is used to start WildFly as:

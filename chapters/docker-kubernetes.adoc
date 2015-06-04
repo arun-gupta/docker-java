@@ -34,7 +34,7 @@ Label is an arbitrary key/value pair in a distributed watchable storage that the
 
 ### Start Kubernetes Cluster
 
-. Download Kubernetes from http://<INSTRUCTOR_IP>:8082/kubernetes.tar.gz (version 0.18.2)
+. Download Kubernetes from http://dockerlab:8082/kubernetes.tar.gz (version 0.18.2)
 . Setup a cluster as:
 +
 [source, text]
@@ -45,7 +45,7 @@ export KUBERNETES_PROVIDER=vagrant
 ./cluster/kube-up.sh
 ----
 +
-The KUBERNETES_PROVIDER environment variable tells all of the various cluster management scripts which variant to use.
+The `KUBERNETES_PROVIDER` environment variable tells all of the various cluster management scripts which variant to use.
 +
 Vagrant will provision each machine in the cluster with all the necessary components to run Kubernetes. The initial setup can take a few minutes to complete on each machine.
 +
@@ -92,53 +92,6 @@ By default, each VM in the cluster is running Fedora, and all of the Kubernetes 
 
 ### Verify Kubernetes Cluster
 
-#### Minions
-
-Check the minions:
-
-[source, text]
-----
-kubernetes> ./cluster/kubectl.sh get minions
-----
-+
-This is not the expected output and filed as https://github.com/GoogleCloudPlatform/kubernetes/issues/9271.
-
-#### Pods
-
-Check the pods:
-
-[source, text]
-----
-kubernetes> ./cluster/kubectl.sh get pods
-POD                                         IP           CONTAINER(S)              IMAGE(S)                                                                            HOST                    LABELS                                                           STATUS    CREATED         MESSAGE
-etcd-server-kubernetes-master                                                                                                                                          kubernetes-master/      <none>                                                           Running   About an hour   
-                                                         etcd-container            gcr.io/google_containers/etcd:2.0.9                                                                                                                                          Running   About an hour   
-kube-apiserver-kubernetes-master                                                                                                                                       kubernetes-master/      <none>                                                           Running   About an hour   
-                                                         kube-apiserver            gcr.io/google_containers/kube-apiserver:465b93ab80b30057f9c2ef12f30450c3                                                                                                     Running   About an hour   
-kube-controller-manager-kubernetes-master                                                                                                                              kubernetes-master/      <none>                                                           Running   About an hour   
-                                                         kube-controller-manager   gcr.io/google_containers/kube-controller-manager:572696d43ca87cd1fe0c774bac3a5f4b                                                                                            Running   About an hour   
-kube-dns-v1-qfe73                           172.17.0.2                                                                                                                 10.245.1.3/10.245.1.3   k8s-app=kube-dns,kubernetes.io/cluster-service=true,version=v1   Running   About an hour   
-                                                         skydns                    gcr.io/google_containers/skydns:2015-03-11-001                                                                                                                               Running   About an hour   
-                                                         kube2sky                  gcr.io/google_containers/kube2sky:1.7                                                                                                                                        Running   About an hour   
-                                                         etcd                      gcr.io/google_containers/etcd:2.0.9                                                                                                                                          Running   About an hour   
-kube-scheduler-kubernetes-master                                                                                                                                       kubernetes-master/      <none>                                                           Running   About an hour   
-                                                         kube-scheduler            gcr.io/google_containers/kube-scheduler:d1f640dfb379f64daf3ae44286014821                                                                                                     Running   About an hour   
-----
-
-By default, five pods are running:
-
-. `etcd-server-kubernetes-master`
-. `kube-apiserver-kubernetes-master`
-. `kube-controller-manager-kubernetes-master`
-. `kube-dns-v1-qfe73`
-. `kube-scheduler-kubernetes-master`
-
-Three interesting containers running in `kube-dns-v1-qfe73` pod are:
-
-. *skydns*: SkyDNS is a distributed service for announcement and discovery of services built on top of etcd. It utilizes DNS queries to discover available services.
-. *etcd*: A distributed, consistent key value store for shared configuration and service discovery with a focus on being simple, secure, fast, reliable. This is used for storing state information for Kubernetes.
-. *kube2sky*: A bridge between Kubernetes and SkyDNS. This will watch the kubernetes API for changes in Services and then publish those changes to SkyDNS through etcd.
-
 #### Kubernetes Master
 
 . Log in to the master as:
@@ -175,12 +128,22 @@ kube-controller-manager.service
 Similarly you can verify `etcd` and `nginx` as well.
 +
 . Log out of master.
+. Access `https://10.245.1.2` (or whatever IP address is assigned to your k8s cluster start up log) to see the output as:
++
+image::../images/kubernetes-master-default-output.png[]
 
 #### Kubernetes Minion
 
-Docker and Kubelet are running in the minion and can be verified by logging in to the minion and using systemctl scripts as:
-
-. Log in to the minion as:
+. Check the minions:
++
+[source, text]
+----
+kubernetes> ./cluster/kubectl.sh get minions
+----
++
+This is not the expected output and filed as https://github.com/GoogleCloudPlatform/kubernetes/issues/9271.
++
+. Docker and Kubelet are running in the minion and can be verified by logging in to the minion and using `systemctl` scripts. Log in to the minion as:
 +
 [source, text]
 ----
@@ -243,11 +206,51 @@ Jun 04 20:54:55 kubernetes-minion-1 kubelet[2872]: E0604 20:54:55.917611    2872
 Hint: Some lines were ellipsized, use -l to show in full.
 ----
 
+#### Pods
+
+Check the pods:
+
+[source, text]
+----
+kubernetes> ./cluster/kubectl.sh get pods
+POD                                         IP           CONTAINER(S)              IMAGE(S)                                                                            HOST                    LABELS                                                           STATUS    CREATED         MESSAGE
+etcd-server-kubernetes-master                                                                                                                                          kubernetes-master/      <none>                                                           Running   About an hour   
+                                                         etcd-container            gcr.io/google_containers/etcd:2.0.9                                                                                                                                          Running   About an hour   
+kube-apiserver-kubernetes-master                                                                                                                                       kubernetes-master/      <none>                                                           Running   About an hour   
+                                                         kube-apiserver            gcr.io/google_containers/kube-apiserver:465b93ab80b30057f9c2ef12f30450c3                                                                                                     Running   About an hour   
+kube-controller-manager-kubernetes-master                                                                                                                              kubernetes-master/      <none>                                                           Running   About an hour   
+                                                         kube-controller-manager   gcr.io/google_containers/kube-controller-manager:572696d43ca87cd1fe0c774bac3a5f4b                                                                                            Running   About an hour   
+kube-dns-v1-qfe73                           172.17.0.2                                                                                                                 10.245.1.3/10.245.1.3   k8s-app=kube-dns,kubernetes.io/cluster-service=true,version=v1   Running   About an hour   
+                                                         skydns                    gcr.io/google_containers/skydns:2015-03-11-001                                                                                                                               Running   About an hour   
+                                                         kube2sky                  gcr.io/google_containers/kube2sky:1.7                                                                                                                                        Running   About an hour   
+                                                         etcd                      gcr.io/google_containers/etcd:2.0.9                                                                                                                                          Running   About an hour   
+kube-scheduler-kubernetes-master                                                                                                                                       kubernetes-master/      <none>                                                           Running   About an hour   
+                                                         kube-scheduler            gcr.io/google_containers/kube-scheduler:d1f640dfb379f64daf3ae44286014821                                                                                                     Running   About an hour   
+----
+
+By default, five pods are running:
+
+. `etcd-server-kubernetes-master`
+. `kube-apiserver-kubernetes-master`
+. `kube-controller-manager-kubernetes-master`
+. `kube-dns-v1-qfe73`
+. `kube-scheduler-kubernetes-master`
+
+Three interesting containers running in `kube-dns-v1-qfe73` pod are:
+
+. *skydns*: SkyDNS is a distributed service for announcement and discovery of services built on top of etcd. It utilizes DNS queries to discover available services.
+. *etcd*: A distributed, consistent key value store for shared configuration and service discovery with a focus on being simple, secure, fast, reliable. This is used for storing state information for Kubernetes.
+. *kube2sky*: A bridge between Kubernetes and SkyDNS. This will watch the kubernetes API for changes in Services and then publish those changes to SkyDNS through etcd.
+
+
+### Start Java EE Application Pod
 
 
 
 
 
-. Access `https://10.245.1.2` (or whatever IP address is assigned to your k8s cluster start up log)
+
+
+
 
 

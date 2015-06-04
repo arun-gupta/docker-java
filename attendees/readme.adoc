@@ -5,13 +5,11 @@
 This folder contains instructions to setup an attendee environment. Please note, that it is only intended to setup the environment for this lab. The lab itself is in the link:https://github.com/arun-gupta/docker-java/blob/master/readme.adoc[main readme]. Continue with it after you finished this setup.
 You'll learn about all the software you installed here during the lab. For now just go through this document and let'#'s get ready as fast as possible for the lab.
 
-Your instructor will have a a machine setup with all the relevant downloads and needed infrastructures. The IP will change depending on the network used. In this guide, it's refered to as <INSTRUCTOR_IP> make sure to replace this with the actuall IP address you get from your instructor.
-
 toc::[]
 
 ## Prerequisites
-This lab can be executed on a netbook with x86 architecture. For it to
-be fun, you should have a decent hardware available. Beside the operating system of choice, there's only a couple of other thing you should have installed already:
+
+Here are the requirements for attendees to complete this lab:
 
 ### Hardware
 
@@ -40,11 +38,23 @@ This tutorial only uses software which is open source or at least free to use in
 . VirtualBox base packages (everything but the extension pack) is released under the GNU General Public License V2, see it here: https://www.virtualbox.org/wiki/GPL
 . Msysgit is a fork of Git under the GNU General Public License version 2.0, see it here: http://opensource.org/licenses/GPL-2.0
 
+[[Configure_Instructor_Host]]
+## Configure Instructor Host
+
+All downloads and relevant infrastructure is setup on instructor's machine. Configure the IP address of instructor's machine into the host mapping table of your operating system.
+
+Edit the `/etc/hosts` (Mac OS) or `C:\Windows\System32\drivers\etc\hosts` (Windows) and add:
+
+[source, text]
+----
+<INSTRUCTOR_IP>  dockerlab
+----
+
 ## Install VirtualBox
 
 Docker currently runs natively on Linux, but you can use VirtualBox to run Docker in a virtual machine on your box, and get the best of both worlds. This is why Virtualbox is a requirement to have on your machine. Get the latest downloads from the instructur machine:
 
-Downloads are available at http://<INSTRUCTOR_IP:8082>/downloads/
+Downloads are available at http://dockerlab:8082/downloads/
 
 or directly from the https://www.virtualbox.org/[Oracle Virtualbox] website.
 
@@ -65,20 +75,20 @@ Install Git Client as explained at: https://git-scm.com/book/en/v2/Getting-Start
 
 ## Install Docker Machine
 
-Download your binary from http://<INSTRUCTOR_IP:8082>/downloads/
+Download your binary from http://dockerlab:8082/downloads/
 
 [source, text]
 ----
 # MacOS
-curl -L  http://<INSTRUCTOR_IP>:8082/downloads/docker-machine_darwin-amd64 > /usr/local/bin/docker-machine
+curl -L  http://dockerlab:8082/downloads/docker-machine_darwin-amd64 > /usr/local/bin/docker-machine
 chmod +x /usr/local/bin/docker-machine
 
 # Linux
-curl -L  http://<INSTRUCTOR_IP>:8082/downloads/docker-machine_linux-amd64 > /usr/local/bin/docker-machine
+curl -L  http://dockerlab:8082/downloads/docker-machine_linux-amd64 > /usr/local/bin/docker-machine
 chmod +x /usr/local/bin/docker-machine
 
 #Windows
-curl http://<INSTRUCTOR_IP>:8082/downloads/docker-machine_windows-amd64.exe
+curl http://dockerlab:8082/downloads/docker-machine_windows-amd64.exe
 ----
 
 On Windows copy the script into `C:\docker` directory and rename to: `docker-machine.exe`. Add `C:\docker` to your `PATH` variable.
@@ -91,16 +101,16 @@ set PATH=%PATH%;c:\docker
 
 ## Install Docker Client
 
-Download your binary from http://<INSTRUCTOR_IP>:8082/downloads/
+Download your binary from http://dockerlab:8082/downloads/
 
 [source, text]
 ----
 # MacOS / Linux (other distros)
-curl -L  http://<INSTRUCTOR_IP>:8082/`uname -s`/x86_64/docker-latest > /usr/local/bin/docker
+curl -L  http://dockerlab:8082/`uname -s`/x86_64/docker-latest > /usr/local/bin/docker
 chmod +x /usr/local/bin/docker
 
 #Windows
-curl http://<INSTRUCTOR_IP>:8082/docker-1.6.0.exe
+curl http://dockerlab:8082/docker-1.6.0.exe
 ----
 
 On Windows put into and rename to `C:\docker\docker.exe`.
@@ -111,14 +121,14 @@ On Windows put into and rename to `C:\docker\docker.exe`.
 +
 [source, text]
 ----
-docker-machine create --driver virtualbox --virtualbox-boot2docker-url http://<INSTRUCTOR_IP>:8082/downloads/boot2docker.iso lab
+docker-machine create --driver virtualbox --virtualbox-boot2docker-url http://dockerlab:8082/downloads/boot2docker.iso lab
 ----
 +
 . Setup the Docker Host to connect to insecure registries:
 +
 [source, text]
 ----
-docker-machine ssh lab "echo $'EXTRA_ARGS=\"\$EXTRA_ARGS --insecure-registry <INSTRUCTOR_IP>:5000\"' | sudo tee -a /var/lib/boot2docker/profile && sudo /etc/init.d/docker restart"
+docker-machine ssh lab "echo $'EXTRA_ARGS=\"\$EXTRA_ARGS --insecure-registry dockerlab:5000\"' | sudo tee -a /var/lib/boot2docker/profile && sudo /etc/init.d/docker restart"
 eval "$(docker-machine env lab)"
 ----
 +
@@ -128,7 +138,7 @@ This will allow to download all Docker images from instructor's machine.
 
 . Download Apache Maven as:
 
-  curl http://<INSTRUCTOR_IP>:8082/downloads/apache-maven-3.3.3-bin.zip
+  curl http://dockerlab:8082/downloads/apache-maven-3.3.3-bin.zip
 
 . Unzip to a folder of your choice and add the folder to your PATH environment variable. For example, do the following on Windows:
 
@@ -136,16 +146,15 @@ This will allow to download all Docker images from instructor's machine.
 
 ## Prepare Maven Settings
 
-Download `lab-settings.xml` file from http://<INSTRUCTOR_IP>:8082/downloads/lab-settings.xml
+Download `lab-settings.xml` file from http://dockerlab:8082/downloads/lab-settings.xml
 
-Edit the model file and replace the `<INSTRUCTOR_IP>` with the accurate value.
-
+Edit the model file and replace the `dockerlab` with the accurate value.
 
 ## Setup JBoss Developer Studio
 
 To install JBoss Developer Studio stand-alone, complete the following steps:
 
-. Download http://<INSTRUCTOR_IP:8082>/downloads/jboss-devstudio-8.1.0.GA-jar_universal.jar
+. Download http://dockerlab:8082/downloads/jboss-devstudio-8.1.0.GA-jar_universal.jar
 . Start the installer (see below)
 . Follow the on-screen instructions to complete the installation process.
 
@@ -156,20 +165,19 @@ cd /download/path/
 java -jar jboss-devstudio-8.1.0.GA-jar_universal.jar
 ----
 
-## Configure Host
+## Configure Lab Docker Host
 
-Add a host entry for your Docker Host. To make it easier to access the containers, we add an entry into the host mapping table of your host operating system.
+Add a host entry for the Docker Host running on your machine. To make it easier to access the containers, we add an entry into the host mapping table of your operating system.
 
-First, find out the IP address of your machine:
-
+. Find out the IP address of your machine:
++
 [source, text]
 ----
 docker-machine ip lab
 ----
-
-And edit the `/etc/hosts` (Mac OS) or `C:\Windows\System32\drivers\etc\hosts` (Windows)
-and add
-
++
+. Edit the `/etc/hosts` (Mac OS) or `C:\Windows\System32\drivers\etc\hosts` (Windows) and add:
++
 [source, text]
 ----
 <OUTPUT OF DOCKER MACHINE COMMAND>  dockerhost
@@ -177,6 +185,6 @@ and add
 
 ## Install Vagrant
 
-. Download Vagrant from `http://<INSTRUCTOR_IP>:8082/downloads/` for your specific operating system.
+. Download Vagrant from `http://dockerlab:8082/downloads/` for your specific operating system.
 . Install it by clicking on the archive.
 
