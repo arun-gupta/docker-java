@@ -48,6 +48,18 @@ RUN wget http://test.docker.com.s3.amazonaws.com/builds/Windows/x86_64/docker-1.
 RUN wget http://apache.mirrors.ionfish.org/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.zip
 RUN wget http://apache.mirrors.ionfish.org/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz
 
+#Get Vagrant MacOS
+RUN wget https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2.dmg
+
+#Get Vagrant Windows
+RUN wget https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2.msi
+
+#Get Vagrant Debian 64-bit
+RUN wget https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2_x86_64.deb
+
+#Get Vagrant Linux 64-bit
+RUN wget https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2_x86_64.rpm
+
 #Add other files to downloads
 ADD downloads/lab-settings.xml /var/www/html/downloads/
 
