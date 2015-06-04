@@ -1,3 +1,5 @@
+## Run Container
+
 The first step in running any application on Docker is to run an image. There are plenty of images available from the official Docker registry (aka link:https://hub.docker.com[Docker Hub]). To run any of them, you just have to ask the Docker Client to run it. The client will check if the image already exists on Docker Host. If it exists then it'll run it, otherwise the host will download the image and then run it.
 
 ### Pull Image
@@ -326,5 +328,3 @@ docker ps -a | grep wildfly | awk '{print $1}' | xargs docker rm
 ----
 docker rm $(docker ps -aq)
 ----
-
-Common Docker commands are available in link:command-cheatsheet.adoc[Docker Command Cheatsheet].

@@ -1,3 +1,6 @@
+[[JavaEE_Application_Docker_Cluster]]
+## Java EE Application on Container Cluster
+
 A frequent requirement for Java EE based applications is running them on a cluster of application server. While setup and test can be complicated on developer machines, this is where Docker can play to it's full potential. With the help of images and automatic port mapping, we're ready to test Ticket Monster on a couple of WildFly instances and add and remove them randomly.
 
 The diagram below shows what will be achieved in this section:

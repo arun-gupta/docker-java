@@ -1,3 +1,5 @@
+## Docker Client
+
 The client communicates with the demon process on your host and let's you work with images and containers.
 
 Check if your client is working using the following command:

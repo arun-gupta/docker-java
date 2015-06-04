@@ -1,3 +1,5 @@
+## Verify Docker Configuration
+
 Check if your Docker Host is running:
 
 [source, text]

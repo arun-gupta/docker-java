@@ -4,84 +4,45 @@
 
 toc::[]
 
-## Preface
-
 include::chapters/preface.adoc[]
-
-## Setup Environments
 
 include::chapters/setup.adoc[]
 
-## Docker Basics
-
 include::chapters/docker-basics.adoc[]
-
-## Docker Machine
 
 include::chapters/docker-machine.adoc[]
 
-## Docker Client
-
 include::chapters/docker-client.adoc[]
 
-## Verify Docker Configuration
+include::chapters/docker-configuration.adoc[]
 
-include::chapters/verify-docker-configuration.adoc[]
-
-## Running WildFly Container
-
-include::chapters/docker-wildfly.adoc[]
-
-## Deploy Java EE 7 Application (Pre-Built WAR)
+include::chapters/docker-container.adoc[]
 
 include::chapters/docker-javaee7.adoc[]
 
-## Build and Deploy Java EE 6 Application (Ticket Monster)
-
 include::chapters/ticket-monster.adoc[]
-
-## Docker Maven Plugin
 
 include::chapters/docker-maven-plugin.adoc[]
 
-## Docker Tools in Eclipse
-
 include::chapters/docker-eclipse.adoc[]
-
-## Docker Tools in NetBeans
 
 include::chapters/docker-netbeans.adoc[]
 
-## Docker Tools in IntelliJ
-
 include::chapters/docker-intellij.adoc[]
-
-## Test Java EE Applications on Docker
 
 include::chapters/docker-testing.adoc[]
 
-[[JavaEE_Application_Docker_Cluster]]
-## Java EE Application on Container Cluster
-
 include::chapters/container-cluster.adoc[]
-
-## Java EE Application on Docker Swarm Cluster
 
 include::chapters/docker-swarm.adoc[]
 
-## Starting Multiple Containers Using Docker Compose
+include::chapters/kubernetes.adoc[]
 
 include::chapters/docker-compose.adoc[]
 
-## Java EE Application on Kubernetes
-
-include::chapters/kubernetes.adoc[]
-
-## OpenShift v3 (Optional Part, No Windows)
-
 include::chapters/docker-openshift.adoc[]
 
-## References
+include::docker-commands.adoc[]
 
 include::chapters/docker-references.adoc[]
 

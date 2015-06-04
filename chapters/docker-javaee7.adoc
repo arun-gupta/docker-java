@@ -1,3 +1,5 @@
+## Deploy Java EE 7 Application (Pre-Built WAR)
+
 https://github.com/javaee-samples/javaee7-hol[Java EE 7 Hands-on Lab] has been delivered all around the world and is a pretty standard application that shows design patterns and anti-patterns for a typical Java EE 7 application.
 
 .Java EE 7 Application Architecture
