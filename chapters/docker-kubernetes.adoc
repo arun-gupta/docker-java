@@ -230,11 +230,13 @@ kube-scheduler-kubernetes-master                                                
 
 By default, five pods are running:
 
-. `etcd-server-kubernetes-master`
-. `kube-apiserver-kubernetes-master`
-. `kube-controller-manager-kubernetes-master`
-. `kube-dns-v1-qfe73`
-. `kube-scheduler-kubernetes-master`
+|====
+| `etcd-server-kubernetes-master` | etcd server
+| `kube-apiserver-kubernetes-master` |  Kube API Server
+| `kube-controller-manager-kubernetes-master` | Kube Controller Manager
+| `kube-dns-v1-qfe73` | TODO: Why etcd is running as a container as well?
+| `kube-scheduler-kubernetes-master` | Kube Scheduler
+|====
 
 Three interesting containers running in `kube-dns-v1-qfe73` pod are:
 
@@ -245,8 +247,27 @@ Three interesting containers running in `kube-dns-v1-qfe73` pod are:
 
 ### Start Java EE Application Pod
 
+#### Start MySQL Pod
 
+Use mysql.yaml
 
+#### Start MySQL Service
+
+Use mysql-service.yaml
+
+#### Start WildFly Pod
+
+Use wildfly.yaml
+
+#### Start WildFly Service
+
+Use wildfly-server.yaml
+
+#### Start WildFly Replication Controller
+
+Use wildfly-rc.yaml
+
+#### Access Java EE Application
 
 
 
