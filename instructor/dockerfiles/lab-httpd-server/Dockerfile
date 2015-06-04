@@ -60,9 +60,11 @@ RUN wget https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2_x86_64.deb
 #Get Vagrant Linux 64-bit
 RUN wget https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2_x86_64.rpm
 
+#Get Kubernetes
+RUN wget https://github.com/GoogleCloudPlatform/kubernetes/releases/download/v0.18.1/kubernetes.tar.gz
+
 #Add other files to downloads
 ADD downloads/lab-settings.xml /var/www/html/downloads/
-
 
 EXPOSE 80
 
