@@ -25,3 +25,8 @@ docker push localhost:5000/mod_cluster
 docker pull arungupta/javaee7-hol
 docker tag arungupta/javaee7-hol localhost:5000/javaee7-hol
 docker push localhost:5000/javaee7-hol
+
+# MySQL
+docker pull mysql:latest
+docker tag mysql localhost:5000/mysql
+docker push localhost:5000/mysql
