@@ -1,0 +1,3 @@
+The instructor setup is designed to make the lab most reliable even with bad Internet connections. Most if not all of the software can be directly downloaded from the instructor's machine. The machine is setup as _Docker Host_ and also runs a _Docker Registry_.
+
+Execute link:../instructor/readme.adoc[instructor setup instructions] at least a day before the lab.

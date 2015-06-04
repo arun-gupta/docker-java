@@ -1,0 +1,18 @@
+Machine makes it really easy to create Docker hosts on your computer, on cloud providers and inside your own data center. It creates servers, installs Docker on them, then configures the Docker client to talk to them.
+
+Once your Docker host has been created, it then has a number of commands for managing them:
+
+. Starting, stopping, restarting
+. Upgrading Docker
+. Configuring the Docker client to talk to your host
+
+You used Docker Machine already during the attendee setup. We won't need it too much further on. But if you need to create hosts, it's a very handy tool to know about. From now on we're mostly going to use the docker client.
+
+Find out more about the details at the link:https://docs.docker.com/machine/[Official Docker Machine Website]
+
+Check if docker machine is working using the following command:
+
+[source, text]
+----
+docker-machine -v
+----

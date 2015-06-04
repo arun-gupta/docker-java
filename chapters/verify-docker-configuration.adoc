@@ -1,0 +1,49 @@
+Check if your Docker Host is running:
+
+[source, text]
+----
+docker-machine ls
+----
+
+You should see the output similar to:
+
+[source, text]
+----
+NAME        ACTIVE   DRIVER       STATE     URL                         SWARM
+lab                  virtualbox   Running   tcp://192.168.99.101:2376   
+----
+
+If the machine state is stopped, start it with:
+
+[source, text]
+----
+docker-machine start lab
+----
+
+After it is started you can find out IP address of your host with:
+
+[source, text]
+----
+docker-machine ip lab
+----
+
+We already did this during the setup document, remember? So, this is a good chance to check, if you already added this IP to your hosts file.
+
+Type:
+
+[source, text]
+----
+ping dockerhost
+----
+
+and see if this resolves to the IP address that the docker-machine command printed out. You should see an output as:
+
+[source, text]
+----
+> ping dockerhost
+PING dockerhost (192.168.99.101): 56 data bytes
+64 bytes from 192.168.99.101: icmp_seq=0 ttl=64 time=0.394 ms
+64 bytes from 192.168.99.101: icmp_seq=1 ttl=64 time=0.387 ms
+----
+
+If it does, you're ready to start over with the lab. If it does not, make sure you've followed the steps to https://github.com/arun-gupta/docker-java/tree/master/attendees#configure-host[configure your host].

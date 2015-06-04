@@ -1,0 +1,38 @@
+https://github.com/javaee-samples/javaee7-hol[Java EE 7 Hands-on Lab] has been delivered all around the world and is a pretty standard application that shows design patterns and anti-patterns for a typical Java EE 7 application.
+
+.Java EE 7 Application Architecture
+image::../images/javaee7-hol.png[]
+
+Pull the Docker image that contains WildFly and pre-built Java EE 7 application WAR file as shown:
+
+[source, text]
+----
+docker pull <INSTRUCTOR_IP>:5000/javaee7-hol
+----
+
+The javaee7-hol link:https://github.com/arun-gupta/docker-images/blob/master/javaee7-hol/Dockerfile[Dockerfile] is based on `jboss/wildfly` and adds the movieplex7 application as war file.
+
+Run it as:
+
+[source, text]
+----
+docker run -it -p 8080:8080 <INSTRUCTOR_IP>:5000/javaee7-hol
+----
+
+See the application in action at http://dockerhost:8080/movieplex7/.
+
+Only two changes are required to the standard `jboss/wildfly` image:
+
+. Start WildFly in full platform:
++
+[source, text]
+----
+CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-c", "standalone-full.xml", "-b", "0.0.0.0"]
+----
++
+. WAR file is copied to `standalone/deployments` directory as:
++
+[source, text]
+----
+RUN curl -L https://github.com/javaee-samples/javaee7-hol/blob/jrebel/solution/movieplex7-1.0-SNAPSHOT.war?raw=true -o /opt/jboss/wildfly/standalone/deployments/movieplex7-1.0-SNAPSHOT.war
+----

@@ -1,0 +1,3 @@
+If you are on a Mac or Linux system, you can also try out clustering with OpenShift V3 and Kubernetes. For this is an optional step in the lab, you can follow these separate instructions.
+
+http://blog.arungupta.me/openshift-v3-getting-started-javaee7-wildfly-mysql/

@@ -1,0 +1,67 @@
+Docker simplifies software delivery by making it easy to build and share images that contain your application’s entire environment, or application operating system.
+
+**What does it mean by an application operating system ?**
+
+Your application typically require a specific version of operating system, application server, JDK, database server, may require to tune the configuration files, and similarly multiple other dependencies. The application may need binding to specific ports and certain amount of memory. The components and configuration together required to run your application is what is referred to as application operating system.
+
+You can certainly provide an installation script that will download and install these components. Docker simplifies this process by allowing to create an image that contains your application and infrastructure together, managed as one component. These images are then used to create Docker containers which run on the container virtualization platform, provided by Docker.
+
+**What can a Java Developer use Docker for?**
+
+. *Faster delivery of your applications*: Docker helps you with the development lifecycle.
+Docker allows you to develop on local containers that contain your applications
+and services. It can then integrate into a continuous integration and
+deployment workflow.
++
+For example, you write code locally and share the development stack
+via Docker with colleagues. When everybody is ready, you push the
+code and the stack you all are developing onto a test environment
+and execute any required tests.
++
+From the testing environment, you can then push the Docker images
+into production and deploy your code.
++
+. *Deploying and scaling more easily*: Docker's container-based platform allows for portable workloads. Docker containers can run on a developer's local host, on physical
+or virtual machines in a data center, or in the Cloud.
++
+Docker's portability and lightweight nature also make dynamically managing workloads easy. You can use Docker to quickly scale up or tear down applications and services. Docker is so fast, that scaling can be near real time.
+
+**How is it different from VM?**
+
+Docker is an open source container virtualization platform.
+
+Docker has three main components:
+
+. __Images__ are *build component* of Docker and a read-only template of application operating system.
+. __Containers__ are *run component* of Docker, and created from, images.Containers can be run, started, stopped, moved, and deleted.
+. Images are stored, shared, and managed in a __registry__, the *distribution component* of Docker. The publically available registry is known as Docker Hub.
+
+In order for these three components to work together, there is *Docker Daemon* that runs on a host machine and does the heavy lifting of building, running, and distributing Docker containers. In addition, there is *Client* that is a Docker binary which accepts commands from the user and communicates back and forth with the daemon.
+
+.Docker architecture
+image::../images/docker-architecture.png[]
+
+Client communicates with Daemon, either co-located on the same host, or on a different host. It requests the Daemon to pull an image from the repository using `pull` command. The Daemon then downloads the image from Docker Hub, or whatever registry is configured. Multiple images can be downloaded from the registry and installed on Daemon host. Images are run using `run` command to create containers on demand.
+
+**How does a Docker Image work?**
+
+We've already seen that Docker images are read-only templates from which Docker containers are launched. Each image consists of a series of layers. Docker makes use of union file systems to combine these layers into a single image. Union file systems allow files and directories of separate file systems, known as branches, to be transparently overlaid, forming a single coherent file system.
+
+One of the reasons Docker is so lightweight is because of these layers. When you change a Docker image—for example, update an application to a new version— a new layer gets built. Thus, rather than replacing the whole image or entirely rebuilding, as you may do with a virtual machine, only that layer is added or updated. Now you don't need to distribute a whole new image, just the update, making distributing Docker images faster and simpler.
+
+Every image starts from a base image, for example `ubuntu`, a base Ubuntu image, or `fedora`, a base Fedora image. You can also use images of your own as the basis for a new image, for example if you have a base Apache image you could use this as the base of all your web application images.
+
+NOTE: By default, Docker obtains these base images from Docker Hub.
+
+Docker images are then built from these base images using a simple, descriptive set of steps we call instructions. Each instruction creates a new layer in our image. Instructions include actions like:
+
+. Run a command.
+. Add a file or directory.
+. Create an environment variable.
+. What process to run when launching a container from this image.
+
+These instructions are stored in a file called a Dockerfile. Docker reads this Dockerfile when you request a build of an image, executes the instructions, and returns a final image.
+
+**How does a Container work?**
+
+A container consists of an operating system, user-added files, and meta-data. As we've seen, each container is built from an image. That image tells Docker what the container holds, what process to run when the container is launched, and a variety of other configuration data. The Docker image is read-only. When Docker runs a container from an image, it adds a read-write layer on top of the image (using a union file system as we saw earlier) in which your application can then run.

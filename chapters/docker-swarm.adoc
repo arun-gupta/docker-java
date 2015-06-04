@@ -1,0 +1,137 @@
+Docker Swarm solves one of the fundamental limitations of Docker where the containers could only run on a single Docker host. Docker Swarm is native clustering for Docker. It turns a pool of Docker hosts into a single, virtual host.
+
+.Key Components of Docker Swarm
+image::images/swarm1.png[]
+
+*Swarm Manager*: Docker Swarm has a Master or Manager, that is a pre-defined Docker Host, and is a single point for all administration. Currently only a single instance of manager is allowed in the cluster. This is a SPOF for high availability architectures and additional managers will be allowed in a future version of Swarm with #598. TODO: ADD LINK.
+
+*Swarm Nodes*: The containers are deployed on Nodes that are additional Docker Hosts. Each Swarm Node must be accessible by the manager, each node must listen to the same network interface (TCP port). Each node runs a node agent that registers the referenced Docker daemon, monitors it, and updates the discovery backend with the node’s status. The containers run on a node.
+
+*Scheduler Strategy*: Different scheduler strategies (``binpack'', ``spread'' (default), and ``random'') can be applied to pick the best node to run your container. The default strategy optimizes the node for least number of running containers. There are multiple kinds of filters, such as constraints and affinity.  This should allow for a decent scheduling algorithm.
+
+*Node Discovery Service*: By default, Swarm uses hosted discovery service, based on Docker Hub, using tokens to discover nodes that are part of a cluster. However etcd, consul, and zookeeper can be also be used for service discovery as well. This is particularly useful if there is no access to Internet, or you are running the setup in a closed network. A new discovery backend can be created as explained here. It would be useful to have the hosted Discovery Service inside the firewall and #660 will discuss this.
+
+**Standard Docker API:** Docker Swarm serves the standard Docker API and thus any tool that talks to a single Docker host will seamlessly scale to multiple hosts now. That means if you were using shell scripts using Docker CLI to configure multiple Docker hosts, the same CLI would can now talk to Swarm cluster and Docker Swarm will then act as proxy and run it on the cluster.
+
+There are lots of other concepts but these are the main ones.
+
+. Create a Swarm cluster. The easiest way of using Swarm is, by using the official Docker image:
++
+[source, text]
+----
+docker run swarm create
+----
++
+This command returns a <TOKEN> and is the unique cluster id. It will be used when creating master and nodes later. This cluster id is returned by the hosted discovery service on Docker Hub.
++
+NOTE: Make sure to note this cluster id now as there is no means to list it later.
++
+. Swarm is fully integrated with Docker Machine, and so is the easiest way to get started. Let's create a Swarm Master next:
++
+[source, text]
+----
+docker-machine create -d virtualbox --swarm --swarm-master --swarm-discovery token://<TOKEN> swarm-master
+----
++
+The option "--swarm" configures the machine with Swarm, "--swarm-master" configures the created machine to be Swarm master. Make sure to replace cluster id after token:// with that obtained in the previous step. Swarm master creation talks to the hosted service on Docker Hub and informs that a master is created in the cluster.
++
+. Connect to this newly created master and find some more information about it:
++
+[source, text]
+----
+eval "$(docker-machine env swarm-master)"
+docker info
+----
++
+NOTE: If you're on Windows, use the "docker-machine env swarm-master" command only and copy the output into an editor to replace all appearances of EXPORT with SET and issue the three commands at your command prompt, remove the quotes and all duplicate appearences of "/".
++
+. Create Swarm nodes.
++
+[source, text]
+----
+docker-machine create -d virtualbox --swarm --swarm-discovery token://<TOKEN> swarm-node-01
+----
++
+Node creation talks to the hosted service at Docker Hub and joins the previously created cluster. This is specified by --swarm-discovery token://... and specifying the cluster id obtained earlier.
++
+. To make it a real cluster, let's create a second node:
++
+[source, text]
+----
+docker-machine create -d virtualbox --swarm --swarm-discovery token://<TOKEN> swarm-node-02
+----
++
+. List all the nodes / Docker machines, that has been created so far.
++
+[source, text]
+----
+TODO: ADD CODE
+----
++
+This shows the output as:
++
+[source, text]
+----
+TODO: ADD CODE
+----
++
+The machines that are part of the cluster have the cluster’s name in the SWARM column, blank otherwise. For example, ``mymachine'' is a standalone machine where as all other machines are part of swarm-master cluster. The Swarm master is also identified by (master) in the SWARM column.
++
+. Connect to the Swarm cluster and find some information about it:
++
+[source, text]
+----
+eval "$(docker-machine env --swarm swarm-master)"
+docker info
+----
++
+This shows the output as:
++
+[source, text]
+----
+TODO: ADD CODE
+----
++
+There are 3 nodes – one Swarm master and 2 Swarm nodes. There is a total of 4 containers running in this cluster – one Swarm agent on master and each node, and there is an additional swarm-agent-master running on the master. This can be verified by connecting to the master and listing all the containers:
++
+[source, text]
+----
+eval "$(docker-machine env swarm-master)"
+docker info
+----
++
+. List nodes in the cluster with the following command:
++
+[source, text]
+----
+docker run swarm list token://<TOKEN>
+----
++
+The complete cluster is in place now, and we need to deploy the Ticket Monster application to it.
+
+Swarm takes care for the distribution of the deployments across the nodes. The only thing, we need to do is to deploy the application as explained already:
+
+Double check, if the db instance is still running. If not, start it again.
+
+[source, text]
+----
+docker start db
+----
+
+Next is the modcluster container:
+
+[source, text]
+----
+docker start modcluster
+----
+
+And finally the server instances 1 to 3:
+
+[source, text]
+----
+docker start server1
+docker start server2
+docker start server3
+----
+
+TODO: Is there any way to visualize containers in a cluster? Use Docker REST API?

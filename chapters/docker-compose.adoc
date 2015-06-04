@@ -1,0 +1,9 @@
+Docker Compose script is only downloadable for OSX and Linux.
+
+TODO: What are the exact steps to get it running on Windows?
+
+Multiple containers, as in <<JavaEE_Application_Docker_Cluster>> can be easily started using Docker Compose, or Compose for short.
+
+If you have some additional time, you can take this part of the lab:
+
+http://blog.arungupta.me/docker-compose-orchestrate-containers-techtip77/
