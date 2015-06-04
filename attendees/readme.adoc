@@ -17,7 +17,7 @@ be fun, you should have a decent hardware available. Beside the operating system
 
 . CPU
 .. Mac: X64 (i5 or superior)
-.. Linux / Windows: x86 (Intel Pentium) or x64 (i5 and comparable)
+.. Linux / Windows: x64 (i5 and comparable)
 
 . Memory
 .. At least 4 to 8 GB
@@ -126,7 +126,7 @@ This will allow to download all Docker images from instructor's machine.
 
 ## Install Maven
 
-. Download `apache-maven-3.3.3-bin.zip` from the instructor PC.
+. Download Apache Maven as:
 
   curl http://<INSTRUCTOR_IP>:8082/downloads/apache-maven-3.3.3-bin.zip
 
@@ -174,3 +174,9 @@ and add
 ----
 <OUTPUT OF DOCKER MACHINE COMMAND>  dockerhost
 ----
+
+## Install Vagrant
+
+. Download Vagrant from `http://<INSTRUCTOR_IP>:8082/downloads/` for your specific operating system.
+. Install it by clicking on the archive.
+
