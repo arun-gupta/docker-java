@@ -1,1 +1,253 @@
 ## Java EE Application on Kubernetes Cluster
+
+Kubernetes, or k8s in short, is an open source orchestration system for Docker containers. It manages containerized applications across multiple hosts and provides basic mechanisms for deployment, maintenance, and scaling of applications.
+
+It allows the user to provide declarative primitives for the desired state, for example “need 5 WildFly servers and 1 MySQL server running”. Kubernetes self-healing mechanisms, such as auto-restarting, re-scheduling, and replicating containers then ensure this state is met. The user just define the state and Kubernetes ensures that the state is met at all times on the cluster.
+
+*How is it related to Docker?*
+
+Docker provides the lifecycle management of containers. A Docker image defines a build time representation of the runtime containers. There are commands to start, stop, restart, link, and perform other lifecycle methods on these containers. Kubernetes uses Docker to package, instantiate, and run containerized applications.
+
+*How does Kubernetes simplify containerized application deployment?*
+
+A typical application would have a cluster of containers across multiple hosts. For example, your web tier (for example Undertow) might run on a set of containers. Similarly, your application tier (for example, WildFly) would run on a different set of containers. The web tier would need to delegate the request to application tier. In some cases, or at least to begin with, you may have your web and application server packaged together in the same set of containers. The database tier would generally run on a separate tier anyway. These containers would need to talk to each other. Using any of the solutions mentioned above would require scripting to start the containers, and monitoring/bouncing if something goes down. Kubernetes does all of that for the user after the application state has been defined.
+
+### Key Concepts
+
+At a very high level, there are three key concepts:
+
+. *Pods* are the smallest deployable units that can be created, scheduled, and managed. Its a logical collection of containers that belong to an application.
+. *Master* is the central control point that provides a unified view of the cluster. There is a single master node that control multiple minions.
+. *Minion* is a worker node that run tasks as delegated by the master. Minions can run one or more pods. It provides an application-specific “virtual host” in a containerized environment.
+
+A picture is always worth a thousand words and so this is a high-level logical block diagram for Kubernetes:
+
+image::../images/kubernetes-key-concepts.png[]
+
+After the 50,000 feet view, lets fly a little lower at 30,000 feet and take a look at how Kubernetes make all of this happen. There are a few key components at Master and Minion that make this happen.
+
+. *Replication Controller* is a resource at Master that ensures that requested number of pods are running on minions at all times.
+. *Service* is an object on master that provides load balancing across a replicated group of pods.
+Label is an arbitrary key/value pair in a distributed watchable storage that the Replication Controller uses for service discovery.
+. *Kubelet* Each minion runs services to run containers and be managed from the master. In addition to Docker, Kubelet is another key service installed there. It reads container manifests as YAML files that describes a pod. Kubelet ensures that the containers defined in the pods are started and continue running.
+. Master serves *RESTful Kubernetes API* that validate and configure Pod, Service, and Replication Controller.
+
+### Start Kubernetes Cluster
+
+. Download Kubernetes from http://<INSTRUCTOR_IP>:8082/kubernetes.tar.gz (version 0.18.2)
+. Setup a cluster as:
++
+[source, text]
+----
+cd kubernetes
+
+export KUBERNETES_PROVIDER=vagrant
+./cluster/kube-up.sh
+----
++
+The KUBERNETES_PROVIDER environment variable tells all of the various cluster management scripts which variant to use.
++
+Vagrant will provision each machine in the cluster with all the necessary components to run Kubernetes. The initial setup can take a few minutes to complete on each machine.
++
+This will take a few minutes and shows the output as:
++
+[source, text]
+----
+Starting cluster using provider: vagrant
+... calling verify-prereqs
+... calling kube-up
+Using credentials: vagrant:vagrant
+
+. . .
+
+Cluster validation succeeded
+Done, listing cluster services:
+
+Kubernetes master is running at https://10.245.1.2
+KubeDNS is running at https://10.245.1.2/api/v1beta3/proxy/namespaces/default/services/kube-dns
+----
++
+Note down the address for Kubernetes master, `https://10.245.1.2` in this case.
++
+. Verify the Kubernetes cluster as:
++
+[source, text]
+----
+kubernetes> vagrant status
+Current machine states:
+
+master                    running (virtualbox)
+minion-1                  running (virtualbox)
+
+This environment represents multiple VMs. The VMs are all listed
+above with their current state. For more information about a specific
+VM, run `vagrant status NAME`.
+----
++
+By default, the Vagrant setup will create a single kubernetes-master and 1 kubernetes-minion. Each VM will take 1 GB, so make sure you have at least 2GB to 4GB of free memory (plus appropriate free disk space).
++
+NOTE: By default, only one minion is created. This can be manipulated by setting an environment variable NUM_MINIONS variable to an integer before invoking `kube-up.sh` script.
++
+By default, each VM in the cluster is running Fedora, and all of the Kubernetes services are installed into systemd.
+
+### Verify Kubernetes Cluster
+
+#### Minions
+
+Check the minions:
+
+[source, text]
+----
+kubernetes> ./cluster/kubectl.sh get minions
+----
++
+This is not the expected output and filed as https://github.com/GoogleCloudPlatform/kubernetes/issues/9271.
+
+#### Pods
+
+Check the pods:
+
+[source, text]
+----
+kubernetes> ./cluster/kubectl.sh get pods
+POD                                         IP           CONTAINER(S)              IMAGE(S)                                                                            HOST                    LABELS                                                           STATUS    CREATED         MESSAGE
+etcd-server-kubernetes-master                                                                                                                                          kubernetes-master/      <none>                                                           Running   About an hour   
+                                                         etcd-container            gcr.io/google_containers/etcd:2.0.9                                                                                                                                          Running   About an hour   
+kube-apiserver-kubernetes-master                                                                                                                                       kubernetes-master/      <none>                                                           Running   About an hour   
+                                                         kube-apiserver            gcr.io/google_containers/kube-apiserver:465b93ab80b30057f9c2ef12f30450c3                                                                                                     Running   About an hour   
+kube-controller-manager-kubernetes-master                                                                                                                              kubernetes-master/      <none>                                                           Running   About an hour   
+                                                         kube-controller-manager   gcr.io/google_containers/kube-controller-manager:572696d43ca87cd1fe0c774bac3a5f4b                                                                                            Running   About an hour   
+kube-dns-v1-qfe73                           172.17.0.2                                                                                                                 10.245.1.3/10.245.1.3   k8s-app=kube-dns,kubernetes.io/cluster-service=true,version=v1   Running   About an hour   
+                                                         skydns                    gcr.io/google_containers/skydns:2015-03-11-001                                                                                                                               Running   About an hour   
+                                                         kube2sky                  gcr.io/google_containers/kube2sky:1.7                                                                                                                                        Running   About an hour   
+                                                         etcd                      gcr.io/google_containers/etcd:2.0.9                                                                                                                                          Running   About an hour   
+kube-scheduler-kubernetes-master                                                                                                                                       kubernetes-master/      <none>                                                           Running   About an hour   
+                                                         kube-scheduler            gcr.io/google_containers/kube-scheduler:d1f640dfb379f64daf3ae44286014821                                                                                                     Running   About an hour   
+----
+
+By default, five pods are running:
+
+. `etcd-server-kubernetes-master`
+. `kube-apiserver-kubernetes-master`
+. `kube-controller-manager-kubernetes-master`
+. `kube-dns-v1-qfe73`
+. `kube-scheduler-kubernetes-master`
+
+Three interesting containers running in `kube-dns-v1-qfe73` pod are:
+
+. *skydns*: SkyDNS is a distributed service for announcement and discovery of services built on top of etcd. It utilizes DNS queries to discover available services.
+. *etcd*: A distributed, consistent key value store for shared configuration and service discovery with a focus on being simple, secure, fast, reliable. This is used for storing state information for Kubernetes.
+. *kube2sky*: A bridge between Kubernetes and SkyDNS. This will watch the kubernetes API for changes in Services and then publish those changes to SkyDNS through etcd.
+
+#### Kubernetes Master
+
+. Log in to the master as:
++
+[source, text]
+----
+> vagrant ssh master
+Last login: Thu Jun  4 19:30:04 2015 from 10.0.2.2
+[vagrant@kubernetes-master ~]$ 
+----
++
+This is not the expected output and filed as https://github.com/GoogleCloudPlatform/kubernetes/issues/9271.
++
+. Verify that different Kubernetes components have started up correctly. Start with Kubernetes API server:
++
+[source, text]
+----
+[vagrant@kubernetes-master ~]$ sudo systemctl status kube-apiserver
+kube-apiserver.service
+   Loaded: not-found (Reason: No such file or directory)
+   Active: inactive (dead)
+----
++
+. Check the status of Kube Controller Manager:
++
+[source, text]
+----
+[vagrant@kubernetes-master ~]$ sudo systemctl status kube-controller-manager
+kube-controller-manager.service
+   Loaded: not-found (Reason: No such file or directory)
+   Active: inactive (dead)
+----
++
+Similarly you can verify `etcd` and `nginx` as well.
++
+. Log out of master.
+
+#### Kubernetes Minion
+
+Docker and Kubelet are running in the minion and can be verified by logging in to the minion and using systemctl scripts as:
+
+. Log in to the minion as:
++
+[source, text]
+----
+cluster> vagrant ssh minion-1
+Last login: Thu Jun  4 19:30:03 2015 from 10.0.2.2
+[vagrant@kubernetes-minion-1 ~]$
+----
++
+. Check the status of Docker:
++
+[source, text]
+----
+> vagrant ssh minion-1
+Last login: Thu Jun  4 19:30:03 2015 from 10.0.2.2
+[vagrant@kubernetes-minion-1 ~]$ sudo systemctl status docker
+docker.service - Docker Application Container Engine
+   Loaded: loaded (/usr/lib/systemd/system/docker.service; enabled)
+   Active: active (running) since Thu 2015-06-04 19:29:44 UTC; 1h 24min ago
+     Docs: http://docs.docker.com
+ Main PID: 2651 (docker)
+   CGroup: /system.slice/docker.service
+           └─2651 /usr/bin/docker -d --selinux-enabled
+
+Jun 04 20:53:41 kubernetes-minion-1 docker[2651]: time="2015-06-04T20:53:41Z" level="info" msg="-job containers() = OK (0)"
+Jun 04 20:53:41 kubernetes-minion-1 docker[2651]: time="2015-06-04T20:53:41Z" level="info" msg="GET /containers/json"
+Jun 04 20:53:41 kubernetes-minion-1 docker[2651]: time="2015-06-04T20:53:41Z" level="info" msg="+job containers()"
+Jun 04 20:53:41 kubernetes-minion-1 docker[2651]: time="2015-06-04T20:53:41Z" level="info" msg="-job containers() = OK (0)"
+Jun 04 20:53:42 kubernetes-minion-1 docker[2651]: time="2015-06-04T20:53:42Z" level="info" msg="GET /containers/json"
+Jun 04 20:53:42 kubernetes-minion-1 docker[2651]: time="2015-06-04T20:53:42Z" level="info" msg="+job containers()"
+Jun 04 20:53:42 kubernetes-minion-1 docker[2651]: time="2015-06-04T20:53:42Z" level="info" msg="-job containers() = OK (0)"
+Jun 04 20:53:46 kubernetes-minion-1 docker[2651]: time="2015-06-04T20:53:46Z" level="info" msg="GET /version"
+Jun 04 20:53:46 kubernetes-minion-1 docker[2651]: time="2015-06-04T20:53:46Z" level="info" msg="+job version()"
+Jun 04 20:53:46 kubernetes-minion-1 docker[2651]: time="2015-06-04T20:53:46Z" level="info" msg="-job version() = OK (0)"
+----
++
+. Check the status of kubelet:
++
+[source, text]
+----
+[vagrant@kubernetes-minion-1 ~]$ sudo systemctl status kubelet
+kubelet.service - Kubernetes Kubelet Server
+   Loaded: loaded (/usr/lib/systemd/system/kubelet.service; enabled)
+   Active: active (running) since Thu 2015-06-04 19:29:54 UTC; 1h 25min ago
+     Docs: https://github.com/GoogleCloudPlatform/kubernetes
+ Main PID: 2872 (kubelet)
+   CGroup: /system.slice/kubelet.service
+           ├─2872 /usr/local/bin/kubelet --api_servers=https://10.245.1.2:6443 --hostname_override=10.245.1.3 --cloud_provider=vagrant --...
+           └─2904 journalctl -f
+
+Jun 04 20:53:35 kubernetes-minion-1 kubelet[2872]: E0604 20:53:35.913270    2872 file.go:53] Unable to read config path "/etc/kuber...noring
+Jun 04 20:53:46 kubernetes-minion-1 kubelet[2872]: I0604 20:53:46.579635    2872 container.go:363] Failed to update stats for conta... stats
+Jun 04 20:53:46 kubernetes-minion-1 kubelet[2872]: I0604 20:53:46.957415    2872 container.go:363] Failed to update stats for conta... stats
+Jun 04 20:53:55 kubernetes-minion-1 kubelet[2872]: E0604 20:53:55.915371    2872 file.go:53] Unable to read config path "/etc/kuber...noring
+Jun 04 20:54:15 kubernetes-minion-1 kubelet[2872]: E0604 20:54:15.916542    2872 file.go:53] Unable to read config path "/etc/kuber...noring
+Jun 04 20:54:24 kubernetes-minion-1 kubelet[2872]: I0604 20:54:24.783170    2872 container.go:363] Failed to update stats for conta... stats
+Jun 04 20:54:35 kubernetes-minion-1 kubelet[2872]: E0604 20:54:35.917074    2872 file.go:53] Unable to read config path "/etc/kuber...noring
+Jun 04 20:54:47 kubernetes-minion-1 kubelet[2872]: I0604 20:54:47.577805    2872 container.go:363] Failed to update stats for conta... stats
+Jun 04 20:54:50 kubernetes-minion-1 kubelet[2872]: I0604 20:54:50.870552    2872 container.go:363] Failed to update stats for conta... stats
+Jun 04 20:54:55 kubernetes-minion-1 kubelet[2872]: E0604 20:54:55.917611    2872 file.go:53] Unable to read config path "/etc/kuber...noring
+Hint: Some lines were ellipsized, use -l to show in full.
+----
+
+
+
+
+
+
+. Access `https://10.245.1.2` (or whatever IP address is assigned to your k8s cluster start up log)
+
+
