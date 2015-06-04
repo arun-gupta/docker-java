@@ -1,0 +1,9 @@
+id: wildfly
+kind: Service
+apiVersion: v1beta1
+port: 8080
+containerPort: 8080
+selector:
+  name: wildfly
+labels:
+  name: wildfly

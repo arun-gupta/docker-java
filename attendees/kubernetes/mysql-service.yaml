@@ -1,0 +1,9 @@
+id: mysql
+kind: Service
+apiVersion: v1beta1
+port: 3306
+containerPort: 3306
+selector:
+  name: mysql
+labels:
+  name: mysql

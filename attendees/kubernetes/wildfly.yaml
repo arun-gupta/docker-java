@@ -1,0 +1,15 @@
+id: wildfly
+kind: Pod
+apiVersion: v1beta1
+desiredState:
+  manifest:
+    version: v1beta1
+    id: wildfly
+    containers:
+      - name: wildfly
+    	image: arungupta/wildfly-mysql-javaee7:knetes
+    	cpu: 100
+    	ports:
+    	  - containerPort: 8080
+  labels:
+    name: wildfly
