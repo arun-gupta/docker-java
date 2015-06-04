@@ -1,5 +1,7 @@
 = Docker and Kubernetes for Java EE Developers
+v1.0, Jun 4, 2015
 :toc:
+:toclevels: 3
 :toc-placement!:
 
 toc::[]
@@ -36,7 +38,7 @@ include::chapters/container-cluster.adoc[]
 
 include::chapters/docker-swarm.adoc[]
 
-include::chapters/kubernetes.adoc[]
+include::chapters/docker-kubernetes.adoc[]
 
 include::chapters/docker-compose.adoc[]
 
