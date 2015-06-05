@@ -88,9 +88,64 @@ By default, the Vagrant setup will create a single kubernetes-master and 1 kuber
 +
 NOTE: By default, only one minion is created. This can be manipulated by setting an environment variable NUM_MINIONS variable to an integer before invoking `kube-up.sh` script.
 +
-By default, each VM in the cluster is running Fedora, and all of the Kubernetes services are installed into systemd.
+By default, each VM in the cluster is running Fedora, Kubelete is installed into ``systemd'', and all other Kubernetes services are running as containers on Master.
 
-### Verify Kubernetes Cluster
+
+### Deploy Java EE Application
+
+Pods, and the IP addresses assigned to them, are ephemeral. If a pod dies then Kubernetes will recreate that pod because of its self-healing features, but it might recreate it on a different host. Even if it is on the same host, a different IP address could be assigned to it. And so any application cannot rely upon the IP address of the pod.
+
+Kubernetes services is an abstraction which defines a logical set of pods. A service is typically back-ended by one or more physical pods (associated using labels), and it has a permanent IP address that can be used by other pods/applications. For example, WildFly pod can not directly connect to a MySQL pod but can connect to MySQL service. In essence, Kubernetes service offers clients an IP and port pair which, when accessed, redirects to the appropriate backends.
+
+image::../images/kubernetes-services.png[]
+
+Any Service that a Pod wants to access must be created before the Pod itself, or else the environment variables will not be populated. 
+
+#### Start MySQL Service
+
+[source, text]
+----
+./cluster/kubectl.sh create -f ../../attendees/kubernetes/mysql-service.yaml 
+----
+
+Check that the service is created:
+
+[source, text]
+----
+> ./cluster/kubectl.sh get services
+NAME            LABELS                                                                           SELECTOR           IP(S)          PORT(S)
+kube-dns        k8s-app=kube-dns,kubernetes.io/cluster-service=true,kubernetes.io/name=KubeDNS   k8s-app=kube-dns   10.247.0.10    53/UDP
+                                                                                                                                   53/TCP
+kubernetes      component=apiserver,provider=kubernetes                                          <none>             10.247.0.2     443/TCP
+kubernetes-ro   component=apiserver,provider=kubernetes                                          <none>             10.247.0.1     80/TCP
+mysql-service   name=mysql-service                                                               name=mysql         10.247.222.0   3306/TCP
+----
+
+TODO: Consider adding DNS support as explained at: https://github.com/GoogleCloudPlatform/kubernetes/blob/master/docs/services.md#dns
+
+#### Start MySQL Pod
+
+[source, text]
+----
+> ./cluster/kubectl.sh create -f ../../attendees/kubernetes/mysql.yaml 
+error: no objects passed to create
+----
+
+TODO: debug this
+
+#### Start WildFly Replication Controller
+
+[source, text]
+----
+> ./cluster/kubectl.sh create -f ../../attendees/kubernetes/wildfly.yaml 
+error: no objects passed to create
+----
+
+TODO: debug this
+
+#### Access Java EE Application
+
+### Debug Kubernetes
 
 #### Kubernetes Master
 
@@ -103,29 +158,32 @@ Last login: Thu Jun  4 19:30:04 2015 from 10.0.2.2
 [vagrant@kubernetes-master ~]$ 
 ----
 +
-This is not the expected output and filed as https://github.com/GoogleCloudPlatform/kubernetes/issues/9271.
-+
-. Verify that different Kubernetes components have started up correctly. Start with Kubernetes API server:
+. Log in as root:
 +
 [source, text]
 ----
-[vagrant@kubernetes-master ~]$ sudo systemctl status kube-apiserver
-kube-apiserver.service
-   Loaded: not-found (Reason: No such file or directory)
-   Active: inactive (dead)
+[vagrant@kubernetes-master ~]$ su - 
+Password: 
+Last login: Thu Jun  4 19:25:41 UTC 2015
+[root@kubernetes-master ~]
 ----
 +
-. Check the status of Kube Controller Manager:
+Default root password for VM images created by Vagrant is ``vagrant''.
++
+. Check the containers running on master:
 +
 [source, text]
 ----
-[vagrant@kubernetes-master ~]$ sudo systemctl status kube-controller-manager
-kube-controller-manager.service
-   Loaded: not-found (Reason: No such file or directory)
-   Active: inactive (dead)
+CONTAINER ID        IMAGE                                                                               COMMAND                CREATED             STATUS              PORTS               NAMES
+2b92c80630d5        gcr.io/google_containers/etcd:2.0.9                                                 "/usr/local/bin/etcd   5 hours ago         Up 5 hours                              k8s_etcd-container.ec4297e5_etcd-server-kubernetes-master_default_3595ac402f3a17c29dab95f3e0f64c76_56fa3dce                        
+64c375f8030b        gcr.io/google_containers/kube-apiserver:465b93ab80b30057f9c2ef12f30450c3            "/bin/sh -c '/usr/lo   5 hours ago         Up 5 hours                              k8s_kube-apiserver.f4e485e1_kube-apiserver-kubernetes-master_default_c6b19d563bdbcfb0af80b57377ee905c_2f16c239                     
+d7d9d40bd479        gcr.io/google_containers/kube-controller-manager:572696d43ca87cd1fe0c774bac3a5f4b   "/bin/sh -c '/usr/lo   5 hours ago         Up 5 hours                              k8s_kube-controller-manager.70259e73_kube-controller-manager-kubernetes-master_default_8f8db766ebc90a00a99244c362284cf1_6eff7640   
+13251c4df211        gcr.io/google_containers/kube-scheduler:d1f640dfb379f64daf3ae44286014821            "/bin/sh -c '/usr/lo   5 hours ago         Up 5 hours                              k8s_kube-scheduler.f53b6329_kube-scheduler-kubernetes-master_default_1f3b1657f7f1af67ce9f929d78c64695_de632a80                     
+b1809bdabd9c        gcr.io/google_containers/pause:0.8.0                                                "/pause"               5 hours ago         Up 5 hours                              k8s_POD.e4cc795_kube-apiserver-kubernetes-master_default_c6b19d563bdbcfb0af80b57377ee905c_767dadb1                                 
+280baf845b00        gcr.io/google_containers/pause:0.8.0                                                "/pause"               5 hours ago         Up 5 hours                              k8s_POD.e4cc795_kube-scheduler-kubernetes-master_default_1f3b1657f7f1af67ce9f929d78c64695_52a4ca74                                 
+615a314a35bf        gcr.io/google_containers/pause:0.8.0                                                "/pause"               5 hours ago         Up 5 hours                              k8s_POD.e4cc795_kube-controller-manager-kubernetes-master_default_8f8db766ebc90a00a99244c362284cf1_97cc1739                        
+7a554eea05f3        gcr.io/google_containers/pause:0.8.0                                                "/pause"               5 hours ago         Up 5 hours                              k8s_POD.e4cc795_etcd-server-kubernetes-master_default_3595ac402f3a17c29dab95f3e0f64c76_593b9807 
 ----
-+
-Similarly you can verify `etcd` and `nginx` as well.
 +
 . Log out of master.
 . Access `https://10.245.1.2` (or whatever IP address is assigned to your k8s cluster start up log) to see the output as:
@@ -141,7 +199,7 @@ image::../images/kubernetes-master-default-output.png[]
 kubernetes> ./cluster/kubectl.sh get minions
 ----
 +
-This is not the expected output and filed as https://github.com/GoogleCloudPlatform/kubernetes/issues/9271.
+This is not giving the expected output and filed as https://github.com/GoogleCloudPlatform/kubernetes/issues/9271.
 +
 . Docker and Kubelet are running in the minion and can be verified by logging in to the minion and using `systemctl` scripts. Log in to the minion as:
 +
@@ -243,35 +301,4 @@ Three interesting containers running in `kube-dns-v1-qfe73` pod are:
 . *skydns*: SkyDNS is a distributed service for announcement and discovery of services built on top of etcd. It utilizes DNS queries to discover available services.
 . *etcd*: A distributed, consistent key value store for shared configuration and service discovery with a focus on being simple, secure, fast, reliable. This is used for storing state information for Kubernetes.
 . *kube2sky*: A bridge between Kubernetes and SkyDNS. This will watch the kubernetes API for changes in Services and then publish those changes to SkyDNS through etcd.
-
-
-### Start Java EE Application Pod
-
-#### Start MySQL Pod
-
-Use mysql.yaml
-
-#### Start MySQL Service
-
-Use mysql-service.yaml
-
-#### Start WildFly Pod
-
-Use wildfly.yaml
-
-#### Start WildFly Service
-
-Use wildfly-server.yaml
-
-#### Start WildFly Replication Controller
-
-Use wildfly-rc.yaml
-
-#### Access Java EE Application
-
-
-
-
-
-
 
