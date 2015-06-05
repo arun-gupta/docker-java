@@ -3,7 +3,7 @@
 Docker Swarm solves one of the fundamental limitations of Docker where the containers could only run on a single Docker host. Docker Swarm is native clustering for Docker. It turns a pool of Docker hosts into a single, virtual host.
 
 .Key Components of Docker Swarm
-image::images/swarm1.png[]
+image::../images/swarm1.png[]
 
 *Swarm Manager*: Docker Swarm has a Master or Manager, that is a pre-defined Docker Host, and is a single point for all administration. Currently only a single instance of manager is allowed in the cluster. This is a SPOF for high availability architectures and additional managers will be allowed in a future version of Swarm with #598. TODO: ADD LINK.
 
