@@ -34,17 +34,16 @@ include::chapters/docker-intellij.adoc[]
 
 include::chapters/docker-testing.adoc[]
 
+include::chapters/docker-compose.adoc[]
+
 include::chapters/container-cluster.adoc[]
 
 include::chapters/docker-swarm.adoc[]
 
 include::chapters/docker-kubernetes.adoc[]
 
-include::chapters/docker-compose.adoc[]
-
 include::chapters/docker-openshift.adoc[]
 
 include::chapters/docker-commands.adoc[]
 
 include::chapters/docker-references.adoc[]
-
