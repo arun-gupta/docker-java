@@ -1,5 +1,5 @@
 # Docker and Kubernetes for Java EE Developers
-v1.0, Jun 4, 2015
+v1.0, Jun 6, 2015
 :toc:
 :toclevels: 3
 :toc-placement!:
