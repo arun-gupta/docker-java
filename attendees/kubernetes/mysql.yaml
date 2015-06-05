@@ -3,20 +3,19 @@ apiVersion: v1beta3
 metadata:
   name: mysql-server
   labels:
-    - name: mysql-server
+    name: mysql-server
 spec:
   replicas: 1
   selector:
-    - name: mysql-server
+    name: mysql-server
   template:
     metadata:
       labels:
-        - name: mysql-server
+        name: mysql-server
     spec:
       containers:
         - name: mysql
           image: mysql:latest
-          cpu: 100
           env:
             - name: MYSQL_USER
               value: mysql

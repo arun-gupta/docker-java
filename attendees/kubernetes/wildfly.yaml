@@ -3,7 +3,7 @@ apiVersion: v1beta3
 metadata:
   name: wildfly
   labels:
-    - name: wildfly
+    name: wildfly
 spec:
   replicas: 1
   selector:
@@ -11,10 +11,11 @@ spec:
   template:
     metadata:
       labels:
-        - name: wildfly-server
-      spec:
-        containers:
-          - name: javaee7-app
-            image: arungupta/wildfly-mysql-javaee7:knetes
-            ports:
-              - containerPort: 8080
+        name: wildfly-server
+    spec:
+      containers:
+        - name: wildfly
+          image: arungupta/wildfly-mysql-javaee7:knetes
+          ports:
+            - containerPort: 8080
+              hostPort: 8080
