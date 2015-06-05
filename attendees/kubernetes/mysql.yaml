@@ -1,29 +1,30 @@
-id: mysql
-kind: Pod
-  apiVersion: v1beta1
-  desiredState:
-    manifest:
-      version: v1beta1
-      id: mysql
-      containers
-        name: mysql
-        image: dockerlab:5000/mysql:latest
-        cpu: 100
-        env:
-          -
-            name: MYSQL_USER
-            value: mysql
-          -
-            name: MYSQL_PASSWORD
-            value: mysql
-          -
-            name: MYSQL_DATABASE
-            value: sample
-          -
-            name: MYSQL_ROOT_PASSWORD
-            value: supersecret
-        ports:
-          - containerPort
-  labels
-    name: mysql
-
+kind: ReplicationController
+apiVersion: v1beta3
+metadata:
+  name: mysql-server
+  labels:
+    - name: mysql-server
+spec:
+  replicas: 1
+  selector:
+    - name: mysql-server
+  template:
+    metadata:
+      labels:
+        - name: mysql-server
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:latest
+          cpu: 100
+          env:
+            - name: MYSQL_USER
+              value: mysql
+            - name: MYSQL_PASSWORD
+              value: mysql
+            - name: MYSQL_DATABASE
+              value: sample
+            - name: MYSQL_ROOT_PASSWORD
+              value: supersecret
+          ports:
+            - containerPort: 3360

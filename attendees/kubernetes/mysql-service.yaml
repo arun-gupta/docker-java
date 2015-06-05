@@ -1,9 +1,15 @@
-id: mysql
+id: mysql-service
 kind: Service
-apiVersion: v1beta1
-port: 3306
-containerPort: 3306
-selector:
-  name: mysql
-labels:
-  name: mysql
+apiVersion: v1beta3
+metadata:
+  name: mysql-service
+  labels:
+    name: mysql-service
+    context: docker-java-lab
+spec:
+  ports:
+    - port: 3306
+  selector:
+    name: mysql-server
+  labels:
+    name: mysql-server

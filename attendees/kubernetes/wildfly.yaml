@@ -1,15 +1,20 @@
-id: wildfly
-kind: Pod
-apiVersion: v1beta1
-desiredState:
-  manifest:
-    version: v1beta1
-    id: wildfly
-    containers:
-      - name: wildfly
-    	image: arungupta/wildfly-mysql-javaee7:knetes
-    	cpu: 100
-    	ports:
-    	  - containerPort: 8080
+kind: ReplicationController
+apiVersion: v1beta3
+metadata:
+  name: wildfly
   labels:
-    name: wildfly
+    - name: wildfly
+spec:
+  replicas: 1
+  selector:
+    name: wildfly-server
+  template:
+    metadata:
+      labels:
+        - name: wildfly-server
+      spec:
+        containers:
+          - name: javaee7-app
+            image: arungupta/wildfly-mysql-javaee7:knetes
+            ports:
+              - containerPort: 8080
