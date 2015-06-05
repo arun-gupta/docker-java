@@ -8,7 +8,7 @@ toc::[]
 
 include::chapters/preface.adoc[]
 
-include::chapters/setup.adoc[]
+include::chapters/docker-setup.adoc[]
 
 include::chapters/docker-basics.adoc[]
 

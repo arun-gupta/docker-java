@@ -124,7 +124,7 @@ image::../images/jbds-docker-tools-display-log.png[]
 
 TODO: Users can also attach an Eclipse console to a running Docker container to follow the logs and use the STDIN to interact with it.
 
-### Information and Inspect on Images and Containers
+### Details on Images and Containers
 
 Eclipse Properties view is used to provide more information about the containers and images.
 

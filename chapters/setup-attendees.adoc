@@ -1,3 +1,0 @@
-This lab is designed for a BYOL (Brying Your Own Laptop) style hands-on-lab. We did our best to support a wide range of client configurations but only did test on machines as stated in the hardware section.
-
-include::../attendees/readme.adoc[]

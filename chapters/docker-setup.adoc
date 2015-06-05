@@ -1,10 +1,18 @@
-## Docker for Java Developers - Attendee Setup
+## Setup Environments
 
-This folder contains instructions to setup an attendee environment. Please note, that it is only intended to setup the environment for this lab. The lab itself is in the link:https://github.com/arun-gupta/docker-java/blob/master/readme.adoc[main readme]. Continue with it after you finished this setup.
+This section describes the relevant steps for both attendees and instructors to setup the environments. Please follow the parts, that are appropriate for you.
 
-You'll learn about all the software you installed here during the lab. For now just go through this document and let'#'s get ready as fast as possible for the lab.
+### Instructor
 
-### Hardware and Software Prerequisites
+The instructor setup is designed to make the lab most reliable even with bad Internet connections. Most if not all of the software can be directly downloaded from the instructor's machine. The machine is setup as _Docker Host_ and also runs a _Docker Registry_.
+
+Execute link:../instructor/readme.adoc[instructor setup instructions] at least a day before the lab.
+
+### Attendees
+
+This lab is designed for a BYOL (Brying Your Own Laptop) style hands-on-lab. This folder contains instructions to setup an attendee environment. We did our best to support a wide range of client configurations but only did test on machines as stated in the hardware section.
+
+Please note, that it is only intended to setup the environment for this lab. The lab itself is at https://github.com/arun-gupta/docker-java/.
 
 Here are the requirements for attendees to complete this lab:
 
@@ -28,7 +36,7 @@ Here are the requirements for attendees to complete this lab:
 .. link:http://www.getfirefox.com[Firefox]
 
 
-### A Word About Licenses
+#### A Word About Licenses
 This tutorial only uses software which is open source or at least free to use in development and/or education. Please refer to the individual products/tools used in this tutorial.
 
 . Docker is Apache License Version 2.0, see it here: https://github.com/docker/docker/blob/master/LICENSE
@@ -36,7 +44,7 @@ This tutorial only uses software which is open source or at least free to use in
 . Msysgit is a fork of Git under the GNU General Public License version 2.0, see it here: http://opensource.org/licenses/GPL-2.0
 
 [[Configure_Instructor_Host]]
-### Configure Instructor Host
+#### Configure Instructor Host
 
 All downloads and relevant infrastructure is setup on instructor's machine. Configure the IP address of instructor's machine into the host mapping table of your operating system.
 
@@ -47,7 +55,7 @@ Edit the `/etc/hosts` (Mac OS) or `C:\Windows\System32\drivers\etc\hosts` (Windo
 <INSTRUCTOR_IP>  dockerlab
 ----
 
-### Install VirtualBox
+#### Install VirtualBox
 
 Docker currently runs natively on Linux, but you can use VirtualBox to run Docker in a virtual machine on your box, and get the best of both worlds. This is why Virtualbox is a requirement to have on your machine. Get the latest downloads from the instructur machine:
 
@@ -66,13 +74,13 @@ Linux Users
 . Create a `/usr/src/linux` link to the current kernel source
 ====
 
-### Install Git Client
+#### Install Git Client
 
 Install Git Client as explained at: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
 
 Windows client is available at http://dockerlab:8082/downloads/.
 
-### Install Docker Machine
+#### Install Docker Machine
 
 Download your binary from http://dockerlab:8082/downloads/
 
@@ -98,7 +106,7 @@ On Windows copy the script into `C:\docker` directory and rename to: `docker-mac
 set PATH=%PATH%;c:\docker
 ----
 
-### Install Docker Client
+#### Install Docker Client
 
 Download your binary from http://dockerlab:8082/downloads/
 
@@ -114,7 +122,7 @@ curl http://dockerlab:8082/docker-1.6.0.exe
 
 On Windows rename the file to `C:\docker\docker.exe`.
 
-### Create Lab Docker Host
+#### Create Lab Docker Host
 
 . Create the Docker Host to be used in the lab:
 +
@@ -149,14 +157,14 @@ docker-machine ip lab
 <OUTPUT OF DOCKER MACHINE COMMAND>  dockerhost
 ----
 
-### Install Maven
+#### Install Maven
 
 . Download Apache Maven from http://dockerlab:8082/downloads/apache-maven-3.3.3-bin.zip
 . Unzip to a folder of your choice and add the folder to your PATH environment variable. For example, do the following on Windows:
 
   set PATH=%PATH%;c:/apache-maven-3.3.3
 
-### Setup JBoss Developer Studio
+#### Setup JBoss Developer Studio
 
 To install JBoss Developer Studio stand-alone, complete the following steps:
 
@@ -170,8 +178,7 @@ java -jar jboss-devstudio-8.1.0.GA-jar_universal.jar
 +
 Follow the on-screen instructions to complete the installation process.
 
-### Install Vagrant
+#### Install Vagrant
 
 . Download Vagrant from http://dockerlab:8082/downloads/ for your specific operating system.
 . Install it by clicking on the archive.
-
