@@ -22,6 +22,7 @@ At a very high level, there are three key concepts:
 
 A picture is always worth a thousand words and so this is a high-level logical block diagram for Kubernetes:
 
+.Kubernetes Key Concepts
 image::../images/kubernetes-key-concepts.png[]
 
 After the 50,000 feet view, lets fly a little lower at 30,000 feet and take a look at how Kubernetes make all of this happen. There are a few key components at Master and Minion that make this happen.
@@ -97,6 +98,7 @@ Pods, and the IP addresses assigned to them, are ephemeral. If a pod dies then K
 
 Kubernetes services is an abstraction which defines a logical set of pods. A service is typically back-ended by one or more physical pods (associated using labels), and it has a permanent IP address that can be used by other pods/applications. For example, WildFly pod can not directly connect to a MySQL pod but can connect to MySQL service. In essence, Kubernetes service offers clients an IP and port pair which, when accessed, redirects to the appropriate backends.
 
+.Kubernetes Services
 image::../images/kubernetes-services.png[]
 
 Any Service that a Pod wants to access must be created before the Pod itself, or else the environment variables will not be populated. 
@@ -186,8 +188,9 @@ b1809bdabd9c        gcr.io/google_containers/pause:0.8.0                        
 ----
 +
 . Log out of master.
-. Access `https://10.245.1.2` (or whatever IP address is assigned to your k8s cluster start up log) to see the output as:
+. Access `https://10.245.1.2` (or whatever IP address is assigned to your kubernetes cluster start up log) to see the output as:
 +
+.Kubernetes Output from Master
 image::../images/kubernetes-master-default-output.png[]
 
 #### Kubernetes Minion
