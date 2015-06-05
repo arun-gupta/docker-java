@@ -18,7 +18,7 @@ ASCIIDOCTOR_PDF=~/tools/asciidoctor-pdf/bin/asciidoctor-pdf
 #ASCIIDOCTOR_PDF=~/projects/asciidoctor/asciidoctor-pdf/bin/asciidoctor-pdf
 
 # File names
-MASTER_ADOC=readme.adoc
+MASTER_ADOC=docker-java-lab.adoc
 MASTER_DOCBOOK=${MASTER_ADOC/.adoc/.xml}
 
 # Command options
