@@ -24,7 +24,7 @@ include::chapters/docker-javaee7.adoc[]
 
 include::chapters/ticket-monster.adoc[]
 
-include::chapters/docker-maven-plugin.adoc[]
+include::chapters/docker-maven.adoc[]
 
 include::chapters/docker-eclipse.adoc[]
 
