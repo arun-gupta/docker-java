@@ -1,8 +1,9 @@
 ## Java EE Application on Kubernetes Cluster
 
-Kubernetes, or k8s in short, is an open source orchestration system for Docker containers. It manages containerized applications across multiple hosts and provides basic mechanisms for deployment, maintenance, and scaling of applications.
+[quote, github.com/GoogleCloudPlatform/kubernetes/]
+Kubernetes is an open source system for managing containerized applications across multiple hosts, providing basic mechanisms for deployment, maintenance, and scaling of applications.
 
-It allows the user to provide declarative primitives for the desired state, for example “need 5 WildFly servers and 1 MySQL server running”. Kubernetes self-healing mechanisms, such as auto-restarting, re-scheduling, and replicating containers then ensure this state is met. The user just define the state and Kubernetes ensures that the state is met at all times on the cluster.
+Kubernetes, or ``k8s'' in short, allows the user to provide declarative primitives for the desired state, for example “need 5 WildFly servers and 1 MySQL server running”. Kubernetes self-healing mechanisms, such as auto-restarting, re-scheduling, and replicating containers then ensure this state is met. The user just define the state and Kubernetes ensures that the state is met at all times on the cluster.
 
 *How is it related to Docker?*
 
