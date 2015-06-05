@@ -30,3 +30,9 @@ docker push localhost:5000/javaee7-hol
 docker pull mysql:latest
 docker tag mysql localhost:5000/mysql
 docker push localhost:5000/mysql
+
+# WildFly MySQL
+docker pull arungupta/wildfly-mysql-javaee7
+docker tag arungupta/wildfly-mysql-javaee7 localhost:5000/wildfly-mysql-javaee7
+docker push localhost:5000/wildfly-mysql-javaee7
+
