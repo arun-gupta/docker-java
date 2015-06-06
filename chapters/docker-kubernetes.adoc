@@ -347,7 +347,13 @@ Send a PR?
 
 [source, text]
 ----
-./cluster/kube-down.sh
+> ./cluster/kube-down.sh 
+Bringing down cluster using provider: vagrant
+==> minion-1: Forcing shutdown of VM...
+==> minion-1: Destroying VM and associated drives...
+==> master: Forcing shutdown of VM...
+==> master: Destroying VM and associated drives...
+Done
 ----
 
 ### Debug Kubernetes (OPTIONAL)
