@@ -36,7 +36,7 @@ Label is an arbitrary key/value pair in a distributed watchable storage that the
 
 ### Start Kubernetes Cluster
 
-. Download Kubernetes from http://dockerlab:8082/kubernetes.tar.gz (version 0.18.2)
+. Download Kubernetes from http://dockerlab:8082/kubernetes.tar.gz (version 0.18.1.1)
 . Setup a cluster as:
 +
 [source, text]
@@ -49,9 +49,9 @@ export KUBERNETES_PROVIDER=vagrant
 +
 The `KUBERNETES_PROVIDER` environment variable tells all of the various cluster management scripts which variant to use.
 +
-Vagrant will provision each machine in the cluster with all the necessary components to run Kubernetes. The initial setup can take a few minutes to complete on each machine.
+NOTE: This will take a few minutes, so be patience! Vagrant will provision each machine in the cluster with all the necessary components to run Kubernetes.
 +
-This will take a few minutes and shows the output as:
+It shows the output as:
 +
 [source, text]
 ----
@@ -91,7 +91,15 @@ By default, the Vagrant setup will create a single kubernetes-master and 1 kuber
 NOTE: By default, only one minion is created. This can be manipulated by setting an environment variable NUM_MINIONS variable to an integer before invoking `kube-up.sh` script.
 +
 By default, each VM in the cluster is running Fedora, Kubelete is installed into ``systemd'', and all other Kubernetes services are running as containers on Master.
-
++
+. Access `https://10.245.1.2` (or whatever IP address is assigned to your kubernetes cluster start up log). This may present the warning as shown below:
++
+image::../images/kubernetes-master-default-output-certificate.png[]
++
+Click on ``Advanced'' and then on ``Proceed to 10.245.1.2'' to see the output as:
++
+.Kubernetes Output from Master
+image::../images/kubernetes-master-default-output.png[]
 
 ### Deploy Java EE Application
 
@@ -102,17 +110,21 @@ Kubernetes services is an abstraction which defines a logical set of pods. A ser
 .Kubernetes Services
 image::../images/kubernetes-services.png[]
 
-Any Service that a Pod wants to access must be created before the Pod itself, or else the environment variables will not be populated. 
+NOTE: In this case, all the pods are running on a single minion. This is because, that is the default number for a Kubernetes cluster. The pod can very be on another minion if more minions exist in the cluster.
+
+Any Service that a Pod wants to access must be created before the Pod itself, or else the environment variables will not be populated.
 
 #### Start MySQL Service
 
+. Start MySQL service as:
++
 [source, text]
 ----
 ./cluster/kubectl.sh create -f ../../attendees/kubernetes/mysql-service.yaml 
 ----
-
-Check that the service is created:
-
++
+. Check that the service is created:
++
 [source, text]
 ----
 > ./cluster/kubectl.sh get services
@@ -123,32 +135,222 @@ kubernetes      component=apiserver,provider=kubernetes                         
 kubernetes-ro   component=apiserver,provider=kubernetes                                          <none>             10.247.0.1     80/TCP
 mysql-service   name=mysql-service                                                               name=mysql         10.247.222.0   3306/TCP
 ----
++
+. When a Pod is run on a Node, the kubelet adds a set of environment variables for each active Service. 
++
+It supports both Docker links compatible variables and simpler `{SVCNAME}_SERVICE_HOST` and `{SVCNAME}_SERVICE_PORT` variables, where the Service name is upper-cased and dashes are converted to underscores.
++
+Our service name is ``mysql'' and so `MYSQL_SERVICE_HOST` and `MYSQL_SERVICE_PORT` variables are available to other pods.
 
 TODO: Consider adding DNS support as explained at: https://github.com/GoogleCloudPlatform/kubernetes/blob/master/docs/services.md#dns
 
-#### Start MySQL Pod
+#### Start MySQL Replication Controller
 
+. Start MySQL replication controller as:
++
 [source, text]
 ----
-> ./cluster/kubectl.sh create -f ../../attendees/kubernetes/mysql.yaml 
-error: no objects passed to create
+> ./cluster/kubectl.sh  --v=5  create -f ../../attendees/kubernetes/mysql.yaml 
+I0605 16:16:06.724597   66780 defaults.go:174] creating security context for container mysql
+replicationcontrollers/mysql-server
 ----
-
-TODO: debug this
++
+It uses the following configuration file:
++
+[source, yaml]
+----
+kind: ReplicationController
+apiVersion: v1beta3
+metadata:
+  name: mysql-server
+  labels:
+    name: mysql-server
+spec:
+  replicas: 1
+  selector:
+    name: mysql-server
+  template:
+    metadata:
+      labels:
+        name: mysql-server
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:latest
+          env:
+            - name: MYSQL_USER
+              value: mysql
+            - name: MYSQL_PASSWORD
+              value: mysql
+            - name: MYSQL_DATABASE
+              value: sample
+            - name: MYSQL_ROOT_PASSWORD
+              value: supersecret
+          ports:
+            - containerPort: 3360
+----
++
+. Verify MySQL replication controller as:
++
+[source, text]
+----
+> ./cluster/kubectl.sh get rc
+CONTROLLER     CONTAINER(S)   IMAGE(S)                                         SELECTOR                      REPLICAS
+kube-dns-v1    etcd           gcr.io/google_containers/etcd:2.0.9              k8s-app=kube-dns,version=v1   1
+               kube2sky       gcr.io/google_containers/kube2sky:1.7                                          
+               skydns         gcr.io/google_containers/skydns:2015-03-11-001                                 
+mysql-server   mysql          mysql:latest                                     name=mysql-server             1
+----
 
 #### Start WildFly Replication Controller
 
+. Start WildFly replication controller as:
++
 [source, text]
 ----
-> ./cluster/kubectl.sh create -f ../../attendees/kubernetes/wildfly.yaml 
-error: no objects passed to create
+> ./cluster/kubectl.sh  --v=5  create -f ../../attendees/kubernetes/wildfly.yaml 
+I0605 16:25:41.990260   66897 defaults.go:174] creating security context for container wildfly
+replicationcontrollers/wildfly
+----
++
+It uses the following configuration file:
++
+[source, yaml]
+----
+kind: ReplicationController
+apiVersion: v1beta3
+metadata:
+  name: wildfly
+  labels:
+    name: wildfly
+spec:
+  replicas: 1
+  selector:
+    name: wildfly-server
+  template:
+    metadata:
+      labels:
+        name: wildfly-server
+    spec:
+      containers:
+        - name: wildfly
+          image: arungupta/wildfly-mysql-javaee7:knetes
+          ports:
+            - containerPort: 8080
+----
++
+. Verify WildFly replication controller as:
++
+[source, text]
+----
+> ./cluster/kubectl.sh get rc
+CONTROLLER     CONTAINER(S)   IMAGE(S)                                         SELECTOR                      REPLICAS
+kube-dns-v1    etcd           gcr.io/google_containers/etcd:2.0.9              k8s-app=kube-dns,version=v1   1
+               kube2sky       gcr.io/google_containers/kube2sky:1.7                                          
+               skydns         gcr.io/google_containers/skydns:2015-03-11-001                                 
+mysql-server   mysql          mysql:latest                                     name=mysql-server             1
+wildfly        wildfly        arungupta/wildfly-mysql-javaee7:knetes           name=wildfly-server           1
 ----
 
 TODO: debug this
 
-#### Access Java EE Application
+### Access Java EE Application
 
-### Debug Kubernetes
+http://<pod_ip>:8080/employees/resources/employees
+
+### Self-healing Pods
+
+. Delete the WildFly pod
+. Wait for k8s to restart the pod because of RC
+
+### Application Logs
+
+. Login to the Minion-1 VM:
++
+[source, text]
+----
+> vagrant ssh minion-1
+Last login: Fri Jun  5 23:01:36 2015 from 10.0.2.2
+[vagrant@kubernetes-minion-1 ~]$
+----
++
+. Log in as root:
++
+[source, text]
+----
+[vagrant@kubernetes-minion-1 ~]$ su -
+Password: 
+[root@kubernetes-minion-1 ~]# 
+----
++
+Default root password for VM images created by Vagrant is ``vagrant''.
++
+. See the list of Docker containers running on this VM:
++
+[source, text]
+----
+docker ps
+----
++
+. View WildFly log as:
++
+[source, text]
+----
+docker logs $(docker ps | grep arungupta/wildfly | awk '{print $1}')
+----
++
+. View MySQL log as:
++
+[source, text]
+----
+docker logs <CID>
+----
+
+### Delete Kubernetes Resources
+
+. Delete WildFly repliation controller as:
++
+[source, text]
+----
+> ./cluster/kubectl.sh --v=5  delete -f ../../attendees/kubernetes/wildfly.yaml 
+I0605 16:39:09.152694   67149 defaults.go:174] creating security context for container wildfly
+replicationcontrollers/wildfly
+----
++
+. Delete MySQL replication controller as:
++
+[source, text]
+----
+> ./cluster/kubectl.sh --v=5 delete -f ../../attendees/kubernetes/mysql.yaml 
+I0605 17:54:26.042191   67742 defaults.go:174] creating security context for container mysql
+replicationcontrollers/mysql-server
+----
++
+. Delete MySQL service as:
++
+[source, text]
+----
+> ./cluster/kubectl.sh --v=5 delete -f ../../attendees/kubernetes/mysql-service.yaml 
+services/mysql
+----
+
+Alternatively, all services and replication controllers can be assigned a label and deleted as:
+
+[source, text]
+----
+kubectl delete -l services,pods name=docker-lab
+----
+
+Send a PR?
+
+### Stop Kubernetes Cluster
+
+[source, text]
+----
+./cluster/kube-down.sh
+----
+
+### Debug Kubernetes (OPTIONAL)
 
 #### Kubernetes Master
 
@@ -189,10 +391,6 @@ b1809bdabd9c        gcr.io/google_containers/pause:0.8.0                        
 ----
 +
 . Log out of master.
-. Access `https://10.245.1.2` (or whatever IP address is assigned to your kubernetes cluster start up log) to see the output as:
-+
-.Kubernetes Output from Master
-image::../images/kubernetes-master-default-output.png[]
 
 #### Kubernetes Minion
 
