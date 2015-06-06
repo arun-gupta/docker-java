@@ -1,5 +1,58 @@
 ## OpenShift v3 (Optional Part, No Windows?)
 
-If you are on a Mac or Linux system, you can also try out clustering with OpenShift V3 and Kubernetes. For this is an optional step in the lab, you can follow these separate instructions.
+[quote, github.com/openshift/origin]
+OpenShift adds developer and operational centric tools on top of Kubernetes to enable rapid application development, easy deployment and scaling, and long-term lifecycle maintenance for small and large teams and applications.
+
+OpenShift is Red Hat’s open source PaaS platform. OpenShift v3 (due to be released this year) will provide a holistic experience on running your microservices using Docker and Kubernetes. In a classic Red Hat way, all the work is done in the open source at OpenShift Origin. This will also drive the next major release of OpenShift Online and OpenShift Enterprise.
+
+OpenShift v3 uses a new platform stack that is using plenty of community projects where Red Hat contributes such as Fedora, Centos, Docker, Project Atomic, Kubernetes, and OpenStack. OpenShift v3 Platform Combines Docker, Kubernetes, Atomic and More explain this platform stack in detail.
+
+image::../images/openshiftv3-stack.png[]
+
+### Download and Run OpenShift Origin
+
+OpenShift Origin is available as a Docker container. It has all of the software prebuilt and pre-installed, but you do need to do a few things to get it going.
+
+. Create a `/var/lib/openshift` folder on your Docker host. This volume will be mounted in the container to hold any data such that it is preserved after restart.
++
+[source, text]
+----
+docker-machine ssh lab "mkdir /var/lib/openshift"
+----
++
+. Download and run the OpenShift Origin container as:
++
+[source, text]
+----
+$ docker run -d --name "openshift-origin" --net=host --privileged \
+-v /var/run/docker.sock:/var/run/docker.sock \
+-v /var/lib/openshift:/var/lib/openshift \
+dockerlab:5000/openshift start
+----
++
+. Check that the container is running:
++
+[source, text]
+----
+> docker ps
+CONTAINER ID        IMAGE                     COMMAND                CREATED             STATUS              PORTS               NAMES
+df29f4cdff9e        openshift/origin:latest   "/usr/bin/openshift    57 seconds ago      Up 57 seconds                           openshift-origin 
+----
+
+### Run Java EE Application
+
+Here is the deployment diagram of our application:
+
+image::../images/openshiftv3-wildfly-mysql-deployment.png[]
+
+. WildFly and MySQL are running on separate pods.
+. Each of them is wrapped in a Replication Controller to enable simplified scaling.
+. Each Replication Controller is published as a Service.
+. WildFly talks to the MySQL service, as opposed to directly to the pod. This is important as Pods, and IP addresses assigned to them, are ephemeral.
+
+Lets get started!
+
+. Docker host is already configured to trust insecure registry service. This registry will be used to push images for build/test/deploy cycle.
+
 
 http://blog.arungupta.me/openshift-v3-getting-started-javaee7-wildfly-mysql/
