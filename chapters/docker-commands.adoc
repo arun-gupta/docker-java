@@ -19,4 +19,5 @@ Here is the list of commonly used Docker commands:
 | Attach to a container | `docker attach ${CID}`
 | Remove a container | `docker rm ${CID}`
 | Remove all containers | `docker rm $(docker ps -aq)`
+| Get container id for an image by regular expression | `docker ps \| grep arungupta/wildfly \| awk '{print $1}'`
 |==================
