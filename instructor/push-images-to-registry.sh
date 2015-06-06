@@ -36,3 +36,22 @@ docker pull arungupta/wildfly-mysql-javaee7
 docker tag arungupta/wildfly-mysql-javaee7 localhost:5000/wildfly-mysql-javaee7
 docker push localhost:5000/wildfly-mysql-javaee7
 
+# WildFly MySQL
+docker pull openshift/origin
+docker tag openshift/origin localhost:5000/openshift-origin
+docker push localhost:5000/openshift-origin
+
+#OpenShift Origin
+docker pull openshift/origin-docker-registry
+docker tag openshift/origin-docker-registry localhost:5000/openshift-origin-docker-registry
+docker push localhost:5000/openshift-origin-docker-registry
+docker pull openshift/origin-sti-builder
+docker tag openshift/origin-sti-builder localhost:5000/openshift-origin-sti-builder
+docker push localhost:5000/openshift-origin-sti-builder
+docker pull openshift/origin-deployer
+docker tag openshift/origin-deployer localhost:5000/openshift-origin-deployer
+docker push localhost:5000/openshift-origin-deployer
+docker pull arungupta/wildfly-mysql-javaee7:k8s
+docker tag arungupta/wildfly-mysql-javaee7:k8s localhost:5000/wildfly-mysql-javaee7:k8s
+docker push localhost:5000/wildfly-mysql-javaee7:k8s
+
