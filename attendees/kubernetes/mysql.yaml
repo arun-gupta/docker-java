@@ -1,17 +1,17 @@
 kind: ReplicationController
 apiVersion: v1beta3
 metadata:
-  name: mysql-server
+  name: mysql
   labels:
-    name: mysql-server
+    name: mysql
 spec:
   replicas: 1
   selector:
-    name: mysql-server
+    name: mysql
   template:
     metadata:
       labels:
-        name: mysql-server
+        name: mysql
     spec:
       containers:
         - name: mysql
@@ -26,4 +26,5 @@ spec:
             - name: MYSQL_ROOT_PASSWORD
               value: supersecret
           ports:
-            - containerPort: 3360
+            - containerPort: 3306
+              hostPort: 3306
