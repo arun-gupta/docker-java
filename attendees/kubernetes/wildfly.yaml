@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: wildfly
-          image: arungupta/wildfly-mysql-javaee7:knetes
+          image: arungupta/wildfly-mysql-javaee7:k8s
           ports:
             - containerPort: 8080
               hostPort: 8080
