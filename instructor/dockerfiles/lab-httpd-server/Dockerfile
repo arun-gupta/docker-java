@@ -41,6 +41,9 @@ RUN wget https://github.com/docker/machine/releases/download/v0.3.0-rc1/docker-m
 #Get Docker Machine Linux
 RUN wget https://github.com/docker/machine/releases/download/v0.3.0-rc1/docker-machine_linux-amd64
 
+#Get Docker Client Mac OS
+RUN wget curl https://get.docker.com/builds/Darwin/x86_64/docker-latest
+
 #Get Docker Client Windows
 RUN wget http://test.docker.com.s3.amazonaws.com/builds/Windows/x86_64/docker-1.6.0.exe
 
