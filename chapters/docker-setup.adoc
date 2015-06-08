@@ -182,3 +182,8 @@ Follow the on-screen instructions to complete the installation process.
 
 . Download Vagrant from http://dockerlab:8082/downloads/ for your specific operating system.
 . Install it by clicking on the archive.
+
+#### Install Kubernetes
+
+. Download Kubernetes (0.18.1) from http://dockerlab:8082/downloads/kubernetes.tar.gz.
+. Install it by clicking on the archive.
