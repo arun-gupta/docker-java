@@ -12,7 +12,10 @@ RUN mkdir -p /var/www/html/downloads
 WORKDIR /var/www/html/downloads
 
 #Place JBDS inside the image
-ADD downloads/jboss-devstudio-8.1.0.GA-installer-standalone.jar /var/www/html/downloads/
+ADD downloads/jboss-devstudio-9.0.0.Beta2-v20150609-1026-B3346-installer-standalone.jar /var/www/html/downloads/
+
+#Setup permission for JBDS
+chmod 644 /var/www/html/downloads/jboss-devstudio-9.0.0.Beta2-v20150609-1026-B3346-installer-standalone.jar
 
 #Get WildFly 8.2
 RUN wget http://download.jboss.org/wildfly/8.2.0.Final/wildfly-8.2.0.Final.zip
@@ -42,7 +45,10 @@ RUN wget https://github.com/docker/machine/releases/download/v0.3.0-rc1/docker-m
 RUN wget https://github.com/docker/machine/releases/download/v0.3.0-rc1/docker-machine_linux-amd64
 
 #Get Docker Client Mac OS
-RUN wget curl https://get.docker.com/builds/Darwin/x86_64/docker-latest
+RUN curl -L https://get.docker.com/builds/Darwin/x86_64/docker-latest -o docker-latest-mac
+
+#Get Docker Client Linux
+RUN curl -L https://get.docker.com/builds/Linux/x86_64/docker-latest -o docker-latest-linux
 
 #Get Docker Client Windows
 RUN wget http://test.docker.com.s3.amazonaws.com/builds/Windows/x86_64/docker-1.6.0.exe
@@ -52,16 +58,16 @@ RUN wget http://apache.mirrors.ionfish.org/maven/maven-3/3.3.3/binaries/apache-m
 RUN wget http://apache.mirrors.ionfish.org/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz
 
 #Get Vagrant MacOS
-RUN wget https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2.dmg
+RUN curl -L https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2.dmg -o vagrant_1.7.2.dmg
 
 #Get Vagrant Windows
-RUN wget https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2.msi
+RUN curl -L https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2.msi -o vagrant_1.7.2.msi
 
 #Get Vagrant Debian 64-bit
-RUN wget https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2_x86_64.deb
+RUN curl -L https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2_x86_64.deb -o vagrant_1.7.2_x86_64.deb
 
 #Get Vagrant Linux 64-bit
-RUN wget https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2_x86_64.rpm
+RUN curl -L https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2_x86_64.rpm -o vagrant_1.7.2_x86_64.rpm
 
 #Get Kubernetes
 RUN wget https://github.com/GoogleCloudPlatform/kubernetes/releases/download/v0.18.1/kubernetes.tar.gz

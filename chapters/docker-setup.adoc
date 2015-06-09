@@ -125,8 +125,12 @@ Download your binary from http://dockerlab:8082/downloads/
 
 [source, text]
 ----
-# MacOS / Linux (other distros)
-curl -L  http://dockerlab:8082/`uname -s`/x86_64/docker-latest > /usr/local/bin/docker
+# MacOS
+curl -L  http://dockerlab:8082/downloads/docker-latest-mac > /usr/local/bin/docker
+chmod +x /usr/local/bin/docker
+
+# Linux (other distros)
+curl -L  http://dockerlab:8082/downloads/docker-latest-linux > /usr/local/bin/docker
 chmod +x /usr/local/bin/docker
 
 #Windows
@@ -180,16 +184,16 @@ docker-machine ip lab
 . Download WildFly 8.2 from http://dockerlab:8082/downloads/wildfly-8.2.0.Final.zip
 . Install it by clicking on the archive.
 
-#### JBoss Developer Studio 9
+#### JBoss Developer Studio 9 - Beta 2
 
 To install JBoss Developer Studio stand-alone, complete the following steps:
 
-. Download http://dockerlab:8082/downloads/jboss-devstudio-8.1.0.GA-jar_universal.jar
+. Download http://localhost:8082/downloads/jboss-devstudio-9.0.0.Beta2-v20150609-1026-B3346-installer-standalone.jar
 . Start the installer as:
 +
 [source, text]
 ----
-java -jar jboss-devstudio-8.1.0.GA-jar_universal.jar
+java -jar jboss-devstudio-9.0.0.Beta2-v20150609-1026-B3346-installer-standalone.jar
 ----
 +
 Follow the on-screen instructions to complete the installation process.

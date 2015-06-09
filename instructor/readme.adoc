@@ -200,7 +200,7 @@ This will download the Nexus image on Docker host and populate it with the Nexus
 
 ## Start the Instructor Environment
 
-Download link:http://www.jboss.org/download-manager/file/jboss-devstudio-8.1.0.GA-standalone_jar.jar[JBoss Developer Studio 8.10.GA - 567 MB] and place it inside `dockerfiles/lab-httpd-server/downloads` folder.
+Download link:https://devstudio.redhat.com/9.0/snapshots/builds/devstudio.product_master/2015-06-09_06-24-34-B3346/installer/[JBoss Developer Studio 9.0 - Beta2 - 482MB] and place it inside `dockerfiles/lab-httpd-server/downloads` folder.
 
 Use the following compose command to startup the complete environment at once.
 
