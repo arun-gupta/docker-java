@@ -15,6 +15,7 @@ Here is the list of commonly used Docker commands:
 | Run a container | `docker run`
 | List containers | `docker ps`
 | Stop a container | `docker stop ${CID}`
+| Stop all running containers | `docker stop ``docker ps -q```
 | Find IP address of the container | `docker inspect --format '{{ .NetworkSettings.IPAddress }}' ${CID}`
 | Attach to a container | `docker attach ${CID}`
 | Remove a container | `docker rm ${CID}`
