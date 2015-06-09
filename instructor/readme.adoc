@@ -99,6 +99,9 @@ And save to c:\Users\<username>\docker\docker-machine.exe
 ----
 
 For Windows, make sure to add `c:\Users\<username>\docker` to your `%PATH%` variable. This was already done for Linux / MacOs when you downloaded `docker-machine` script to `/usr/local/bin/docker-machine`.
+If you're executing commands in the Babun bash from here on, make sure to keep in mind, that the Path variable is set in Linux/Unix style:
+`PATH=$PATH\:/d/Program\ Files\ \(x86\)/docker ; export PATH`. You have to escape all special characters with a backslash.
+
 
 ### Create Machine
 
