@@ -4,24 +4,18 @@
 
 This folder contains instructions to setup an Instructor environment.
 
-toc::[]
-
-IMPORTANT: Make sure to run these instructions prior to the lab already. Executing them might take up to 60 minutes.
+IMPORTANT: Make sure to run these instructions a day prior to the lab. You need a good Internet connection as several files and Docker images need to be downloaded. Plan for at least 60 minutes.
 
 Instructor needs:
 
-. A docker registry server
-. A Boot2docker served by a local HTTP Server
-. A Nexus Proxy
+. Docker Registry server
+. Boot2docker served by a local HTTP Server
+. Nexus Proxy
+
+NOTE: All instructions are to be run from the `instructor` directory.
 
 ## Prerequisites
 
-. Have https://www.virtualbox.org/[Oracle Virtualbox] installed and the install folder added to your PATH environment variable.
-. Have the https://github.com/arun-gupta/docker-java/ git repository checked out.
-. Have https://msysgit.github.io/ installed on Windows
-
-This lab can be executed on a netbook with x86 architecture. For it to
-be fun, you should have a decent hardware available. Beside the operating system of choice, there's only a couple of other thing you should have installed already:
 
 ### Hardware
 
@@ -29,16 +23,17 @@ be fun, you should have a decent hardware available. Beside the operating system
 .. Mac: X64 (i5 or superior)
 .. Linux / Windows: x64 (i5 and comparable)
 
-. Memory
-.. At least 8 to 16 GB
+. Memory: At least 8 GB, 16 GB is preferred
 
 ### Software
 
 . Operating System
 .. Mac OS X (10.8 or later), Windows 7 (SP1), Fedora (21 or later)
-. Java
-.. http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html[Oracle JDK 8u45]
-.. link:http://maven.apache.org/download.cgi[Maven 3.0 or later]
+. http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html[Oracle JDK 8u45]
+. http://maven.apache.org/download.cgi[Maven 3.0 or later]
+. https://www.virtualbox.org/[Oracle Virtualbox], include install folder to your PATH.
+. https://git-scm.com/book/en/v2/Getting-Started-Installing-Git[Git Client]
+. Check out https://github.com/javaee-samples/docker-java/ git repository.
 . Webbrowser
 .. https://www.google.com/chrome/browser/desktop/[Chrome]
 .. link:http://www.getfirefox.com[Firefox]
@@ -99,13 +94,14 @@ And save to c:\Users\<username>\docker\docker-machine.exe
 ----
 
 For Windows, make sure to add `c:\Users\<username>\docker` to your `%PATH%` variable. This was already done for Linux / MacOs when you downloaded `docker-machine` script to `/usr/local/bin/docker-machine`.
+
 If you're executing commands in the Babun bash from here on, make sure to keep in mind, that the Path variable is set in Linux/Unix style:
 `PATH=$PATH\:/d/Program\ Files\ \(x86\)/docker ; export PATH`. You have to escape all special characters with a backslash.
 
 
 ### Create Machine
 
-. This creates your instructor host which will run the complete infrastructure.
+. Creates instructor host which will run the complete infrastructure.
 +
 [source, text]
 ----
@@ -138,7 +134,7 @@ VBoxManage controlvm "mymachine" natpf1 "tcp-port10022,tcp,,10022,,10022";
 VBoxManage controlvm "mymachine" natpf1 "tcp-port10080,tcp,,10080,,10080";
 ----
 
-This is available as a script in https://github.com/arun-gupta/docker-java/blob/master/instructor/virtualbox-ports.sh.
+This is available as a script in https://github.com/javaee-samples/docker-java/blob/master/instructor/virtualbox-ports.sh.
 
 Check machine IP
 [source, text]
@@ -150,38 +146,15 @@ This IP address is referred as <HOST_IP> in this document.
 
 ## Configure Docker Host
 
-Add extra args to Docker Host to allow insecure registry for external access via `http://`. You can either insert your <HOST_IP> or the complete subnet e.g. 192.168.99.100 maps to 192.168.99.0/24.
+Add extra args to Docker Host to allow insecure registry for external access via `http://`. You can either insert your <HOST_IP> or the complete subnet e.g. 192.168.99.100 maps to 192.168.99.0/24 as:
 
-. Edit `/var/lib/boot2docker/profile` as:
-+
 [source, text]
 ----
-docker-machine ssh mymachine
-sudo vi /var/lib/boot2docker/profile
+docker-machine ssh mymachine "echo $'EXTRA_ARGS=\"\$EXTRA_ARGS --insecure-registry $(docker-machine ip mymachine):5000\"' | sudo tee -a /var/lib/boot2docker/profile && sudo /etc/init.d/docker restart"
+docker-machine ssh mymachine "echo -e '$(docker-machine ip mymachine)\tdockerlab' | sudo tee -a /etc/hosts"
 ----
-+
-. Add insecure registry settings such that the file `/var/lib/boot2docker/profile` looks like:
-+
-[source, text]
-----
-EXTRA_ARGS='
---label provider=virtualbox
---insecure-registry <HOST_IP>
-'
-----
-+
-Make sure to substitute `<HOST_IP>` with the IP address obtained earlier.
-+
-Leave other key/value in the file as is. Save and quit the editor.
-+
-. Restart the docker daemon:
-+
-[source, text]
-----
-$ sudo /etc/init.d/docker restart
-----
-+
-. Exit out of the shell by typing `exit`.
+
+This will configure insecure registry using both IP address and hostname.
 
 ## Container with Nexus Dependencies
 
@@ -198,9 +171,11 @@ The folder permissions in Windows don't allow for a location of your choice.
 
 This will download the Nexus image on Docker host and populate it with the Nexus dependencies.
 
-## Start the Instructor Environment
+## Download JBoss Developer Studio 9.0 Nightly
 
-Download link:https://devstudio.redhat.com/9.0/snapshots/builds/devstudio.product_master/2015-06-09_06-24-34-B3346/installer/[JBoss Developer Studio 9.0 - Beta2 - 482MB] and place it inside `dockerfiles/lab-httpd-server/downloads` folder.
+Download https://devstudio.redhat.com/9.0/snapshots/builds/devstudio.product_master/2015-06-09_06-24-34-B3346/installer/[JBoss Developer Studio 9.0 - Nightly - 482MB - JAR File] and place it inside `dockerfiles/lab-httpd-server/downloads` folder.
+
+## Start the Instructor Environment
 
 Use the following compose command to startup the complete environment at once.
 
@@ -228,19 +203,19 @@ a041b58ceff1        instructor_httpserver:latest   "/run-apache.sh"       5 minu
 
 Test if the servers are running:
 
-. Docker Registry [http://localhost:5000/v2/]
+. Docker Registry [http://dockerlab:5000/v2/]
 +
 image::images/registry-default-output.png[]
 +
-. Nexus Console [http://localhost:8081/content/groups/public/]
+. Nexus Console [http://dockerlab:8081/content/groups/public/]
 +
 image::images/nexus-default-output.png[]
 +
-. Apache Webserver [http://localhost:8082/]
+. Apache Webserver [http://dockerlab:8082/]
 +
 image::images/webserver-default-output.png[]
 +
-. Gitlab server [http://localhost:10080/]
+. Gitlab server [http://dockerlab:10080/]
 +
 image::images/gitlab-default-output.png[]
 
@@ -271,7 +246,7 @@ Done!
 
 1. Clone TicketMonster from the existing gitlab container
 
-  git clone -b WildFly-docker-test http://root:dockeradmin@localhost:10080/root/ticket-monster.git
+  git clone -b WildFly-docker-test http://root:dockeradmin@dockerlab:10080/root/ticket-monster.git
 
 2. Build TicketMonster
 
@@ -293,47 +268,7 @@ docker build -t "instructor/ticketmonster-pgsql-wildfly" dockerfiles/ticketmonst
 
 ## Push Images to Registry
 
-Put the following images to the local registry:
-
-. ``jboss/wildfly''
-. ``managed-wildfly''
-. ``ticketmonster-pgsql-wildfly''
-. ``postgres''
-. ``modcluster''
-. ``javaee7-hol''
-
-These commands are available in https://github.com/arun-gupta/docker-java/blob/master/instructor/push-images-to-registry.sh[push-images-to-registry.sh].
-
-[source, text]
-----
-# Wildfly
-docker pull jboss/wildfly
-docker tag jboss/wildfly localhost:5000/wildfly
-docker push localhost:5000/wildfly
-
-# Managed WildFly
-docker tag instructor/wildfly-management localhost:5000/wildfly-management
-docker push localhost:5000/wildfly-management
-
-# Ticket-monster+PGSQ+WildFly
-docker tag instructor/ticketmonster-pgsql-wildfly localhost:5000/ticketmonster-pgsql-wildfly
-docker push localhost:5000/ticketmonster-pgsql-wildfly
-
-# Postgres
-docker pull postgres
-docker tag postgres localhost:5000/postgres
-docker push localhost:5000/postgres
-
-# Modcluster
-docker pull goldmann/mod_cluster
-docker tag goldmann/mod_cluster localhost:5000/mod_cluster
-docker push localhost:5000/mod_cluster
-
-#Java EE 7 hol
-docker pull arungupta/javaee7-hol
-docker tag arungupta/javaee7-hol localhost:5000/javaee7-hol
-docker push localhost:5000/javaee7-hol
-----
+Push the required images to the local registry by executing the script `push-images-to-registry.sh`.
 
 ## More information
 
