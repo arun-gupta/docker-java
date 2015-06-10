@@ -1,3 +1,4 @@
+[[JavaEE7_PreBuilt_WAR]]
 ## Deploy Java EE 7 Application (Pre-Built WAR)
 
 https://github.com/javaee-samples/javaee7-hol[Java EE 7 Hands-on Lab] has been delivered all around the world and is a pretty standard application that shows design patterns and anti-patterns for a typical Java EE 7 application.
@@ -22,6 +23,11 @@ docker run -it -p 8080:8080 dockerlab:5000/javaee7-hol
 ----
 
 See the application in action at http://dockerhost:8080/movieplex7/.
+
+This uses an in-memory database with WildFly application server as shown in the image:
+
+.In-memory Database
+image::../images/javaee7-hol-in-memory-database.png[]
 
 Only two changes are required to the standard `jboss/wildfly` image:
 

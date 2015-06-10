@@ -35,7 +35,9 @@ NOTE: Make sure to note this cluster id now as there is no means to list it late
 docker-machine create -d virtualbox --swarm --swarm-master --swarm-discovery token://<TOKEN> swarm-master
 ----
 +
-The option "--swarm" configures the machine with Swarm, "--swarm-master" configures the created machine to be Swarm master. Make sure to replace cluster id after token:// with that obtained in the previous step. Swarm master creation talks to the hosted service on Docker Hub and informs that a master is created in the cluster.
+Replace `<TOKEN>` with the cluster id obtained in the previous step. 
++
+`--swarm` configures the machine with Swarm, `--swarm-master` configures the created machine to be Swarm master. Swarm master creation talks to the hosted service on Docker Hub and informs that a master is created in the cluster.
 +
 . Connect to this newly created master and find some more information about it:
 +
@@ -45,7 +47,41 @@ eval "$(docker-machine env swarm-master)"
 docker info
 ----
 +
-NOTE: If you're on Windows, use the "docker-machine env swarm-master" command only and copy the output into an editor to replace all appearances of EXPORT with SET and issue the three commands at your command prompt, remove the quotes and all duplicate appearences of "/".
+NOTE: If you're on Windows, use the `docker-machine env swarm-master` command only and copy the output into an editor to replace all appearances of EXPORT with SET and issue the three commands at your command prompt, remove the quotes and all duplicate appearences of "/".
++
+This will show the output as:
++
+[source, text]
+----
+> docker info
+Containers: 2
+Images: 7
+Storage Driver: aufs
+ Root Dir: /mnt/sda1/var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 11
+ Dirperm1 Supported: true
+Execution Driver: native-0.2
+Kernel Version: 4.0.3-boot2docker
+Operating System: Boot2Docker 1.6.2 (TCL 5.4); master : 4534e65 - Wed May 13 21:24:28 UTC 2015
+CPUs: 1
+Total Memory: 998.1 MiB
+Name: swarm-master
+ID: USSA:35LS:WVRN:GKAZ:MLD4:XMQF:P7PL:VQ5D:7V4K:2QAH:5D2L:HC4K
+Debug mode (server): true
+Debug mode (client): false
+Fds: 24
+Goroutines: 37
+System Time: Wed Jun 10 03:40:00 UTC 2015
+EventsListeners: 1
+Init SHA1: 7f9c6798b022e64f04d2aff8c75cbf38a2779493
+Init Path: /usr/local/bin/docker
+Docker Root Dir: /mnt/sda1/var/lib/docker
+Username: arungupta
+Registry: [https://index.docker.io/v1/]
+Labels:
+ provider=virtualbox
+----
 +
 . Create Swarm nodes.
 +
@@ -54,7 +90,7 @@ NOTE: If you're on Windows, use the "docker-machine env swarm-master" command on
 docker-machine create -d virtualbox --swarm --swarm-discovery token://<TOKEN> swarm-node-01
 ----
 +
-Node creation talks to the hosted service at Docker Hub and joins the previously created cluster. This is specified by --swarm-discovery token://... and specifying the cluster id obtained earlier.
+Node creation talks to the hosted service at Docker Hub and joins the previously created cluster. This is specified by `--swarm-discovery token://...` and specifying the cluster id obtained earlier.
 +
 . To make it a real cluster, let's create a second node:
 +
@@ -67,17 +103,21 @@ docker-machine create -d virtualbox --swarm --swarm-discovery token://<TOKEN> sw
 +
 [source, text]
 ----
-TODO: ADD CODE
+docker-machine ls
 ----
 +
 This shows the output as:
 +
 [source, text]
 ----
-TODO: ADD CODE
+NAME            ACTIVE   DRIVER       STATE     URL                         SWARM
+lab                      virtualbox   Running   tcp://192.168.99.103:2376   
+swarm-master    *        virtualbox   Running   tcp://192.168.99.107:2376   swarm-master (master)
+swarm-node-01            virtualbox   Running   tcp://192.168.99.108:2376   swarm-master
+swarm-node-02            virtualbox   Running   tcp://192.168.99.109:2376   swarm-master
 ----
 +
-The machines that are part of the cluster have the cluster’s name in the SWARM column, blank otherwise. For example, ``mymachine'' is a standalone machine where as all other machines are part of swarm-master cluster. The Swarm master is also identified by (master) in the SWARM column.
+The machines that are part of the cluster have the cluster’s name in the SWARM column, blank otherwise. For example, ``la'' is a standalone machine where as all other machines are part of the ``swarm-master'' cluster. The Swarm master is also identified by (master) in the SWARM column.
 +
 . Connect to the Swarm cluster and find some information about it:
 +
@@ -91,16 +131,26 @@ This shows the output as:
 +
 [source, text]
 ----
-TODO: ADD CODE
+> docker info
+Containers: 4
+Strategy: spread
+Filters: affinity, health, constraint, port, dependency
+Nodes: 3
+ swarm-master: 192.168.99.107:2376
+  └ Containers: 2
+  └ Reserved CPUs: 0 / 1
+  └ Reserved Memory: 0 B / 1.023 GiB
+ swarm-node-01: 192.168.99.108:2376
+  └ Containers: 1
+  └ Reserved CPUs: 0 / 1
+  └ Reserved Memory: 0 B / 1.023 GiB
+ swarm-node-02: 192.168.99.109:2376
+  └ Containers: 1
+  └ Reserved CPUs: 0 / 1
+  └ Reserved Memory: 0 B / 1.023 GiB
 ----
 +
 There are 3 nodes – one Swarm master and 2 Swarm nodes. There is a total of 4 containers running in this cluster – one Swarm agent on master and each node, and there is an additional swarm-agent-master running on the master. This can be verified by connecting to the master and listing all the containers:
-+
-[source, text]
-----
-eval "$(docker-machine env swarm-master)"
-docker info
-----
 +
 . List nodes in the cluster with the following command:
 +
@@ -109,7 +159,17 @@ docker info
 docker run swarm list token://<TOKEN>
 ----
 +
-The complete cluster is in place now, and we need to deploy the Ticket Monster application to it.
+This shows the output as:
++
+[source, text]
+----
+> docker run swarm list token://b9d9da9198c0facbeeae302242fb65a5
+192.168.99.109:2376
+192.168.99.108:2376
+192.168.99.107:2376
+----
+
+The complete cluster is in place now, and we need to deploy the Java EE application to it.
 
 Swarm takes care for the distribution of the deployments across the nodes. The only thing, we need to do is to deploy the application as explained already:
 

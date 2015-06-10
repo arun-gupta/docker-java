@@ -1,0 +1,45 @@
+[[JavaEE7_Container_Linking]]
+## Deploy Java EE 7 Application (Container Linking)
+
+<<JavaEE7_PreBuilt_WAR>> explained how to use an in-memory database with the application server. This gets you started rather quickly but becomes a bottleneck soon as the database is only in-memory. This means that any changes made to your schema and data are lost after the application server shuts down. In this case, you need to use a database server that resides outside the application server. For example, MySQL as the database server and WildFly as the application server.
+
+.Two Containers On Same Docker Host
+image::../images/javaee7-hol-container-linking.png[]
+
+This section will show how https://docs.docker.com/userguide/dockerlinks/[Docker Container Linking] can be used to connect to a service running inside a Docker container via a network port.
+
+. Start MySQL server as:
++
+[source, text]
+----
+docker run --name mysqldb -e MYSQL_USER=mysql -e MYSQL_PASSWORD=mysql -e MYSQL_DATABASE=sample -e MYSQL_ROOT_PASSWORD=supersecret -p 3306:3306 -d mysql
+----
++
+`-e` define environment variables that are read by the database at startup and allow us to access the database with this user and password.
++
+. Start WildFly and deploy Java EE 7 application as:
++
+[source, text]
+----
+docker run -it --name mywildfly --link mysqldb:db -p 8080:8080 arungupta/wildfly-mysql-javaee7
+----
++
+`--link` takes two parameters - first is name of the container we're linking to and second is the alias for the link name.
++
+.Container Linking
+[NOTE]
+===============================
+Creating a link between two containers creates a conduit between a source container and a target container and securely transfer information about source container to target container.
+
+In our case, target container (WildFly) can see information about source container (MySQL). When containers are linked, information about a source container can be sent to a recipient container. This allows the recipient to see selected data describing aspects of the source container. For example, IP address of MySQL server is expoed at $DB_PORT_3306_TCP_ADDR and port of MySQL server is exposed at $DB_PORT_3306_TCP_PORT. These are then used to create the JDBC resource.
+
+See more about container communication on the Docker website link:https://docs.docker.com/userguide/dockerlinks/[Linking Containers Together]
+===============================
++
+. See the output as:
++
+[source, text]
+----
+> curl http://$(docker-machine ip lab):8080/employees/resources/employees
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?><collection><employee><id>1</id><name>Penny</name></employee><employee><id>2</id><name>Sheldon</name></employee><employee><id>3</id><name>Amy</name></employee><employee><id>4</id><name>Leonard</name></employee><employee><id>5</id><name>Bernadette</name></employee><employee><id>6</id><name>Raj</name></employee><employee><id>7</id><name>Howard</name></employee><employee><id>8</id><name>Priya</name></employee></collection>
+----
