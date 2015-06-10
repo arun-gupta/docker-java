@@ -53,12 +53,13 @@ docker run -d --name server3 --link db:db --link modcluster:modcluster dockerlab
 docker run -d --name server4 --link db:db --link modcluster:modcluster dockerlab:5000/ticketmonster-pgsql-wildfly
 ----
 +
-. Stop some servers and check the application behavior:
+. Stop some servers:
 +
 [source, text]
 ----
 docker stop server1
 docker stop server3
 ----
++
+Ensure that the application is still accessible at http://dockerhost/ticket-monster.
 
-TODO: Pick the parts that need to be described in more detail from https://goldmann.pl/blog/2013/10/07/wildfly-cluster-using-docker-on-fedora/
