@@ -33,7 +33,7 @@ Creating a link between two containers creates a conduit between a source contai
 
 In our case, target container (WildFly) can see information about source container (MySQL). When containers are linked, information about a source container can be sent to a recipient container. This allows the recipient to see selected data describing aspects of the source container. For example, IP address of MySQL server is expoed at $DB_PORT_3306_TCP_ADDR and port of MySQL server is exposed at $DB_PORT_3306_TCP_PORT. These are then used to create the JDBC resource.
 
-See more about container communication on the Docker website link:https://docs.docker.com/userguide/dockerlinks/[Linking Containers Together]
+See more about container communication on the Docker website https://docs.docker.com/userguide/dockerlinks/[Linking Containers Together]
 ===============================
 +
 . See the output as:

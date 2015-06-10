@@ -90,6 +90,8 @@ Labels:
 docker-machine create -d virtualbox --swarm --swarm-discovery token://<TOKEN> swarm-node-01
 ----
 +
+Replace `<TOKEN>` with the cluster id obtained in the previous step. 
++
 Node creation talks to the hosted service at Docker Hub and joins the previously created cluster. This is specified by `--swarm-discovery token://...` and specifying the cluster id obtained earlier.
 +
 . To make it a real cluster, let's create a second node:
@@ -98,6 +100,8 @@ Node creation talks to the hosted service at Docker Hub and joins the previously
 ----
 docker-machine create -d virtualbox --swarm --swarm-discovery token://<TOKEN> swarm-node-02
 ----
++
+Replace `<TOKEN>` with the cluster id obtained in the previous step. 
 +
 . List all the nodes / Docker machines, that has been created so far.
 +
@@ -117,7 +121,7 @@ swarm-node-01            virtualbox   Running   tcp://192.168.99.108:2376   swar
 swarm-node-02            virtualbox   Running   tcp://192.168.99.109:2376   swarm-master
 ----
 +
-The machines that are part of the cluster have the cluster’s name in the SWARM column, blank otherwise. For example, ``la'' is a standalone machine where as all other machines are part of the ``swarm-master'' cluster. The Swarm master is also identified by (master) in the SWARM column.
+The machines that are part of the cluster have the cluster’s name in the SWARM column, blank otherwise. For example, ``lab'' is a standalone machine where as all other machines are part of the ``swarm-master'' cluster. The Swarm master is also identified by (master) in the SWARM column.
 +
 . Connect to the Swarm cluster and find some information about it:
 +
@@ -171,29 +175,73 @@ This shows the output as:
 
 The complete cluster is in place now, and we need to deploy the Java EE application to it.
 
-Swarm takes care for the distribution of the deployments across the nodes. The only thing, we need to do is to deploy the application as explained already:
+Swarm takes care for the distribution of the deployments across the nodes. The only thing, we need to do is to deploy the application as already explained in <<JavaEE7_Container_Linking>>.
 
-Double check, if the db instance is still running. If not, start it again.
-
+. Start MySQL server as:
++
 [source, text]
 ----
-docker start db
+docker run --name mysqldb -e MYSQL_USER=mysql -e MYSQL_PASSWORD=mysql -e MYSQL_DATABASE=sample -e MYSQL_ROOT_PASSWORD=supersecret -p 3306:3306 -d mysql
 ----
-
-Next is the modcluster container:
-
++
+`-e` define environment variables that are read by the database at startup and allow us to access the database with this user and password.
++
+. Start WildFly and deploy Java EE 7 application as:
++
 [source, text]
 ----
-docker start modcluster
+docker run -d --name mywildfly --link mysqldb:db -p 8080:8080 arungupta/wildfly-mysql-javaee7
 ----
-
-And finally the server instances 1 to 3:
-
++
+This is using the https://docs.docker.com/userguide/dockerlinks/[Docker Container Linking] explained earlier.
++
+. Check the state of the cluster as:
++
 [source, text]
 ----
-docker start server1
-docker start server2
-docker start server3
+> docker info
+Containers: 7
+Strategy: spread
+Filters: affinity, health, constraint, port, dependency
+Nodes: 3
+ swarm-master: 192.168.99.107:2376
+  └ Containers: 2
+  └ Reserved CPUs: 0 / 1
+  └ Reserved Memory: 0 B / 1.023 GiB
+ swarm-node-01: 192.168.99.108:2376
+  └ Containers: 2
+  └ Reserved CPUs: 0 / 1
+  └ Reserved Memory: 0 B / 1.023 GiB
+ swarm-node-02: 192.168.99.109:2376
+  └ Containers: 3
+  └ Reserved CPUs: 0 / 1
+  └ Reserved Memory: 0 B / 1.023 GiB
+----
++
+``swarm-node-02'' is running three containers and so lets look at the list of containers running there:
++
+[source, text]
+----
+> eval "$(docker-machine env swarm-node-02)"
+> docker ps -a
+CONTAINER ID        IMAGE                                    COMMAND                CREATED              STATUS              PORTS                    NAMES
+f8022254703d        arungupta/wildfly-mysql-javaee7:latest   "/opt/jboss/wildfly/   About a minute ago   Up About a minute   0.0.0.0:8080->8080/tcp   mywildfly           
+7b6e9324c735        mysql:latest                             "/entrypoint.sh mysq   7 minutes ago        Up 7 minutes        0.0.0.0:3306->3306/tcp   mysqldb             
+6ed4c35c943b        swarm:latest                             "/swarm join --addr    12 minutes ago       Up 12 minutes       2375/tcp                 swarm-agent      
+----
++
+. Access the application as:
++
+[source, text]
+----
+curl http://$(docker-machine ip swarm-node-02):8080/employees/resources/employees
+----
++
+to see the output as:
++
+[source, xml]
+----
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?><collection><employee><id>1</id><name>Penny</name></employee><employee><id>2</id><name>Sheldon</name></employee><employee><id>3</id><name>Amy</name></employee><employee><id>4</id><name>Leonard</name></employee><employee><id>5</id><name>Bernadette</name></employee><employee><id>6</id><name>Raj</name></employee><employee><id>7</id><name>Howard</name></employee><employee><id>8</id><name>Priya</name></employee></collection>
 ----
 
-TODO: Is there any way to visualize containers in a cluster? Use Docker REST API?
+TODO: https://github.com/javaee-samples/docker-java/issues/55
