@@ -20,6 +20,13 @@ docker run -d --name modcluster -p 80:80 dockerlab:5000/mod_cluster
 .Apache HTTPD runing mod_cluster_manager interface
 image::../images/wildfly_cluster2.png[]
 +
+. Start Postgres database container, if not already running:
++
+[source, text]
+----
+docker run --name db -d -p 5432:5432 -e POSTGRES_USER=ticketmonster -e POSTGRES_PASSWORD=ticketmonster-docker dockerlab:5000/postgres
+----
++
 . Start the first WildFly instance:
 +
 [source, text]
