@@ -135,6 +135,7 @@ VBoxManage controlvm "mymachine" natpf1 "tcp-port10080,tcp,,10080,,10080";
 ----
 
 This is available as a script in https://github.com/javaee-samples/docker-java/blob/master/instructor/virtualbox-ports.sh.
+A Windows version in https://github.com/javaee-samples/docker-java/blob/master/instructor/virtualbox-ports.bat
 
 Check machine IP
 [source, text]
