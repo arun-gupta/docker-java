@@ -23,14 +23,13 @@ Here are the requirements for attendees to complete this lab:
 .. Linux / Windows: x64 (i5 and comparable)
 
 . Memory
-.. At least 4 to 8 GB
+.. At least 4GB, preferred 8 GB
 
 #### Software
 
 . Operating System
 .. Mac OS X (10.8 or later), Windows 7 (SP1), Fedora (21 or later)
-. Java
-.. http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html[Oracle JDK 8u45]
+. Java: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html[Oracle JDK 8u45]
 . Webbrowser
 .. https://www.google.com/chrome/browser/desktop/[Chrome]
 .. link:http://www.getfirefox.com[Firefox]
@@ -151,12 +150,13 @@ docker-machine create --driver virtualbox --virtualbox-boot2docker-url http://do
 [source, text]
 ----
 docker-machine ssh lab "echo $'EXTRA_ARGS=\"\$EXTRA_ARGS --insecure-registry <INSTRUCTOR_IP>:5000\"' | sudo tee -a /var/lib/boot2docker/profile && sudo /etc/init.d/docker restart"
+docker-machine ssh lab "echo $'EXTRA_ARGS=\"\$EXTRA_ARGS --insecure-registry dockerlab:5000\"' | sudo tee -a /var/lib/boot2docker/profile && sudo /etc/init.d/docker restart"
 eval "$(docker-machine env lab)"
 ----
 +
 Substitute `<INSTRUCTOR_IP>` with the IP address of the instructor's machine.
 +
-This will allow to download all Docker images from instructor's machine.
+This will allow to download all Docker images from instructor's machine, using both IP address and hostname.
 +
 . Add a host entry for this Docker Host running on your machine. To make it easier to access the containers, we add an entry into the host mapping table of your operating system. Find out the IP address of your machine:
 +
