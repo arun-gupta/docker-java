@@ -15,7 +15,7 @@ WORKDIR /var/www/html/downloads
 ADD downloads/jboss-devstudio-9.0.0.Beta2-v20150609-1026-B3346-installer-standalone.jar /var/www/html/downloads/
 
 #Setup permission for JBDS
-chmod 644 /var/www/html/downloads/jboss-devstudio-9.0.0.Beta2-v20150609-1026-B3346-installer-standalone.jar
+RUN chmod 644 /var/www/html/downloads/jboss-devstudio-9.0.0.Beta2-v20150609-1026-B3346-installer-standalone.jar
 
 #Get WildFly 8.2
 RUN wget http://download.jboss.org/wildfly/8.2.0.Final/wildfly-8.2.0.Final.zip
