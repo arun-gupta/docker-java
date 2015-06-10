@@ -155,6 +155,8 @@ docker-machine ssh mymachine "echo $'EXTRA_ARGS=\"\$EXTRA_ARGS --insecure-regist
 docker-machine ssh mymachine "echo -e '$(docker-machine ip mymachine)\tdockerlab' | sudo tee -a /etc/hosts"
 ----
 
+IMPORTANT: Running Windows, make sure to execute the above commands in Babun shell. They'll not work in a Windows cmd prompt.
+
 This will configure insecure registry using both IP address and hostname.
 
 ## Container with Nexus Dependencies
@@ -168,7 +170,7 @@ docker run --name="nexusdata" -v $(pwd):/backup sonatype/nexus:oss bash -c "tar 
 ----
 
 NOTE: Running Windows, make sure to copy the `nexusbackup.tar` to the following folder `c:/Users/<username>/docker-hol` and make sure to update the docker run command accordingly.
-The folder permissions in Windows don't allow for a location of your choice.
+The folder permissions in Windows don't allow for a location of your choice. 
 
 This will download the Nexus image on Docker host and populate it with the Nexus dependencies.
 
