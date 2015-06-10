@@ -41,6 +41,11 @@ docker pull openshift/origin
 docker tag openshift/origin localhost:5000/openshift-origin
 docker push localhost:5000/openshift-origin
 
+# WildFly MySQL
+docker pull swarm
+docker tag swarm localhost:5000/swarm
+docker push localhost:5000/swarm
+
 #OpenShift Origin
 docker pull openshift/origin-docker-registry
 docker tag openshift/origin-docker-registry localhost:5000/openshift-origin-docker-registry
