@@ -90,9 +90,9 @@ By default, the Vagrant setup will create a single kubernetes-master and 1 kuber
 +
 NOTE: By default, only one minion is created. This can be manipulated by setting an environment variable NUM_MINIONS variable to an integer before invoking `kube-up.sh` script.
 +
-By default, each VM in the cluster is running Fedora, Kubelete is installed into ``systemd'', and all other Kubernetes services are running as containers on Master.
+By default, each VM in the cluster is running Fedora, Kubelet is installed into ``systemd'', and all other Kubernetes services are running as containers on Master.
 +
-. Access `https://10.245.1.2` (or whatever IP address is assigned to your kubernetes cluster start up log). This may present the warning as shown below:
+. Access https://10.245.1.2 (or whatever IP address is assigned to your kubernetes cluster start up log). This may present the warning as shown below:
 +
 image::../images/kubernetes-master-default-output-certificate.png[]
 +
@@ -100,6 +100,8 @@ Click on ``Advanced'' and then on ``Proceed to 10.245.1.2'' to see the output as
 +
 .Kubernetes Output from Master
 image::../images/kubernetes-master-default-output.png[]
++
+Use ``vagrant'' as the username and ``vagrant'' as the password.
 
 ### Deploy Java EE Application
 
@@ -136,7 +138,7 @@ kubernetes-ro   component=apiserver,provider=kubernetes                         
 mysql-service   name=mysql-service                                                               name=mysql         10.247.222.0   3306/TCP
 ----
 +
-. When a Pod is run on a Node, the kubelet adds a set of environment variables for each active Service. 
+. When a Pod is run on a node, the kubelet adds a set of environment variables for each active Service. 
 +
 It supports both Docker links compatible variables and simpler `{SVCNAME}_SERVICE_HOST` and `{SVCNAME}_SERVICE_PORT` variables, where the Service name is upper-cased and dashes are converted to underscores.
 +
@@ -409,7 +411,9 @@ kubernetes> ./cluster/kubectl.sh get minions
 +
 This is not giving the expected output and filed as https://github.com/GoogleCloudPlatform/kubernetes/issues/9271.
 +
-. Docker and Kubelet are running in the minion and can be verified by logging in to the minion and using `systemctl` scripts. Log in to the minion as:
+. Docker and Kubelet are running in minion and can be verified by logging in.
++
+Log in to the minion as:
 +
 [source, text]
 ----
@@ -422,8 +426,6 @@ Last login: Thu Jun  4 19:30:03 2015 from 10.0.2.2
 +
 [source, text]
 ----
-> vagrant ssh minion-1
-Last login: Thu Jun  4 19:30:03 2015 from 10.0.2.2
 [vagrant@kubernetes-minion-1 ~]$ sudo systemctl status docker
 docker.service - Docker Application Container Engine
    Loaded: loaded (/usr/lib/systemd/system/docker.service; enabled)
@@ -444,69 +446,4 @@ Jun 04 20:53:46 kubernetes-minion-1 docker[2651]: time="2015-06-04T20:53:46Z" le
 Jun 04 20:53:46 kubernetes-minion-1 docker[2651]: time="2015-06-04T20:53:46Z" level="info" msg="+job version()"
 Jun 04 20:53:46 kubernetes-minion-1 docker[2651]: time="2015-06-04T20:53:46Z" level="info" msg="-job version() = OK (0)"
 ----
-+
-. Check the status of kubelet:
-+
-[source, text]
-----
-[vagrant@kubernetes-minion-1 ~]$ sudo systemctl status kubelet
-kubelet.service - Kubernetes Kubelet Server
-   Loaded: loaded (/usr/lib/systemd/system/kubelet.service; enabled)
-   Active: active (running) since Thu 2015-06-04 19:29:54 UTC; 1h 25min ago
-     Docs: https://github.com/GoogleCloudPlatform/kubernetes
- Main PID: 2872 (kubelet)
-   CGroup: /system.slice/kubelet.service
-           ├─2872 /usr/local/bin/kubelet --api_servers=https://10.245.1.2:6443 --hostname_override=10.245.1.3 --cloud_provider=vagrant --...
-           └─2904 journalctl -f
-
-Jun 04 20:53:35 kubernetes-minion-1 kubelet[2872]: E0604 20:53:35.913270    2872 file.go:53] Unable to read config path "/etc/kuber...noring
-Jun 04 20:53:46 kubernetes-minion-1 kubelet[2872]: I0604 20:53:46.579635    2872 container.go:363] Failed to update stats for conta... stats
-Jun 04 20:53:46 kubernetes-minion-1 kubelet[2872]: I0604 20:53:46.957415    2872 container.go:363] Failed to update stats for conta... stats
-Jun 04 20:53:55 kubernetes-minion-1 kubelet[2872]: E0604 20:53:55.915371    2872 file.go:53] Unable to read config path "/etc/kuber...noring
-Jun 04 20:54:15 kubernetes-minion-1 kubelet[2872]: E0604 20:54:15.916542    2872 file.go:53] Unable to read config path "/etc/kuber...noring
-Jun 04 20:54:24 kubernetes-minion-1 kubelet[2872]: I0604 20:54:24.783170    2872 container.go:363] Failed to update stats for conta... stats
-Jun 04 20:54:35 kubernetes-minion-1 kubelet[2872]: E0604 20:54:35.917074    2872 file.go:53] Unable to read config path "/etc/kuber...noring
-Jun 04 20:54:47 kubernetes-minion-1 kubelet[2872]: I0604 20:54:47.577805    2872 container.go:363] Failed to update stats for conta... stats
-Jun 04 20:54:50 kubernetes-minion-1 kubelet[2872]: I0604 20:54:50.870552    2872 container.go:363] Failed to update stats for conta... stats
-Jun 04 20:54:55 kubernetes-minion-1 kubelet[2872]: E0604 20:54:55.917611    2872 file.go:53] Unable to read config path "/etc/kuber...noring
-Hint: Some lines were ellipsized, use -l to show in full.
-----
-
-#### Pods
-
-Check the pods:
-
-[source, text]
-----
-kubernetes> ./cluster/kubectl.sh get pods
-POD                                         IP           CONTAINER(S)              IMAGE(S)                                                                            HOST                    LABELS                                                           STATUS    CREATED         MESSAGE
-etcd-server-kubernetes-master                                                                                                                                          kubernetes-master/      <none>                                                           Running   About an hour   
-                                                         etcd-container            gcr.io/google_containers/etcd:2.0.9                                                                                                                                          Running   About an hour   
-kube-apiserver-kubernetes-master                                                                                                                                       kubernetes-master/      <none>                                                           Running   About an hour   
-                                                         kube-apiserver            gcr.io/google_containers/kube-apiserver:465b93ab80b30057f9c2ef12f30450c3                                                                                                     Running   About an hour   
-kube-controller-manager-kubernetes-master                                                                                                                              kubernetes-master/      <none>                                                           Running   About an hour   
-                                                         kube-controller-manager   gcr.io/google_containers/kube-controller-manager:572696d43ca87cd1fe0c774bac3a5f4b                                                                                            Running   About an hour   
-kube-dns-v1-qfe73                           172.17.0.2                                                                                                                 10.245.1.3/10.245.1.3   k8s-app=kube-dns,kubernetes.io/cluster-service=true,version=v1   Running   About an hour   
-                                                         skydns                    gcr.io/google_containers/skydns:2015-03-11-001                                                                                                                               Running   About an hour   
-                                                         kube2sky                  gcr.io/google_containers/kube2sky:1.7                                                                                                                                        Running   About an hour   
-                                                         etcd                      gcr.io/google_containers/etcd:2.0.9                                                                                                                                          Running   About an hour   
-kube-scheduler-kubernetes-master                                                                                                                                       kubernetes-master/      <none>                                                           Running   About an hour   
-                                                         kube-scheduler            gcr.io/google_containers/kube-scheduler:d1f640dfb379f64daf3ae44286014821                                                                                                     Running   About an hour   
-----
-
-By default, five pods are running:
-
-|====
-| `etcd-server-kubernetes-master` | etcd server
-| `kube-apiserver-kubernetes-master` |  Kube API Server
-| `kube-controller-manager-kubernetes-master` | Kube Controller Manager
-| `kube-dns-v1-qfe73` | TODO: Why etcd is running as a container as well?
-| `kube-scheduler-kubernetes-master` | Kube Scheduler
-|====
-
-Three interesting containers running in `kube-dns-v1-qfe73` pod are:
-
-. *skydns*: SkyDNS is a distributed service for announcement and discovery of services built on top of etcd. It utilizes DNS queries to discover available services.
-. *etcd*: A distributed, consistent key value store for shared configuration and service discovery with a focus on being simple, secure, fast, reliable. This is used for storing state information for Kubernetes.
-. *kube2sky*: A bridge between Kubernetes and SkyDNS. This will watch the kubernetes API for changes in Services and then publish those changes to SkyDNS through etcd.
 
