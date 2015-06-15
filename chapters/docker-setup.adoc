@@ -12,9 +12,7 @@ Execute link:../instructor/readme.adoc[instructor setup instructions] at least a
 
 This lab is designed for a BYOL (Brying Your Own Laptop) style hands-on-lab. This folder contains instructions to setup an attendee environment. We did our best to support a wide range of client configurations but only did test on machines as stated in the hardware section.
 
-Please note, that it is only intended to setup the environment for this lab. The lab itself is at https://github.com/arun-gupta/docker-java/.
-
-Here are the requirements for attendees to complete this lab:
+Please note, that it is only intended to setup the environment for this lab. The lab itself is at https://github.com/javaee-samples/docker-java/.
 
 #### Hardware
 
@@ -36,11 +34,9 @@ Here are the requirements for attendees to complete this lab:
 
 
 #### A Word About Licenses
+
 This tutorial only uses software which is open source or at least free to use in development and/or education. Please refer to the individual products/tools used in this tutorial.
 
-. Docker is Apache License Version 2.0, see it here: https://github.com/docker/docker/blob/master/LICENSE
-. VirtualBox base packages (everything but the extension pack) is released under the GNU General Public License V2, see it here: https://www.virtualbox.org/wiki/GPL
-. Msysgit is a fork of Git under the GNU General Public License version 2.0, see it here: http://opensource.org/licenses/GPL-2.0
 
 [[Configure_Instructor_Host]]
 #### Configure Instructor Host
@@ -69,11 +65,9 @@ Windows client is available at http://dockerlab:8082/downloads/.
 
 #### VirtualBox
 
-Docker currently runs natively on Linux, but you can use VirtualBox to run Docker in a virtual machine on your box, and get the best of both worlds. This is why Virtualbox is a requirement to have on your machine. Get the latest downloads from the instructur machine:
+Docker currently runs natively on Linux, but you can use VirtualBox to run Docker in a virtual machine on your box, and get the best of both worlds.
 
-Downloads are available at http://dockerlab:8082/downloads/ or directly from the https://www.virtualbox.org/[Oracle Virtualbox] website.
-
-Installation should complete without any error.
+. Download Virutal Box from http://dockerlab:8082/downloads/ for your specific operating system.
 
 [WARNING]
 ====
@@ -110,12 +104,6 @@ curl http://dockerlab:8082/downloads/docker-machine_windows-amd64.exe
 
 On Windows copy the script into `C:\docker` directory and rename to: `docker-machine.exe`. Add `C:\docker` to your `PATH` variable.
 
-[source, text]
-----
-# Windows Only
-set PATH=%PATH%;c:\docker
-----
-
 #### Docker Client
 
 Download your binary from http://dockerlab:8082/downloads/
@@ -138,7 +126,7 @@ On Windows rename the file to `C:\docker\docker.exe`.
 
 #### Create Lab Docker Host
 
-. Create the Docker Host to be used in the lab:
+. Create Docker Host to be used in the lab:
 +
 [source, text]
 ----
