@@ -1,21 +1,10 @@
 ## Test Java EE Applications on Docker
 
-Testing Java EE applications is a very important aspect. Especially when it comes to in-container tests, link:http://www.arquillian.org[JBoss Arquillian] is well known to make this very easy.
-Picking up where unit tests leave off, Arquillian handles all the plumbing of container management, deployment and framework initialization so you can focus on the task at hand, writing your tests. Real tests.
+Testing Java EE applications is a very important aspect. Especially when it comes to in-container tests, http://www.arquillian.org[JBoss Arquillian] is well known to make this very easy for Java EE application servers. Picking up where unit tests leave off, Arquillian handles all the plumbing of container management, deployment and framework initialization so you can focus on the task at hand, writing your tests.
 
-Arquillian brings the test to the runtime so you don’t have to manage the runtime from the test (or the build). Arquillian eliminates this burden by covering all aspects of test execution, which entails:
+With Arquillian, you can use http://arquillian.org/modules/wildfly-arquillian-wildfly-remote-container-adapter/[WildFly Remote container adapter] and connect to any WildFly instance running in a Docker container. But this wouldn't help with the Docker container lifycycle management.
 
-. Managing the lifecycle of the container(s)
-. Bundling the test case, dependent classes and resources into a ShrinkWrap archive (or archives)
-. Deploying the archive (or archives) to the container (or containers)
-. Enriching the test case by providing dependency injection and other declarative services
-. Executing the tests inside (or against) the container
-. Capturing the results and returning them to the test runner for reporting
-. To avoid introducing unnecessary complexity into the developer’s build environment, Arquillian integrates seamlessly with familiar testing frameworks (e.g., JUnit 4, TestNG 5), allowing tests to be launched using existing IDE, Ant and Maven test plugins — without any add-ons.
-
-Basically, you can just use Arquillian with the link:http://arquillian.org/modules/wildfly-arquillian-wildfly-remote-container-adapter/[WildFly Remote container adapter] and connect to any WildFly instance running in a Docker container. But this wouldn't help with the Docker container lifycycle management.
-This is where a new Arquillian extension, named link:http://arquillian.org/blog/2014/11/17/arquillian-cube-1-0-0-Alpha1/["Cube"] comes in.
-With this extension you can start a Docker container with a server installed, deploy the required deployable file within it and execute Arquillian tests.
+http://arquillian.org/modules/cube-extension/[Arquillian Cube], an extension of Arquillian, allows you to control the lifecycle of Docker images as part of the test lifecyle, either automatically or manually. This extension allows to start a Docker container with a server installed, deploy the required deployable file within it and execute Arquillian tests.
 
 The key point here is that if Docker is used as deployable platform in production, your tests are executed in a the same container as it will be in production, so your tests are even more real than before.
 
