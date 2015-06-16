@@ -2,15 +2,84 @@
 
 Testing Java EE applications is a very important aspect. Especially when it comes to in-container tests, http://www.arquillian.org[JBoss Arquillian] is well known to make this very easy for Java EE application servers. Picking up where unit tests leave off, Arquillian handles all the plumbing of container management, deployment and framework initialization so you can focus on the task at hand, writing your tests.
 
-With Arquillian, you can use http://arquillian.org/modules/wildfly-arquillian-wildfly-remote-container-adapter/[WildFly Remote container adapter] and connect to any WildFly instance running in a Docker container. But this wouldn't help with the Docker container lifycycle management.
+With Arquillian, you can use http://arquillian.org/modules/wildfly-arquillian-wildfly-remote-container-adapter/[WildFly remote container adapter] and connect to any WildFly instance running in a Docker container. But this wouldn't help with the Docker container lifycycle management.
 
 http://arquillian.org/modules/cube-extension/[Arquillian Cube], an extension of Arquillian, allows you to control the lifecycle of Docker images as part of the test lifecyle, either automatically or manually. This extension allows to start a Docker container with a server installed, deploy the required deployable file within it and execute Arquillian tests.
 
 The key point here is that if Docker is used as deployable platform in production, your tests are executed in a the same container as it will be in production, so your tests are even more real than before.
 
+. Check out the workspace:
++
 [source, text]
 ----
-mvn -s settings.xml -f ticket-monster/demo/pom.xml -Pdocker-test test
+git clone http://github.com/javaee-samples/javaee-arquillian-cube
 ----
++
+. Edit `src/test/resources/arquillian.xml` file and change the IP address specified in `serverUri` property value to point to your Docker host's IP. This can be found out as:
++
+[source, text]
+----
+docker-machine ip lab
+----
++
+. Run the tests as:
++
+[source, text]
+----
+mvn test
+----
++
+This will create a container using the image defined in `src/test/resources/wildfly/Dockerfile`. The container qualifier in `arquillian.xml` defines the directory name in `src/test/resources` directory.
++
+[NOTE]
+====
+A pre-built image can be used by specifying:
 
-http://blog.arungupta.me/run-javaee-tests-wildfly-docker-arquillian-cube/
+  wildfly:
+    image: jboss/wildfly
+
+instead of
+
+  wildfly:
+    buildImage:
+      dockerfileLocation: src/test/resources/wildfly
+====
++
+By default, the ``cube'' profile is activated and this includes all the required dependencies.
++
+The result is shown as:
++
+[source, text]
+----
+Running org.javaee7.sample.PersonDatabaseTest
+Jun 16, 2015 9:23:04 AM org.jboss.arquillian.container.impl.MapObject populate
+WARNING: Configuration contain properties not supported by the backing object org.jboss.as.arquillian.container.remote.RemoteContainerConfiguration
+Unused property entries: {target=wildfly:8.1.0.Final:remote}
+Supported property names: [managementAddress, password, managementPort, managementProtocol, username]
+Jun 16, 2015 9:23:13 AM org.xnio.Xnio <clinit>
+INFO: XNIO version 3.2.0.Beta4
+Jun 16, 2015 9:23:13 AM org.xnio.nio.NioXnio <clinit>
+INFO: XNIO NIO Implementation Version 3.2.0.Beta4
+Jun 16, 2015 9:23:13 AM org.jboss.remoting3.EndpointImpl <clinit>
+INFO: JBoss Remoting version (unknown)
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 16.406 sec - in org.javaee7.sample.PersonDatabaseTest
+
+Results :
+
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+----
++
+. In `arquillian.xml`, add the following property:
++
+[source, xml]
+----
+<property name="connectionMode">STARTORCONNECT</property>
+----
++
+This bypasses the create/start Cube commands if a Docker Container with the same name is already running on the target system.
++
+This allows you to prestart the containers manually during development and just connect to them to avoid the extra cost of starting the Docker Containers for each test run. This assumes you are not changing the actual definition of the Docker Container itself.
