@@ -87,10 +87,12 @@ Find out more about the details at the link:https://docs.docker.com/machine/[Off
 
 Check if docker machine is working using the following command:
 
-[source, text]
-----
-docker-machine -v
-----
+  docker-machine -v
+
+It shows the following output:
+
+  docker-machine version 0.3.0-rc3 (a5fd8cf)
+
 
 ### Docker Client
 
@@ -98,10 +100,11 @@ The client communicates with the demon process on your host and let's you work w
 
 Check if your client is working using the following command:
 
-[source, text]
-----
-docker -v
-----
+  docker -v
+
+It shows the following output:
+
+  Docker version 1.6.2, build 7c8fca2
 
 The most important options you'll be using frequently are:
 
@@ -110,19 +113,14 @@ The most important options you'll be using frequently are:
 . `stop` - stops a container
 
 Get a full list of available commands with
-[source, text]
-----
-docker
-----
+
+  docker
 
 ### Verify Docker Configuration
 
 Check if your Docker Host is running:
 
-[source, text]
-----
-docker-machine ls
-----
+  docker-machine ls
 
 You should see the output similar to:
 
@@ -134,26 +132,17 @@ lab                  virtualbox   Running   tcp://192.168.99.101:2376
 
 If the machine state is stopped, start it with:
 
-[source, text]
-----
-docker-machine start lab
-----
+  docker-machine start lab
 
 After it is started you can find out IP address of your host with:
 
-[source, text]
-----
-docker-machine ip lab
-----
+  docker-machine ip lab
 
 We already did this during the setup document, remember? So, this is a good chance to check, if you already added this IP to your hosts file.
 
 Type:
 
-[source, text]
-----
-ping dockerhost
-----
+  ping dockerhost
 
 and see if this resolves to the IP address that the docker-machine command printed out. You should see an output as:
 
@@ -165,4 +154,4 @@ PING dockerhost (192.168.99.101): 56 data bytes
 64 bytes from 192.168.99.101: icmp_seq=1 ttl=64 time=0.387 ms
 ----
 
-If it does, you're ready to start over with the lab. If it does not, make sure you've followed the steps to https://github.com/arun-gupta/docker-java/tree/master/attendees#configure-host[configure your host].
+If it does, you're ready to start over with the lab. If it does not, make sure you've followed the steps to https://github.com/javaee-samples/docker-java/tree/master/attendees#configure-host[configure your host].
