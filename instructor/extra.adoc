@@ -11,7 +11,7 @@ To update the HTML, have http://asciidoctor.org/ installed and run the following
 
 [source, text]
 ----
-asciidoctor ../docker-java-lab.adoc -a data-uri -a numbered -a experimental -a source-highlighter=coderay -a imagesdir=images -o instructor/dockerfiles/lab-httpd-server/index.html
+asciidoctor ../docker-java-lab.adoc -a data-uri -a numbered -a experimental -a source-highlighter=coderay -a imagesdir=images -o dockerfiles/lab-httpd-server/index.html
 ----
 
 After that, you will need to build the services again running

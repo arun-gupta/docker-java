@@ -72,7 +72,7 @@ This starts the database container. It can be confirmed as:
 ----
 > docker ps
 CONTAINER ID        IMAGE                                           COMMAND                CREATED             STATUS              PORTS                                              NAMES
-047bab6a86fe        192.168.99.100:5000/postgres:latest             "/docker-entrypoint.   42 seconds ago      Up 3 seconds        0.0.0.0:5432->5432/tcp                             db   
+047bab6a86fe        classroom.example.com:5000/postgres:latest             "/docker-entrypoint.   42 seconds ago      Up 3 seconds        0.0.0.0:5432->5432/tcp                             db   
 ----
 
 Server logs can be viewed as:
