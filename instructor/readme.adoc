@@ -101,6 +101,16 @@ If you're executing commands in the Babun bash from here on, make sure to keep i
 
 There is no in-built support for DNS and so this needs to be configured. Currently this works only on Mac and Linux, and need to be fixed for Windows https://github.com/javaee-samples/docker-java/issues/61[#61].
 
+. Edit `/etc/hosts` (Mac OS / Linux)
++
+[source, text]
+----
+<INSTRUCTOR_IP>  classroom.example.com
+----
++
+IMPORTANT: <INSTRUCTOR_IP> is the IP of your public interface eg. `en0, eth0`.
++
+
 . Install a simple dns server such as `dnsmasq` as:
 +
 [source, text]
@@ -129,6 +139,11 @@ Then to load dnsmasq now:
     sudo launchctl load /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
 ==> Summary
 🍺  /usr/local/Cellar/dnsmasq/2.72: 7 files, 492K, built in 28 seconds
+
+You may need to restart Dnsmasq to get it to recognise this change:
+
+sudo launchctl stop homebrew.mxcl.dnsmasq
+sudo launchctl start homebrew.mxcl.dnsmasq
 ----
 +
 This can be done on Linux as:
@@ -144,9 +159,7 @@ sudo yum -­y install dnsmasq
 ----
 nameserver  <INSTRUCTOR_IP>
 ----
-+
-IMPORTANT: important this is the IP of your public interface eg. `en0, eth0` 
-+
+
 . Make sure that dnsmasq starts automatically follow the instructions from brew or yum.
 
 
@@ -156,7 +169,7 @@ IMPORTANT: important this is the IP of your public interface eg. `en0, eth0`
 +
 [source, text]
 ----
-docker-machine create --driver=virtualbox --virtualbox-memory=4096 --engine-opt dns=<INSTRUCTOR_IP> --engine-insecure-registry=classroom.example.com:5000 instructor-machine
+docker-machine create --driver=virtualbox --virtualbox-memory=4096 --engine-insecure-registry=classroom.example.com:5000 instructor-machine
 ----
 
 +
@@ -165,6 +178,13 @@ docker-machine create --driver=virtualbox --virtualbox-memory=4096 --engine-opt 
 [source, text]
 ----
 eval "$(docker-machine env instructor-machine)"
+----
+
++
+IMPORTANT: If you change your network, you may need to restart your docker machine:  
+[source, text]
+----
+docker-machine restart instructor-machine
 ----
 
 
