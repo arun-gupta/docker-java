@@ -6,17 +6,11 @@ v1.0, Jun 16, 2015
 
 toc::[]
 
-include::chapters/preface.adoc[]
+include::chapters/docker-preface.adoc[]
 
 include::chapters/docker-setup.adoc[]
 
 include::chapters/docker-basics.adoc[]
-
-include::chapters/docker-machine.adoc[]
-
-include::chapters/docker-client.adoc[]
-
-include::chapters/docker-configuration.adoc[]
 
 include::chapters/docker-container.adoc[]
 

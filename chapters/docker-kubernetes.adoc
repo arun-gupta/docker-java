@@ -36,8 +36,7 @@ Label is an arbitrary key/value pair in a distributed watchable storage that the
 
 ### Start Kubernetes Cluster
 
-. Download Kubernetes from http://dockerlab:8082/kubernetes.tar.gz (version 0.18.1.1)
-. Setup a cluster as:
+. In ``kubernetes'' directory, setup a cluster as:
 +
 [source, text]
 ----

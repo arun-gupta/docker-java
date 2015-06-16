@@ -37,8 +37,6 @@ NOTE: You're free to explore the application. Open it with with the favorite IDE
 
 Copy the Maven `lab-settings.xml` file that you have downloaded from the instructor machine and place it inside `docker-java` directory.
 
-NOTE: Make sure `dockerlab` is mapped to the instructor's machine in your network settings as explained in <<Configure_Instructor_Host>>.
-
 When you're ready, it is time to build the application. Switch to the checkout directory and run maven package.
 
 [source, text]
@@ -60,7 +58,7 @@ Start Postgres database as:
 docker run --name db -d -p 5432:5432 -e POSTGRES_USER=ticketmonster -e POSTGRES_PASSWORD=ticketmonster-docker classroom.example.com:5000/postgres
 ----
 
-This command starts a container named ``db'' from the image in your instructor's registry `dockerlab:5000/postgres`. As this will not be present locally, it needs to be downloaded first. But you'll have a very quick connection to the instructor registry and this shouldn't take long.
+This command starts a container named ``db'' from the image in your instructor's registry `classroom.example.com:5000/postgres`. As this will not be present locally, it needs to be downloaded first. But you'll have a very quick connection to the instructor registry and this shouldn't take long.
 
 The two `-e` options define environment variables which are read by the db at startup and allow us to access the database with this user and password.
 

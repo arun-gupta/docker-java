@@ -27,7 +27,7 @@ docker-machine ssh lab "mkdir /var/lib/openshift"
 $ docker run -d --name "openshift-origin" --net=host --privileged \
 -v /var/run/docker.sock:/var/run/docker.sock \
 -v /var/lib/openshift:/var/lib/openshift \
-dockerlab:5000/openshift start
+classroom.example.com:5000/openshift start
 ----
 +
 . Check that the container is running:

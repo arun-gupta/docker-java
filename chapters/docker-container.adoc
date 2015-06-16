@@ -15,7 +15,7 @@ At first, this list is empty. Now, let's get a plain `jboss/wildfly` image from 
 
 [source, text]
 ----
-docker pull dockerlab:5000/wildfly
+docker pull dockerhost:5000/wildfly
 ----
 
 By default, docker images are retrieved from https://hub.docker.com/[Docker Hub]. This lab is pre-congfigured to run such that everything can be pulled from instructor's machine.
@@ -53,7 +53,7 @@ When the download is done, you can list the images again and will see the follow
 docker images
 
 REPOSITORY              TAG     IMAGE ID       CREATED       VIRTUAL SIZE
-dockerlab:5000/wildfly  latest  2ac466861ca1   10 weeks ago  951.3 MB
+dockerhost:5000/wildfly  latest  2ac466861ca1   10 weeks ago  951.3 MB
 ----
 
 ### Run Container
@@ -64,7 +64,7 @@ Run WildFly container in an interactive mode.
 
 [source, text]
 ----
-docker run -it dockerlab:5000/wildfly
+docker run -it dockerhost:5000/wildfly
 ----
 
 This will show the output as:
@@ -177,7 +177,7 @@ Restart the container as:
 
 [source, text]
 ----
-docker run -it -p 8080:8080 dockerlab:5000/wildfly
+docker run -it -p 8080:8080 dockerhost:5000/wildfly
 ----
 
 The format is `-p hostPort:containerPort`. This option maps container ports to host ports and allows other containers on our host to access them.
@@ -204,14 +204,14 @@ The following command will override the default command in Docker file, explicit
 
 [source, text]
 ----
-docker run -P -d dockerlab:5000/wildfly /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0
+docker run -P -d dockerhost:5000/wildfly /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0
 ----
 
 Accessing WildFly Administration Console require a user in administration realm. A pre-created image, with appropriate username/password credentials, is used to start WildFly as:
 
 [source, text]
 ----
-docker run -P -d 192.168.99.100:5000/wildfly-management
+docker run -P -d dockerhost:5000/wildfly-management
 ----
 
 `-P` flag map any network ports inside the image it to a random high port from the range 49153 to 65535 on Docker host.
@@ -222,7 +222,7 @@ Look at the exposed ports as:
 ----
  docker ps
 CONTAINER ID        IMAGE                                           COMMAND                CREATED             STATUS              PORTS                                              NAMES
-6f610b310a46        192.168.99.100:5000/wildfly-management:latest   "/bin/sh -c '/opt/jb   6 seconds ago       Up 6 seconds        0.0.0.0:32769->8080/tcp, 0.0.0.0:32770->9990/tcp   determined_darwin 
+6f610b310a46        dockerhost:5000/wildfly-management:latest   "/bin/sh -c '/opt/jb   6 seconds ago       Up 6 seconds        0.0.0.0:32769->8080/tcp, 0.0.0.0:32770->9990/tcp   determined_darwin 
 ----
 
 Look for the host port that is mapped in the container, `32770` in this case. Access the admin console at http://dockerhost:32770.
