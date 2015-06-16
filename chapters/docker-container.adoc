@@ -71,7 +71,7 @@ This will show the output as:
 
 [source, text]
 ----
-> docker run -it 192.168.99.100:5000/wildfly
+> docker run -it classroom.example.com:5000/wildfly
 =========================================================================
 
   JBoss Bootstrap Environment
@@ -107,7 +107,7 @@ Restart the container in detached mode:
 
 [source, text]
 ----
-> docker run -d 192.168.99.100:5000/wildfly
+> docker run -d classroom.example.com:5000/wildfly
 972f51cc8422eec0a7ea9a804a55a2827b5537c00a6bfd45f8646cb764bc002a
 ----
 
@@ -133,7 +133,7 @@ We can check it by issuing the `docker ps` command which retrieves the images pr
 ----
 > docker ps
 CONTAINER ID        IMAGE                                 COMMAND                CREATED             STATUS              PORTS                    NAMES
-0bc123a8ece0        192.168.99.100:5000/wildfly:latest    "/opt/jboss/wildfly/   4 seconds ago       Up 4 seconds        8080/tcp                 tender_wozniak 
+0bc123a8ece0        classroom.example.com:5000/wildfly:latest    "/opt/jboss/wildfly/   4 seconds ago       Up 4 seconds        8080/tcp                 tender_wozniak 
 ----
 
 Also try `docker ps -a` to see all the containers on this machine.
@@ -157,7 +157,7 @@ Restart the container as:
 ----
 > docker ps
 CONTAINER ID        IMAGE                                 COMMAND                CREATED             STATUS              PORTS                     NAMES
-4545ced66242        192.168.99.100:5000/wildfly:latest    "/opt/jboss/wildfly/   3 seconds ago       Up 3 seconds        0.0.0.0:32768->8080/tcp   suspicious_wozniak   
+4545ced66242        classroom.example.com:5000/wildfly:latest    "/opt/jboss/wildfly/   3 seconds ago       Up 3 seconds        0.0.0.0:32768->8080/tcp   suspicious_wozniak   
 ----
 
 `-P` flag map any network ports inside the image it to a random high port from the range 49153 to 65535 on Docker host.
@@ -270,7 +270,7 @@ This management image can also be started with a pre-defined port mapping as:
 
 [source, text]
 ----
-docker run -p 8080:8080 -p 9990:9990 -d 192.168.99.100:5000/wildfly-management
+docker run -p 8080:8080 -p 9990:9990 -d classroom.example.com:5000/wildfly-management
 ----
 
 In this case, Docker port mapping will be shown as:
