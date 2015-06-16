@@ -435,9 +435,11 @@ Bringing down cluster using provider: vagrant
 Done
 ----
 
-### Debug Kubernetes (OPTIONAL)
+### View Logs
 
-#### Kubernetes Master
+Viewing logs is causing https://github.com/GoogleCloudPlatform/kubernetes/issues/9888.
+
+### Debug Kubernetes Master (OPTIONAL)
 
 . Log in to the master as:
 +
@@ -474,8 +476,6 @@ b1809bdabd9c        gcr.io/google_containers/pause:0.8.0                        
 615a314a35bf        gcr.io/google_containers/pause:0.8.0                                                "/pause"               5 hours ago         Up 5 hours                              k8s_POD.e4cc795_kube-controller-manager-kubernetes-master_default_8f8db766ebc90a00a99244c362284cf1_97cc1739                        
 7a554eea05f3        gcr.io/google_containers/pause:0.8.0                                                "/pause"               5 hours ago         Up 5 hours                              k8s_POD.e4cc795_etcd-server-kubernetes-master_default_3595ac402f3a17c29dab95f3e0f64c76_593b9807 
 ----
-+
-. Log out of master.
 
 
 
