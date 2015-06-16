@@ -12,7 +12,7 @@ Execute link:../instructor/readme.adoc[instructor setup instructions] at least a
 
 This lab is designed for a BYOL (Brying Your Own Laptop) style hands-on-lab. This folder contains instructions to setup an attendee environment. We did our best to support a wide range of client configurations but only did test on machines as stated in the hardware section.
 
-Please note, that it is only intended to setup the environment for this lab. The lab itself is at https://github.com/arun-gupta/docker-java/.
+Please note, that it is only intended to setup the environment for this lab. The lab itself is at https://github.com/javaee-samples/docker-java/.
 
 Here are the requirements for attendees to complete this lab:
 
