@@ -4,15 +4,15 @@ This section describes the relevant steps for both attendees and instructors to 
 
 ### Instructor
 
-The instructor setup is designed to make the lab most reliable even with bad Internet connections. Most if not all of the software can be directly downloaded from the instructor's machine. The machine is setup as _Docker Host_ and also runs a _Docker Registry_.
+The instructor setup is designed to make the lab most reliable even with bad Internet connections. Most, if not all, of the software can be directly downloaded from the instructor's machine. The machine is setup as _Docker Host_ and also runs a _Docker Registry_ and Nexus container.
 
-Execute link:../instructor/readme.adoc[instructor setup instructions] at least a day before the lab.
+Follow all the https://github.com/javaee-samples/docker-java/blob/master/instructor/readme.adoc[instructor setup instructions] at least a day before the lab. Make sure there is a decent Internet connection available.
 
-### Attendees (From Instructor Machine)
+### Attendees (From Instructor's Machine)
 
 This lab is designed for a BYOL (Brying Your Own Laptop) style hands-on-lab. This section provide instructions to setup an attendee environment from an instructor's machine.
 
-Please note, that it is only intended to setup the environment for this lab. The lab contents are at https://github.com/javaee-samples/docker-java/.
+The lab contents are at https://github.com/javaee-samples/docker-java/.
 
 #### Hardware
 
@@ -31,7 +31,6 @@ Please note, that it is only intended to setup the environment for this lab. The
 . Webbrowser
 .. https://www.google.com/chrome/browser/desktop/[Chrome]
 .. link:http://www.getfirefox.com[Firefox]
-
 
 #### A Word About Licenses
 
