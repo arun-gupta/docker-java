@@ -343,7 +343,7 @@ Alternatively, all services and replication controllers can be assigned a label 
 kubectl delete -l services,pods name=docker-lab
 ----
 
-Send a PR?
+Send a PR for the last code: https://github.com/javaee-samples/docker-java/issues/59
 
 ### Stop Kubernetes Cluster
 
