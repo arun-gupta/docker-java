@@ -16,7 +16,6 @@ NOTE: All instructions are to be run from the `instructor` directory.
 
 ## Prerequisites
 
-
 ### Hardware
 
 . CPU
@@ -98,24 +97,57 @@ For Windows, make sure to add `c:\Users\<username>\docker` to your `%PATH%` vari
 If you're executing commands in the Babun bash from here on, make sure to keep in mind, that the Path variable is set in Linux/Unix style:
 `PATH=$PATH\:/d/Program\ Files\ \(x86\)/docker ; export PATH`. You have to escape all special characters with a backslash.
 
-###Set up DNS (Need to work on this)
+### Set up DNS
 
-. At the moment we don’t have built in DNS support, so you have to set this 
+There is no in-built support for DNS and so this needs to be configured. Currently this works only on Mac and Linux, and need to be fixed for Windows https://github.com/javaee-samples/docker-java/issues/61[#61].
 
-. Install a simple dns server such as `dnsmasq` (e.g. sudo port install manually, I am working on fixing this up.
+. Install a simple dns server such as `dnsmasq` as:
++
+[source, text]
+----
+brew install dnsmasq
+----
++
+to see the output as:
++
+[source, text]
+----
+> brew install dnsmasq
+==> Downloading http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.72.tar.gz
+######################################################################## 100.0%
+==> make install PREFIX=/usr/local/Cellar/dnsmasq/2.72
+==> Caveats
+To configure dnsmasq, copy the example configuration to /usr/local/etc/dnsmasq.conf
+and edit to taste.
 
-dnsmasq or brew install dnsmasq or sudo yum -­y install dnsmasq
+  cp /usr/local/opt/dnsmasq/dnsmasq.conf.example /usr/local/etc/dnsmasq.conf
 
-. Edit the `/etc/resolv.conf` (Mac OS / Linux) - TODO - Configure Windows
-
+To have launchd start dnsmasq at startup:
+    sudo cp -fv /usr/local/opt/dnsmasq/*.plist /Library/LaunchDaemons
+    sudo chown root /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
+Then to load dnsmasq now:
+    sudo launchctl load /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
+==> Summary
+🍺  /usr/local/Cellar/dnsmasq/2.72: 7 files, 492K, built in 28 seconds
+----
++
+This can be done on Linux as:
++
+[source, text]
+----
+sudo yum -­y install dnsmasq
+----
++
+. Edit `/etc/resolv.conf` (Mac OS / Linux)
++
 [source, text]
 ----
 nameserver  <INSTRUCTOR_IP>
 ----
-
-It’s important this is the IP of your public interface eg. `en0, eth0` 
-
-. Make sure that dnsmasq starts automatically follow the instructions from ports, brew or yum.
++
+IMPORTANT: important this is the IP of your public interface eg. `en0, eth0` 
++
+. Make sure that dnsmasq starts automatically follow the instructions from brew or yum.
 
 
 ### Create Machine
