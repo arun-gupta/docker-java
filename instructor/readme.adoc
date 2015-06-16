@@ -67,7 +67,7 @@ Learn more about the tool on link:https://docs.docker.com/compose/[Docker Compos
 [source, text]
 ----
 # Linux / MacOS
-curl -L https://github.com/docker/compose/releases/download/1.3.0rc1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+curl -L https://github.com/docker/compose/releases/download/1.3.0rc3/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 ----
 
@@ -80,16 +80,16 @@ Install the Docker machine client for your environment: https://github.com/docke
 [source, text]
 ----
 # MacOS
-curl -L  https://github.com/docker/machine/releases/download/v0.3.0-rc1/docker-machine_darwin-amd64 > /usr/local/bin/docker-machine
+curl -L  https://github.com/docker/machine/releases/download/v0.3.0-rc2/docker-machine_darwin-amd64 > /usr/local/bin/docker-machine
 chmod +x /usr/local/bin/docker-machine
 
 # Linux
-curl -L https://github.com/docker/machine/releases/download/v0.3.0-rc1/docker-machine_linux-amd64 > /usr/local/bin/docker-machine
+curl -L https://github.com/docker/machine/releases/download/v0.3.0-rc2/docker-machine_linux-amd64 > /usr/local/bin/docker-machine
 chmod +x /usr/local/bin/docker-machine
 
 # Windows
 Download:
-https://github.com/docker/machine/releases/download/v0.3.0-rc1/docker-machine_windows-amd64.exe
+https://github.com/docker/machine/releases/download/v0.3.0-rc2/docker-machine_windows-amd64.exe
 And save to c:\Users\<username>\docker\docker-machine.exe
 ----
 
@@ -98,6 +98,25 @@ For Windows, make sure to add `c:\Users\<username>\docker` to your `%PATH%` vari
 If you're executing commands in the Babun bash from here on, make sure to keep in mind, that the Path variable is set in Linux/Unix style:
 `PATH=$PATH\:/d/Program\ Files\ \(x86\)/docker ; export PATH`. You have to escape all special characters with a backslash.
 
+###Set up DNS (Need to work on this)
+
+. At the moment we don’t have built in DNS support, so you have to set this 
+
+. Install a simple dns server such as `dnsmasq` (e.g. sudo port install manually, I am working on fixing this up.
+
+dnsmasq or brew install dnsmasq or sudo yum -­y install dnsmasq
+
+. Edit the `/etc/resolv.conf` (Mac OS / Linux) - TODO - Configure Windows
+
+[source, text]
+----
+nameserver  <INSTRUCTOR_IP>
+----
+
+It’s important this is the IP of your public interface eg. `en0, eth0` 
+
+. Make sure that dnsmasq starts automatically follow the instructions from ports, brew or yum.
+
 
 ### Create Machine
 
@@ -105,59 +124,39 @@ If you're executing commands in the Babun bash from here on, make sure to keep i
 +
 [source, text]
 ----
-docker-machine create --driver=virtualbox --virtualbox-memory=4096 mymachine
+docker-machine create --driver=virtualbox --virtualbox-memory=4096 --engine-opt dns=<INSTRUCTOR_IP> --engine-insecure-registry=classroom.example.com:5000 instructor-machine
 ----
+
 +
 . Configure Docker client to run the commands on this newly created machine as:
 +
 [source, text]
 ----
-eval "$(docker-machine env mymachine)"
+eval "$(docker-machine env instructor-machine)"
 ----
+
 
 ### Virtual Box Configuration
 
 Expose the Virtual Box ports to other computer in the LAN
 
-VirtualBox will run docker container inside the newly create host called 'mymachine'. We need now to expose the ports used in this lab to the world.
+VirtualBox will run docker container inside the newly create host called 'instructor-machine'. We need now to expose the ports used in this lab to the world.
 
 [source, text]
 ----
 #Open Registry Server port
-VBoxManage controlvm "mymachine" natpf1 "tcp-port5000,tcp,,5000,,5000";
+VBoxManage controlvm "instructor-machine" natpf1 "tcp-port5000,tcp,,5000,,5000";
 #Open Nexus Server port
-VBoxManage controlvm "mymachine" natpf1 "tcp-port8081,tcp,,8081,,8081";
+VBoxManage controlvm "instructor-machine" natpf1 "tcp-port8081,tcp,,8081,,8081";
 #Open HTTP Server port
-VBoxManage controlvm "mymachine" natpf1 "tcp-port8082,tcp,,8082,,8082";
+VBoxManage controlvm "instructor-machine" natpf1 "tcp-port8082,tcp,,8082,,8082";
 #Open gitlab ports
-VBoxManage controlvm "mymachine" natpf1 "tcp-port10022,tcp,,10022,,10022";
-VBoxManage controlvm "mymachine" natpf1 "tcp-port10080,tcp,,10080,,10080";
+VBoxManage controlvm "instructor-machine" natpf1 "tcp-port10022,tcp,,10022,,10022";
+VBoxManage controlvm "instructor-machine" natpf1 "tcp-port10080,tcp,,10080,,10080";
 ----
 
 This is available as a script in https://github.com/javaee-samples/docker-java/blob/master/instructor/virtualbox-ports.sh.
 A Windows version in https://github.com/javaee-samples/docker-java/blob/master/instructor/virtualbox-ports.bat
-
-Check machine IP
-[source, text]
-----
-docker-machine ip mymachine
-----
-
-This IP address is referred as <HOST_IP> in this document.
-
-## Configure Docker Host
-
-Add extra args to Docker Host to allow insecure registry for external access via `http://`. You can either insert your <HOST_IP> or the complete subnet e.g. 192.168.99.100 maps to 192.168.99.0/24 as:
-
-[source, text]
-----
-docker-machine ssh mymachine "echo $'EXTRA_ARGS=\"\$EXTRA_ARGS --insecure-registry $(docker-machine ip mymachine):5000\"' | sudo tee -a /var/lib/boot2docker/profile && sudo /etc/init.d/docker restart"
-docker-machine ssh mymachine "echo -e '$(docker-machine ip mymachine)\tdockerlab' | sudo tee -a /etc/hosts"
-----
-
-IMPORTANT: Running Windows, make sure to execute the above commands in Babun shell. They'll not work in a Windows cmd prompt.
-
-This will configure insecure registry using both IP address and hostname.
 
 ## Container with Nexus Dependencies
 
@@ -193,7 +192,6 @@ The status of different servers can be verified as:
 
 [source, text]
 ----
-dockerfiles> cd ..
 instructor> docker ps
 CONTAINER ID        IMAGE                          COMMAND                CREATED              STATUS              PORTS                                                   NAMES
 7b847ca4554e        registry:2.0                   "registry cmd/regist   45 seconds ago       Up 45 seconds       0.0.0.0:5000->5000/tcp                                  instructor_dockerregistry_1
@@ -206,19 +204,19 @@ a041b58ceff1        instructor_httpserver:latest   "/run-apache.sh"       5 minu
 
 Test if the servers are running:
 
-. Docker Registry [http://dockerlab:5000/v2/]
+. Docker Registry [http://localhost:5000/v2/]
 +
 image::images/registry-default-output.png[]
 +
-. Nexus Console [http://dockerlab:8081/content/groups/public/]
+. Nexus Console [http://localhost:8081/content/groups/public/]
 +
 image::images/nexus-default-output.png[]
 +
-. Apache Webserver [http://dockerlab:8082/]
+. Apache Webserver [http://localhost:8082/]
 +
 image::images/webserver-default-output.png[]
 +
-. Gitlab server [http://dockerlab:10080/]
+. Gitlab server [http://localhost:10080/]
 +
 image::images/gitlab-default-output.png[]
 
@@ -249,7 +247,7 @@ Done!
 
 1. Clone TicketMonster from the existing gitlab container
 
-  git clone -b WildFly-docker-test http://root:dockeradmin@dockerlab:10080/root/ticket-monster.git
+  git clone -b WildFly-docker-test http://root:dockeradmin@localhost:10080/root/ticket-monster.git
 
 2. Build TicketMonster
 
@@ -268,6 +266,8 @@ Build ``managed-widlfly'' and ``ticketmonster-pgsql-widlfly'' images
 docker build -t "instructor/wildfly-management" dockerfiles/wildfly-management/
 docker build -t "instructor/ticketmonster-pgsql-wildfly" dockerfiles/ticketmonster-pgsql-wildfly/
 ----
+
+This is available as a script in https://github.com/javaee-samples/docker-java/blob/master/instructor/buid-images.sh
 
 ## Push Images to Registry
 

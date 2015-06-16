@@ -12,7 +12,9 @@ Execute link:../instructor/readme.adoc[instructor setup instructions] at least a
 
 This lab is designed for a BYOL (Brying Your Own Laptop) style hands-on-lab. This folder contains instructions to setup an attendee environment. We did our best to support a wide range of client configurations but only did test on machines as stated in the hardware section.
 
-Please note, that it is only intended to setup the environment for this lab. The lab itself is at https://github.com/javaee-samples/docker-java/.
+Please note, that it is only intended to setup the environment for this lab. The lab itself is at https://github.com/arun-gupta/docker-java/.
+
+Here are the requirements for attendees to complete this lab:
 
 #### Hardware
 
@@ -34,40 +36,44 @@ Please note, that it is only intended to setup the environment for this lab. The
 
 
 #### A Word About Licenses
-
 This tutorial only uses software which is open source or at least free to use in development and/or education. Please refer to the individual products/tools used in this tutorial.
 
+. Docker is Apache License Version 2.0, see it here: https://github.com/docker/docker/blob/master/LICENSE
+. VirtualBox base packages (everything but the extension pack) is released under the GNU General Public License V2, see it here: https://www.virtualbox.org/wiki/GPL
+. Msysgit is a fork of Git under the GNU General Public License version 2.0, see it here: http://opensource.org/licenses/GPL-2.0
 
 [[Configure_Instructor_Host]]
 #### Configure Instructor Host
 
 All downloads and relevant infrastructure is setup on instructor's machine. Configure the IP address of instructor's machine into the host mapping table of your operating system.
 
-Edit the `/etc/hosts` (Mac OS) or `C:\Windows\System32\drivers\etc\hosts` (Windows) and add:
+Edit the `/etc/resolv.conf` (Mac OS / Linux) - TODO - Configure Windows
 
 [source, text]
 ----
-<INSTRUCTOR_IP>  dockerlab
+nameserver  <INSTRUCTOR UP>
 ----
 
 #### Git Client
 
 Install Git Client as explained at: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
 
-Windows client is available at http://dockerlab:8082/downloads/.
+Windows client is available at http://classroom.example.com:8082/downloads/.
 
 #### Maven
 
-. Download Apache Maven from http://dockerlab:8082/downloads/apache-maven-3.3.3-bin.zip
+. Download Apache Maven from http://classroom.example.com:8082/downloads/apache-maven-3.3.3-bin.zip
 . Unzip to a folder of your choice and add the folder to your PATH environment variable. For example, do the following on Windows:
 
   set PATH=%PATH%;c:/apache-maven-3.3.3
 
 #### VirtualBox
 
-Docker currently runs natively on Linux, but you can use VirtualBox to run Docker in a virtual machine on your box, and get the best of both worlds.
+Docker currently runs natively on Linux, but you can use VirtualBox to run Docker in a virtual machine on your box, and get the best of both worlds. This is why Virtualbox is a requirement to have on your machine. Get the latest downloads from the instructur machine:
 
-. Download Virutal Box from http://dockerlab:8082/downloads/ for your specific operating system.
+Downloads are available at http://classroom.example.com:8082/downloads/ or directly from the https://www.virtualbox.org/[Oracle Virtualbox] website.
+
+Installation should complete without any error.
 
 [WARNING]
 ====
@@ -80,65 +86,63 @@ Linux Users
 
 #### Vagrant
 
-. Download Vagrant from http://dockerlab:8082/downloads/ for your specific operating system.
+. Download Vagrant from http://classroom.example.com:8082/downloads/ for your specific operating system.
 . Install it by clicking on the archive.
 
 
 #### Docker Machine
 
-Download your binary from http://dockerlab:8082/downloads/
+Download your binary from http://classroom.example.com:8082/downloads/
 
 [source, text]
 ----
 # MacOS
-curl -L  http://dockerlab:8082/downloads/docker-machine_darwin-amd64 > /usr/local/bin/docker-machine
+curl -L  http://classroom.example.com:8082/downloads/docker-machine_darwin-amd64 > /usr/local/bin/docker-machine
 chmod +x /usr/local/bin/docker-machine
 
 # Linux
-curl -L  http://dockerlab:8082/downloads/docker-machine_linux-amd64 > /usr/local/bin/docker-machine
+curl -L  http://classroom.example.com:8082/downloads/docker-machine_linux-amd64 > /usr/local/bin/docker-machine
 chmod +x /usr/local/bin/docker-machine
 
 #Windows
-curl http://dockerlab:8082/downloads/docker-machine_windows-amd64.exe
+curl http://classroom.example.com:8082/downloads/docker-machine_windows-amd64.exe
 ----
 
 On Windows copy the script into `C:\docker` directory and rename to: `docker-machine.exe`. Add `C:\docker` to your `PATH` variable.
 
+[source, text]
+----
+# Windows Only
+set PATH=%PATH%;c:\docker
+----
+
 #### Docker Client
 
-Download your binary from http://dockerlab:8082/downloads/
+Download your binary from http://classroom.example.com:8082/downloads/
 
 [source, text]
 ----
 # MacOS
-curl -L  http://dockerlab:8082/downloads/docker-latest-mac > /usr/local/bin/docker
+curl -L  http://classroom.example.com:8082/downloads/docker-latest-mac > /usr/local/bin/docker
 chmod +x /usr/local/bin/docker
 
 # Linux (other distros)
-curl -L  http://dockerlab:8082/downloads/docker-latest-linux > /usr/local/bin/docker
+curl -L  http://classroom.example.com:8082/downloads/docker-latest-linux > /usr/local/bin/docker
 chmod +x /usr/local/bin/docker
 
 #Windows
-curl http://dockerlab:8082/docker-1.6.0.exe
+curl http://classroom.example.com:8082/docker-1.6.0.exe
 ----
 
 On Windows rename the file to `C:\docker\docker.exe`.
 
 #### Create Lab Docker Host
 
-. Create Docker Host to be used in the lab:
+. Create the Docker Host to be used in the lab:
 +
 [source, text]
 ----
-docker-machine create --driver virtualbox --virtualbox-boot2docker-url http://dockerlab:8082/downloads/boot2docker.iso lab
-----
-+
-. Setup the Docker Host to connect to insecure registries:
-+
-[source, text]
-----
-docker-machine ssh lab "echo $'EXTRA_ARGS=\"\$EXTRA_ARGS --insecure-registry <INSTRUCTOR_IP>:5000\"' | sudo tee -a /var/lib/boot2docker/profile && sudo /etc/init.d/docker restart"
-docker-machine ssh lab "echo $'EXTRA_ARGS=\"\$EXTRA_ARGS --insecure-registry dockerlab:5000\"' | sudo tee -a /var/lib/boot2docker/profile && sudo /etc/init.d/docker restart"
+docker-machine create --driver=virtualbox --engine-opt dns=<INSTRUCTOR UP> --virtualbox-boot2docker-url=http://classroom.example.com:8082/downloads/boot2docker.iso --engine-insecure-registry=classroom.example.com:5000 lab
 eval "$(docker-machine env lab)"
 ----
 +
@@ -162,19 +166,19 @@ docker-machine ip lab
 
 #### Kubernetes
 
-. Download Kubernetes (0.18.1) from http://dockerlab:8082/downloads/kubernetes.tar.gz
+. Download Kubernetes (0.18.1) from http://classroom.example.com:8082/downloads/kubernetes.tar.gz
 . Install it by clicking on the archive.
 
 #### WildFly
 
-. Download WildFly 8.2 from http://dockerlab:8082/downloads/wildfly-8.2.0.Final.zip
+. Download WildFly 8.2 from http://classroom.example.com:8082/downloads/wildfly-8.2.0.Final.zip
 . Install it by clicking on the archive.
 
 #### JBoss Developer Studio 9 - Beta 2
 
 To install JBoss Developer Studio stand-alone, complete the following steps:
 
-. Download http://localhost:8082/downloads/jboss-devstudio-9.0.0.Beta2-v20150609-1026-B3346-installer-standalone.jar
+. Download http://classroom.example.com:8082/downloads/jboss-devstudio-9.0.0.Beta2-v20150609-1026-B3346-installer-standalone.jar
 . Start the installer as:
 +
 [source, text]

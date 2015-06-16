@@ -28,7 +28,7 @@ And checkout the sources from the instructor's git repository.
 
 [source, text]
 ----
-git clone -b WildFly-docker-test http://root:dockeradmin@dockerlab:10080/root/ticket-monster.git
+git clone -b WildFly-docker-test http://root:dockeradmin@classroom.example.com:10080/root/ticket-monster.git
 ----
 
 `-b WildFly-docker-test` is a branch of Ticket Monster that contains a ``docker-test'' profile to run Arquillian Cube test. More on this later.
@@ -57,7 +57,7 @@ Start Postgres database as:
 
 [source, text]
 ----
-docker run --name db -d -p 5432:5432 -e POSTGRES_USER=ticketmonster -e POSTGRES_PASSWORD=ticketmonster-docker dockerlab:5000/postgres
+docker run --name db -d -p 5432:5432 -e POSTGRES_USER=ticketmonster -e POSTGRES_PASSWORD=ticketmonster-docker classroom.example.com:5000/postgres
 ----
 
 This command starts a container named ``db'' from the image in your instructor's registry `dockerlab:5000/postgres`. As this will not be present locally, it needs to be downloaded first. But you'll have a very quick connection to the instructor registry and this shouldn't take long.
@@ -92,7 +92,7 @@ Start WildFly server as:
 
 [source, text]
 ----
-docker run -d --name wildfly -p 8080:8080 --link db:db -v /Users/youruser/tmp/deployments:/opt/jboss/wildfly/standalone/deployments/:rw dockerlab:5000/wildfly
+docker run -d --name wildfly -p 8080:8080 --link db:db -v /Users/youruser/tmp/deployments:/opt/jboss/wildfly/standalone/deployments/:rw classroom.example.com:5000/wildfly
 ----
 
 Make sure to replace `/Users/youruser/tmp/deployments` to a directory on your local machine. Also, make sure this directory already exists.
@@ -184,7 +184,7 @@ The Command Line Interface (CLI) is a tool for connecting to WildFly instances t
 
 Lets use the CLI to deploy Ticket Monster to WildFly running in the container.
 
-. CLI needs to be locally installed and comes as part of WildFly. Download WildFly 8.2 from http://dockerlab:8082/downloads/wildfly-8.2.0.Final.zip. Unzip into a folder of your choice (e.g. `/Users/arungupta/tools/`). This will create `wildfly-8.2.0.Final` directory here. This folder is named $WIDLFY_HOME from here on. Make sure to add the `/Users/arungupta/tools/wildfly-8.2.0.Final/bin` to your $PATH.
+. CLI needs to be locally installed and comes as part of WildFly. Download WildFly 8.2 from http://classroom.example.com:8082/downloads/wildfly-8.2.0.Final.zip. Unzip into a folder of your choice (e.g. `/Users/arungupta/tools/`). This will create `wildfly-8.2.0.Final` directory here. This folder is named $WIDLFY_HOME from here on. Make sure to add the `/Users/arungupta/tools/wildfly-8.2.0.Final/bin` to your $PATH.
 +
 [source, text]
 ----
@@ -243,7 +243,7 @@ A standalone WildFly process, process can be configured to listen for remote man
 +
 [source, text]
 ----
-docker run -d --name wildflymngm -p 8080:8080 -p 9990:9990 --link db:db dockerlab:5000/wildfly-management
+docker run -d --name wildflymngm -p 8080:8080 -p 9990:9990 --link db:db classroom.example.com:5000/wildfly-management
 ----
 +
 There is no mapped volume in this case but an additional port exposed. The WildFly image that is used makes it easier for you to play around with the deployment via the management API. It has a tweaked start script which changes the management interface according to the behavior described in the first sentence.

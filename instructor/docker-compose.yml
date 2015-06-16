@@ -1,9 +1,13 @@
-dockerregistry:
-  image: registry:2.0
-  volumes:
-    - /srv/docker/registry:/tmp/registry-dev
-  ports: 
+registryv2:
+  image: registry:2.0.1
+  ports:
     - "5000:5000"
+  environment:
+    - REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY=/var/lib/registry
+    - REGISTRY_LOG_LEVEL=debug
+  volumes:
+    - /srv/docker/registry:/var/lib/registry
+  restart: always
 httpserver:
   build: dockerfiles/lab-httpd-server/
   ports: 

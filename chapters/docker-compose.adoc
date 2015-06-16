@@ -34,14 +34,14 @@ Docker Compose script is only available for OSX and Linux. https://github.com/ar
 [source, yml]
 ----
 mysqldb:
-  image: dockerhost:5000/mysql
+  image: classroom.example.com:5000/mysql
   environment:
     MYSQL_DATABASE: sample
     MYSQL_USER: mysql
     MYSQL_PASSWORD: mysql
     MYSQL_ROOT_PASSWORD: supersecret
 mywildfly:
-  image: dockerhost:5000/arungupta/wildfly-mysql-javaee7
+  image: classroom.example.com:5000/wildfly-mysql-javaee7
   links:
     - mysqldb:db
   ports:
