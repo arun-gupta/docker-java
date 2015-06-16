@@ -5,6 +5,7 @@ metadata:
   name: mysql
   labels:
     name: mysql
+    context: docker-k8s-lab
 spec:
   ports:
     - port: 3306

@@ -4,6 +4,7 @@ metadata:
   name: wildfly
   labels:
     name: wildfly
+    context: docker-k8s-lab
 spec:
   replicas: 1
   selector:
@@ -12,6 +13,7 @@ spec:
     metadata:
       labels:
         name: wildfly-server
+        context: docker-k8s-lab
     spec:
       containers:
         - name: wildfly
