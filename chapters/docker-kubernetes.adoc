@@ -102,6 +102,55 @@ Click on ``Advanced'' and then on ``Proceed to 10.245.1.2'' to see the output as
 image::../images/kubernetes-master-default-output.png[]
 +
 Use ``vagrant'' as the username and ``vagrant'' as the password.
++
+Check the list of nodes as:
++
+[source, text]
+----
+> ./cluster/kubectl.sh get nodes
+NAME         LABELS                              STATUS
+10.245.1.3   kubernetes.io/hostname=10.245.1.3   Ready
+----
++
+. Check the list of pods:
++
+[source, text]
+----
+> ./cluster/kubectl.sh get nodes
+NAME         LABELS                              STATUS
+10.245.1.3   kubernetes.io/hostname=10.245.1.3   Ready
+kubernetes> ./cluster/kubectl.sh get po
+POD                                IP           CONTAINER(S)     IMAGE(S)                                                                   HOST                    LABELS                                                           STATUS    CREATED     MESSAGE
+kube-dns-v1-jnvez                  172.17.0.2                                                                                               10.245.1.3/10.245.1.3   k8s-app=kube-dns,kubernetes.io/cluster-service=true,version=v1   Running   6 minutes   
+                                                skydns           gcr.io/google_containers/skydns:2015-03-11-001                                                                                                                      Running   4 minutes   last termination: exit code 2
+                                                kube2sky         gcr.io/google_containers/kube2sky:1.7                                                                                                                               Running   4 minutes   
+                                                etcd             gcr.io/google_containers/etcd:2.0.9                                                                                                                                 Running   5 minutes   
+kube-scheduler-kubernetes-master                                                                                                            kubernetes-master/      <none>                                                           Pending   2 seconds   
+                                                kube-scheduler   gcr.io/google_containers/kube-scheduler:d1f640dfb379f64daf3ae44286014821                                                                                                                  
+----
++
+. Check the list of services running:
++
+[source, text]
+----
+> ./cluster/kubectl.sh get se
+NAME            LABELS                                                                           SELECTOR           IP(S)         PORT(S)
+kube-dns        k8s-app=kube-dns,kubernetes.io/cluster-service=true,kubernetes.io/name=KubeDNS   k8s-app=kube-dns   10.247.0.10   53/UDP
+                                                                                                                                  53/TCP
+kubernetes      component=apiserver,provider=kubernetes                                          <none>             10.247.0.2    443/TCP
+kubernetes-ro   component=apiserver,provider=kubernetes                                          <none>             10.247.0.1    80/TCP
+----
++
+. Check the list of replication controllers:
++
+[source, text]
+----
+> ./cluster/kubectl.sh get rc
+CONTROLLER    CONTAINER(S)   IMAGE(S)                                         SELECTOR                      REPLICAS
+kube-dns-v1   etcd           gcr.io/google_containers/etcd:2.0.9              k8s-app=kube-dns,version=v1   1
+              kube2sky       gcr.io/google_containers/kube2sky:1.7                                          
+              skydns         gcr.io/google_containers/skydns:2015-03-11-001
+----
 
 ### Deploy Java EE Application
 
@@ -122,20 +171,20 @@ Any Service that a Pod wants to access must be created before the Pod itself, or
 +
 [source, text]
 ----
-./cluster/kubectl.sh create -f ../../attendees/kubernetes/mysql-service.yaml 
+./cluster/kubectl.sh create -f ../../attendees/kubernetes/mysql-service.yaml
 ----
 +
 . Check that the service is created:
 +
 [source, text]
 ----
-> ./cluster/kubectl.sh get services
+> ./cluster/kubectl.sh get se
 NAME            LABELS                                                                           SELECTOR           IP(S)          PORT(S)
 kube-dns        k8s-app=kube-dns,kubernetes.io/cluster-service=true,kubernetes.io/name=KubeDNS   k8s-app=kube-dns   10.247.0.10    53/UDP
                                                                                                                                    53/TCP
 kubernetes      component=apiserver,provider=kubernetes                                          <none>             10.247.0.2     443/TCP
 kubernetes-ro   component=apiserver,provider=kubernetes                                          <none>             10.247.0.1     80/TCP
-mysql-service   name=mysql-service                                                               name=mysql         10.247.222.0   3306/TCP
+mysql           name=mysql                                                                       name=mysql         10.247.82.83   3306/TCP
 ----
 +
 . When a Pod is run on a node, the kubelet adds a set of environment variables for each active Service. 
@@ -152,9 +201,9 @@ TODO: Consider adding DNS support as explained at: https://github.com/GoogleClou
 +
 [source, text]
 ----
-> ./cluster/kubectl.sh  --v=5  create -f ../../attendees/kubernetes/mysql.yaml 
-I0605 16:16:06.724597   66780 defaults.go:174] creating security context for container mysql
-replicationcontrollers/mysql-server
+> ./cluster/kubectl.sh create --v=5 -f ../../attendees/kubernetes/mysql.yaml 
+I0616 13:46:49.767091    4376 defaults.go:174] creating security context for container mysql
+replicationcontrollers/mysql
 ----
 +
 It uses the following configuration file:
@@ -236,7 +285,7 @@ spec:
     spec:
       containers:
         - name: wildfly
-          image: arungupta/wildfly-mysql-javaee7:knetes
+          image: arungupta/wildfly-mysql-javaee7:k8s
           ports:
             - containerPort: 8080
 ----
@@ -253,8 +302,6 @@ kube-dns-v1    etcd           gcr.io/google_containers/etcd:2.0.9              k
 mysql-server   mysql          mysql:latest                                     name=mysql-server             1
 wildfly        wildfly        arungupta/wildfly-mysql-javaee7:knetes           name=wildfly-server           1
 ----
-
-TODO: debug this
 
 ### Access Java EE Application
 
