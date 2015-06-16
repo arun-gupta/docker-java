@@ -139,6 +139,11 @@ Then to load dnsmasq now:
     sudo launchctl load /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
 ==> Summary
 🍺  /usr/local/Cellar/dnsmasq/2.72: 7 files, 492K, built in 28 seconds
+
+You may need to restart Dnsmasq to get it to recognise this change:
+
+sudo launchctl stop homebrew.mxcl.dnsmasq
+sudo launchctl start homebrew.mxcl.dnsmasq
 ----
 +
 This can be done on Linux as:
@@ -181,7 +186,6 @@ IMPORTANT: If you change your network, you may need to restart your docker machi
 ----
 docker-machine restart instructor-machine
 ----
-+
 
 
 ### Virtual Box Configuration
