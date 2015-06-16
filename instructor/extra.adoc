@@ -5,13 +5,13 @@ This are some instructions to keep the instructor environment
 
 ## Uptating the attendees instructions served by the instructor httpd server
 
-The instructor webserver [http://localhost:8082/] provides the link:https://github.com/arun-gupta/docker-java/blob/master/attendees/readme.adoc[attendes instructions] in the HTML format.
+The instructor webserver [http://localhost:8082/] provides the link:https://github.com/javaee-samples/docker-java/blob/master/docker-java-lab.adoc[attendes instructions] in the HTML format.
 
 To update the HTML, have http://asciidoctor.org/ installed and run the following command:
 
 [source, text]
 ----
-asciidoctor ../readme.adoc  -a data-uri -o dockerfiles/lab-httpd-server/index.html
+asciidoctor ../docker-java-lab.adoc -a data-uri -a numbered -a experimental -a source-highlighter=coderay -a imagesdir=images -o instructor/dockerfiles/lab-httpd-server/index.html
 ----
 
 After that, you will need to build the services again running
