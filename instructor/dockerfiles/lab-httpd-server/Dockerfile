@@ -21,7 +21,7 @@ RUN chmod 644 /var/www/html/downloads/jboss-devstudio-9.0.0.Beta2-v20150609-1026
 RUN curl -L http://download.jboss.org/wildfly/8.2.0.Final/wildfly-8.2.0.Final.zip -o wildfly-8.2.0.Final.zip
 
 #Get Boot2docker 1.6.2
-RUN curl -L https://github.com/boot2docker/boot2docker/releases/download/v1.6.2/boot2docker.iso -o boot2docker.iso
+RUN curl -L https://github.com/boot2docker/boot2docker/releases/download/v1.7.0/boot2docker.iso -o boot2docker.iso
 
 #Get VirtualBox for MAC
 RUN curl -L http://download.virtualbox.org/virtualbox/4.3.26/VirtualBox-4.3.26-98988-OSX.dmg -o VirtualBox-4.3.26-98988-OSX.dmg
@@ -36,13 +36,13 @@ RUN curl -L http://download.virtualbox.org/virtualbox/4.3.26/VirtualBox-4.3.26-9
 RUN curl -L https://github.com/msysgit/msysgit/releases/download/Git-1.9.5-preview20150319/Git-1.9.5-preview20150319.exe -o Git-1.9.5-preview20150319.exe
 
 #Get Docker Machine Windows
-RUN curl -L https://github.com/docker/machine/releases/download/v0.3.0-rc3/docker-machine_windows-amd64.exe -o docker-machine_windows-amd64.exe
+RUN curl -L https://github.com/docker/machine/releases/download/v0.3.0/docker-machine_windows-amd64.exe -o docker-machine_windows-amd64.exe
 
 #Get Docker Machine MacOS
-RUN curl -L https://github.com/docker/machine/releases/download/v0.3.0-rc3/docker-machine_darwin-amd64 -o docker-machine_darwin-amd64
+RUN curl -L https://github.com/docker/machine/releases/download/v0.3.0/docker-machine_darwin-amd64 -o docker-machine_darwin-amd64
 
 #Get Docker Machine Linux
-RUN curl -L https://github.com/docker/machine/releases/download/v0.3.0-rc3/docker-machine_linux-amd64 -o docker-machine_linux-amd64
+RUN curl -L https://github.com/docker/machine/releases/download/v0.3.0/docker-machine_linux-amd64 -o docker-machine_linux-amd64
  
 #Get Docker Client Mac OS
 RUN curl -L https://get.docker.com/builds/Darwin/x86_64/docker-latest -o docker-latest-mac
@@ -51,7 +51,7 @@ RUN curl -L https://get.docker.com/builds/Darwin/x86_64/docker-latest -o docker-
 RUN curl -L https://get.docker.com/builds/Linux/x86_64/docker-latest -o docker-latest-linux
 
 #Get Docker Client Windows
-RUN curl -L http://test.docker.com.s3.amazonaws.com/builds/Windows/x86_64/docker-1.6.0.exe -o docker-1.6.0.exe
+RUN curl -L http://test.docker.com.s3.amazonaws.com/builds/Windows/x86_64/docker-1.7.0.exe -o docker-1.7.0.exe
 
 #Get Maven binaries
 RUN curl -L http://apache.mirrors.tds.net/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.zip -o apache-maven-3.3.3-bin.zip
@@ -70,7 +70,7 @@ RUN curl -L https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2_x86_64.deb -o
 RUN curl -L https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2_x86_64.rpm -o vagrant_1.7.2_x86_64.rpm
 
 #Get Kubernetes
-RUN curl -L https://github.com/GoogleCloudPlatform/kubernetes/releases/download/v0.18.1/kubernetes.tar.gz -o kubernetes.tar.gz
+RUN curl -L https://github.com/GoogleCloudPlatform/kubernetes/releases/download/v0.19.3/kubernetes.tar.gz -o kubernetes.tar.gz
 
 #Add other files to downloads
 ADD downloads/lab-settings.xml /var/www/html/downloads/

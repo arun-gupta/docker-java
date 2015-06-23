@@ -1,12 +1,12 @@
 registryv1:
   image: registry:0.9.1
   ports:
-    - "5000:5000"
+   - "5000:5000"
   environment:
-    - DISABLE_TOKEN_AUTH=true
-    - SETTINGS_FLAVOR=local
-    - SEARCH_BACKEND=sqlalchemy
-    - STORAGE_PATH=/var/lib/registry
+   - DISABLE_TOKEN_AUTH=true
+   - SETTINGS_FLAVOR=local
+   - SEARCH_BACKEND=sqlalchemy
+   - STORAGE_PATH=/var/lib/registry
   volumes:
     - /srv/docker/registry_v1:/var/lib/registry
   restart: always

@@ -115,7 +115,7 @@ curl -L  http://classroom.example.com:8082/downloads/docker-latest-linux > /usr/
 chmod +x /usr/local/bin/docker
 
 #Windows
-curl http://classroom.example.com:8082/docker-1.6.0.exe
+curl http://classroom.example.com:8082/docker-1.7.0.exe
 ----
 
 On Windows rename the file to `C:\docker\docker.exe`.
@@ -148,7 +148,7 @@ Edit `/etc/hosts` (Mac OS or Linux) or `C:\Windows\System32\drivers\etc\hosts` (
 
 #### Kubernetes
 
-. Download Kubernetes (0.18.1) from http://classroom.example.com:8082/downloads/kubernetes.tar.gz
+. Download Kubernetes (0.19.3) from http://classroom.example.com:8082/downloads/kubernetes.tar.gz
 . Install it by clicking on the archive.
 
 #### WildFly
