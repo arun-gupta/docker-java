@@ -1,23 +1,27 @@
-registryv2:
-  image: registry:2.0.1
+registryv1:
+  image: registry:0.9.1
   ports:
-    - "5000:5000"
+   - "5000:5000"
   environment:
-    - REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY=/var/lib/registry
-    - REGISTRY_LOG_LEVEL=debug
+   - DISABLE_TOKEN_AUTH=true
+   - SETTINGS_FLAVOR=local
+   - SEARCH_BACKEND=sqlalchemy
+   - STORAGE_PATH=/var/lib/registry
   volumes:
-    - /srv/docker/registry:/var/lib/registry
+    - /srv/docker/registry_v1:/var/lib/registry
   restart: always
 httpserver:
   build: dockerfiles/lab-httpd-server/
   ports: 
     - "8082:80"
+  restart: always
 nexus:
   image: sonatype/nexus:oss
   ports:
     - "8081:8081"
   volumes_from: 
     - nexusdata
+  restart: always
 postgresqlgitlab:
   image: sameersbn/postgresql:9.4
   environment:
@@ -26,10 +30,12 @@ postgresqlgitlab:
     - DB_NAME=gitlabhq_production
   volumes:
     - /srv/docker/gitlab/postgresql:/var/lib/postgresql
+  restart: always
 redisgitlab:
   image: sameersbn/redis:latest
   volumes:
     - /srv/docker/gitlab/redis:/var/lib/redis
+  restart: always
 gitlab:
   image: sameersbn/gitlab:7.10.4
   links:
@@ -51,3 +57,4 @@ gitlab:
     - GITLAB_BACKUPS=disable
   volumes:
     - /srv/docker/gitlab/gitlab:/home/git/data
+  restart: always
