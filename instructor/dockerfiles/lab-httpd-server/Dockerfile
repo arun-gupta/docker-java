@@ -17,11 +17,14 @@ ADD downloads/jboss-devstudio-9.0.0.Beta2-v20150609-1026-B3346-installer-standal
 #Setup permission for JBDS
 RUN chmod 644 /var/www/html/downloads/jboss-devstudio-9.0.0.Beta2-v20150609-1026-B3346-installer-standalone.jar
 
-#Get WildFly 8.2
+#Get WildFly 9.0
 RUN curl -L http://download.jboss.org/wildfly/8.2.0.Final/wildfly-8.2.0.Final.zip -o wildfly-8.2.0.Final.zip
 
 #Get Boot2docker 1.6.2
 RUN curl -L https://github.com/boot2docker/boot2docker/releases/download/v1.7.0/boot2docker.iso -o boot2docker.iso
+
+RUN mkdir -p /var/www/html/downloads/virtualbox
+WORKDIR /var/www/html/downloads
 
 #Get VirtualBox for MAC
 RUN curl -L http://download.virtualbox.org/virtualbox/4.3.26/VirtualBox-4.3.26-98988-OSX.dmg -o VirtualBox-4.3.26-98988-OSX.dmg
@@ -32,11 +35,16 @@ RUN curl -L http://download.virtualbox.org/virtualbox/4.3.26/VirtualBox-4.3.26-9
 #Get VirtualBox for Linux (All Distros)
 RUN curl -L http://download.virtualbox.org/virtualbox/4.3.26/VirtualBox-4.3.26-98988-Linux_amd64.run -o VirtualBox-4.3.26-98988-Linux_amd64.run
 
+WORKDIR /var/www/html/downloads
+
 #Get Git for Windows
 RUN curl -L https://github.com/msysgit/msysgit/releases/download/Git-1.9.5-preview20150319/Git-1.9.5-preview20150319.exe -o Git-1.9.5-preview20150319.exe
 
+RUN mkdir -p /var/www/html/downloads/docker
+WORKDIR /var/www/html/downloads/docker
+
 #Get Docker Machine Windows
-RUN curl -L https://github.com/docker/machine/releases/download/v0.3.0/docker-machine_windows-amd64.exe -o docker-machine_windows-amd64.exe
+RUN curl -L https://github.com/docker/machine/releases/download/v0.3.0/docker-machine_windows-amd64.exe -o docker-machine.exe
 
 #Get Docker Machine MacOS
 RUN curl -L https://github.com/docker/machine/releases/download/v0.3.0/docker-machine_darwin-amd64 -o docker-machine_darwin-amd64
@@ -53,9 +61,13 @@ RUN curl -L https://get.docker.com/builds/Linux/x86_64/docker-latest -o docker-l
 #Get Docker Client Windows
 RUN curl -L http://test.docker.com.s3.amazonaws.com/builds/Windows/x86_64/docker-1.7.0.exe -o docker-1.7.0.exe
 
+WORKDIR /var/www/html/downloads
+
 #Get Maven binaries
 RUN curl -L http://apache.mirrors.tds.net/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.zip -o apache-maven-3.3.3-bin.zip
-RUN curl -L http://apache.mirrors.tds.net/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz -o apache-maven-3.3.3-bin.tar.gz
+
+RUN mkdir -p /var/www/html/downloads/vagrant
+WORKDIR /var/www/html/downloads/vagrant
 
 #Get Vagrant MacOS
 RUN curl -L https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2.dmg -o vagrant_1.7.2.dmg
