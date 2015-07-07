@@ -3,9 +3,9 @@ v1.0, Jun 16, 2015
 :toc:
 :toclevels: 3
 ////
-:local: false
+:classroom:
 ////
-:public: true
+:public:
 :toc-placement!:
 
 toc::[]

@@ -2,31 +2,28 @@
 
 This section describes the relevant steps for both attendees and instructors to setup the environments. Please follow the parts, that are appropriate for you.
 
+ifdef::classroom[]
 ### Instructor
 
 The instructor setup is designed to make the lab most reliable even with bad Internet connections. Most, if not all, of the software can be directly downloaded from the instructor's machine. The machine is setup as _Docker Host_ and also runs a _Docker Registry_ and Nexus container.
 
 Follow all the https://github.com/javaee-samples/docker-java/blob/master/instructor/readme.adoc[instructor setup instructions] at least a day before the lab. Make sure there is a decent Internet connection available.
+endif::classroom[]
 
-### Attendees (From Instructor's Machine)
+### Attendees
 
-This lab is designed for a BYOL (Brying Your Own Laptop) style hands-on-lab. This section provide instructions to setup an attendee environment from an instructor's machine.
-
-The lab contents are at https://github.com/javaee-samples/docker-java/.
+This lab is designed for a BYOL (Brying Your Own Laptop) style hands-on-lab.
+ifdef::classroom[]
+This section provide instructions to setup an attendee environment from an instructor's machine.
+endif::classroom[]
 
 #### Hardware
 
-. CPU
-.. Mac: X64 (i5 or superior)
-.. Linux / Windows: x64 (i5 and comparable)
-
-. Memory
-.. At least 4GB, preferred 8 GB
+. Operating System: Mac OS X (10.8 or later), Windows 7 (SP1), Fedora (21 or later)
+. Memory: At least 4 GB+, preferred 8 GB
 
 #### Software
 
-. Operating System
-.. Mac OS X (10.8 or later), Windows 7 (SP1), Fedora (21 or later)
 . Java: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html[Oracle JDK 8u45]
 . Webbrowser
 .. https://www.google.com/chrome/browser/desktop/[Chrome]
@@ -36,6 +33,7 @@ The lab contents are at https://github.com/javaee-samples/docker-java/.
 
 This tutorial only uses software which is open source or at least free to use in development and/or education. Please refer to the individual products/tools used in this tutorial.
 
+ifdef::classroom[]
 [[Configure_Instructor_Host]]
 #### Configure Instructor Host
 
@@ -49,23 +47,36 @@ nameserver  <INSTRUCTOR IP>
 ----
 
 On Windows, configure Domain Suffixes or DNS Suffixes as explained at http://www.pc-freak.net/blog/configure-equivalent-linux-etcresolvconf-search-domaincom-ms-windows-dns-suffixes/.
+endif::classroom[]
 
 #### Git Client
 
+ifdef::public[]
 Install Git Client as explained at: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
+endif::public[]
 
+ifdef::classroom[]
+Mac client: ??
+Linux client: ??
 Windows client is available at http://classroom.example.com:8082/downloads/Git-1.9.5-preview20150319.exe.
+endif::classroom[]
 
 #### Maven
 
-. Download Apache Maven from http://classroom.example.com:8082/downloads/apache-maven-3.3.3-bin.zip
-. Unzip to a folder of your choice and add the folder to your PATH environment variable.
+ifdef::public[]
+. Download Apache Maven from 
+ifdef::classroom[http://classroom.example.com:8082/downloads/apache-maven-3.3.3-bin.zip]
+ifdef::public[https://maven.apache.org/download.cgi]
+. Unzip to a folder of your choice and add the folder to PATH environment variable.
 
 #### VirtualBox
 
-Docker currently runs natively on Linux, but you can use VirtualBox to run Docker in a virtual machine on your box, and get the best of both worlds. This is why Virtualbox is a requirement to have on your machine. Get the latest downloads from the instructur machine:
+Docker currently runs natively on Linux, but it can in a virtual machine on Mac or Windows. This is why Virtualbox is a requirement for Mac or Windows.
 
-Downloads are available from http://classroom.example.com:8082/downloads/VirtualBox-4.3.26-98988-OSX.dmg[Mac], http://classroom.example.com:8082/downloads/VirtualBox-4.3.26-98988-Linux_amd64.run[Linux], http://classroom.example.com:8082/downloads/VirtualBox-4.3.26-98988-Win.exe[Windows].
+Downloads are available from
+ifdef::classroom[http://classroom.example.com:8082/downloads/virtualbox]
+ifdef::public[https://www.virtualbox.org/]
+.
 
 [WARNING]
 ====
@@ -78,52 +89,44 @@ Linux Users
 
 #### Vagrant
 
-. Download Vagrant for http://classroom.example.com:8082/downloads/vagrant_1.7.2.dmg[Mac], http://classroom.example.com:8082/downloads/vagrant_1.7.2.msi[Windows], http://classroom.example.com:8082/downloads/vagrant_1.7.2_x86_64.rpm[Linux] or http://classroom.example.com:8082/downloads/vagrant_1.7.2_x86_64.deb[Debian] and install.
+Download Vagrant from
+ifdef::classroom[http://classroom.example.com:8082/downloads/vagrant]
+ifdef::public[https://www.vagrantup.com/downloads.html]
+and install.
 
 #### Docker Machine
 
-Download your binary from http://classroom.example.com:8082/downloads/
+Docker Machine makes it really easy to create Docker hosts on your computer, on cloud providers and inside your own data center. It creates servers, installs Docker on them, then configures the Docker client to talk to them.
+
+ifdef::classroom[]
+Download your binary from http://classroom.example.com:8082/downloads/docker
 
 [source, text]
 ----
-# MacOS
-curl -L  http://classroom.example.com:8082/downloads/docker-machine_darwin-amd64 > /usr/local/bin/docker-machine
+# Mac
+curl -L  http://classroom.example.com:8082/downloads/docker/docker-machine_darwin-amd64 > /usr/local/bin/docker-machine
 chmod +x /usr/local/bin/docker-machine
 
 # Linux
-curl -L  http://classroom.example.com:8082/downloads/docker-machine_linux-amd64 > /usr/local/bin/docker-machine
+curl -L  http://classroom.example.com:8082/downloads/docker/docker-machine_linux-amd64 > /usr/local/bin/docker-machine
 chmod +x /usr/local/bin/docker-machine
 
 #Windows
-curl http://classroom.example.com:8082/downloads/docker-machine_windows-amd64.exe
+curl http://classroom.example.com:8082/downloads/docker/docker-machine.exe
 ----
+endif::classroom[]
 
-On Windows copy the script into `C:\docker` directory and rename to: `docker-machine.exe`. Add `C:\docker` to your `PATH` variable.
+ifdef::public[]
+Install as explained at: https://docs.docker.com/machine/#installation
+endif::public[]
 
-#### Docker Client
-
-Download your binary from http://classroom.example.com:8082/downloads/
-
-[source, text]
-----
-# MacOS
-curl -L  http://classroom.example.com:8082/downloads/docker-latest-mac > /usr/local/bin/docker
-chmod +x /usr/local/bin/docker
-
-# Linux (other distros)
-curl -L  http://classroom.example.com:8082/downloads/docker-latest-linux > /usr/local/bin/docker
-chmod +x /usr/local/bin/docker
-
-#Windows
-curl http://classroom.example.com:8082/docker-1.7.0.exe
-----
-
-On Windows rename the file to `C:\docker\docker.exe`.
+On Windows copy the script into `C:\docker` directory. Add `C:\docker` to your `PATH` variable.
 
 #### Create Lab Docker Host
 
-. Create the Docker Host to be used in the lab:
+. Create Docker Host to be used in the lab:
 +
+ifdef::classroom[]
 [source, text]
 ----
 docker-machine create --driver=virtualbox --engine-opt dns=<INSTRUCTOR IP> --virtualbox-boot2docker-url=http://classroom.example.com:8082/downloads/boot2docker.iso --engine-insecure-registry=classroom.example.com:5000 lab
@@ -132,7 +135,7 @@ eval "$(docker-machine env lab)"
 +
 Substitute `<INSTRUCTOR_IP>` with the IP address of the instructor's machine.
 +
-. To make it easier to access the containers, we add an entry into the host mapping table of your operating system. Add a host entry for this Docker Host running on your machine. Find out the IP address of your machine:
+. To make it easier to access the containers, an entry is added into the host mapping table of your operating system. Add a host entry for this Docker Host running on your machine. Find out the IP address of your machine:
 +
 [source, text]
 ----
@@ -145,47 +148,79 @@ Edit `/etc/hosts` (Mac OS or Linux) or `C:\Windows\System32\drivers\etc\hosts` (
 ----
 <OUTPUT OF DOCKER MACHINE COMMAND>  dockerhost
 ----
+endif::classroom[]
+ifdef::public[]
+[source, text]
+----
+docker-machine create --driver=virtualbox lab
+eval "$(docker-machine env lab)"
+----
+endif::public[]
+
+#### Docker Client
+
+Docker Client is used to communicate with Docker Host created using Docker Machine.
+
+ifdef::public[]
+[source, text]
+----
+# Mac
+curl -L https://get.docker.com/builds/Darwin/x86_64/docker-latest > /usr/local/bin/docker
+chmod +x /usr/local/bin/docker
+
+# Linux
+curl -L https://get.docker.com/builds/Linux/x86_64/docker-latest > docker-latest-linux
+chmod +x /usr/local/bin/docker
+
+# Windows
+curl -L http://test.docker.com.s3.amazonaws.com/builds/Windows/x86_64/docker-1.7.0.exe -o docker.exe
+----
+endif::public[]
+
+ifdef::classroom[]
+[source, text]
+----
+# Mac
+curl -L http://classroom.example.com:8082/downloads/docker-latest-mac > /usr/local/bin/docker
+chmod +x /usr/local/bin/docker
+
+# Linux
+curl -L  http://classroom.example.com:8082/downloads/docker-latest-linux > /usr/local/bin/docker
+chmod +x /usr/local/bin/docker
+
+#Windows
+curl http://classroom.example.com:8082/docker/docker-1.7.0.exe -o docker.exe
+----
+endif::classroom[]
+
+On Windows rename the file to `C:\docker\docker.exe`.
 
 #### Kubernetes
 
-. Download Kubernetes (0.19.3) from http://classroom.example.com:8082/downloads/kubernetes.tar.gz
-. Install it by clicking on the archive.
+. Download Kubernetes (0.19.3) from 
+ifdef::classroom[http://classroom.example.com:8082/downloads/kubernetes.tar.gz]
+ifdef::public[https://github.com/GoogleCloudPlatform/kubernetes/releases/download/v0.19.3/kubernetes.tar.gz]
+. Install it by extracting the archive.
 
 #### WildFly
 
-. Download WildFly 8.2 from http://classroom.example.com:8082/downloads/wildfly-8.2.0.Final.zip
-. Install it by clicking on the archive.
+. Download WildFly 9.0 from
+ifdef::classroom[http://classroom.example.com:8082/downloads/wildfly-9.0.0.Final.zip]
+ifdef::public[http://download.jboss.org/wildfly/8.2.0.Final/wildfly-9.0.0.Final.zip]
+. Install it by extracting the archive.
 
 #### JBoss Developer Studio 9 - Beta 2
 
 To install JBoss Developer Studio stand-alone, complete the following steps:
 
-. Download http://classroom.example.com:8082/downloads/jboss-devstudio-9.0.0.Beta2-v20150609-1026-B3346-installer-standalone.jar
+. Download
+ifdef::classroom[http://classroom.example.com:8082/downloads/jboss-devstudio-9.0.0.Beta2-v20150609-1026-B3346-installer-standalone.jar]
+ifdef::public[https://devstudio.redhat.com/9.0/snapshots/builds/devstudio.product_master/latest/installer/]
 . Start the installer as:
 +
 [source, text]
 ----
-java -jar jboss-devstudio-9.0.0.Beta2-v20150609-1026-B3346-installer-standalone.jar
+java -jar <JAR FILE NAME>
 ----
 +
 Follow the on-screen instructions to complete the installation process.
-
-
-### Attendees (From Internet)
-
-. Chrome or Firefox
-. http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html[Oracle JDK 8 u45]
-. https://git-scm.com/book/en/v2/Getting-Started-Installing-Git[Git client]
-. https://maven.apache.org/download.cgi[Maven 3.3.3]
-. Latest https://www.virtualbox.org/[Virtual Box]
-. https://www.vagrantup.com/downloads.html[Vagrant]
-. Docker
-.. https://docs.docker.com/machine/#installation[Docker Machine]
-.. Docker Client
-... Mac: `curl https://get.docker.com/builds/Darwin/x86_64/docker-latest > /usr/local/bin/docker`
-... Windows: http://test.docker.com.s3.amazonaws.com/builds/Windows/x86_64/docker-1.6.0.exe
-... Linux: `apt-get install docker.io`
-. https://github.com/GoogleCloudPlatform/kubernetes/releases/download/v0.18.1/kubernetes.tar.gz[Kubernetes 0.18.1]
-. JBoss
-.. http://download.jboss.org/wildfly/8.2.0.Final/wildfly-8.2.0.Final.zip[WildFly 8.2]
-.. https://devstudio.redhat.com/9.0/snapshots/builds/devstudio.product_master/latest/installer/[JBoss Developer Studio 9 Nightly]
