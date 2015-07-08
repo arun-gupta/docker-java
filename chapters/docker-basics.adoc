@@ -1,5 +1,7 @@
 ## Docker Basics
 
+PURPOSE: This chapter introduces the basic terminology of Docker.
+
 [quote, docs.docker.com/]
 Docker is a platform for developers and sysadmins to develop, ship, and run applications. Docker lets you quickly assemble applications from components and eliminates the friction that can come when shipping code. Docker lets you get your code tested and deployed into production as fast as possible.
 
@@ -31,9 +33,7 @@ or virtual machines in a data center, or in the Cloud.
 +
 Docker's portability and lightweight nature also make dynamically managing workloads easy. You can use Docker to quickly scale up or tear down applications and services. Docker is so fast, that scaling can be near real time.
 
-**How is it different from VM?**
-
-Docker is an open source container virtualization platform.
+**Main Components of Docker**
 
 Docker has three main components:
 
@@ -89,7 +89,7 @@ Check if docker machine is working using the following command:
 
   docker-machine -v
 
-It shows the following output:
+It shows the output similar to the one shown below:
 
   docker-machine version 0.3.0-rc3 (a5fd8cf)
 
@@ -102,19 +102,22 @@ Check if your client is working using the following command:
 
   docker -v
 
-It shows the following output:
+It shows the output similar to the following:
 
-  Docker version 1.6.2, build 7c8fca2
+  Docker version 1.7.0, build 0baf609
 
 The most important options you'll be using frequently are:
 
 . `run` - runs a container
 . `ps`- lists containers
 . `stop` - stops a container
+. `rm` - Removes a container
 
 Get a full list of available commands with
 
   docker
+
+A more comprehensive list of commands is also available in <<Common_Docker_Commands>>.
 
 ### Verify Docker Configuration
 
@@ -130,11 +133,11 @@ NAME        ACTIVE   DRIVER       STATE     URL                         SWARM
 lab                  virtualbox   Running   tcp://192.168.99.101:2376   
 ----
 
-If the machine state is stopped, start it with:
+This machine is shown in ``Running'' state. If the machine state is stopped, start it with:
 
   docker-machine start lab
 
-After it is started you can find out IP address of your host with:
+After it is started you can find out IP address of your Docker Host with:
 
   docker-machine ip lab
 
@@ -154,4 +157,4 @@ PING dockerhost (192.168.99.101): 56 data bytes
 64 bytes from 192.168.99.101: icmp_seq=1 ttl=64 time=0.387 ms
 ----
 
-If it does, you're ready to start over with the lab. If it does not, make sure you've followed the steps to https://github.com/javaee-samples/docker-java/tree/master/attendees#configure-host[configure your host].
+If it does, you're ready to start over with the lab.

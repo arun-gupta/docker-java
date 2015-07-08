@@ -82,7 +82,7 @@ RUN curl -L https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2_x86_64.deb -o
 RUN curl -L https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2_x86_64.rpm -o vagrant_1.7.2_x86_64.rpm
 
 #Get Kubernetes
-RUN curl -L https://github.com/GoogleCloudPlatform/kubernetes/releases/download/v0.19.3/kubernetes.tar.gz -o kubernetes.tar.gz
+RUN curl -L https://github.com/GoogleCloudPlatform/kubernetes/releases/tag/v0.21.0 -o kubernetes.tar.gz
 
 #Add other files to downloads
 ADD downloads/lab-settings.xml /var/www/html/downloads/
