@@ -4,7 +4,8 @@ docker tag jboss/wildfly localhost:5000/wildfly
 docker push localhost:5000/wildfly
 
 # Managed WildFly
-docker tag instructor/wildfly-management localhost:5000/wildfly-management
+docker pull arungupta/wildfly-management
+docker tag arungupta/wildfly-management localhost:5000/wildfly-management
 docker push localhost:5000/wildfly-management
 
 # Ticket-monster+PGSQ+WildFly
