@@ -1,7 +1,7 @@
 [[JavaEE7_PreBuilt_WAR]]
 ## Deploy Java EE 7 Application (Pre-Built WAR)
 
-https://github.com/javaee-samples/javaee7-hol[Java EE 7 Hands-on Lab] has been delivered all around the world and is a pretty standard application that shows design patterns and anti-patterns for a typical Java EE 7 application.
+https://github.com/javaee-samples/javaee7-hol[Java EE 7 Movieplex] is a standard multi-tier enterprise application that shows design patterns and anti-patterns for a typical Java EE 7 application.
 
 .Java EE 7 Application Architecture
 image::../images/javaee7-hol.png[]
@@ -10,19 +10,24 @@ Pull the Docker image that contains WildFly and pre-built Java EE 7 application 
 
 [source, text]
 ----
-docker pull classroom.example.com:5000/javaee7-hol
+ifdef::classroom[docker pull classroom.example.com:5000/javaee7-hol]
+ifdef::public[docker pull arugupta/javaee7-hol]
 ----
 
-The javaee7-hol link:https://github.com/arun-gupta/docker-images/blob/master/javaee7-hol/Dockerfile[Dockerfile] is based on `jboss/wildfly` and adds the movieplex7 application as war file.
+The https://github.com/arun-gupta/docker-images/blob/master/javaee7-hol/Dockerfile[javaee7-hol Dockerfile] is based on `jboss/wildfly` and adds the movieplex7 application as war file.
 
 Run it as:
 
 [source, text]
 ----
-docker run -it -p 8080:8080 classroom.example.com:5000/javaee7-hol
+ifdef::classroom[docker run -it -p 8080:8080 classroom.example.com:5000/javaee7-hol]
+ifdef::public[docker run -it -p 8080:8080 arungupta/javaee7-hol]
 ----
 
-See the application in action at http://dockerhost:8080/movieplex7/.
+See the application in action at http://dockerhost:8080/movieplex7/. The output is shown as:
+
+.Java EE 7 Application Output
+image::../images/javaee7-movieplex7.png[]
 
 This uses an in-memory database with WildFly application server as shown in the image:
 
@@ -31,16 +36,16 @@ image::../images/javaee7-hol-in-memory-database.png[]
 
 Only two changes are required to the standard `jboss/wildfly` image:
 
-. Start WildFly in full platform:
+. By default, WildFly starts in Web platform. This Java EE 7 application uses some capabilities from the Full Platform and so WildFly is started in that mode instead as:
 +
 [source, text]
 ----
 CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-c", "standalone-full.xml", "-b", "0.0.0.0"]
 ----
 +
-. WAR file is copied to `standalone/deployments` directory as:
+. WAR file is copied to the `standalone/deployments` directory as:
 +
 [source, text]
 ----
-RUN curl -L https://github.com/javaee-samples/javaee7-hol/blob/jrebel/solution/movieplex7-1.0-SNAPSHOT.war?raw=true -o /opt/jboss/wildfly/standalone/deployments/movieplex7-1.0-SNAPSHOT.war
+RUN curl -L https://github.com/javaee-samples/javaee7-hol/raw/master/solution/movieplex7-1.0-SNAPSHOT.war -o /opt/jboss/wildfly/standalone/deployments/movieplex7-1.0-SNAPSHOT.war
 ----
