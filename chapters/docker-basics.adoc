@@ -13,26 +13,6 @@ Your application typically require a specific version of operating system, appli
 
 You can certainly provide an installation script that will download and install these components. Docker simplifies this process by allowing to create an image that contains your application and infrastructure together, managed as one component. These images are then used to create Docker containers which run on the container virtualization platform, provided by Docker.
 
-**What can a Java Developer use Docker for?**
-
-. *Faster delivery of your applications*: Docker helps you with the development lifecycle.
-Docker allows you to develop on local containers that contain your applications
-and services. It can then integrate into a continuous integration and
-deployment workflow.
-+
-For example, you write code locally and share the development stack
-via Docker with colleagues. When everybody is ready, you push the
-code and the stack you all are developing onto a test environment
-and execute any required tests.
-+
-From the testing environment, you can then push the Docker images
-into production and deploy your code.
-+
-. *Deploying and scaling more easily*: Docker's container-based platform allows for portable workloads. Docker containers can run on a developer's local host, on physical
-or virtual machines in a data center, or in the Cloud.
-+
-Docker's portability and lightweight nature also make dynamically managing workloads easy. You can use Docker to quickly scale up or tear down applications and services. Docker is so fast, that scaling can be near real time.
-
 **Main Components of Docker**
 
 Docker has three main components:
@@ -91,7 +71,7 @@ Check if docker machine is working using the following command:
 
 It shows the output similar to the one shown below:
 
-  docker-machine version 0.3.0-rc3 (a5fd8cf)
+  docker-machine version 0.3.0 (0a251fe)
 
 
 ### Docker Client
