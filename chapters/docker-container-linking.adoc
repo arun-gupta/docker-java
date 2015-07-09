@@ -1,7 +1,7 @@
 [[JavaEE7_Container_Linking]]
 ## Deploy Java EE 7 Application (Container Linking)
 
-<<JavaEE7_PreBuilt_WAR>> explained how to use an in-memory database with the application server. This gets you started rather quickly but becomes a bottleneck soon as the database is only in-memory. This means that any changes made to your schema and data are lost after the application server shuts down. In this case, you need to use a database server that resides outside the application server. For example, MySQL as the database server and WildFly as the application server.
+<<JavaEE7_PreBuilt_WAR>> explained how to use an in-memory database with the application server. This gets you started rather quickly but becomes a bottleneck soon as the database is only in-memory. This means that any changes made to your schema and data are lost when the application server shuts down. In this case, you need to use a database server that resides outside the application server. For example, MySQL as the database server and WildFly as the application server.
 
 .Two Containers On Same Docker Host
 image::../images/javaee7-hol-container-linking.png[]
@@ -40,6 +40,6 @@ See more about container communication on the Docker website https://docs.docker
 +
 [source, text]
 ----
-> curl http://$(docker-machine ip lab):8080/employees/resources/employees
+> curl http://dockerhost:8080/employees/resources/employees
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?><collection><employee><id>1</id><name>Penny</name></employee><employee><id>2</id><name>Sheldon</name></employee><employee><id>3</id><name>Amy</name></employee><employee><id>4</id><name>Leonard</name></employee><employee><id>5</id><name>Bernadette</name></employee><employee><id>6</id><name>Raj</name></employee><employee><id>7</id><name>Howard</name></employee><employee><id>8</id><name>Priya</name></employee></collection>
 ----
