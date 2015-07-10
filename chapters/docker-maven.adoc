@@ -23,11 +23,26 @@ Maven plugin allows you to manage Docker images and containers from `pom.xml`. I
 
   mvn package -Pdocker
 
+. Verify the image as:
++
+[source, text]
+----
+docker images
+REPOSITORY                        TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
+arungupta/javaee7-docker-maven    latest              2e51b3fca40f        4 seconds ago       581.5 MB
+----
++
 . Run the container as:
 
   mvn install -Pdocker
 
-. Access your application at http://dockerhost:8080/javaee7-docker-maven/resources/persons.
+. Access your application at http://dockerhost:8080/javaee7-docker-maven/resources/persons. It shows the output as:
++
+[source, xml]
+----
+curl http://dockerhost:8080/javaee7-docker-maven/resources/persons
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?><collection><person><name>Penny</name></person><person><name>Leonard</name></person><person><name>Sheldon</name></person><person><name>Amy</name></person><person><name>Howard</name></person><person><name>Bernadette</name></person><person><name>Raj</name></person><person><name>Priya</name></person></collection>
+----
 
 ### Understand Plugin Configuration
 
