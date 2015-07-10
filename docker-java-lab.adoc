@@ -22,7 +22,7 @@ include::chapters/docker-javaee7.adoc[]
 
 include::chapters/docker-container-linking.adoc[]
 
-include::chapters/ticket-monster.adoc[]
+include::chapters/docker-deployment-options.adoc[]
 
 include::chapters/docker-maven.adoc[]
 

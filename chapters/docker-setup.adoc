@@ -215,7 +215,10 @@ To install JBoss Developer Studio stand-alone, complete the following steps:
 
 . Download
 ifdef::classroom[http://classroom.example.com:8082/downloads/jboss-devstudio-9.0.0.Beta2-v20150609-1026-B3346-installer-standalone.jar]
-ifdef::public[https://devstudio.redhat.com/9.0/snapshots/builds/devstudio.product_master/latest/installer/]
+ifdef::public[]
+http://tools.jboss.org/downloads/devstudio/mars/9.0.0.Beta1.html[9.0.0 Beta 1]
+https://devstudio.redhat.com/9.0/snapshots/builds/devstudio.product_master/latest/installer/[Laest Nightly] (used with the lab)
+endif::public[]
 . Start the installer as:
 +
 [source, text]
