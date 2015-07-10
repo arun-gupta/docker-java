@@ -141,18 +141,18 @@ Now you've sucessfully used the CLI to remote deploy the Java EE 7 sample applic
 
 ### Deploy Application Using Web Console
 
-WildFly comes with a web-based administration console. It also relies on the same management APIs that are used by JBoss Developer Tools and the CLI. It does provide a nice web-based way to administrate your instance and if you've already exposed the container ports, you can simply access it at http://dockerhost:9990 in your web browser.
+WildFly comes with a web-based administration console. It also relies on the same management APIs that are used by JBoss Developer Tools and the CLI. It provides a simple and easy to use web-based console to manage WildFly instance. For a Docker image, it needs to be explicitly enabled as explained in <<Enabling_WildFly_Administration>>. Once enabled, it can be accessed at http://dockerhost:9990.
 
 .WildFly Web Console
 image::../images/console1.png[]
 
 Username and password credentials are shown in <<WildFly_Administration_Credentials>>. 
 
-NOTE: You may like to stop and remove the Docker container running WildFly. This can be done as `docker ps -a | grep wildfly | awk '{print $1}' | xargs docker rm -f`. Start a new container as `docker run -p 8080:8080 -p 9990:9990 -d arungupta/wildfly-management`.
+NOTE: You may like to stop and remove the Docker container running WildFly. This can be done as `docker ps -a | grep wildfly | awk '{print $1}' | xargs docker rm -f`. Start a new container as `docker run -d --name wildfly -p 8080:8080 -p 9990:9990 arungupta/wildfly-management`.
 
-Now navigate through the console and execute the following steps to deploy the application:
+Deploy the application using the console with the following steps:
 
-. Go to the `Deployments' tab.
+. Go to `Deployments' tab.
 +
 .Deployments tab in WildFly Web Console
 image::../images/wildfly9-deployments-tab.png[]
@@ -178,7 +178,7 @@ image::../images/wildfly9-javaee7-simple-sample-output.png[]
 
 ### Deploy Application Using Management API
 
-A standalone WildFly process, process can be configured to listen for remote management requests using its `native management interface'. The CLI tool that comes with the application server uses this interface, and user can develop custom clients that use it as well. In order to use this, WildFly management interface listen IP needs to be changed from 127.0.0.1 to 0.0.0.0 which basically means, that it is not only listening on the localhost but also on all publicly assigned IP addresses.
+A standalone WildFly process, process can be configured to listen for remote management requests using its `native management interface'. The CLI tool that comes with the application server uses this interface, and user can develop custom clients that use it as well. By default, WildFly management interface listens on 127.0.0.1. When running inside a Docker container, the network interface should be bound to all publicly assigned addresses. This can be easily changed by biding to 0.0.0.0 instead of 127.0.0.1.
 
 . Start another WildFly instance again:
 +
@@ -188,7 +188,7 @@ ifdef::classroom[docker run -d --name wildfly -p 8080:8080 -p 9990:9990 classroo
 ifdef::public[docker run -d --name wildfly -p 8080:8080 -p 9990:9990 arungupta/wildfly-management]
 ----
 +
-There is no mounted volume in this case but an additional port is exposed. The WildFly image that is used makes it easier for you to deploy using the management API. It has tweaked start script which changes the management interface according to the behavior described in the first sentence.
+In addition to application port 8080, the administration port 9990 is exposed as well. The WildFly image that is used has tweaked the start script such that the management interface is bound to 0.0.0.0.
 +
 . Create a new server adapter in JBoss Developer Studio and name it `WildFly 9.0.0-Management'. Specify the host name as `dockerhost'.
 +
