@@ -7,10 +7,7 @@ https://github.com/javaee-samples/javaee7-simple-sample[Java EE 7 Simple Sample]
 
 . Clone the repo:
 
-[source, text]
-----
-ifdef::public[git clone https://github.com/javaee-samples/javaee7-simple-sample.git]
-----
+  git clone https://github.com/javaee-samples/javaee7-simple-sample.git
 
 . Build the application:
 
@@ -184,8 +181,7 @@ A standalone WildFly process, process can be configured to listen for remote man
 +
 [source, text]
 ----
-ifdef::classroom[docker run -d --name wildfly -p 8080:8080 -p 9990:9990 classroom.example.com:5000/wildfly-management]
-ifdef::public[docker run -d --name wildfly -p 8080:8080 -p 9990:9990 arungupta/wildfly-management]
+docker run -d --name wildfly -p 8080:8080 -p 9990:9990 arungupta/wildfly-management
 ----
 +
 In addition to application port 8080, the administration port 9990 is exposed as well. The WildFly image that is used has tweaked the start script such that the management interface is bound to 0.0.0.0.
