@@ -11,20 +11,20 @@ Docker provides the lifecycle management of containers. A Docker image defines a
 
 *How does Kubernetes simplify containerized application deployment?*
 
-A typical application would have a cluster of containers across multiple hosts. For example, your web tier (for example Undertow) might run on a set of containers. Similarly, your application tier (for example, WildFly) would run on a different set of containers. The web tier would need to delegate the request to application tier. In some cases, or at least to begin with, you may have your web and application server packaged together in the same set of containers. The database tier would generally run on a separate tier anyway. These containers would need to talk to each other. Using any of the solutions mentioned above would require scripting to start the containers, and monitoring/bouncing if something goes down. Kubernetes does all of that for the user after the application state has been defined.
+A typical application would have a cluster of containers across multiple hosts. For example, your web tier (for example Undertow) might run as a few instances, and likely on a set of containers. Similarly, your application tier (for example, WildFly) would run on a different set of containers. The web tier would need to delegate the request to application tier. The web, application, and database tier would generally run on a separate set of containers. These containers would need to talk to each other. Using any of the solutions mentioned above would require scripting to start the containers, and monitoring/bouncing if something goes down. Kubernetes does all of that for the user after the application state has been defined.
 
-### Key Concepts
+### Key Components
 
-At a very high level, there are three key concepts:
+At a very high level, there are three key components:
 
 . *Pods* are the smallest deployable units that can be created, scheduled, and managed. Its a logical collection of containers that belong to an application.
 . *Master* is the central control point that provides a unified view of the cluster. There is a single master node that control multiple minions.
-. *Minion* is a worker node that run tasks as delegated by the master. Minions can run one or more pods. It provides an application-specific “virtual host” in a containerized environment.
+. *Node* is a worker node that run tasks as delegated by the master. Minions can run one or more pods. It provides an application-specific “virtual host” in a containerized environment.
 
 A picture is always worth a thousand words and so this is a high-level logical block diagram for Kubernetes:
 
-.Kubernetes Key Concepts
-image::../images/kubernetes-key-concepts.png[]
+.Kubernetes Key Components
+image::../images/kubernetes-key-components.png[]
 
 After the 50,000 feet view, lets fly a little lower at 30,000 feet and take a look at how Kubernetes make all of this happen. There are a few key components at Master and Minion that make this happen.
 
