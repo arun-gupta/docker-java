@@ -119,7 +119,7 @@ Node creation talks to the hosted service at Docker Hub and joins the previously
 +
 Replace `<TOKEN>` with the cluster id obtained in the previous step. 
 
-. List all the nodes created so far.
+. List all the nodes created so far:
 
   docker-machine ls
 +
@@ -173,7 +173,7 @@ CPUs: 3
 Total Memory: 3.065 GiB
 ----
 +
-There are 3 nodes – one Swarm master and 2 Swarm nodes. There is a total of 4 containers running in this cluster – one Swarm agent on master and each node, and there is an additional swarm-agent-master running on the master. This can be verified by connecting to the master and listing all the containers:
+There are 3 nodes – one Swarm master and 2 Swarm nodes. There is a total of 4 containers running in this cluster – one Swarm agent on master and each node, and there is an additional swarm-agent-master running on the master. This can be verified by connecting to the master and listing all the containers.
 +
 . List nodes in the cluster with the following command:
 +
