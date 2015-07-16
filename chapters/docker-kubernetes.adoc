@@ -36,7 +36,11 @@ Label is an arbitrary key/value pair in a distributed watchable storage that the
 
 ### Start Kubernetes Cluster
 
-. In ``kubernetes'' directory, setup a cluster as:
+Kubernetes cluster can be easily started using Vagrant. There are two options to start the cluster - first using a downloaded Kubernetes distribution bundle and second by downloading the latest bundle as part of the install.
+
+#### Using Previously Downloaded Kubernetes Distribution
+
+. Setup a Kubernetes cluster as:
 +
 [source, text]
 ----
@@ -69,7 +73,46 @@ KubeDNS is running at https://10.245.1.2/api/v1beta3/proxy/namespaces/default/se
 ----
 +
 Note down the address for Kubernetes master, `https://10.245.1.2` in this case.
+
+#### Download and Start the Cluster Together
+
+. Alternatively, the cluster can also be started as:
 +
+[source, text]
+----
+> curl -sS https://get.k8s.io | bash
+Downloading kubernetes release v0.21.1 to /Users/arungupta/tools/kubernetes.tar.gz
+--2015-07-13 15:56:54--  https://storage.googleapis.com/kubernetes-release/release/v0.21.1/kubernetes.tar.gz
+Resolving storage.googleapis.com... 74.125.28.128, 2607:f8b0:400e:c02::80
+Connecting to storage.googleapis.com|74.125.28.128|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 117901998 (112M) [application/x-tar]
+Saving to: 'kubernetes.tar.gz'
+
+kubernetes.tar.gz               100%[=========================================================>] 112.44M  6.21MB/s   in 18s    
+
+2015-07-13 15:57:13 (6.13 MB/s) - 'kubernetes.tar.gz' saved [117901998/117901998]
+
+. . .
+
+NAME                 STATUS    MESSAGE              ERROR
+controller-manager   Healthy   ok                   nil
+scheduler            Healthy   ok                   nil
+etcd-0               Healthy   {"health": "true"}   nil
+Cluster validation succeeded
+Done, listing cluster services:
+
+Kubernetes master is running at https://10.245.1.2
+KubeDNS is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/kube-dns
+KubeUI is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/kube-ui
+
+Kubernetes binaries at /Users/arungupta/tools/kubernetes/kubernetes/cluster/
+You may want to add this directory to your PATH in $HOME/.profile
+Installation successful!
+----
+
+#### Verify the Cluster
+
 . Verify the Kubernetes cluster as:
 +
 [source, text]
@@ -88,6 +131,9 @@ VM, run `vagrant status NAME`.
 By default, the Vagrant setup will create a single kubernetes-master and 1 kubernetes-minion. Each VM will take 1 GB, so make sure you have at least 2GB to 4GB of free memory (plus appropriate free disk space).
 +
 NOTE: By default, only one minion is created. This can be manipulated by setting an environment variable NUM_MINIONS variable to an integer before invoking `kube-up.sh` script.
++
+.Kubernetes Cluster using Vagrant
+image::../images/kubernetes-cluster-vagrant.png[]
 +
 By default, each VM in the cluster is running Fedora, Kubelet is installed into ``systemd'', and all other Kubernetes services are running as containers on Master.
 +
@@ -116,40 +162,24 @@ NAME         LABELS                              STATUS
 [source, text]
 ----
 kubernetes> ./cluster/kubectl.sh get po
-POD                                IP        CONTAINER(S)     IMAGE(S)                                                                   HOST                 LABELS                                                           STATUS    CREATED     MESSAGE
-etcd-server-kubernetes-master                                                                                                            kubernetes-master/   <none>                                                           Running   2 minutes   
-                                             etcd-container   gcr.io/google_containers/etcd:2.0.9                                                                                                                              Running   2 minutes   
-kube-apiserver-kubernetes-master                                                                                                         kubernetes-master/   <none>                                                           Running   2 minutes   
-                                             kube-apiserver   gcr.io/google_containers/kube-apiserver:465b93ab80b30057f9c2ef12f30450c3                                                                                         Running   2 minutes   
-kube-dns-v1-lxdof                                                                                                                        10.245.1.3/          k8s-app=kube-dns,kubernetes.io/cluster-service=true,version=v1   Pending   2 minutes   
-                                             etcd             gcr.io/google_containers/etcd:2.0.9                                                                                                                                                    
-                                             kube2sky         gcr.io/google_containers/kube2sky:1.7                                                                                                                                                  
-                                             skydns           gcr.io/google_containers/skydns:2015-03-11-001                                                                                                                                         
-kube-scheduler-kubernetes-master                                                                                                         kubernetes-master/   <none>                                                           Running   2 minutes   
-                                             kube-scheduler   gcr.io/google_containers/kube-scheduler:d1f640dfb379f64daf3ae44286014821                                                                                         Running   2 minutes
+NAME      READY     STATUS    RESTARTS   AGE
 ----
 +
 . Check the list of services running:
 +
 [source, text]
 ----
-> ./cluster/kubectl.sh get se
-NAME            LABELS                                                                           SELECTOR           IP(S)         PORT(S)
-kube-dns        k8s-app=kube-dns,kubernetes.io/cluster-service=true,kubernetes.io/name=KubeDNS   k8s-app=kube-dns   10.247.0.10   53/UDP
-                                                                                                                                  53/TCP
-kubernetes      component=apiserver,provider=kubernetes                                          <none>             10.247.0.2    443/TCP
-kubernetes-ro   component=apiserver,provider=kubernetes                                          <none>             10.247.0.1    80/TCP
+kubernetes> ./cluster/kubectl.sh get se
+NAME         LABELS                                    SELECTOR   IP(S)        PORT(S)
+kubernetes   component=apiserver,provider=kubernetes   <none>     10.247.0.1   443/TCP
 ----
 +
 . Check the list of replication controllers:
 +
 [source, text]
 ----
-> ./cluster/kubectl.sh get rc
-CONTROLLER    CONTAINER(S)   IMAGE(S)                                         SELECTOR                      REPLICAS
-kube-dns-v1   etcd           gcr.io/google_containers/etcd:2.0.9              k8s-app=kube-dns,version=v1   1
-              kube2sky       gcr.io/google_containers/kube2sky:1.7                                          
-              skydns         gcr.io/google_containers/skydns:2015-03-11-001
+kubernetes> ./cluster/kubectl.sh get rc
+CONTROLLER   CONTAINER(S)   IMAGE(S)   SELECTOR   REPLICAS
 ----
 
 ### Deploy Java EE Application
@@ -158,220 +188,311 @@ Pods, and the IP addresses assigned to them, are ephemeral. If a pod dies then K
 
 Kubernetes services is an abstraction which defines a logical set of pods. A service is typically back-ended by one or more physical pods (associated using labels), and it has a permanent IP address that can be used by other pods/applications. For example, WildFly pod can not directly connect to a MySQL pod but can connect to MySQL service. In essence, Kubernetes service offers clients an IP and port pair which, when accessed, redirects to the appropriate backends.
 
-.Kubernetes Services
-image::../images/kubernetes-services.png[]
+.Kubernetes Service
+image::../images/kubernetes-service.png[]
 
-NOTE: In this case, all the pods are running on a single minion. This is because, that is the default number for a Kubernetes cluster. The pod can very be on another minion if more minions exist in the cluster.
+NOTE: In this case, all the pods are running on a single minion. This is because, that is the default number for a Kubernetes cluster. The pod can very be on another minion if more number of minions are configured to start in the cluster.
 
 Any Service that a Pod wants to access must be created before the Pod itself, or else the environment variables will not be populated.
 
 #### Start MySQL Service
 
-. Start MySQL service as:
+The order of Service and the targeted Pods does not matter. However Service needs to be started before any other Pods consuming the Service are started.
+
+. Start MySQL Pod:
 +
 [source, text]
 ----
-./cluster/kubectl.sh create -f ../../attendees/kubernetes/mysql-service.yaml
+./cluster/kubectl.sh create -f ../../attendees/kubernetes/app-mysql-pod.yaml
+pods/mysql-pod
 ----
 +
 It uses the following configuration file:
 +
 [source, yaml]
 ----
-id: mysql
-kind: Service
-apiVersion: v1beta3
+apiVersion: v1
+kind: Pod
 metadata:
-  name: mysql
+  name: mysql-pod
   labels:
-    name: mysql
+    name: mysql-pod
+    context: docker-k8s-lab
+spec:
+  containers:
+    -
+      name: mysql
+      image: mysql:latest
+      env:
+        -
+          name: "MYSQL_USER"
+          value: "mysql"
+        -
+          name: "MYSQL_PASSWORD"
+          value: "mysql"
+        -
+          name: "MYSQL_DATABASE"
+          value: "sample"
+        -
+          name: "MYSQL_ROOT_PASSWORD"
+          value: "supersecret"
+      ports:
+        -
+          containerPort: 3306
+----
++
+. Get status of the Pod:
++
+[source, text]
+----
+kubernetes> ./cluster/kubectl.sh get -w po
+NAME        READY     STATUS    RESTARTS   AGE
+mysql-pod   0/1       Pending   0          4s
+NAME        READY     STATUS    RESTARTS   AGE
+mysql-pod   0/1       Running   0          44s
+mysql-pod   1/1       Running   0         44s
+----
++
+`-w` watches for changes to the requested object. Wait for the MySQL pod to be in Running status.
++
+. Start MySQL Service:
++
+[source, text]
+----
+./cluster/kubectl.sh create -f ../../attendees/kubernetes/app-mysql-service.yaml
+services/mysql-service
+----
++
+It uses the following configuration file:
++
+[source, yaml]
+----
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+  labels:
+    name: mysql-pod
     context: docker-k8s-lab
 spec:
   ports:
+    # the port that this service should serve on
     - port: 3306
+  # label keys and values that must match in order to receive traffic for this service
   selector:
-    name: mysql
-  labels:
-    name: mysql
-----
-+
-. Check that the service is created:
-+
-[source, text]
-----
-> ./cluster/kubectl.sh get se -l context=docker-k8s-lab
-NAME      LABELS                              SELECTOR     IP(S)            PORT(S)
-mysql     context=docker-k8s-lab,name=mysql   name=mysql   10.247.141.208   3306/TCP
-----
-+
-Note that the label used during the creation is used to query the service.
-+
-When a Pod is run on a node, the kubelet adds a set of environment variables for each active Service. 
-+
-It supports both Docker links compatible variables and simpler `{SVCNAME}_SERVICE_HOST` and `{SVCNAME}_SERVICE_PORT` variables, where the Service name is upper-cased and dashes are converted to underscores.
-+
-Our service name is ``mysql'' and so `MYSQL_SERVICE_HOST` and `MYSQL_SERVICE_PORT` variables are available to other pods.
-
-Send a Pull Request for https://github.com/javaee-samples/docker-java/issues/62[#62].
-
-#### Start MySQL Replication Controller
-
-. Start MySQL replication controller as:
-+
-[source, text]
-----
-> ./cluster/kubectl.sh --v=5 create -f ../../attendees/kubernetes/mysql.yaml
-I0616 19:41:55.441461    8346 defaults.go:174] creating security context for container mysql
-replicationcontrollers/mysql
-----
-+
-It uses the following configuration file:
-+
-[source, yaml]
-----
-kind: ReplicationController
-apiVersion: v1beta3
-metadata:
-  name: mysql
-  labels:
-    name: mysql
+    name: mysql-pod
     context: docker-k8s-lab
-spec:
-  replicas: 1
-  selector:
-    name: mysql
-  template:
-    metadata:
-      labels:
-        name: mysql
-        context: docker-k8s-lab
-    spec:
-      containers:
-        - name: mysql
-          image: mysql:latest
-          env:
-            - name: MYSQL_USER
-              value: mysql
-            - name: MYSQL_PASSWORD
-              value: mysql
-            - name: MYSQL_DATABASE
-              value: sample
-            - name: MYSQL_ROOT_PASSWORD
-              value: supersecret
-          ports:
-            - containerPort: 3306
-              hostPort: 3306
 ----
 +
-Once again, the ``docker-k8s-lab'' label is used. This simplifies querying the created pods later on.
+Once again, the ``context: docker-k8s-lab'' label is used. This simplifies querying the created pods later on.
 +
-. Verify MySQL replication controller as:
+. Get status of the Service:
 +
 [source, text]
 ----
-> ./cluster/kubectl.sh get rc -l context=docker-k8s-lab
-CONTROLLER   CONTAINER(S)   IMAGE(S)       SELECTOR     REPLICAS
-mysql        mysql          mysql:latest   name=mysql   1
+./cluster/kubectl.sh get -w se
+NAME            LABELS                                    SELECTOR                                IP(S)          PORT(S)
+kubernetes      component=apiserver,provider=kubernetes   <none>                                  10.247.0.1     443/TCP
+mysql-service   context=docker-k8s-lab,name=mysql-pod     context=docker-k8s-lab,name=mysql-pod   10.247.63.43   3306/TCP
 ----
 +
-. Check the status of MySQL pod as:
-+
-[source, text]
-----
-> ./cluster/kubectl.sh get po -l context=docker-k8s-lab
-POD           IP        CONTAINER(S)   IMAGE(S)       HOST          LABELS                              STATUS    CREATED          MESSAGE
-mysql-7lq67                                           10.245.1.3/   context=docker-k8s-lab,name=mysql   Pending   About a minute   
-                        mysql          mysql:latest                  
-----
-
-#### Start WildFly Replication Controller
-
-. Start WildFly replication controller as:
+If multiple services are running, then it can be narrowed by specifying labels:
 +
 [source, text]
 ----
-> ./cluster/kubectl.sh --v=5 create -f ../../attendees/kubernetes/wildfly.yaml
-I0616 18:59:00.563099    7849 defaults.go:174] creating security context for container wildfly
-replicationcontrollers/wildfly
+./cluster/kubectl.sh  get -w po -l context=docker-k8s-lab,name=mysql-pod
+NAME        READY     STATUS    RESTARTS   AGE
+mysql-pod   1/1       Running   0          4m
+----
++
+This is also the selector label used by Service to target Pods.
++
+When a Service is run on a node, the kubelet adds a set of environment variables for each active Service. It supports both Docker links compatible variables and simpler `{SVCNAME}_SERVICE_HOST` and `{SVCNAME}_SERVICE_PORT` variables, where the Service name is upper-cased and dashes are converted to underscores.
++
+Our service name is ``mysql-service'' and so `MYSQL_SERVICE_SERVICE_HOST` and `MYSQL_SERVICE_SERVICE_PORT` variables are available to other pods.
++
+Send a Pull Request for https://github.com/javaee-samples/docker-java/issues/62[#62].
++
+. Start WildFly Replication Controller:
++
+[source, text]
+----
+./cluster/kubectl.sh create -f ../../attendees/kubernetes/app-wildfly-rc.yaml
+replicationcontrollers/wildfly-rc
 ----
 +
 It uses the following configuration file:
 +
 [source, yaml]
 ----
+apiVersion: v1
 kind: ReplicationController
-apiVersion: v1beta3
 metadata:
-  name: wildfly
+  name: wildfly-rc
   labels:
     name: wildfly
     context: docker-k8s-lab
 spec:
   replicas: 1
-  selector:
-    name: wildfly-server
   template:
     metadata:
       labels:
-        name: wildfly-server
-        context: docker-k8s-lab
+        name: wildfly
     spec:
       containers:
-        - name: wildfly
-          image: arungupta/wildfly-mysql-javaee7:k8s
-          ports:
-            - containerPort: 8080
-              hostPort: 8080
+      - name: wildfly-rc-pod
+        image: arungupta/wildfly-mysql-javaee7:k8s
+        ports:
+        - containerPort: 8080
 ----
 +
-. Verify WildFly replication controller using ``docker-k8s-lab'' label as:
-+
-[source, text]
-----
-> ./cluster/kubectl.sh get rc -l context=docker-k8s-lab
-CONTROLLER   CONTAINER(S)   IMAGE(S)                              SELECTOR              REPLICAS
-mysql        mysql          mysql:latest                          name=mysql            1
-wildfly      wildfly        arungupta/wildfly-mysql-javaee7:k8s   name=wildfly-server   1
-----
-+
-. Check the status of WildFly pod as:
+. Check the status of Pod inside Replication Controller:
 +
 [source, text]
 ----
-> ./cluster/kubectl.sh get pod -l context=docker-k8s-lab
-POD             IP        CONTAINER(S)   IMAGE(S)                              HOST          LABELS                                       STATUS    CREATED      MESSAGE
-mysql-7lq67                                                                    10.245.1.3/   context=docker-k8s-lab,name=mysql            Pending   3 minutes    
-                          mysql          mysql:latest                                                                                                            
-wildfly-o0nw6                                                                  10.245.1.3/   context=docker-k8s-lab,name=wildfly-server   Pending   45 seconds   
-                          wildfly        arungupta/wildfly-mysql-javaee7:k8s
+./cluster/kubectl.sh get po
+NAME               READY     STATUS    RESTARTS   AGE
+mysql-pod          1/1       Running   0          1h
+wildfly-rc-w2kk5   1/1       Running   0          6m
 ----
-
-Make sure the status of both WildFly and MySQL pod is changed to ``running''. It will look like:
-
++
+. Get IP address of the Pod:
++
 [source, text]
 ----
-> ./cluster/kubectl.sh get pod -l context=docker-k8s-lab
-POD             IP            CONTAINER(S)   IMAGE(S)                              HOST                    LABELS                                       STATUS    CREATED      MESSAGE
-mysql-7lq67     172.17.0.9                                                         10.245.1.3/10.245.1.3   context=docker-k8s-lab,name=mysql            Running   14 minutes   
-                              mysql          mysql:latest                                                                                               Running   10 minutes   
-wildfly-o0nw6   172.17.0.10                                                        10.245.1.3/10.245.1.3   context=docker-k8s-lab,name=wildfly-server   Running   11 minutes   
-                              wildfly        arungupta/wildfly-mysql-javaee7:k8s                                                                        Running   26 seconds   
+./cluster/kubectl.sh get -o template po wildfly-rc-w2kk5 --template={{.status.podIP}}
+10.246.1.23
+----
++
+. Log in to minion and access the application:
++
+[source, text]
+----
+vagrant ssh minion-1
+Last login: Thu Jul 16 00:24:36 2015 from 10.0.2.2
+[vagrant@kubernetes-minion-1 ~]$ curl http://10.246.1.23:8080/employees/resources/employees/
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?><collection><employee><id>1</id><name>Penny</name></employee><employee><id>2</id><name>Sheldon</name></employee><employee><id>3</id><name>Amy</name></employee><employee><id>4</id><name>Leonard</name></employee><employee><id>5</id><name>Bernadette</name></employee><employee><id>6</id><name>Raj</name></employee><employee><id>7</id><name>Howard</name></employee><employee><id>8</id><name>Priya</name></employee></collection>
 ----
 
-NOTE: Takes a while for all the pods to start. It took ~25 minutes on a 16 GB, i7 Mac OS X.
+### Rescheduling Pods
 
-### Access Java EE Application
+Replication Controller ensures that specified number of pod ``replicas'' are running at any one time. If there are too many, the replication controller kills some pods. If there are too few, it starts more.
 
-http://<pod_ip>:8080/employees/resources/employees
+WildFly Replication Controller is already running with one Pod. Lets delete this Pod and see how a new Pod is automatically rescheduled.
 
-### Self-healing Pods
+. Find the Pod's name:
++
+[source, text]
+----
+./cluster/kubectl.sh get po
+NAME               READY     STATUS    RESTARTS   AGE
+wildfly-rc-w2kk5   1/1       Running   0          6m
+----
++
+. Delete the Pod:
++
+[source, text]
+----
+./cluster/kubectl.sh delete po wildfly-rc-w2kk5
+pods/wildfly-rc-w2kk5
+----
++
+Status of the Pods can be seen in another shell:
++
+[source, text]
+----
+./cluster/kubectl.sh get -w po
+NAME               READY     STATUS    RESTARTS   AGE
+wildfly-rc-w2kk5   1/1       Running   0          2m
+NAME               READY     STATUS    RESTARTS   AGE
+wildfly-rc-xz6wu   0/1       Pending   0         2s
+wildfly-rc-xz6wu   0/1       Pending   0         2s
+wildfly-rc-xz6wu   0/1       Pending   0         12s
+wildfly-rc-xz6wu   0/1       Running   0         14s
+wildfly-rc-xz6wu   1/1       Running   0         22s
+----
++
+Notice how Pod with name ``wildfly-rc-w2kk5'' was deleted and a new Pod with the name ``wildfly-rc-xz6wu'' was created.
 
-. Delete the WildFly pod
-. Wait for k8s to restart the pod because of RC
+### Scaling Pods
+
+Replication Controller allows dynamic scaling up and down of Pods.
+
+. Scale up the number of Pods:
++
+[source, text]
+----
+./cluster/kubectl.sh scale --replicas=2 rc wildfly-rc
+scaled
+----
++
+. Status of the Pods can be seen in another shell:
++
+[source, text]
+----
+./cluster/kubectl.sh get -w po
+NAME               READY     STATUS    RESTARTS   AGE
+wildfly-rc-bgtkg   1/1       Running   0          3m
+NAME               READY     STATUS    RESTARTS   AGE
+wildfly-rc-bymu7   0/1       Pending   0          2s
+wildfly-rc-bymu7   0/1       Pending   0         2s
+wildfly-rc-bymu7   0/1       Pending   0         2s
+wildfly-rc-bymu7   0/1       Running   0         3s
+wildfly-rc-bymu7   1/1       Running   0         12s
+----
++
+Notice a new Pod with the name ``wildfly-rc-bymu7'' is created.
++
+. Scale down the number of Pods:
++
+[source, text]
+----
+./cluster/kubectl.sh scale --replicas=1 rc wildfly-rc
+scaled
+----
++
+. Status of the Pods using `-w` is not shown correctly https://github.com/GoogleCloudPlatform/kubernetes/issues/11338[#11338]. But status of the Pods can be seen correctly as:
++
+[source, text]
+----
+./cluster/kubectl.sh get po
+NAME               READY     STATUS    RESTARTS   AGE
+wildfly-rc-bgtkg   1/1       Running   0          9m
+----
++
+Notice only one Pod is running now.
 
 ### Application Logs
 
-. Login to Minion-1 VM:
+. Get list of the Pods:
++
+[source, text]
+----
+./cluster/kubectl.sh get po
+NAME               READY     STATUS    RESTARTS   AGE
+mysql-pod          1/1       Running   0          18h
+wildfly-rc-w2kk5   1/1       Running   0          16h
+----
++
+. Get logs for the WildFly Pod:
++
+[source, text]
+----
+./cluster/kubectl.sh logs wildfly-rc-w2kk5
+=> Starting WildFly server
+=> Waiting for the server to boot
+=========================================================================
+
+  JBoss Bootstrap Environment
+
+  JBOSS_HOME: /opt/jboss/wildfly
+
+  . . .
+----
+
+Alternatively, the logs can also be seen by logging into the minion:
+
+. Log in to Minion-1 VM:
 +
 [source, text]
 ----
@@ -434,18 +555,14 @@ Bringing down cluster using provider: vagrant
 Done
 ----
 
-### View Logs
-
-Viewing logs is causing https://github.com/GoogleCloudPlatform/kubernetes/issues/9888.
-
-### Debug Kubernetes Master (OPTIONAL)
+### Debug Kubernetes Master
 
 . Log in to the master as:
 +
 [source, text]
 ----
-> vagrant ssh master
-Last login: Thu Jun  4 19:30:04 2015 from 10.0.2.2
+vagrant ssh master
+Last login: Wed Jul 15 20:36:32 2015 from 10.0.2.2
 [vagrant@kubernetes-master ~]$ 
 ----
 +
@@ -455,8 +572,7 @@ Last login: Thu Jun  4 19:30:04 2015 from 10.0.2.2
 ----
 [vagrant@kubernetes-master ~]$ su - 
 Password: 
-Last login: Thu Jun  4 19:25:41 UTC 2015
-[root@kubernetes-master ~]
+[root@kubernetes-master ~]#
 ----
 +
 Default root password for VM images created by Vagrant is ``vagrant''.
@@ -466,15 +582,12 @@ Default root password for VM images created by Vagrant is ``vagrant''.
 [source, text]
 ----
 CONTAINER ID        IMAGE                                                                               COMMAND                CREATED             STATUS              PORTS               NAMES
-2b92c80630d5        gcr.io/google_containers/etcd:2.0.9                                                 "/usr/local/bin/etcd   5 hours ago         Up 5 hours                              k8s_etcd-container.ec4297e5_etcd-server-kubernetes-master_default_3595ac402f3a17c29dab95f3e0f64c76_56fa3dce                        
-64c375f8030b        gcr.io/google_containers/kube-apiserver:465b93ab80b30057f9c2ef12f30450c3            "/bin/sh -c '/usr/lo   5 hours ago         Up 5 hours                              k8s_kube-apiserver.f4e485e1_kube-apiserver-kubernetes-master_default_c6b19d563bdbcfb0af80b57377ee905c_2f16c239                     
-d7d9d40bd479        gcr.io/google_containers/kube-controller-manager:572696d43ca87cd1fe0c774bac3a5f4b   "/bin/sh -c '/usr/lo   5 hours ago         Up 5 hours                              k8s_kube-controller-manager.70259e73_kube-controller-manager-kubernetes-master_default_8f8db766ebc90a00a99244c362284cf1_6eff7640   
-13251c4df211        gcr.io/google_containers/kube-scheduler:d1f640dfb379f64daf3ae44286014821            "/bin/sh -c '/usr/lo   5 hours ago         Up 5 hours                              k8s_kube-scheduler.f53b6329_kube-scheduler-kubernetes-master_default_1f3b1657f7f1af67ce9f929d78c64695_de632a80                     
-b1809bdabd9c        gcr.io/google_containers/pause:0.8.0                                                "/pause"               5 hours ago         Up 5 hours                              k8s_POD.e4cc795_kube-apiserver-kubernetes-master_default_c6b19d563bdbcfb0af80b57377ee905c_767dadb1                                 
-280baf845b00        gcr.io/google_containers/pause:0.8.0                                                "/pause"               5 hours ago         Up 5 hours                              k8s_POD.e4cc795_kube-scheduler-kubernetes-master_default_1f3b1657f7f1af67ce9f929d78c64695_52a4ca74                                 
-615a314a35bf        gcr.io/google_containers/pause:0.8.0                                                "/pause"               5 hours ago         Up 5 hours                              k8s_POD.e4cc795_kube-controller-manager-kubernetes-master_default_8f8db766ebc90a00a99244c362284cf1_97cc1739                        
-7a554eea05f3        gcr.io/google_containers/pause:0.8.0                                                "/pause"               5 hours ago         Up 5 hours                              k8s_POD.e4cc795_etcd-server-kubernetes-master_default_3595ac402f3a17c29dab95f3e0f64c76_593b9807 
+dc59a764953c        gcr.io/google_containers/etcd:2.0.12                                                "/bin/sh -c '/usr/lo   20 hours ago        Up 20 hours                             k8s_etcd-container.fa2ab1d9_etcd-server-kubernetes-master_default_7b64ecafde589b94a342982699601a19_2b69c4d5                        
+b722e22d3ddb        gcr.io/google_containers/kube-scheduler:d1107ff3b8fcdcbf5a9d78d9d6dbafb1            "/bin/sh -c '/usr/lo   20 hours ago        Up 20 hours                             k8s_kube-scheduler.7501c229_kube-scheduler-kubernetes-master_default_98b354f725c1589ea5a12119795546ae_b81b9740                     
+38a73e342866        gcr.io/google_containers/kube-controller-manager:fafaf8100ccc963e643b55e35386d713   "/bin/sh -c '/usr/lo   20 hours ago        Up 20 hours                             k8s_kube-controller-manager.db050993_kube-controller-manager-kubernetes-master_default_f5c25224fbfb2de87e1e5c35e6b3a293_dcd4cb5d   
+01001de6409e        gcr.io/google_containers/kube-apiserver:cff9e185796caa8b281e7d961aea828b            "/bin/sh -c '/usr/lo   20 hours ago        Up 20 hours                             k8s_kube-apiserver.7e06f4e1_kube-apiserver-kubernetes-master_default_829f8c23fd5fc7951253cac7618447fc_b39c0a5d                     
+0f8ccb144ece        gcr.io/google_containers/pause:0.8.0                                                "/pause"               20 hours ago        Up 20 hours                             k8s_POD.e4cc795_kube-scheduler-kubernetes-master_default_98b354f725c1589ea5a12119795546ae_eb1efcac                                 
+0b8f527456c0        gcr.io/google_containers/pause:0.8.0                                                "/pause"               20 hours ago        Up 20 hours                             k8s_POD.e4cc795_kube-apiserver-kubernetes-master_default_829f8c23fd5fc7951253cac7618447fc_5dd4dee7                                 
+39d9c41ab1a2        gcr.io/google_containers/pause:0.8.0                                                "/pause"               20 hours ago        Up 20 hours                             k8s_POD.e4cc795_kube-controller-manager-kubernetes-master_default_f5c25224fbfb2de87e1e5c35e6b3a293_522972ae                        
+d970ddff7046        gcr.io/google_containers/pause:0.8.0                                                "/pause"               20 hours ago        Up 20 hours                             k8s_POD.e4cc795_etcd-server-kubernetes-master_default_7b64ecafde589b94a342982699601a19_fa75b27f 
 ----
-
-
-
