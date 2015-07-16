@@ -19,6 +19,7 @@ Here is the list of commonly used Docker commands:
 | Stop all running containers | `docker stop ``docker ps -q```
 | Find IP address of the container | `docker inspect --format '{{ .NetworkSettings.IPAddress }}' ${CID}`
 | Attach to a container | `docker attach ${CID}`
+| Open a shell in to a container | `docker exec -it ${CID} bash`
 | Remove a container | `docker rm ${CID}`
 | Remove all containers | `docker rm $(docker ps -aq)`
 | Get container id for an image by a regular expression | `docker ps \| grep wildfly \| awk '{print $1}'`
