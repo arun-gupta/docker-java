@@ -197,9 +197,9 @@ endif::classroom[]
 
 #### Kubernetes
 
-. Download Kubernetes (0.21.0) from 
+. Download Kubernetes (1.0.0 Candidate Two) from 
 ifdef::classroom[http://classroom.example.com:8082/downloads/kubernetes.tar.gz]
-ifdef::public[https://github.com/GoogleCloudPlatform/kubernetes/releases/tag/v0.21.0]
+ifdef::public[https://github.com/GoogleCloudPlatform/kubernetes/releases/download/v1.0.0/kubernetes.tar.gz]
 . Install it by extracting the archive.
 
 #### WildFly
