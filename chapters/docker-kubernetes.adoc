@@ -195,9 +195,9 @@ NOTE: In this case, all the pods are running on a single minion. This is because
 
 Any Service that a Pod wants to access must be created before the Pod itself, or else the environment variables will not be populated.
 
-#### Start MySQL Service
-
 The order of Service and the targeted Pods does not matter. However Service needs to be started before any other Pods consuming the Service are started.
+
+#### Start MySQL Pod
 
 . Start MySQL Pod:
 +
@@ -254,7 +254,9 @@ mysql-pod   1/1       Running   0         44s
 ----
 +
 `-w` watches for changes to the requested object. Wait for the MySQL pod to be in Running status.
-+
+
+#### Start MySQL service
+
 . Start MySQL Service:
 +
 [source, text]
@@ -312,8 +314,10 @@ When a Service is run on a node, the kubelet adds a set of environment variables
 Our service name is ``mysql-service'' and so `MYSQL_SERVICE_SERVICE_HOST` and `MYSQL_SERVICE_SERVICE_PORT` variables are available to other pods.
 +
 Send a Pull Request for https://github.com/javaee-samples/docker-java/issues/62[#62].
-+
-. Start WildFly Replication Controller:
+
+#### Start WildFly Replication Controller
+
+. Start WildFly replication controller:
 +
 [source, text]
 ----
@@ -363,7 +367,9 @@ wildfly-rc-w2kk5   1/1       Running   0          6m
 ./cluster/kubectl.sh get -o template po wildfly-rc-w2kk5 --template={{.status.podIP}}
 10.246.1.23
 ----
-+
+
+#### Access the application
+
 . Log in to minion and access the application:
 +
 [source, text]
