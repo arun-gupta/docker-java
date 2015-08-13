@@ -1,6 +1,6 @@
 ## Setup Environments
 
-This section describes the relevant steps for both attendees and instructors to setup the environments. Please follow the parts, that are appropriate for you.
+This section describes the relevant steps to setup the environment on your machine.
 
 ifdef::classroom[]
 ### Instructor
@@ -29,15 +29,11 @@ endif::classroom[]
 .. https://www.google.com/chrome/browser/desktop/[Chrome]
 .. link:http://www.getfirefox.com[Firefox]
 
-#### A Word About Licenses
-
-This tutorial only uses software which is open source or at least free to use in development and/or education. Please refer to the individual products/tools used in this tutorial.
-
 ifdef::classroom[]
 [[Configure_Instructor_Host]]
 #### Configure Instructor Host
 
-All downloads and relevant infrastructure is setup on instructor's machine. Configure the IP address of instructor's machine into the resolver configuration of your operating system.
+All downloads and relevant infrastructure is setup on instructor's machine. Configure IP address of the instructor's machine into so that your machine can resolve it correctly.
 
 Edit the `/etc/resolv.conf` (Mac OS / Linux)
 
@@ -63,7 +59,6 @@ endif::classroom[]
 
 #### Maven
 
-ifdef::public[]
 . Download Apache Maven from 
 ifdef::classroom[http://classroom.example.com:8082/downloads/apache-maven-3.3.3-bin.zip]
 ifdef::public[https://maven.apache.org/download.cgi]
@@ -77,6 +72,8 @@ Downloads are available from
 ifdef::classroom[http://classroom.example.com:8082/downloads/virtualbox]
 ifdef::public[https://www.virtualbox.org/]
 .
+
+Virtual Box 5.0.0 does not allow Kubernetes cluster to be started: https://github.com/kubernetes/kubernetes/issues/12614. Make sure to download VirtualBox 4.3.30.
 
 [WARNING]
 ====
@@ -197,10 +194,19 @@ endif::classroom[]
 
 #### Kubernetes
 
-. Download Kubernetes (1.0.0 Candidate Two) from 
+. Download Kubernetes (1.0.3) from 
 ifdef::classroom[http://classroom.example.com:8082/downloads/kubernetes.tar.gz]
-ifdef::public[https://github.com/GoogleCloudPlatform/kubernetes/releases/download/v1.0.0/kubernetes.tar.gz]
-. Install it by extracting the archive.
+ifdef::public[https://github.com/kubernetes/kubernetes/releases/download/v1.0.1/kubernetes.tar.gz]
+. Extract the archive and install it by:
+
+[source, text]
+----
+export KUBERNETES_PROVIDER=vagrant
+cd kubernetes
+./cluster/kube-up.sh
+----
+
+NOTE: Kubernetes 1.0.1 is the only version verified to work with Virtual Box. More details at: https://github.com/kubernetes/kubernetes/issues/12614
 
 #### WildFly
 
@@ -209,14 +215,14 @@ ifdef::classroom[http://classroom.example.com:8082/downloads/wildfly-9.0.0.Final
 ifdef::public[http://download.jboss.org/wildfly/8.2.0.Final/wildfly-9.0.0.Final.zip]
 . Install it by extracting the archive.
 
-#### JBoss Developer Studio 9 - Beta 1
+#### JBoss Developer Studio 9 - Beta 2
 
 To install JBoss Developer Studio stand-alone, complete the following steps:
 
 . Download
 ifdef::classroom[http://classroom.example.com:8082/downloads/jboss-devstudio-9.0.0.Beta2-v20150609-1026-B3346-installer-standalone.jar]
 ifdef::public[]
-http://tools.jboss.org/downloads/devstudio/mars/9.0.0.Beta1.html[9.0.0 Beta 1]
+http://tools.jboss.org/downloads/devstudio/mars/9.0.0.Beta2.html[9.0.0 Beta 2]
 https://devstudio.redhat.com/9.0/snapshots/builds/devstudio.product_master/latest/installer/[Laest Nightly] (used with the lab)
 endif::public[]
 . Start the installer as:

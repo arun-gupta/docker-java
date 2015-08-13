@@ -19,7 +19,7 @@ Docker has three main components:
 
 . __Images__ are *build component* of Docker and a read-only template of application operating system.
 . __Containers__ are *run component* of Docker, and created from, images.Containers can be run, started, stopped, moved, and deleted.
-. Images are stored, shared, and managed in a __registry__, the *distribution component* of Docker. The publically available registry is known as Docker Hub.
+. Images are stored, shared, and managed in a __registry__, the *distribution component* of Docker. The publically available registry is known as Docker Hub (available at http://hub.docker.com).
 
 In order for these three components to work together, there is *Docker Daemon* that runs on a host machine and does the heavy lifting of building, running, and distributing Docker containers. In addition, there is *Client* that is a Docker binary which accepts commands from the user and communicates back and forth with the daemon.
 
@@ -73,6 +73,7 @@ It shows the output similar to the one shown below:
 
   docker-machine version 0.3.0 (0a251fe)
 
+NOTE: The exact version may differ based upon how recently the installation was performed.
 
 ### Docker Client
 
@@ -85,6 +86,8 @@ Check if your client is working using the following command:
 It shows the output similar to the following:
 
   Docker version 1.7.0, build 0baf609
+
+NOTE: The exact version may differ based upon how recently the installation was performed.
 
 The most important options you'll be using frequently are:
 
@@ -137,4 +140,4 @@ PING dockerhost (192.168.99.101): 56 data bytes
 64 bytes from 192.168.99.101: icmp_seq=1 ttl=64 time=0.387 ms
 ----
 
-If it does, you're ready to start over with the lab.
+If it does, you're ready to start with the lab.

@@ -114,7 +114,7 @@ ifdef::public[docker run -d jboss/wildfly]
 972f51cc8422eec0a7ea9a804a55a2827b5537c00a6bfd45f8646cb764bc002a
 ----
 
-`-d` runs the container in detached mode.
+`-d`, instead of `-it`, runs the container in detached mode.
 
 The output is the unique id assigned to the container. Check the logs as:
 
@@ -174,6 +174,8 @@ ifdef::public[63a69bff9c69        jboss/wildfly       "/opt/jboss/wildfly/   14 
 
 The port mapping is shown in the `PORTS` column. Access the WildFly server at http://dockerhost:32768. Make sure to use the correct port number as shown in your case.
 
+NOTE: Exact port number may be different in your case.
+
 ### Run Container with Specified Port
 
 Lets stop the previously running container as:
@@ -208,11 +210,11 @@ image::../images/plain-wildfly1.png[]
 [[Enabling_WildFly_Administration]]
 ### Enabling WildFly Administration
 
-Default WildFly image exposes only port 8080 and thus is not available for administration using either the CLI or Admin Console.
+Default WildFly image exposes only port 8080 and thus is not available for administration using either the CLI or Admin Console. Lets expose the ports in different ways.
 
 #### Default Port Mapping
 
-The following command will override the default command in Docker file, explicitly starting WildFly, and binding application and management port to all network interfaces.
+The following command will override the default command in Docker file, start WildFly, and bind application and management port to all network interfaces.
 
 [source, text]
 ----
@@ -241,6 +243,8 @@ ifdef::public[af7d6914a1f9        arungupta/wildfly-management   "/opt/jboss/wil
 ----
 
 Look for the host port that is mapped in the container, `32769` in this case. Access the admin console at http://dockerhost:32769.
+
+NOTE: Exact port number may be different in your case.
 
 The username/password credentials are:
 
@@ -282,7 +286,6 @@ to see the output as:
 ----
 docker inspect --format='{{(index (index .NetworkSettings.Ports "9990/tcp") 0).HostPort}}' <CONTAINER ID>
 ----
-
 
 [[Management_Fixed_Port_Mapping]]
 #### Fixed Port Mapping
