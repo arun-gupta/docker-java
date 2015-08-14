@@ -4,7 +4,7 @@
 https://github.com/javaee-samples/javaee7-hol[Java EE 7 Movieplex] is a standard multi-tier enterprise application that shows design patterns and anti-patterns for a typical Java EE 7 application.
 
 .Java EE 7 Application Architecture
-image::chapters/images/javaee7-hol.png[]
+image::javaee7-hol.png[]
 
 Pull the Docker image that contains WildFly and pre-built Java EE 7 application WAR file as shown:
 
@@ -27,12 +27,12 @@ ifdef::public[docker run -it -p 8080:8080 arungupta/javaee7-hol]
 See the application in action at http://dockerhost:8080/movieplex7/. The output is shown:
 
 .Java EE 7 Application Output
-image::chapters/images/javaee7-movieplex7.png[]
+image::javaee7-movieplex7.png[]
 
 This uses an in-memory database with WildFly application server as shown in the image:
 
 .In-memory Database
-image::chapters/images/javaee7-hol-in-memory-database.png[]
+image::javaee7-hol-in-memory-database.png[]
 
 Only two changes are required to the standard `jboss/wildfly` image:
 

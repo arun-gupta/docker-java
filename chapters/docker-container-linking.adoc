@@ -4,7 +4,7 @@
 <<JavaEE7_PreBuilt_WAR>> explained how to use an in-memory database with the application server. This gets you started rather quickly but becomes a bottleneck soon as the database is only in-memory. This means that any changes made to your schema and data are lost when the application server shuts down. In this case, you need to use a database server that resides outside the application server. For example, MySQL as the database server and WildFly as the application server.
 
 .Two Containers On Same Docker Host
-image::chapters/images/javaee7-hol-container-linking.png[]
+image::javaee7-hol-container-linking.png[]
 
 This section will show how https://docs.docker.com/userguide/dockerlinks/[Docker Container Linking] can be used to connect to a service running inside a Docker container via a network port.
 

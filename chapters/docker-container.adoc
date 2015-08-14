@@ -34,7 +34,7 @@ At first, the top read-write layer has nothing in it, but any time a process cre
 We call the union of the read-write layer and all the read-only layers a _union file system_.
 
 .Docker Layers
-image::chapters/images/plain-wildfly0.png[]
+image::plain-wildfly0.png[]
 ====
 
 In our particular case, the https://github.com/jboss-dockerfiles/wildfly/blob/master/Dockerfile[jboss/wildfly] image extends the https://github.com/jboss-dockerfiles/base/blob/master/Dockerfile[jboss/base-jdk:7] image which adds the OpenJDK distribution on top of the https://github.com/jboss-dockerfiles/base/blob/master/Dockerfile[jboss/base] image.
@@ -205,7 +205,7 @@ See more about networking on the Docker website link:https://docs.docker.com/art
 Now we're ready to test http://dockerhost:8080 again. This works with the exposed port, as expected.
 
 .Welcome WildFly
-image::chapters/images/plain-wildfly1.png[]
+image::plain-wildfly1.png[]
 
 [[Enabling_WildFly_Administration]]
 ### Enabling WildFly Administration
@@ -259,7 +259,7 @@ The username/password credentials are:
 This shows the admin console as:
 
 .Welcome WildFly
-image::chapters/images/wildfly-admin-console.png[]
+image::wildfly-admin-console.png[]
 
 ##### Additional Ways To Find Port Mapping
 

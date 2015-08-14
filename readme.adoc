@@ -8,6 +8,7 @@ v1.2.x, Aug 13, 2015
 ////
 :public:
 :toc-placement!:
+:imagesdir: ./chapters/images/
 
 toc::[]
 

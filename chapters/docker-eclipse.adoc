@@ -16,12 +16,12 @@ Alternatively, download http://www.eclipse.org/downloads/index-developer-default
 Specify the '`Name:`' as "`Docker Nightly`" and '`Location:`' as http://download.eclipse.org/linuxtools/updates-docker-nightly/.
 +
 .Add Docker Tooling To JBoss Developer Studio
-image::chapters/images/jbds-docker-tools1.png[]
+image::jbds-docker-tools1.png[]
 +
 . Expand Linux Tools, select '`Docker Client`' and '`Docker Tooling`'.
 +
 .Add Docker Tooling
-image::chapters/images/jbds-docker-tools-nightly-setup.png[]
+image::jbds-docker-tools-nightly-setup.png[]
 +
 . Click on '`Next >`', '`Next >`', accept the terms of the license agreement, and click on '`Finish`'. This will complete the installation of plugins.
 +
@@ -33,16 +33,16 @@ The Docker Explorer provides a wizard to establish a new connection to a Docker 
 
 . Use the menu '`Window`', '`Show View`', '`Other...`'. Type '`docker`' to see the output as:
 +
-image::chapters/images/jbds-docker-tools-docker-view.png[]
+image::jbds-docker-tools-docker-view.png[]
 +
 . Select '`Docker Explorer`' to open Docker Explorer.
 +
-image::chapters/images/jbds-docker-tools-docker-explorer-view.png[]
+image::jbds-docker-tools-docker-explorer-view.png[]
 +
 . Click on the link in this window to create a connection to Docker Host. Specify the settings as shown:
 +
 .Docker Explorer
-image::chapters/images/jbds-docker-tools2.png[]
+image::jbds-docker-tools2.png[]
 +
 Make sure to get IP address of the Docker Host as:
 +
@@ -56,24 +56,24 @@ Also, make sure to specify the correct directory for `.docker` on your machine.
 . Click on '`Test Connection`' to check the connection. This should show the output as:
 +
 .Docker Explorer
-image::chapters/images/jbds-docker-tools-test-connection-output.png[]
+image::jbds-docker-tools-test-connection-output.png[]
 +
 Click on '`OK`' and '`Finish`' to exit out of the wizard.
 +
 . Docker Explorer itself is a tree view that handles multiple connections and provides users with quick overview of the existing images and containers.
 +
 .Docker Explorer Tree View
-image::chapters/images/jbds-docker-tools3.png[]
+image::jbds-docker-tools3.png[]
 +
 . Customize the view by clicking on the arrow in toolbar:
 +
 .Docker Explorer Customize View
-image::chapters/images/jbds-docker-tools-customize-view-option.png[]
+image::jbds-docker-tools-customize-view-option.png[]
 +
 Built-in filters can show/hide intermediate and '`dangling`' images, as well as stopped containers.
 +
 .Docker Explorer Customize View Wizard
-image::chapters/images/jbds-docker-tools-customize-view-wizard.png[]
+image::jbds-docker-tools-customize-view-wizard.png[]
 
 ### Docker Images
 
@@ -88,12 +88,12 @@ Lets take a look at it.
 . Use the menu '`Window`', '`Show View`', '`Other...`', select '`Docker Images`'. It shows the list of images on Docker Host:
 +
 .Docker Images View
-image::chapters/images/jbds-docker-tools4.png[]
+image::jbds-docker-tools4.png[]
 +
 . Right-click on the image ending with "`wildfly:latest`" and click on the green arrow in the toolbar. This will show the following wizard:
 +
 .Docker Run Container Wizard
-image::chapters/images/jbds-docker-tools-run-container-wizard.png[]
+image::jbds-docker-tools-run-container-wizard.png[]
 +
 By default, all exports ports from the image are mapped to random ports on the host interface. This setting can be changed by unselecting the first checkbox and specify exact port mapping.
 +
@@ -102,7 +102,7 @@ Click on '`Finish`' to start the container.
 . When the container is started, all logs are streamed into Eclipse Console:
 +
 .Docker Container Logs
-image::chapters/images/jbds-docker-tools5.png[]
+image::jbds-docker-tools5.png[]
 
 ### Docker Containers
 
@@ -111,18 +111,18 @@ Docker Containers view lets the user manage the containers. The view toolbar pro
 . Use the menu '`Window`', '`Show View`', '`Other...`', select '`Docker Containers`'. It shows the list of running containers on Docker Host:
 +
 .Docker Containers View
-image::chapters/images/jbds-docker-tools6.png[]
+image::jbds-docker-tools6.png[]
 + 
 . Pause the container by clicking on the "`pause`" button in the toolbar (https://bugs.eclipse.org/bugs/show_bug.cgi?id=469310[#469310]). Show the complete list of containers by clicking on the '`View Menu`', '`Show all containers`'.
 +
 .All Docker Containers
-image::chapters/images/jbds-docker-tools-all-containers.png[]
+image::jbds-docker-tools-all-containers.png[]
 +
 . Select the paused container, and click on the green arrow in the toolbar to restart the container.
 . Right-click on any running container and select "`Display Log`" to view the log for this container.
 +
 .Eclipse Properties View
-image::chapters/images/jbds-docker-tools-display-log.png[]
+image::jbds-docker-tools-display-log.png[]
 
 TODO: Users can also attach an Eclipse console to a running Docker container to follow the logs and use the STDIN to interact with it.
 
@@ -135,9 +135,9 @@ Eclipse Properties view is used to provide more information about the containers
 Info view is shown as:
 +
 .Docker Container Properties View Info
-image::chapters/images/jbds-docker-tools-properties-info.png[]
+image::jbds-docker-tools-properties-info.png[]
 +
 Inspect view is shown as:
 +
 .Docker Container Properties View Inspect
-image::chapters/images/jbds-docker-tools-properties-inspect.png[]
+image::jbds-docker-tools-properties-inspect.png[]

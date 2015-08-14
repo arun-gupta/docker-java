@@ -24,7 +24,7 @@ Docker has three main components:
 In order for these three components to work together, there is *Docker Daemon* that runs on a host machine and does the heavy lifting of building, running, and distributing Docker containers. In addition, there is *Client* that is a Docker binary which accepts commands from the user and communicates back and forth with the daemon.
 
 .Docker architecture
-image::chapters/images/docker-architecture.png[]
+image::docker-architecture.png[]
 
 Client communicates with Daemon, either co-located on the same host, or on a different host. It requests the Daemon to pull an image from the repository using `pull` command. The Daemon then downloads the image from Docker Hub, or whatever registry is configured. Multiple images can be downloaded from the registry and installed on Daemon host. Images are run using `run` command to create containers on demand.
 

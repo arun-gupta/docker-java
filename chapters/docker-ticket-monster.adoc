@@ -3,7 +3,7 @@
 http://www.jboss.org/ticket-monster/[Ticket Monster] is an example application that focuses on Java EE6 - JPA 2, CDI, EJB 3.1 and JAX-RS along with HTML5 and jQuery Mobile. It is a moderately complex application that demonstrates how to build modern web applications optimized for mobile & desktop. TicketMonster is representative of an online ticketing broker - providing access to events (e.g. concerts, shows, etc) with an online booking application.
 
 .TicketMonster architecture
-image::chapters/images/ticket-monster_tutorial_architecture.png[]
+image::ticket-monster_tutorial_architecture.png[]
 
 The application uses Java EE 6 services to provide business logic and persistence, utilizing technologies such as CDI, EJB 3.1 and JAX-RS, JPA 2. These services back the user-facing booking process, which is implemented using HTML5 and JavaScript, with support for mobile devices through jQuery Mobile.
 
@@ -124,29 +124,29 @@ Start JBoss Developer Studio, if not already started.
 . Create a server adapter
 +
 .Server adapter
-image::chapters/images/jbds1.png[]
+image::jbds1.png[]
 +
 . Assign or create a WildFly 8.x runtime (changed properties are highlighted.)
 +
 .WildFly Runtime Properties
-image::chapters/images/jbds2.png[]
+image::jbds2.png[]
 +
 . Setup server properties as shown in the following image.
 +
 Two properties on the left are automatically propagated from the previous dialog. Additional two properties on the right side are required to disable to keep deployment scanners in sync with the server.
 +
 .Server properties
-image::chapters/images/jbds3.png[]
+image::jbds3.png[]
 +
 . Specify a custom deployment folder on Deployment tab of Server Editor
 +
 .Server Editor
-image::chapters/images/jbds4.png[]
+image::jbds4.png[]
 +
 . Right-click on the newly created server adapter and click ``Start''.
 +
 .Start Server
-image::chapters/images/jbds5.png[]
+image::jbds5.png[]
 
 ### Deploy Application Using Shared Volumes
 
@@ -155,7 +155,7 @@ Open Ticket Monster application source code. Right-click on the project, select 
 The project runs and displays the start page of Ticket Monster application.
 
 .Start Server
-image::chapters/images/jbds6.png[]
+image::jbds6.png[]
 
 Congratulations! You've just deployed your first application to WildFly running in a Docker container from JBoss Developer Studio.
 
@@ -217,7 +217,7 @@ And again, keep the container running, we're going to look into the last deploym
 WildFly comes with a web-based administration console. It also relies on the same management APIs that we've already been using via JBoss Developer Tools and the CLI. It does provide a nice web-based way to administrate your instance and if you've already exposed the container ports, you can simply access it via the URL: http://dockerhost:9990 in your web browser.
 
 .WildFly Web Console
-image::chapters/images/console1.png[]
+image::console1.png[]
 
 Username and password credentials are shown in <<WildFly_Administration_Credentials>>. Now navigate through the console and execute the following steps to deploy the application:
 
@@ -244,22 +244,22 @@ There is no mapped volume in this case but an additional port exposed. The WildF
 . Create another new server adapter in JBoss Developer Studio.
 +
 .Create New Server Adapter
-image::chapters/images/jbds7.png[]
+image::jbds7.png[]
 +
 . Keep the defaults in the adapter properties.
 +
 .Adapter Properties
-image::chapters/images/jbds8.png[]
+image::jbds8.png[]
 +
 . Set up server properties by specifying the admin credentials (docker#admin). Note, you need to delete the existing password and use this instead:
 +
 .Management Login Credentials
-image::chapters/images/jbds9.png[]
+image::jbds9.png[]
 +
 . Right-click on the newly created server adapter and click ``Start''. Status quickly changes to ``Started, Synchronized'' as shown.
 +
 .Synchronized WildFly Server
-image::chapters/images/jbds10.png[]
+image::jbds10.png[]
 +
 . Right-click on the Ticket Monster project, select ``Run on Server'' and choose this server. The project runs and displays the start page of ticket-monster.
 . Stop WildFly when you're done.

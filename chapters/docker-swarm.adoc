@@ -5,7 +5,7 @@ Docker Swarm is native clustering for Docker. It allows you create and access to
 ### Key Components of Docker Swarm
 
 .Key Components of Docker Swarm
-image::chapters/images/docker-swarm-components.png[]
+image::docker-swarm-components.png[]
 
 *Swarm Manager*: Docker Swarm has a Manager, that is a pre-defined Docker Host, and is a single point for all administration. The swarm manager orchestrates and schedules containers on the entire cluster. Currently only a single instance of manager is allowed in the cluster. This is a SPOF for high availability architectures and additional managers will be allowed in a future version of Swarm with https://github.com/docker/swarm/issues/598[#598].
 
