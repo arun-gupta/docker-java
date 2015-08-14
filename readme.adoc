@@ -1,6 +1,7 @@
 # Docker and Kubernetes for Java EE Developers
 v1.2.x, Aug 13, 2015
 :toc:
+:toc-title: Table of Dockernetes
 :toclevels: 3
 ////
 :classroom:
