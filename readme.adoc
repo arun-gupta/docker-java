@@ -1,5 +1,5 @@
 # Docker and Kubernetes for Java EE Developers
-v1.1, Jul 17, 2015
+v1.2.x, Aug 13, 2015
 :toc:
 :toclevels: 3
 ////
@@ -42,7 +42,10 @@ include::chapters/docker-testing.adoc[]
 
 include::chapters/docker-compose.adoc[]
 
+
+////
 include::chapters/docker-mod-cluster.adoc[]
+////
 
 include::chapters/docker-swarm.adoc[]
 
