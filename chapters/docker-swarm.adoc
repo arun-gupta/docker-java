@@ -11,7 +11,7 @@ image::../images/docker-swarm-components.png[]
 
 *Swarm Nodes*: The containers are deployed on Nodes that are additional Docker Hosts. Each Swarm Node must be accessible by the manager, each node must listen to the same network interface (TCP port). Each node runs a Docker Swarm agent that registers the referenced Docker daemon, monitors it, and updates the discovery backend with the node’s status. The containers run on a node.
 
-*Scheduler Strategy*: Different scheduler strategies (``binpack'', ``spread'' (default), and ``random'') can be applied to pick the best node to run your container. The default strategy optimizes the node for least number of running containers. There are multiple kinds of filters, such as constraints and affinity.  This should allow for a decent scheduling algorithm.
+*Scheduler Strategy*: Different scheduler strategies ("`binpack`", "`spread`" (default), and "`random`") can be applied to pick the best node to run your container. The default strategy optimizes the node for least number of running containers. There are multiple kinds of filters, such as constraints and affinity.  This should allow for a decent scheduling algorithm.
 
 *Node Discovery Service*: By default, Swarm uses hosted discovery service, based on Docker Hub, using tokens to discover nodes that are part of a cluster. However etcd, consul, and ZooKeeper can be also be used for service discovery as well. This is particularly useful if there is no access to Internet, or you are running the setup in a closed network. A new discovery backend can be created as explained here. It would be useful to have the hosted Discovery Service inside the firewall and https://github.com/docker/swarm/issues/660[#660] will discuss this.
 
@@ -136,7 +136,7 @@ swarm-node-01            virtualbox   Running   tcp://192.168.99.103:2376   swar
 swarm-node-02            virtualbox   Running   tcp://192.168.99.104:2376   swarm-master
 ----
 +
-The machines that are part of the cluster have the cluster’s name in the SWARM column, blank otherwise. For example, ``lab'' and ``summit2015'' are standalone machines where as all other machines are part of the ``swarm-master'' cluster. The Swarm master is also identified by (master) in the SWARM column.
+The machines that are part of the cluster have the cluster’s name in the SWARM column, blank otherwise. For example, "`lab`" and "`summit2015`" are standalone machines where as all other machines are part of the "`swarm-master`" cluster. The Swarm master is also identified by (master) in the SWARM column.
 +
 . Connect to the Swarm cluster and find some information about it:
 
@@ -216,7 +216,7 @@ docker run -d --name mywildfly --link mysqldb:db -p 8080:8080 arungupta/wildfly-
 +
 This is using the https://docs.docker.com/userguide/dockerlinks/[Docker Container Linking] explained earlier.
 +
-. Check the state of the cluster as:
+. Check state of the cluster as:
 +
 [source, text]
 ----
@@ -246,7 +246,7 @@ CPUs: 3
 Total Memory: 3.065 GiB
 ----
 +
-``swarm-node-02'' is running three containers and so lets look at the list of containers running there:
+"`swarm-node-02`" is running three containers and so lets look at the list of running containers:
 +
 [source, text]
 ----
@@ -276,7 +276,7 @@ to see the output as:
 
 <<Docker_Compose>> explains how multi container applications can be easily started using Docker Compose.
 
-. Connect to `swarm-node-02':
+. Connect to '`swarm-node-02`':
 
   eval "$(docker-machine env swarm-node-02)"
 
@@ -326,7 +326,7 @@ CPUs: 3
 Total Memory: 3.065 GiB
 ----
 +
-. Connect to `swarm-node-02' again:
+. Connect to '`swarm-node-02`' again:
 
   eval "$(docker-machine env swarm-node-02)"
 +

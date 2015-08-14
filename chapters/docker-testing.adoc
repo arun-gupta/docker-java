@@ -45,7 +45,7 @@ instead of
       dockerfileLocation: src/test/resources/wildfly
 ====
 +
-By default, the ``cube'' profile is activated and this includes all the required dependencies.
+By default, the "`cube`" profile is activated and this includes all the required dependencies.
 +
 The result is shown as:
 +

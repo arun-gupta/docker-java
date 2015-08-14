@@ -3,7 +3,7 @@
 [quote, github.com/GoogleCloudPlatform/kubernetes/]
 Kubernetes is an open source system for managing containerized applications across multiple hosts, providing basic mechanisms for deployment, maintenance, and scaling of applications.
 
-Kubernetes, or ``k8s'' in short, allows the user to provide declarative primitives for the desired state, for example “need 5 WildFly servers and 1 MySQL server running”. Kubernetes self-healing mechanisms, such as auto-restarting, re-scheduling, and replicating containers then ensure this state is met. The user just define the state and Kubernetes ensures that the state is met at all times on the cluster.
+Kubernetes, or "`k8s`" in short, allows the user to provide declarative primitives for the desired state, for example "`need 5 WildFly servers and 1 MySQL server running`". Kubernetes self-healing mechanisms, such as auto-restarting, re-scheduling, and replicating containers then ensure this state is met. The user just define the state and Kubernetes ensures that the state is met at all times on the cluster.
 
 *How is it related to Docker?*
 
@@ -19,7 +19,7 @@ At a very high level, there are three key components:
 
 . *Pods* are the smallest deployable units that can be created, scheduled, and managed. Its a logical collection of containers that belong to an application.
 . *Master* is the central control point that provides a unified view of the cluster. There is a single master node that control multiple minions.
-. *Node* is a worker node that run tasks as delegated by the master. Minions can run one or more pods. It provides an application-specific “virtual host” in a containerized environment.
+. *Node* is a worker node that run tasks as delegated by the master. Minions can run one or more pods. It provides an application-specific "`virtual host`" in a containerized environment.
 
 A picture is always worth a thousand words and so this is a high-level logical block diagram for Kubernetes:
 
@@ -69,7 +69,8 @@ Cluster validation succeeded
 Done, listing cluster services:
 
 Kubernetes master is running at https://10.245.1.2
-KubeDNS is running at https://10.245.1.2/api/v1beta3/proxy/namespaces/default/services/kube-dns
+KubeDNS is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/kube-dns
+KubeUI is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/kube-ui
 ----
 +
 Note down the address for Kubernetes master, `https://10.245.1.2` in this case.
@@ -141,12 +142,12 @@ By default, each VM in the cluster is running Fedora, Kubelet is installed into 
 +
 image::../images/kubernetes-master-default-output-certificate.png[]
 +
-Click on ``Advanced'' and then on ``Proceed to 10.245.1.2'' to see the output as:
+Click on '`Advanced`' and then on '`Proceed to 10.245.1.2`' to see the output as:
 +
 .Kubernetes Output from Master
 image::../images/kubernetes-master-default-output.png[]
 +
-Use ``vagrant'' as the username and ``vagrant'' as the password.
+Use '`vagrant`' as the username and '`vagrant`' as the password.
 +
 Check the list of nodes as:
 +
@@ -286,7 +287,7 @@ spec:
     context: docker-k8s-lab
 ----
 +
-Once again, the ``context: docker-k8s-lab'' label is used. This simplifies querying the created pods later on.
+Once again, the "`context: docker-k8s-lab`" label is used. This simplifies querying the created pods later on.
 +
 . Get status of the Service:
 +
@@ -311,9 +312,9 @@ This is also the selector label used by Service to target Pods.
 +
 When a Service is run on a node, the kubelet adds a set of environment variables for each active Service. It supports both Docker links compatible variables and simpler `{SVCNAME}_SERVICE_HOST` and `{SVCNAME}_SERVICE_PORT` variables, where the Service name is upper-cased and dashes are converted to underscores.
 +
-Our service name is ``mysql-service'' and so `MYSQL_SERVICE_SERVICE_HOST` and `MYSQL_SERVICE_SERVICE_PORT` variables are available to other pods.
-+
-Send a Pull Request for https://github.com/javaee-samples/docker-java/issues/62[#62].
+Our service name is "`mysql-service`" and so `MYSQL_SERVICE_SERVICE_HOST` and `MYSQL_SERVICE_SERVICE_PORT` variables are available to other pods.
+
+Kubernetes also allows services to be resolved using DNS configuration. Send a Pull Request for adding this functionality to the lab as explained in https://github.com/javaee-samples/docker-java/issues/62[#62].
 
 #### Start WildFly Replication Controller
 
@@ -382,7 +383,7 @@ Last login: Thu Jul 16 00:24:36 2015 from 10.0.2.2
 
 ### Rescheduling Pods
 
-Replication Controller ensures that specified number of pod ``replicas'' are running at any one time. If there are too many, the replication controller kills some pods. If there are too few, it starts more.
+Replication Controller ensures that specified number of pod "`replicas`" are running at any one time. If there are too many, the replication controller kills some pods. If there are too few, it starts more.
 
 WildFly Replication Controller is already running with one Pod. Lets delete this Pod and see how a new Pod is automatically rescheduled.
 
@@ -418,7 +419,7 @@ wildfly-rc-xz6wu   0/1       Running   0         14s
 wildfly-rc-xz6wu   1/1       Running   0         22s
 ----
 +
-Notice how Pod with name ``wildfly-rc-w2kk5'' was deleted and a new Pod with the name ``wildfly-rc-xz6wu'' was created.
+Notice how Pod with name "`wildfly-rc-w2kk5`" was deleted and a new Pod with the name "`wildfly-rc-xz6wu`" was created.
 
 ### Scaling Pods
 
@@ -447,7 +448,7 @@ wildfly-rc-bymu7   0/1       Running   0         3s
 wildfly-rc-bymu7   1/1       Running   0         12s
 ----
 +
-Notice a new Pod with the name ``wildfly-rc-bymu7'' is created.
+Notice a new Pod with the name "`wildfly-rc-bymu7`" is created.
 +
 . Scale down the number of Pods:
 +
@@ -516,7 +517,7 @@ Password:
 [root@kubernetes-minion-1 ~]# 
 ----
 +
-Default root password for VM images created by Vagrant is ``vagrant''.
+Default root password for VM images created by Vagrant is '`vagrant`'.
 +
 . See the list of Docker containers running on this VM:
 +
@@ -581,7 +582,7 @@ Password:
 [root@kubernetes-master ~]#
 ----
 +
-Default root password for VM images created by Vagrant is ``vagrant''.
+Default root password for VM images created by Vagrant is '`vagrant`'.
 +
 . Check the containers running on master:
 +

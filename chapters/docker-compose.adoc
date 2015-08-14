@@ -49,17 +49,17 @@ mywildfly:
     - 8080:8080
 ----
 +
-This file is available in link:../attendees/docker-compose.yml[] and shows:
+This file is available in https://github.com/javaee-samples/docker-java/raw/master/attendees/docker-compose.yml[] and shows:
 +
-.. Two services are defined by the name `mysqldb` and `mywildfly`
-.. Image name for each service is defined using `image`
+.. Two services defined by the name `mysqldb` and `mywildfly`
+.. Image name for each service defined using `image`
 .. Environment variables for the MySQL container are defined in `environment`
 .. MySQL container is linked with WildFly container using `links`
 .. Port forwarding is achieved using `ports`
 
 ### Start Services
 
-. All the services can be started, in detached mode, by giving the command:
+. All services can be started, in detached mode, by giving the command:
 +
   docker-compose up -d
 +

@@ -1,6 +1,6 @@
 ## Setup Environments
 
-This section describes the relevant steps to setup the environment on your machine.
+This section describes what, how, and where to install the software needed for this lab. This lab is designed for a BYOL (Brying Your Own Laptop) style hands-on-lab.
 
 ifdef::classroom[]
 ### Instructor
@@ -8,24 +8,23 @@ ifdef::classroom[]
 The instructor setup is designed to make the lab most reliable even with bad Internet connections. Most, if not all, of the software can be directly downloaded from the instructor's machine. The machine is setup as _Docker Host_ and also runs a _Docker Registry_ and Nexus container.
 
 Follow all the https://github.com/javaee-samples/docker-java/blob/master/instructor/readme.adoc[instructor setup instructions] at least a day before the lab. Make sure there is a decent Internet connection available.
-endif::classroom[]
 
 ### Attendees
+endif::classroom[]
 
-This lab is designed for a BYOL (Brying Your Own Laptop) style hands-on-lab.
 ifdef::classroom[]
 This section provide instructions to setup an attendee environment from an instructor's machine.
 endif::classroom[]
 
-#### Hardware
+### Hardware
 
 . Operating System: Mac OS X (10.8 or later), Windows 7 (SP1), Fedora (21 or later)
 . Memory: At least 4 GB+, preferred 8 GB
 
-#### Software
+### Software
 
 . Java: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html[Oracle JDK 8u45]
-. Webbrowser
+. Web Browser
 .. https://www.google.com/chrome/browser/desktop/[Chrome]
 .. link:http://www.getfirefox.com[Firefox]
 
@@ -45,7 +44,7 @@ nameserver  <INSTRUCTOR IP>
 On Windows, configure Domain Suffixes or DNS Suffixes as explained at http://www.pc-freak.net/blog/configure-equivalent-linux-etcresolvconf-search-domaincom-ms-windows-dns-suffixes/.
 endif::classroom[]
 
-#### Git Client
+### Git Client
 
 ifdef::public[]
 Install Git Client as explained at: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
@@ -57,14 +56,14 @@ Linux client: ??
 Windows client is available at http://classroom.example.com:8082/downloads/Git-1.9.5-preview20150319.exe.
 endif::classroom[]
 
-#### Maven
+### Maven
 
 . Download Apache Maven from 
 ifdef::classroom[http://classroom.example.com:8082/downloads/apache-maven-3.3.3-bin.zip]
 ifdef::public[https://maven.apache.org/download.cgi]
 . Unzip to a directory of your choice and add it to the `PATH`.
 
-#### VirtualBox
+### VirtualBox
 
 Docker currently runs natively on Linux. It can be configured to run in a virtual machine on Mac or Windows. This is why Virtualbox is a requirement for Mac or Windows.
 
@@ -84,14 +83,14 @@ Linux Users
 . Create a `/usr/src/linux` link to the current kernel source
 ====
 
-#### Vagrant
+### Vagrant
 
 Download Vagrant from
 ifdef::classroom[http://classroom.example.com:8082/downloads/vagrant]
 ifdef::public[https://www.vagrantup.com/downloads.html]
 and install.
 
-#### Docker Machine
+### Docker Machine
 
 Docker Machine makes it really easy to create Docker hosts on your computer, on cloud providers and inside your own data center. It creates servers, installs Docker on them, then configures the Docker client to talk to them.
 
@@ -119,7 +118,7 @@ endif::public[]
 
 On Windows copy the file in a convenience directory that is included in the `PATH` variable.
 
-#### Create Lab Docker Host
+### Create Lab Docker Host
 
 . Create Docker Host to be used in the lab:
 +
@@ -156,7 +155,7 @@ This will provide the IP address associated with the Docker Machine created earl
 <IP ADDRESS>  dockerhost
 ----
 
-#### Docker Client
+### Docker Client
 
 Docker Client is used to communicate with Docker Host.
 
@@ -192,7 +191,7 @@ curl http://classroom.example.com:8082/docker/docker-1.7.0.exe -o docker.exe
 ----
 endif::classroom[]
 
-#### Kubernetes
+### Kubernetes
 
 . Download Kubernetes (1.0.1) from 
 ifdef::classroom[http://classroom.example.com:8082/downloads/kubernetes.tar.gz]
@@ -208,14 +207,14 @@ cd kubernetes
 
 NOTE: Kubernetes 1.0.1 is the only version verified to work with Virtual Box. More details at: https://github.com/kubernetes/kubernetes/issues/12614
 
-#### WildFly
+### WildFly
 
 . Download WildFly 9.0 from
 ifdef::classroom[http://classroom.example.com:8082/downloads/wildfly-9.0.0.Final.zip]
 ifdef::public[http://download.jboss.org/wildfly/8.2.0.Final/wildfly-9.0.0.Final.zip]
 . Install it by extracting the archive.
 
-#### JBoss Developer Studio 9 - Beta 2
+### JBoss Developer Studio 9 - Beta 2
 
 To install JBoss Developer Studio stand-alone, complete the following steps:
 
