@@ -6,7 +6,7 @@ A frequent requirement for Java EE based applications is running them on a clust
 The diagram below shows what will be achieved in this section:
 
 .Standalone Cluster with WildFly and mod_cluster
-image::../images/wildfly_cluster1.png[]
+image::chapters/images/wildfly_cluster1.png[]
 
 . Start Apache HTTPD server
 +
@@ -18,7 +18,7 @@ docker run -d --name modcluster -p 80:80 classroom.example.com:5000/mod_cluster
 . Open http://dockerhost/mod_cluster_manager in your browser to see the empty console as:
 +
 .Apache HTTPD runing mod_cluster_manager interface
-image::../images/wildfly_cluster2.png[]
+image::chapters/images/wildfly_cluster2.png[]
 +
 . Start Postgres database container, if not already running:
 +
@@ -37,12 +37,12 @@ docker run -d --name server1 --link db:db --link modcluster:modcluster classroom
 Besides linking the database container using `--link db:db`, we also link the ``modcluster'' container. This should be done rather quickly and if you now revisit the http://dockerhost/mod_cluster_manager/[mod_cluster_manager] in your browser, then you can see that the first server was registered with the loadbalancer:
 +
 .First WildFly instance registered with Load Balancer
-image::../images/wildfly_cluster3.png[]
+image::chapters/images/wildfly_cluster3.png[]
 +
 . To make sure the Ticket Monster application is also running just visit http://dockerhost/ticket-monster and you will be presented with the Ticket Monster welcome screen.
 +
 .Clustered Ticket Monster Application
-image::../images/wildfly_cluster4.png[]
+image::chapters/images/wildfly_cluster4.png[]
 +
 . Start as many WildFly instances as you want (and your computer memory can handle):
 +

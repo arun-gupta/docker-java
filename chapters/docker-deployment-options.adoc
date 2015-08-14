@@ -50,36 +50,36 @@ Start JBoss Developer Studio, if not already started.
 . Select '`Servers`' tab, create a new server adapter
 +
 .Server adapter
-image::../images/jbds1.png[]
+image::chapters/images/jbds1.png[]
 +
 . Assign an existing or create a new WildFly 9.0.0 runtime (changed properties are highlighted.)
 +
 .WildFly Runtime Properties
-image::../images/jbds2.png[]
+image::chapters/images/jbds2.png[]
 +
 . If a new runtime needs to be created, pick the directory for WildFly 9.0.0:
 +
 .WildFly 9.0.0.Final Runtime
-image::../images/jbds3.png[]
+image::chapters/images/jbds3.png[]
 +
 Click on '`Finish`'.
 +
 . Double-click on the newly selected server to configure server properties:
 +
 .Server properties
-image::../images/jbds4.png[]
+image::chapters/images/jbds4.png[]
 +
 The host name is specified to '`dockerhost`'. Two properties on the left are automatically propagated from the previous dialog. Additional two properties on the right side are required to disable to keep deployment scanners in sync with the server.
 +
 . Specify a custom deployment folder on Deployment tab of Server Editor
 +
 .Custom deployment folder
-image::../images/jbds5.png[]
+image::chapters/images/jbds5.png[]
 +
 . Right-click on the newly created server adapter and click '`Start`'.
 +
 .Started server
-image::../images/jbds6.png[]
+image::chapters/images/jbds6.png[]
 
 ### Deploy Application Using Shared Volumes
 
@@ -89,7 +89,7 @@ image::../images/jbds6.png[]
 The project runs and displays the start page of the application.
 
 .Start Server
-image::../images/jbds7.png[]
+image::chapters/images/jbds7.png[]
 
 Congratulations!
 
@@ -143,7 +143,7 @@ Now you've sucessfully used the CLI to remote deploy the Java EE 7 sample applic
 WildFly comes with a web-based administration console. It also relies on the same management APIs that are used by JBoss Developer Tools and the CLI. It provides a simple and easy to use web-based console to manage WildFly instance. For a Docker image, it needs to be explicitly enabled as explained in <<Enabling_WildFly_Administration>>. Once enabled, it can be accessed at http://dockerhost:9990.
 
 .WildFly Web Console
-image::../images/console1.png[]
+image::chapters/images/console1.png[]
 
 Username and password credentials are shown in <<WildFly_Administration_Credentials>>. 
 
@@ -159,7 +159,7 @@ Deploy the application using the console with the following steps:
 . Go to '`Deployments`' tab.
 +
 .Deployments tab in WildFly Web Console
-image::../images/wildfly9-deployments-tab.png[]
+image::chapters/images/wildfly9-deployments-tab.png[]
 +
 . Click on '`Add`' button.
 . On '`Add Deployment`' screen, take the default of '`Upload a new deployment`' and click '`Next>>`'.
@@ -168,17 +168,17 @@ image::../images/wildfly9-deployments-tab.png[]
 . Select '`Enable`' checkbox.
 +
 .Enable a deployment
-image::../images/wildfly9-add-deployments.png[]
+image::chapters/images/wildfly9-add-deployments.png[]
 +
 . Click '`Finish`'.
 +
 .Java EE 7 Simple Sample Deployed
-image::../images/wildfly9-javaee7-simple-sample-deployed.png[]
+image::chapters/images/wildfly9-javaee7-simple-sample-deployed.png[]
 
 This will complete the deployment of the Java EE 7 application using Web Console. The output can be seen out http://dockerhost:8080/javaee7-simple-sample and looks like:
 
 .Java EE 7 Simple Sample Output
-image::../images/wildfly9-javaee7-simple-sample-output.png[]
+image::chapters/images/wildfly9-javaee7-simple-sample-output.png[]
 
 ### Deploy Application Using Management API
 
@@ -195,24 +195,24 @@ In addition to application port 8080, the administration port 9990 is exposed as
 +
 . Create a new server adapter in JBoss Developer Studio and name it "`WildFly 9.0.0-Management`". Specify the host name as '`dockerhost`'.
 +
-image::../images/jbds8.png[]
+image::chapters/images/jbds8.png[]
 +
 . Click on '`Next>`' and change the values as shown.
 +
 .Create New Server Adapter
-image::../images/jbds9.png[]
+image::chapters/images/jbds9.png[]
 +
 . Take the default values in '`Remote System Integration`' and click on '`Finish`'.
 +
 . Change server properties by double clicking on the newly created server adapter. Specify admin credentials (username: docker, password: docker#admin). Note, you need to delete the existing password and use this instead:
 +
 .Management Login Credentials
-image::../images/jbds10.png[]
+image::chapters/images/jbds10.png[]
 +
 . Right-click on the newly created server adapter and click '`Start`'. Status quickly changes to '`Started`' as shown.
 +
 .Synchronized WildFly Server
-image::../images/jbds11.png[]
+image::chapters/images/jbds11.png[]
 +
 . Right-click on the javaee7-simple-sample project, select '`Run on Server`' and choose this server. The project runs and displays the start page of the application.
 . Stop WildFly when you're done.

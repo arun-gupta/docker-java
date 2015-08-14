@@ -7,7 +7,7 @@ OpenShift is Red Hat’s open source PaaS platform. OpenShift v3 (due to be rele
 
 OpenShift v3 uses a new platform stack that is using plenty of community projects where Red Hat contributes such as Fedora, Centos, Docker, Project Atomic, Kubernetes, and OpenStack. OpenShift v3 Platform Combines Docker, Kubernetes, Atomic and More explain this platform stack in detail.
 
-image::../images/openshiftv3-stack.png[]
+image::chapters/images/openshiftv3-stack.png[]
 
 ### Download and Run OpenShift Origin
 
@@ -43,7 +43,7 @@ df29f4cdff9e        openshift/origin:latest   "/usr/bin/openshift    57 seconds 
 
 Here is the deployment diagram of our application:
 
-image::../images/openshiftv3-wildfly-mysql-deployment.png[]
+image::chapters/images/openshiftv3-wildfly-mysql-deployment.png[]
 
 . WildFly and MySQL are running on separate pods.
 . Each of them is wrapped in a Replication Controller to enable simplified scaling.
