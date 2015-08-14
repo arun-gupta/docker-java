@@ -43,10 +43,10 @@ The base image is used for all JBoss community images. It provides a base layer 
 . A jboss user (uid/gid 1000) with home directory set to `/opt/jboss`
 . A few tools that may be useful when extending the image or installing software, like unzip.
 
-The `jboss/base-jdk:7' image adds:
+The "`jboss/base-jdk:7`" image adds:
 
-. Latest OpenJDK distribution
-. Adds a JAVA_HOME environment variable
+. OpenJDK 7 distribution
+. Adds a `JAVA_HOME` environment variable
 
 When the download is done, you can list the images again and will see the following:
 

@@ -194,7 +194,7 @@ endif::classroom[]
 
 #### Kubernetes
 
-. Download Kubernetes (1.0.3) from 
+. Download Kubernetes (1.0.1) from 
 ifdef::classroom[http://classroom.example.com:8082/downloads/kubernetes.tar.gz]
 ifdef::public[https://github.com/kubernetes/kubernetes/releases/download/v1.0.1/kubernetes.tar.gz]
 . Extract the archive and install it by:

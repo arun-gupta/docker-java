@@ -1,6 +1,6 @@
 ## Docker Basics
 
-PURPOSE: This chapter introduces the basic terminology of Docker.
+*PURPOSE*: This chapter introduces the basic terminology of Docker.
 
 [quote, docs.docker.com/]
 Docker is a platform for developers and sysadmins to develop, ship, and run applications. Docker lets you quickly assemble applications from components and eliminates the friction that can come when shipping code. Docker lets you get your code tested and deployed into production as fast as possible.
@@ -40,10 +40,10 @@ NOTE: By default, Docker obtains these base images from Docker Hub.
 
 Docker images are then built from these base images using a simple, descriptive set of steps we call instructions. Each instruction creates a new layer in our image. Instructions include actions like:
 
-. Run a command.
-. Add a file or directory.
-. Create an environment variable.
-. What process to run when launching a container from this image.
+. Run a command
+. Add a file or directory
+. Create an environment variable
+. Run a process when launching a container
 
 These instructions are stored in a file called a Dockerfile. Docker reads this Dockerfile when you request a build of an image, executes the instructions, and returns a final image.
 
@@ -55,17 +55,17 @@ A container consists of an operating system, user-added files, and meta-data. As
 
 Machine makes it really easy to create Docker hosts on your computer, on cloud providers and inside your own data center. It creates servers, installs Docker on them, then configures the Docker client to talk to them.
 
-Once your Docker host has been created, it then has a number of commands for managing them:
+Once your Docker host has been created, it then has a number of commands for managing containers:
 
-. Starting, stopping, restarting
-. Upgrading Docker
-. Configuring the Docker client to talk to your host
+. Start, stop, restart container
+. Upgrade Docker
+. Configure the Docker client to talk to a host
 
 You used Docker Machine already during the attendee setup. We won't need it too much further on. But if you need to create hosts, it's a very handy tool to know about. From now on we're mostly going to use the docker client.
 
-Find out more about the details at the link:https://docs.docker.com/machine/[Official Docker Machine Website]
+Find out more about the details at the link:https://docs.docker.com/machine/[Docker Machine Website].
 
-Check if docker machine is working using the following command:
+Check if docker machine is working:
 
   docker-machine -v
 
@@ -116,7 +116,7 @@ NAME        ACTIVE   DRIVER       STATE     URL                         SWARM
 lab                  virtualbox   Running   tcp://192.168.99.101:2376   
 ----
 
-This machine is shown in ``Running'' state. If the machine state is stopped, start it with:
+This machine is shown in "`Running`" state. If the machine state is stopped, start it with:
 
   docker-machine start lab
 
