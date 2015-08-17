@@ -72,7 +72,7 @@ ifdef::classroom[http://classroom.example.com:8082/downloads/virtualbox]
 ifdef::public[https://www.virtualbox.org/]
 .
 
-Virtual Box 5.0.0 does not allow Kubernetes cluster to be started: https://github.com/kubernetes/kubernetes/issues/12614. Make sure to download VirtualBox 4.3.30.
+Virtual Box 5.0.0 does not allow Kubernetes cluster to be started: https://github.com/kubernetes/kubernetes/issues/12614. Make sure to download VirtualBox 4.3.30[https://www.virtualbox.org/wiki/Download_Old_Builds_4_3].
 
 [WARNING]
 ====
