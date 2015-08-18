@@ -183,7 +183,7 @@ kubernetes> ./cluster/kubectl.sh get rc
 CONTROLLER   CONTAINER(S)   IMAGE(S)   SELECTOR   REPLICAS
 ----
 
-### Deploy Java EE Application
+### Deploy Java EE Application (multiple configuration files)
 
 Pods, and the IP addresses assigned to them, are ephemeral. If a pod dies then Kubernetes will recreate that pod because of its self-healing features, but it might recreate it on a different host. Even if it is on the same host, a different IP address could be assigned to it. And so any application cannot rely upon the IP address of the pod.
 
@@ -287,7 +287,7 @@ spec:
     context: docker-k8s-lab
 ----
 +
-Once again, the "`context: docker-k8s-lab`" label is used. This simplifies querying the created pods later on.
+Once again, the label "`context: docker-k8s-lab`" is used. This simplifies querying the created pods later on.
 +
 . Get status of the Service:
 +
@@ -299,7 +299,7 @@ kubernetes      component=apiserver,provider=kubernetes   <none>                
 mysql-service   context=docker-k8s-lab,name=mysql-pod     context=docker-k8s-lab,name=mysql-pod   10.247.63.43   3306/TCP
 ----
 +
-If multiple services are running, then it can be narrowed by specifying labels:
+If multiple services are running, then it can be narrowed by specifying the labels:
 +
 [source, text]
 ----
@@ -351,7 +351,7 @@ spec:
         - containerPort: 8080
 ----
 +
-. Check the status of Pod inside Replication Controller:
+. Check status of the Pod inside Replication Controller:
 +
 [source, text]
 ----
@@ -369,7 +369,8 @@ wildfly-rc-w2kk5   1/1       Running   0          6m
 10.246.1.23
 ----
 
-#### Access the application
+[[Access_Kubernetes_Application_Minion]]
+#### Access the application (using minion)
 
 . Log in to minion and access the application:
 +
@@ -380,6 +381,99 @@ Last login: Thu Jul 16 00:24:36 2015 from 10.0.2.2
 [vagrant@kubernetes-minion-1 ~]$ curl http://10.246.1.23:8080/employees/resources/employees/
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?><collection><employee><id>1</id><name>Penny</name></employee><employee><id>2</id><name>Sheldon</name></employee><employee><id>3</id><name>Amy</name></employee><employee><id>4</id><name>Leonard</name></employee><employee><id>5</id><name>Bernadette</name></employee><employee><id>6</id><name>Raj</name></employee><employee><id>7</id><name>Howard</name></employee><employee><id>8</id><name>Priya</name></employee></collection>
 ----
+
+[[Access_Kubernetes_Application_Proxy]]
+#### Access the application (using proxy)
+
+Send a PR for https://github.com/javaee-samples/docker-java/issues/80
+
+### Deploy Java EE Application (one configuration file)
+
+Previous section showed how to deploy the Java EE application using multiple configuration files. This application can be delpoyed using a single configuration file as well.
+
+. Start the application using the configuration file:
++
+[source, yaml]
+....
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mysql-pod
+  labels:
+    name: mysql-pod
+    context: docker-k8s-lab
+spec:
+  containers: 
+    - 
+      name: mysql
+      image: mysql:latest
+      env: 
+        - 
+          name: "MYSQL_USER"
+          value: "mysql"
+        - 
+          name: "MYSQL_PASSWORD"
+          value: "mysql"
+        - 
+          name: "MYSQL_DATABASE"
+          value: "sample"
+        - 
+          name: "MYSQL_ROOT_PASSWORD"
+          value: "supersecret"
+      ports: 
+        - 
+          containerPort: 3306
+----
+apiVersion: v1
+kind: Service
+metadata: 
+  name: mysql-service
+  labels: 
+    name: mysql-pod
+    context: docker-k8s-lab
+spec: 
+  ports:
+    # the port that this service should serve on
+    - port: 3306
+  # label keys and values that must match in order to receive traffic for this service
+  selector: 
+    name: mysql-pod
+    context: docker-k8s-lab
+----
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: wildfly-rc
+  labels:
+    name: wildfly
+    context: docker-k8s-lab
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: wildfly
+    spec:
+      containers:
+      - name: wildfly-rc-pod
+        image: arungupta/wildfly-mysql-javaee7:k8s
+        ports:
+        - containerPort: 8080
+....
++
+Notice that each section, one each for MySQL Pod, MySQL Service, and WildFly Replication Controller, is separated by `----`.
++
+. Start the application:
++
+[source, text]
+----
+./cluster/kubectl.sh create -f ../../attendees/kubernetes/app.yaml
+pods/mysql-pod
+services/mysql-service
+replicationcontrollers/wildfly-rc
+----
++
+. Access the application using <<Access_Kubernetes_Application_Minion>> or <<Access_Kubernetes_Application_Proxy>>.
 
 ### Rescheduling Pods
 
