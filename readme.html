@@ -438,6 +438,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_kubernetes">Kubernetes</a></li>
 <li><a href="#_wildfly">WildFly</a></li>
 <li><a href="#_jboss_developer_studio_9_beta_2">JBoss Developer Studio 9 - Beta 2</a></li>
+<li><a href="#_pull_docker_images">Pull Docker images</a></li>
 </ul>
 </li>
 <li><a href="#_docker_basics">Docker Basics</a>
@@ -629,8 +630,7 @@ Latest content of this lab is always at <a href="https://github.com/javaee-sampl
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Download Apache Maven from
-<a href="https://maven.apache.org/download.cgi" class="bare">https://maven.apache.org/download.cgi</a></p>
+<p>Download Apache Maven from <a href="https://maven.apache.org/download.cgi" class="bare">https://maven.apache.org/download.cgi</a>.</p>
 </li>
 <li>
 <p>Unzip to a directory of your choice and add it to the <code>PATH</code>.</p>
@@ -644,9 +644,7 @@ Latest content of this lab is always at <a href="https://github.com/javaee-sampl
 <p>Docker currently runs natively on Linux. It can be configured to run in a virtual machine on Mac or Windows. This is why Virtualbox is a requirement for Mac or Windows.</p>
 </div>
 <div class="paragraph">
-<p>Downloads are available from
-<a href="https://www.virtualbox.org/" class="bare">https://www.virtualbox.org/</a>
-.</p>
+<p>Downloads are available from <a href="https://www.virtualbox.org/" class="bare">https://www.virtualbox.org/</a>.</p>
 </div>
 <div class="paragraph">
 <p>Virtual Box 5.0.0 does not allow Kubernetes cluster to be started: <a href="https://github.com/kubernetes/kubernetes/issues/12614" class="bare">https://github.com/kubernetes/kubernetes/issues/12614</a>. Make sure to download VirtualBox 4.3.30[<a href="https://www.virtualbox.org/wiki/Download_Old_Builds_4_3" class="bare">https://www.virtualbox.org/wiki/Download_Old_Builds_4_3</a>].</p>
@@ -682,9 +680,7 @@ Latest content of this lab is always at <a href="https://github.com/javaee-sampl
 <div class="sect2">
 <h3 id="_vagrant">Vagrant</h3>
 <div class="paragraph">
-<p>Download Vagrant from
-<a href="https://www.vagrantup.com/downloads.html" class="bare">https://www.vagrantup.com/downloads.html</a>
-and install.</p>
+<p>Download Vagrant from <a href="https://www.vagrantup.com/downloads.html" class="bare">https://www.vagrantup.com/downloads.html</a> and install.</p>
 </div>
 </div>
 <div class="sect2">
@@ -692,11 +688,19 @@ and install.</p>
 <div class="paragraph">
 <p>Docker Machine makes it really easy to create Docker hosts on your computer, on cloud providers and inside your own data center. It creates servers, installs Docker on them, then configures the Docker client to talk to them.</p>
 </div>
-<div class="paragraph">
-<p>Install as explained at: <a href="https://docs.docker.com/machine/#installation" class="bare">https://docs.docker.com/machine/#installation</a></p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text"># Mac
+curl -L https://github.com/docker/machine/releases/download/v0.4.0/docker-machine_darwin-amd64 &gt; /usr/local/bin/docker-machine
+chmod +x /usr/local/bin/docker-machine
+
+# Linux
+curl -L  https://github.com/docker/machine/releases/download/v0.4.0/docker-machine_linux-amd64 &gt; /usr/local/bin/docker-machine
+chmod +x /usr/local/bin/docker-machine
+
+#Windows
+curl https://github.com/docker/machine/releases/download/v0.4.0/docker-machine.exe</code></pre>
 </div>
-<div class="paragraph">
-<p>On Windows copy the file in a convenience directory that is included in the <code>PATH</code> variable.</p>
 </div>
 </div>
 <div class="sect2">
@@ -759,8 +763,7 @@ curl -L http://test.docker.com.s3.amazonaws.com/builds/Windows/x86_64/docker-1.7
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Download Kubernetes (1.0.1) from
-<a href="https://github.com/kubernetes/kubernetes/releases/download/v1.0.1/kubernetes.tar.gz" class="bare">https://github.com/kubernetes/kubernetes/releases/download/v1.0.1/kubernetes.tar.gz</a></p>
+<p>Download Kubernetes (1.0.1) from <a href="https://github.com/kubernetes/kubernetes/releases/download/v1.0.1/kubernetes.tar.gz" class="bare">https://github.com/kubernetes/kubernetes/releases/download/v1.0.1/kubernetes.tar.gz</a>.</p>
 </li>
 <li>
 <p>Extract the archive and install it by:</p>
@@ -792,8 +795,7 @@ Kubernetes 1.0.1 is the only version verified to work with Virtual Box. More det
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Download WildFly 9.0 from
-<a href="http://download.jboss.org/wildfly/8.2.0.Final/wildfly-9.0.0.Final.zip" class="bare">http://download.jboss.org/wildfly/8.2.0.Final/wildfly-9.0.0.Final.zip</a></p>
+<p>Download WildFly 9.0 from <a href="http://download.jboss.org/wildfly/8.2.0.Final/wildfly-9.0.0.Final.zip" class="bare">http://download.jboss.org/wildfly/8.2.0.Final/wildfly-9.0.0.Final.zip</a>.</p>
 </li>
 <li>
 <p>Install it by extracting the archive.</p>
@@ -809,9 +811,8 @@ Kubernetes 1.0.1 is the only version verified to work with Virtual Box. More det
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Download
-<a href="http://tools.jboss.org/downloads/devstudio/mars/9.0.0.Beta2.html">9.0.0 Beta 2</a>
-<a href="https://devstudio.redhat.com/9.0/snapshots/builds/devstudio.product_master/latest/installer/">Laest Nightly</a> (used with the lab)</p>
+<p>Download <a href="http://tools.jboss.org/downloads/devstudio/mars/9.0.0.Beta2.html">9.0.0 Beta 2</a> or
+<a href="https://devstudio.redhat.com/9.0/snapshots/builds/devstudio.product_master/latest/installer/">Latest Nightly</a>.</p>
 </li>
 <li>
 <p>Start the installer as:</p>
@@ -825,6 +826,19 @@ Kubernetes 1.0.1 is the only version verified to work with Virtual Box. More det
 </div>
 </li>
 </ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_pull_docker_images">Pull Docker images</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">docker pull jboss/wildfly
+docker pull arungupta/wildfly-management
+docker pull arungupta/javaee7-hol
+docker pull mysql
+docker pull swarm
+docker pull arungupta/wildfly-mysql-javaee7</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -1972,8 +1986,7 @@ Windows users, please make sure to use <code>-v /c/Users/</code> notation for dr
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>CLI needs to be locally installed and comes as part of WildFly. Download WildFly 9.0 from
-ifdef::public[<a href="http://download.jboss.org/wildfly/9.0.0.Final/wildfly-9.0.0.Final.zip" class="bare">http://download.jboss.org/wildfly/9.0.0.Final/wildfly-9.0.0.Final.zip</a>]. Unzip into a folder of your choice (e.g. <code>/Users/arungupta/tools/</code>). This will create <code>wildfly-9.0.0.Final</code> directory here. This folder is referred to $WIDLFY_HOME from here on. Make sure to add the <code>/Users/arungupta/tools/wildfly-9.0.0.Final/bin</code> to your $PATH.</p>
+<p>CLI needs to be locally installed and comes as part of WildFly. This should be available in the previously downloaded WildFly. Unzip into a folder of your choice (e.g. <code>/Users/arungupta/tools/</code>). This will create <code>wildfly-9.0.0.Final</code> directory here. This folder is referred to $WIDLFY_HOME from here on. Make sure to add the <code>/Users/arungupta/tools/wildfly-9.0.0.Final/bin</code> to your $PATH.</p>
 </li>
 <li>
 <p>Run the &#8220;wildfly-management&#8221; image with fixed port mapping as explained in <a href="#Management_Fixed_Port_Mapping">Fixed Port Mapping</a>.</p>
@@ -2369,7 +2382,7 @@ arungupta/javaee7-docker-maven    latest              2e51b3fca40f        4 seco
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Download and Install <a href="http://classroom.example.com:8082/downloads/jboss-devstudio-9.0.0.Beta2-v20150609-1026-B3346-installer-standalone.jar">JBoss Developer Studio 9.0 Beta 2</a>, take defaults through out the installation.</p>
+<p>Use JBoss Developer Studio 9.0 Beta 2.</p>
 <div class="paragraph">
 <p>Alternatively, download <a href="http://www.eclipse.org/downloads/index-developer-default.php">Eclipse Mars latest build</a> and configure JBoss Tools plugin from the update site <a href="http://download.jboss.org/jbosstools/updates/nightly/mars/" class="bare">http://download.jboss.org/jbosstools/updates/nightly/mars/</a>.</p>
 </div>
@@ -2845,14 +2858,14 @@ Docker Compose is a tool for defining and running complex applications with Dock
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-yml" data-lang="yml">mysqldb:
-  image: classroom.example.com:5000/mysql
+  image: mysql
   environment:
     MYSQL_DATABASE: sample
     MYSQL_USER: mysql
     MYSQL_PASSWORD: mysql
     MYSQL_ROOT_PASSWORD: supersecret
 mywildfly:
-  image: classroom.example.com:5000/wildfly-mysql-javaee7
+  image: arungupta/wildfly-mysql-javaee7
   links:
     - mysqldb:db
   ports:
@@ -4451,7 +4464,7 @@ d970ddff7046        gcr.io/google_containers/pause:0.8.0                        
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-08-14 16:08:32 PDT
+Last updated 2015-08-18 10:24:52 PDT
 </div>
 </div>
 </body>
