@@ -1,0 +1,11 @@
+== Kubernetes and Fabric8
+
+=== Fabic 8 Console
+
+Allows to package and deploy application using a Console
+
+=== Visualization of k8s resources
+
+=== Inject k8s resources using @Inject in Java EE client
+
+=== Maven plugin to generate JSON for your WAR file and deploy it in k8s
