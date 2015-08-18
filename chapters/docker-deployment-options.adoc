@@ -13,8 +13,6 @@ https://github.com/javaee-samples/javaee7-simple-sample[Java EE 7 Simple Sample]
 
   mvn clean package
 
-ifdef::classroom[Copy the Maven `lab-settings.xml` file that you have downloaded from the instructor machine and place it inside `docker-java` directory.]
-
 ### Start Application Server
 
 Start WildFly server as:
@@ -110,9 +108,7 @@ The Command Line Interface (CLI) is a tool for connecting to WildFly instances t
 
 Lets use the CLI to deploy javaee7-simple-sample to WildFly running in the container.
 
-. CLI needs to be locally installed and comes as part of WildFly. Download WildFly 9.0 from
-ifdef::classroom[http://classroom.example.com:8082/downloads/wildfly-9.0.0.Final.zip]
-ifdef::public[http://download.jboss.org/wildfly/9.0.0.Final/wildfly-9.0.0.Final.zip]. Unzip into a folder of your choice (e.g. `/Users/arungupta/tools/`). This will create `wildfly-9.0.0.Final` directory here. This folder is referred to $WIDLFY_HOME from here on. Make sure to add the `/Users/arungupta/tools/wildfly-9.0.0.Final/bin` to your $PATH.
+. CLI needs to be locally installed and comes as part of WildFly. This should be available in the previously downloaded WildFly. Unzip into a folder of your choice (e.g. `/Users/arungupta/tools/`). This will create `wildfly-9.0.0.Final` directory here. This folder is referred to $WIDLFY_HOME from here on. Make sure to add the `/Users/arungupta/tools/wildfly-9.0.0.Final/bin` to your $PATH.
 +
 . Run the "`wildfly-management`" image with fixed port mapping as explained in <<Management_Fixed_Port_Mapping>>.
 . Run the `jboss-cli` command and connect to the WildFly instance.

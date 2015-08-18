@@ -6,7 +6,7 @@ The Docker tooling is aimed at providing at minimum the same basic level feature
 
 As this is still in early access stage, you will have to install it first:
 
-. Download and Install http://classroom.example.com:8082/downloads/jboss-devstudio-9.0.0.Beta2-v20150609-1026-B3346-installer-standalone.jar[JBoss Developer Studio 9.0 Beta 2], take defaults through out the installation. 
+. Use JBoss Developer Studio 9.0 Beta 2. 
 +
 Alternatively, download http://www.eclipse.org/downloads/index-developer-default.php[Eclipse Mars latest build] and configure JBoss Tools plugin from the update site http://download.jboss.org/jbosstools/updates/nightly/mars/.
 +

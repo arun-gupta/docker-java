@@ -15,12 +15,10 @@ At first, this list is empty. Now, let's get a vanilla `jboss/wildfly` image:
 
 [source, text]
 ----
-ifdef::classroom[docker pull classroom.example.com:5000/wildfly]
-ifdef::public[docker pull jboss/wildfly]
+docker pull jboss/wildfly
 ----
 
 By default, docker images are retrieved from https://hub.docker.com/[Docker Hub].
-ifdef::classroom[This lab is congfigured such a private registry is running on instructor's machine. This allows all the attendees to get the images from that machine instead.]
 
 You can see, that Docker is downloading the image with it's different layers.
 
@@ -65,8 +63,7 @@ Run WildFly container in an interactive mode.
 
 [source, text]
 ----
-ifdef::classroom[docker run -it classroom.example.com:5000/wildfly]
-ifdef::public[docker run -it jboss/wildfly]
+docker run -it jboss/wildfly
 ----
 
 This will show the output as:
@@ -109,8 +106,7 @@ Restart the container in detached mode:
 
 [source, text]
 ----
-ifdef::classroom[docker run -d classroom.example.com:5000/wildfly]
-ifdef::public[docker run -d jboss/wildfly]
+docker run -d jboss/wildfly
 972f51cc8422eec0a7ea9a804a55a2827b5537c00a6bfd45f8646cb764bc002a
 ----
 
@@ -136,8 +132,7 @@ We can check it by issuing the `docker ps` command which retrieves the images pr
 ----
 > docker ps
 CONTAINER ID        IMAGE                                 COMMAND                CREATED             STATUS              PORTS                    NAMES
-ifdef::classroom[0bc123a8ece0        classroom.example.com:5000/wildfly:latest    "/opt/jboss/wildfly/   4 seconds ago       Up 4 seconds        8080/tcp                 tender_wozniak]
-ifdef::public[922abbb9c63a        jboss/wildfly       "/opt/jboss/wildfly/   3 seconds ago       Up 2 seconds        8080/tcp            desperate_lovelace]
+922abbb9c63a        jboss/wildfly       "/opt/jboss/wildfly/   3 seconds ago       Up 2 seconds        8080/tcp            desperate_lovelace
 ----
 
 Also try `docker ps -a` to see all the containers on this machine.
@@ -168,8 +163,7 @@ docker run -d -P jboss/wildfly
 ----
 > docker ps
 CONTAINER ID        IMAGE                                 COMMAND                CREATED             STATUS              PORTS                     NAMES
-ifdef::classroom[4545ced66242        classroom.example.com:5000/wildfly:latest    "/opt/jboss/wildfly/   3 seconds ago       Up 3 seconds        0.0.0.0:32768->8080/tcp   suspicious_wozniak   ]
-ifdef::public[63a69bff9c69        jboss/wildfly       "/opt/jboss/wildfly/   14 seconds ago      Up 13 seconds       0.0.0.0:32768->8080/tcp   kickass_bohr]
+63a69bff9c69        jboss/wildfly       "/opt/jboss/wildfly/   14 seconds ago      Up 13 seconds       0.0.0.0:32768->8080/tcp   kickass_bohr
 ----
 
 The port mapping is shown in the `PORTS` column. Access the WildFly server at http://dockerhost:32768. Make sure to use the correct port number as shown in your case.
@@ -189,8 +183,7 @@ Restart the container as:
 
 [source, text]
 ----
-ifdef::classroom[docker run -it -p 8080:8080 classroom.example.com:5000/wildfly]
-ifdef::public[docker run -it -p 8080:8080 jboss/wildfly]
+docker run -it -p 8080:8080 jboss/wildfly
 ----
 
 The format is `-p hostPort:containerPort`. This option maps container ports to host ports and allows other containers on our host to access them.
@@ -218,16 +211,14 @@ The following command will override the default command in Docker file, start Wi
 
 [source, text]
 ----
-ifdef::classroom[docker run -P -d classroom.example.com:5000/wildfly /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0]
-ifdef::public[docker run -P -d jboss/wildfly /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0]
+docker run -P -d jboss/wildfly /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0
 ----
 
 Accessing WildFly Administration Console require a user in administration realm. A pre-created image, with appropriate username/password credentials, is used to start WildFly as:
 
 [source, text]
 ----
-ifdef::classroom[docker run -P -d classroom.example.com:5000/wildfly-management]
-ifdef::public[docker run -P -d arungupta/wildfly-management]
+docker run -P -d arungupta/wildfly-management
 ----
 
 `-P` map any exposed ports inside the image to a random port on Docker host.
@@ -238,8 +229,7 @@ Look at the exposed ports as:
 ----
 docker ps
 CONTAINER ID        IMAGE                                           COMMAND                CREATED             STATUS              PORTS                                              NAMES
-ifdef::classroom[6f610b310a46        classroom.example.com:5000/wildfly-management:latest   "/bin/sh -c '/opt/jb   6 seconds ago       Up 6 seconds        0.0.0.0:32769->8080/tcp, 0.0.0.0:32770->9990/tcp   determined_darwin ]
-ifdef::public[af7d6914a1f9        arungupta/wildfly-management   "/opt/jboss/wildfly/   2 seconds ago       Up 1 seconds        0.0.0.0:32770->8080/tcp, 0.0.0.0:32769->9990/tcp   happy_bardeen]
+af7d6914a1f9        arungupta/wildfly-management   "/opt/jboss/wildfly/   2 seconds ago       Up 1 seconds        0.0.0.0:32770->8080/tcp, 0.0.0.0:32769->9990/tcp   happy_bardeen
 ----
 
 Look for the host port that is mapped in the container, `32769` in this case. Access the admin console at http://dockerhost:32769.
@@ -294,8 +284,7 @@ This management image can also be started with a pre-defined port mapping as:
 
 [source, text]
 ----
-ifdef::classroom[docker run -p 8080:8080 -p 9990:9990 -d classroom.example.com:5000/wildfly-management]
-ifdef::public[docker run -p 8080:8080 -p 9990:9990 -d arungupta/wildfly-management]
+docker run -p 8080:8080 -p 9990:9990 -d arungupta/wildfly-management
 ----
 
 In this case, Docker port mapping will be shown as:

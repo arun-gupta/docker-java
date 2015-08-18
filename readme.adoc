@@ -3,10 +3,6 @@ v1.2.x, Aug 13, 2015
 :toc:
 :toc-title: Table of Dockernetes
 :toclevels: 3
-////
-:classroom:
-////
-:public:
 :toc-placement!:
 :imagesdir: ./chapters/images/
 
