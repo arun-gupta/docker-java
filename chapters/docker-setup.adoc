@@ -122,7 +122,7 @@ NOTE: Kubernetes 1.0.1 is the only version verified to work with Virtual Box. Mo
 
 ### WildFly
 
-. Download WildFly 9.0 from http://download.jboss.org/wildfly/8.2.0.Final/wildfly-9.0.0.Final.zip.
+. Download WildFly 9.0 from http://download.jboss.org/wildfly/9.0.0.Final/wildfly-9.0.0.Final.zip.
 . Install it by extracting the archive.
 
 ### JBoss Developer Studio 9 - Beta 2
