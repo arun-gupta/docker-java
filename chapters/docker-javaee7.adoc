@@ -10,7 +10,7 @@ Pull the Docker image that contains WildFly and pre-built Java EE 7 application 
 
 [source, text]
 ----
-docker pull arugupta/javaee7-hol
+docker pull arungupta/javaee7-hol
 ----
 
 The https://github.com/arun-gupta/docker-images/blob/master/javaee7-hol/Dockerfile[javaee7-hol Dockerfile] is based on `jboss/wildfly` and adds the movieplex7 application as war file.
