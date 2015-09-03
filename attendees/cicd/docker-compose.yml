@@ -1,12 +1,8 @@
-gitlab:
-  image: gitlab/gitlab-ce:latest
-  # container_name: gitlab
+jenkins:
+  image: jenkins
+  container_name: jenkins
   ports:
-    - "8443:443"
-    - "8080:80"
-    - "2222:22"
+    - "8084:8080"
+    - "50000:50000"
   volumes:
-    - /Users/arungupta/tmp/gitlab/config:/etc/gitlab
-    - /Users/arungupta/tmp/gitlab/logs:/var/log/gitlab
-    - /Users/arungupta/tmp/gitlab/data:/var/opt/gitlab
-  restart: always
+    - /Users/arungupta/jenkins:/var/jenkins_home
