@@ -1,4 +1,4 @@
-# Docker and Kubernetes for Java EE Developers
+# Docker and Kubernetes for Java Developers
 v1.2.x, Aug 13, 2015
 :toc:
 :toc-title: Table of Dockernetes
