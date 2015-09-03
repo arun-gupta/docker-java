@@ -1,0 +1,30 @@
+= Install a Git Server
+
+== Start Services
+
+. All services can be started, in detached mode, by giving the command:
+
++
+  docker-compose up -d
++
+And this shows the output as:
++
+ Creating git_serverdata...
+ Creating gitserver_git_dbdata_1...
+ Creating gitserver_git_db_1...
+ Creating git...
++
+
+. Configure the installation
+.. execute the following script
++
+ ./install-gogs.sh <DOCKER_HOST_IP> <git_server_PORT>
++
+
+_example: ./install-gogs.sh 192.168.99.100 3000_
+
+== Sign Up
+
+. Access to this URL: http://dockerhost:3000/user/sign_up
+. Create an account and enjoy!
+. Enjoy! :)

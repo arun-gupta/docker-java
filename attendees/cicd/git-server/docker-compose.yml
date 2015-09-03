@@ -1,0 +1,38 @@
+# Gogs Image to manage git sources to build and release
+git_server:
+  image: gogs/gogs
+  container_name: git
+  ports:
+   - "3000:3000"
+   - "10022:22"
+  volumes_from:
+   - git_serverdata
+  links:
+   - git_db:mysql
+
+git_serverdata:
+  image: busybox
+  container_name: git_serverdata
+  command: /bin/sh
+  volumes:
+    - /data
+  #Doesn't work for now version due to problem with filesystem
+  #  - ./data/gogs/conf/app.ini:/data/gogs/conf/app.ini
+
+git_db:
+  image: mysql:5.6
+  volumes_from:
+    - git_dbdata
+  ports:
+   - "3306:3306"
+  environment:
+   - MYSQL_ROOT_PASSWORD=supersecret
+   - MYSQL_DATABASE=gogs
+   - MYSQL_USER=mysql
+   - MYSQL_PASSWORD=mysql
+
+git_dbdata:
+  image: busybox
+  command: /bin/sh
+  volumes:
+    - /var/lib/mysql
