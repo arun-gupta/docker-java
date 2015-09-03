@@ -21,7 +21,7 @@ And this shows the output as:
  ./install-gogs.sh <DOCKER_HOST_IP> <git_server_PORT>
 +
 
-_example: ./install.sh 192.168.99.100 3000_
+_example: ./install-gogs.sh 192.168.99.100 3000_
 
 == Sign Up
 
