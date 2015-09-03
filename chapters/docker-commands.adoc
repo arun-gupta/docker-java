@@ -22,7 +22,7 @@ Here is the list of commonly used Docker commands:
 | Stop a container | `docker stop ${CID}`
 | Stop all running containers | `docker stop ``docker ps -q```
 | List all exited containers with status 1 | `docker ps -a --filter "exited=1"`
-| List all exited containers | `git-server> docker rm -f $(docker ps -a | grep Exit | awk '{ print $1 }')`
+| List all exited containers | `docker rm -f $(docker ps -a \| grep Exit \| awk '{ print $1 }')`
 | Remove a container | `docker rm ${CID}`
 | Remove container by a regular expression | `docker ps -a \| grep wildfly \| awk '{print $1}' \| xargs docker rm -f`
 | Remove all containers | `docker rm $(docker ps -aq)`
