@@ -4,7 +4,7 @@ v1.2.x, Aug 13, 2015
 :toc-title: Table of Dockernetes
 :toclevels: 3
 :toc-placement!:
-:imagesdir: ./chapters/images/
+:imagesdir: ./chapters/images
 
 toc::[]
 
