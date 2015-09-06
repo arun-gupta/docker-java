@@ -32,7 +32,8 @@ At first, the top read-write layer has nothing in it, but any time a process cre
 We call the union of the read-write layer and all the read-only layers a _union file system_.
 
 .Docker Layers
-image::plain-wildfly0.png[]
+
+image::plain-wildfly0.png
 ====
 
 In our particular case, the https://github.com/jboss-dockerfiles/wildfly/blob/master/Dockerfile[jboss/wildfly] image extends the https://github.com/jboss-dockerfiles/base/blob/master/Dockerfile[jboss/base-jdk:7] image which adds the OpenJDK distribution on top of the https://github.com/jboss-dockerfiles/base/blob/master/Dockerfile[jboss/base] image.
