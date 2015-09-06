@@ -58,7 +58,7 @@ image::images/jbds2.png[]
 . If a new runtime needs to be created, pick the directory for WildFly 9.0.0:
 +
 .WildFly 9.0.0.Final Runtime
-image::jbds3.png[]
+image::images/jbds3.png[]
 +
 Click on '`Finish`'.
 +
