@@ -139,7 +139,7 @@ mysqldb_1   | 2015-06-05 15:40:18 1 [Warning] IP address '172.17.0.24' could not
 . Access the application at http://dockerhost:8080/employees/resources/employees/. This is shown in the browser as:
 
 .Output From Servers Run Using Docker Compose
-image::docker-compose-output.png[]
+image::images/docker-compose-output.png[]
 
 ### Stop Services
 
