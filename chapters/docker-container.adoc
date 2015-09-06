@@ -199,7 +199,7 @@ See more about networking on the Docker website link:https://docs.docker.com/art
 Now we're ready to test http://dockerhost:8080 again. This works with the exposed port, as expected.
 
 .Welcome WildFly
-image::plain-wildfly1.png[]
+image::images/plain-wildfly1.png[]
 
 [[Enabling_WildFly_Administration]]
 ### Enabling WildFly Administration
@@ -250,7 +250,7 @@ The username/password credentials are:
 This shows the admin console as:
 
 .Welcome WildFly
-image::wildfly-admin-console.png[]
+image::images/wildfly-admin-console.png[]
 
 ##### Additional Ways To Find Port Mapping
 
