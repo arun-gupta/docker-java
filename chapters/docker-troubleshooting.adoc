@@ -2,6 +2,16 @@
 
 === Loading Images Offline
 
+Depending upon the network speed and restrictions, you may not be able to download Docker images from Docker Hub. The error message may look like:
+
+[source, text]
+----
+$ docker pull arungupta/wildfly-mysql-javaee7
+Using default tag: latest
+Pulling repository docker.io/arungupta/wildfly-mysql-javaee7
+Network timed out while trying to connect to https://index.docker.io/v1/repositories/arungupta/wildfly-mysql-javaee7/images. You may want to check your internet connection or if you are behind a proxy.
+----
+
 If you are not able to download images from Docker Hub, then they can uploaded from a previously saved `.tar` file.
 
 Save the tar file:
@@ -17,6 +27,8 @@ For example:
 ----
 docker save -o arungupta-javaee7-hol.tar arungupta/javaee7-hol
 ----
+
+Ask instructor for the `.tar` files of images.
 
 Load the tar file:
 
