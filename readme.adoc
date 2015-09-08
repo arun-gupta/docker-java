@@ -60,4 +60,6 @@ include::chapters/docker-openshift.adoc[]
 
 include::chapters/docker-commands.adoc[]
 
+include::chapters/docker-troubleshooting.adoc[]
+
 include::chapters/docker-references.adoc[]

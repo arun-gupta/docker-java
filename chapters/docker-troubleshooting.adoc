@@ -1,0 +1,36 @@
+== Troubleshooting
+
+=== Loading Images Offline
+
+If you are not able to download images from Docker Hub, then they can uploaded from a previously saved `.tar` file.
+
+Save the tar file:
+
+[source, text]
+----
+docker save -o <save image to path> <image name>
+----
+
+For example:
+
+[source, text]
+----
+docker save -o arungupta-javaee7-hol.tar arungupta/javaee7-hol
+----
+
+Load the tar file:
+
+[source, text]
+----
+docker load -i <path to image tar file>
+----
+
+For example:
+
+[source, text]
+----
+docker load -i arungupta-javaee7-hol.tar
+----
+
+Now `docker images` should show the image.
+

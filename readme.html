@@ -552,6 +552,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#Common_Docker_Commands">Common Docker Commands</a></li>
+<li><a href="#_troubleshooting">Troubleshooting</a>
+<ul class="sectlevel2">
+<li><a href="#_loading_images_offline">Loading Images Offline</a></li>
+</ul>
+</li>
 <li><a href="#_references">References</a></li>
 </ul>
 </div>
@@ -4581,6 +4586,52 @@ d970ddff7046        gcr.io/google_containers/pause:0.8.0                        
 </div>
 </div>
 <div class="sect1">
+<h2 id="_troubleshooting">Troubleshooting</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_loading_images_offline">Loading Images Offline</h3>
+<div class="paragraph">
+<p>If you are not able to download images from Docker Hub, then they can uploaded from a previously saved <code>.tar</code> file.</p>
+</div>
+<div class="paragraph">
+<p>Save the tar file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">docker save -o &lt;save image to path&gt; &lt;image name&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">docker save -o arungupta-javaee7-hol.tar arungupta/javaee7-hol</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Load the tar file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">docker load -i &lt;path to image tar file&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">docker load -i arungupta-javaee7-hol.tar</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now <code>docker images</code> should show the image.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_references">References</h2>
 <div class="sectionbody">
 <div class="olist arabic">
@@ -4604,7 +4655,7 @@ d970ddff7046        gcr.io/google_containers/pause:0.8.0                        
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-09-08 08:44:04 CEST
+Last updated 2015-09-08 10:24:58 CEST
 </div>
 </div>
 </body>
