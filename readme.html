@@ -721,6 +721,17 @@ curl https://github.com/docker/machine/releases/download/v0.4.0/docker-machine.e
 eval "$(docker-machine env lab)"</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>Use the following command on Windows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">(docker-machine env lab --shell cmd</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And then execute all the <code>set</code> commands.</p>
+</div>
 </li>
 <li>
 <p>To make it easier to start/stop the containers, an entry is added into the host mapping table of your operating system. Find out the IP address of your machine:</p>
@@ -836,6 +847,18 @@ Kubernetes 1.0.1 is the only version verified to work with Virtual Box. More det
 </div>
 <div class="sect2">
 <h3 id="_pull_docker_images">Pull Docker images</h3>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+These commands need to be issued from the shell or command prompt where <code>docker-machine env lab</code> and associated commands were issued.
+</td>
+</tr>
+</table>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-text" data-lang="text">docker pull jboss/wildfly
