@@ -310,7 +310,7 @@ docker stop <CONTAINER ID>
 +
 [source, text]
 ----
-docker rm $(docker stop $(docker ps -q))
+docker stop $(docker ps -q)
 ----
 +
 . Stop only the exited containers
@@ -329,14 +329,14 @@ docker ps -a -f "exited=-1"
 docker rm 0bc123a8ece0
 ----
 +
-. Containers meeting a regular expression
+. Remove containers meeting a regular expression
 +
 [source, text]
 ----
 docker ps -a | grep wildfly | awk '{print $1}' | xargs docker rm
 ----
 +
-. All running containers, without any criteria
+. Remove all containers, without any criteria
 +
 [source, text]
 ----
