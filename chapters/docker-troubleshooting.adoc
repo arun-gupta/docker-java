@@ -46,3 +46,8 @@ docker load -i arungupta-javaee7-hol.tar
 
 Now `docker images` should show the image.
 
+=== Cannot create Docker Machine on Windows
+
+Are you not able to create Docker Machine on Windows?
+
+Try starting a `cmd` with Administrator privileges and then give the command again.
