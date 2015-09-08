@@ -72,6 +72,15 @@ docker-machine create --driver=virtualbox lab
 eval "$(docker-machine env lab)"
 ----
 +
+Use the following command on Windows:
++
+[source, text]
+----
+(docker-machine env lab --shell cmd
+----
++
+And then execute all the `set` commands.
++
 . To make it easier to start/stop the containers, an entry is added into the host mapping table of your operating system. Find out the IP address of your machine:
 +
 [source, text]
@@ -141,6 +150,8 @@ java -jar <JAR FILE NAME>
 Follow the on-screen instructions to complete the installation process.
 
 ### Pull Docker images
+
+IMPORTANT: These commands need to be issued from the shell or command prompt where `docker-machine env lab` and associated commands were issued.
 
 [source, text]
 ----
