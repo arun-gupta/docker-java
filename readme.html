@@ -871,7 +871,8 @@ docker pull arungupta/wildfly-management
 docker pull arungupta/javaee7-hol
 docker pull mysql
 docker pull swarm
-docker pull arungupta/wildfly-mysql-javaee7</code></pre>
+docker pull arungupta/wildfly-mysql-javaee7
+arungupta/javaee7-docker-maven</code></pre>
 </div>
 </div>
 </div>
@@ -1616,7 +1617,7 @@ Exact port number may be different in your case.
 <p>Stop all the running containers</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">docker rm $(docker stop $(docker ps -q))</code></pre>
+<pre class="highlight"><code class="language-text" data-lang="text">docker stop $(docker ps -q)</code></pre>
 </div>
 </div>
 </li>
@@ -1644,7 +1645,7 @@ Exact port number may be different in your case.
 </div>
 </li>
 <li>
-<p>Containers meeting a regular expression</p>
+<p>Remove containers meeting a regular expression</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-text" data-lang="text">docker ps -a | grep wildfly | awk '{print $1}' | xargs docker rm</code></pre>
@@ -1652,7 +1653,7 @@ Exact port number may be different in your case.
 </div>
 </li>
 <li>
-<p>All running containers, without any criteria</p>
+<p>Remove all containers, without any criteria</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-text" data-lang="text">docker rm $(docker ps -aq)</code></pre>
