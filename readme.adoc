@@ -6,6 +6,9 @@ v1.3, Sep 7, 2015
 :toc-placement!:
 :imagesdir: ./chapters/images
 
+Latest HTML:
+https://htmlpreview.github.io/?https://github.com/javaee-samples/docker-java/blob/master/readme.html
+
 toc::[]
 
 include::chapters/docker-preface.adoc[]
