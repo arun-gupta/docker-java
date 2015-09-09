@@ -1,6 +1,5 @@
 jenkins:
-  image: jenkins
-  container_name: jenkins
+  image: arungupta/jenkins-docker-workflow
   ports:
     - "8084:8080"
     - "50000:50000"
