@@ -163,3 +163,21 @@ docker pull swarm
 docker pull arungupta/wildfly-mysql-javaee7
 arungupta/javaee7-docker-maven
 ----
+
+#### Create Docker Swarm Cluster
+
+Create Docker Swarm cluster as:
+
+[source, text]
+----
+docker run swarm create
+----
+
+This will generate a token. Use this token to create a Swarm Master.
+
+[source, text]
+----
+docker-machine create -d virtualbox --swarm --swarm-master --swarm-discovery token://<token> swarm-master
+----
+
+Detailed explanation for this is available in <<Docker_Swarm>>.
