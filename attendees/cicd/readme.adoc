@@ -1,0 +1,33 @@
+== CI/CD using Jenkins and Docker
+
+All instructions and resources are in  `attendees/cicd` directory.
+
+=== Git
+
+. Start Git server by following link:git-server/README.adoc[].
+.. Clone the project https://github.com/javaee-samples/javaee7-docker-maven and push to this git server.
+
+=== Jenkins
+
+. Start Jenkins in `jenkins` directory by giving the command `docker-compose up -d`
+. Create a new workflow and use the script:
++
+[source, text]
+----
+node {
+  sh "echo hello"
+  git url: 'http://192.168.99.101:3000/arun/hello-world.git'
+  sh "mvn package -Pdocker"
+}
+----
++
+NOTE: Change the IP address to point to Docker host where the Git server is running. Change name of the project accordingly as well.
++
+. Run a build
+
+=== Expected Flow
+
+. `git push` will push changes to Git server
+. This will trigger a build in Jenkins (TODO: Configure hook)
+. Jenkins workflow will build a Docker image (stuck here)
+. Jenkins workflow will push the Docker image to a registry
