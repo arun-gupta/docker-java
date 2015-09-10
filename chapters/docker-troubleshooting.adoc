@@ -28,7 +28,9 @@ For example:
 docker save -o arungupta-javaee7-hol.tar arungupta/javaee7-hol
 ----
 
-Ask instructor for the `.tar` files of images.
+All images required for this workshop can be downloaded from:
+
+https://drive.google.com/folderview?id=0B8g4lYJ4uB37RkdqbFpPZU5ZS2s&usp=sharing
 
 Load the tar file:
 
@@ -45,6 +47,8 @@ docker load -i arungupta-javaee7-hol.tar
 ----
 
 Now `docker images` should show the image.
+
+
 
 === Cannot create Docker Machine on Windows
 
