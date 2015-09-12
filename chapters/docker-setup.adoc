@@ -113,6 +113,7 @@ curl -L http://test.docker.com.s3.amazonaws.com/builds/Windows/x86_64/docker-1.7
 
 [source, text]
 ----
+export VAGRANT_DEFAULT_PROVIDER=virtualbox
 export KUBERNETES_PROVIDER=vagrant
 cd kubernetes
 ./cluster/kube-up.sh
