@@ -1,33 +1,34 @@
-== CI/CD using Jenkins and Docker
+== Continuous Deployment using Jenkins and Docker
 
 All instructions and resources are in  `attendees/cicd` directory.
 
+NOTE: Change IP address to the Docker host where Git server is running.
+
 === Git
 
-. Start Git server by following link:git-server/README.adoc[].
-.. Clone the project https://github.com/javaee-samples/javaee7-docker-maven and push to this git server.
+. Start Git server by following link:git-server/README.adoc[]
+. Create a new repository `javaee7-docker-workflow`.
+. Add a new Java EE sample that has Arquillian tests and packaged as Docker image:
+
+  git clone https://github.com/javaee-samples/javaee7-docker-workflow.git
+  git remote add gogs http://192.168.99.101:3000/arun/javaee7-docker-workflow.git
+  git push gogs master
 
 === Jenkins
 
 . Start Jenkins in `jenkins` directory by giving the command `docker-compose up -d`
-. Create a new workflow and use the script:
-+
-[source, text]
-----
-node {
-  sh "echo hello"
-  git url: 'http://192.168.99.101:3000/arun/hello-world.git'
-  sh "mvn package -Pdocker"
-}
-----
-+
-NOTE: Change the IP address to point to Docker host where the Git server is running. Change name of the project accordingly as well.
-+
-. Run a build
+. Enable Docker commands in Jenkins `docker-machine ssh default "sudo chmod 777 /var/run/docker.sock"`
+. Create a new workflow and use "`Workflow script from SCM`". Use the "`Repository URL`" as "`https://github.com/arun-gupta/javaee7-docker-workflow`" and "`Script Path`" as "`Jenkinsfile`".
+. Start a build
 
-=== Expected Flow
+=== Current Status
 
-. `git push` will push changes to Git server
-. This will trigger a build in Jenkins (TODO: Configure hook)
-. Jenkins workflow will build a Docker image (stuck here)
-. Jenkins workflow will push the Docker image to a registry
+. Checks out the application workspace from Gogs server
+. Builds the application and runs the test
+. Creates a Docker image for the application
+
+=== TODO
+
+. https://github.com/javaee-samples/docker-java/issues/96[Build CI/CD project from git hook/poll]
+. https://github.com/javaee-samples/docker-java/issues/95[Push CI/CD Docker images to Docker registry]
+. https://github.com/javaee-samples/docker-java/issues/94[Consolidate docker-compose.yml for CI/CD]
