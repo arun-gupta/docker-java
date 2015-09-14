@@ -3,5 +3,14 @@ jenkins:
   ports:
     - "8084:8080"
     - "50000:50000"
+  environment:
+    # DOCKER_HOST: tcp://192.168.99.100:2376
+    DOCKER_HOST: unix:///var/run/docker.sock
+    # DOCKER_CERT_PATH: /var/docker/cert
   volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
     - /Users/arungupta/jenkins:/var/jenkins_home
+    # - /Users/arungupta/.docker/machine/machines/docker-java:/var/docker/cert
+    - /usr/local/bin/docker:/usr/bin/docker
+  # net: "host"
+  # privileged: true
