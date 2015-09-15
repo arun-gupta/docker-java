@@ -1,6 +1,6 @@
 == Troubleshooting
 
-=== Loading Images Offline
+=== Network Timed Out
 
 Depending upon the network speed and restrictions, you may not be able to download Docker images from Docker Hub. The error message may look like:
 
@@ -12,23 +12,21 @@ Pulling repository docker.io/arungupta/wildfly-mysql-javaee7
 Network timed out while trying to connect to https://index.docker.io/v1/repositories/arungupta/wildfly-mysql-javaee7/images. You may want to check your internet connection or if you are behind a proxy.
 ----
 
-If you are not able to download images from Docker Hub, then they can uploaded from a previously saved `.tar` file.
+This section provide a couple of alternatives to solve this.
 
-Save the tar file:
+==== Restart Docker Machine
 
-[source, text]
-----
-docker save -o <save image to path> <image name>
-----
-
-For example:
+It seems like Docker Machine gets into a strange state and restarting it fixes that.
 
 [source, text]
 ----
-docker save -o arungupta-javaee7-hol.tar arungupta/javaee7-hol
+docker-machine restart <MACHINE_NAME>
+eval $(docker-machine env <MACHINE_NAME>)
 ----
 
-All images required for this workshop can be downloaded from:
+==== Loading Images Offline
+
+Images can be downloaded from a previously saved `.tar` file. All images required for this workshop can be downloaded from:
 
 https://drive.google.com/folderview?id=0B8g4lYJ4uB37RkdqbFpPZU5ZS2s&usp=sharing
 
@@ -47,8 +45,6 @@ docker load -i arungupta-javaee7-hol.tar
 ----
 
 Now `docker images` should show the image.
-
-
 
 === Cannot create Docker Machine on Windows
 
