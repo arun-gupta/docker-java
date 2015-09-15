@@ -565,6 +565,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#_cannot_create_docker_machine_on_windows">Cannot create Docker Machine on Windows</a></li>
+<li><a href="#_no_route_to_host">No route to host</a></li>
 </ul>
 </li>
 <li><a href="#_references">References</a></li>
@@ -4107,11 +4108,18 @@ wildfly-rc-w2kk5   1/1       Running   0          6m</code></pre>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Log in to node and access the application:</p>
+<p>Log in to node:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">vagrant ssh minion-1
-Last login: Thu Jul 16 00:24:36 2015 from 10.0.2.2
+<pre class="highlight"><code class="language-text" data-lang="text">vagrant ssh minion-1</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Access the application using <code>curl <a href="http://10.246.1.23:8080/employees/resources/employees/" class="bare">http://10.246.1.23:8080/employees/resources/employees/</a></code> and replace IP address with the one obtained earlier:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">Last login: Thu Jul 16 00:24:36 2015 from 10.0.2.2
 [vagrant@kubernetes-minion-1 ~]$ curl http://10.246.1.23:8080/employees/resources/employees/
 &lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;collection&gt;&lt;employee&gt;&lt;id&gt;1&lt;/id&gt;&lt;name&gt;Penny&lt;/name&gt;&lt;/employee&gt;&lt;employee&gt;&lt;id&gt;2&lt;/id&gt;&lt;name&gt;Sheldon&lt;/name&gt;&lt;/employee&gt;&lt;employee&gt;&lt;id&gt;3&lt;/id&gt;&lt;name&gt;Amy&lt;/name&gt;&lt;/employee&gt;&lt;employee&gt;&lt;id&gt;4&lt;/id&gt;&lt;name&gt;Leonard&lt;/name&gt;&lt;/employee&gt;&lt;employee&gt;&lt;id&gt;5&lt;/id&gt;&lt;name&gt;Bernadette&lt;/name&gt;&lt;/employee&gt;&lt;employee&gt;&lt;id&gt;6&lt;/id&gt;&lt;name&gt;Raj&lt;/name&gt;&lt;/employee&gt;&lt;employee&gt;&lt;id&gt;7&lt;/id&gt;&lt;name&gt;Howard&lt;/name&gt;&lt;/employee&gt;&lt;employee&gt;&lt;id&gt;8&lt;/id&gt;&lt;name&gt;Priya&lt;/name&gt;&lt;/employee&gt;&lt;/collection&gt;</code></pre>
 </div>
@@ -4684,6 +4692,24 @@ eval $(docker-machine env &lt;MACHINE_NAME&gt;)</code></pre>
 </div>
 <div class="paragraph">
 <p>Try starting a <code>cmd</code> with Administrator privileges and then give the command again.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_no_route_to_host">No route to host</h3>
+<div class="paragraph">
+<p>Accessing the WildFly and MySQL sample in Kubernetes gives 404 when you give the command <code>curl <a href="http://10.246.1.23:8080/employees/resources/employees/" class="bare">http://10.246.1.23:8080/employees/resources/employees/</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>This may be resolved by stopping the node and restarting the cluster again:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">vagrant halt minion-1
+./cluster/kube-up.sh</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>These commands need to be given in the &#8216;kubernetes&#8217; directory.</p>
 </div>
 </div>
 </div>

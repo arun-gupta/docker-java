@@ -51,3 +51,17 @@ Now `docker images` should show the image.
 Are you not able to create Docker Machine on Windows?
 
 Try starting a `cmd` with Administrator privileges and then give the command again.
+
+=== No route to host
+
+Accessing the WildFly and MySQL sample in Kubernetes gives 404 when you give the command `curl http://10.246.1.23:8080/employees/resources/employees/`.
+
+This may be resolved by stopping the node and restarting the cluster again:
+
+[source, text]
+----
+vagrant halt minion-1
+./cluster/kube-up.sh
+----
+
+These commands need to be given in the '`kubernetes`' directory.
