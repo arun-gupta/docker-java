@@ -567,7 +567,7 @@ Notice only one Pod is running now.
 
 ### Application Logs
 
-. Get list of the Pods:
+. Get a list of the Pods:
 +
 [source, text]
 ----
@@ -593,7 +593,7 @@ wildfly-rc-w2kk5   1/1       Running   0          16h
   . . .
 ----
 
-Alternatively, the logs can also be seen by logging into the node:
+Logs can be obtained for any Kubernetes resources using this way. Alternatively, the logs can also be seen by logging into the node:
 
 . Log in to the node VM:
 +
