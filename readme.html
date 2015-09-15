@@ -542,7 +542,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_start_mysql_pod">Start MySQL Pod</a></li>
 <li><a href="#_start_mysql_service">Start MySQL service</a></li>
 <li><a href="#_start_wildfly_replication_controller">Start WildFly Replication Controller</a></li>
-<li><a href="#Access_Kubernetes_Application_Minion">Access the application (using minion)</a></li>
+<li><a href="#Access_Kubernetes_Application_Node">Access the application (using node)</a></li>
 <li><a href="#Access_Kubernetes_Application_Proxy">Access the application (using proxy)</a></li>
 </ul>
 </li>
@@ -3620,10 +3620,10 @@ Kubernetes is an open source system for managing containerized applications acro
 <p><strong>Pods</strong> are the smallest deployable units that can be created, scheduled, and managed. Its a logical collection of containers that belong to an application.</p>
 </li>
 <li>
-<p><strong>Master</strong> is the central control point that provides a unified view of the cluster. There is a single master node that control multiple nodes.</p>
+<p><strong>Master</strong> is the central control point that provides a unified view of the cluster. There is a single master node that control multiple worker nodes.</p>
 </li>
 <li>
-<p><strong>Node</strong> is a worker node that run tasks as delegated by the master. Nodes can run one or more pods. It provides an application-specific &#8220;virtual host&#8221; in a containerized environment.</p>
+<p><strong>Node</strong> (née minion) is a worker node that run tasks as delegated by the master. Nodes can run one or more pods. It provides an application-specific &#8220;virtual host&#8221; in a containerized environment.</p>
 </li>
 </ol>
 </div>
@@ -3781,7 +3781,7 @@ VM, run `vagrant status NAME`.</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>By default, the Vagrant setup will create a single kubernetes-master and 1 kubernetes-node. Each VM will take 1 GB, so make sure you have at least 2GB to 4GB of free memory (plus appropriate free disk space).</p>
+<p>By default, the Vagrant setup will create a single Master and one node. Each VM will take 1 GB, so make sure you have at least 2GB to 4GB of free memory (plus appropriate free disk space).</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -4103,7 +4103,7 @@ wildfly-rc-w2kk5   1/1       Running   0          6m</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="Access_Kubernetes_Application_Minion">Access the application (using node)</h4>
+<h4 id="Access_Kubernetes_Application_Node">Access the application (using node)</h4>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -4223,7 +4223,7 @@ replicationcontrollers/wildfly-rc</code></pre>
 </div>
 </li>
 <li>
-<p>Access the application using <a href="#Access_Kubernetes_Application_Minion">Access the application (using minion)</a> or <a href="#Access_Kubernetes_Application_Proxy">Access the application (using proxy)</a>.</p>
+<p>Access the application using <a href="#Access_Kubernetes_Application_Node">Access the application (using node)</a> or <a href="#Access_Kubernetes_Application_Proxy">Access the application (using proxy)</a>.</p>
 </li>
 </ol>
 </div>
@@ -4379,7 +4379,7 @@ wildfly-rc-w2kk5   1/1       Running   0          16h</code></pre>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Log in to Minion-1 VM:</p>
+<p>Log in to the node VM:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-text" data-lang="text">&gt; vagrant ssh minion-1

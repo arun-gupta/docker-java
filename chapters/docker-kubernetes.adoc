@@ -19,7 +19,7 @@ At a very high level, there are three key components:
 
 . *Pods* are the smallest deployable units that can be created, scheduled, and managed. Its a logical collection of containers that belong to an application.
 . *Master* is the central control point that provides a unified view of the cluster. There is a single master node that control multiple worker nodes.
-. *Node* (née minions) is a worker node that run tasks as delegated by the master. Nodes can run one or more pods. It provides an application-specific "`virtual host`" in a containerized environment.
+. *Node* (née minion) is a worker node that run tasks as delegated by the master. Nodes can run one or more pods. It provides an application-specific "`virtual host`" in a containerized environment.
 
 A picture is always worth a thousand words and so this is a high-level logical block diagram for Kubernetes:
 
@@ -369,7 +369,7 @@ wildfly-rc-w2kk5   1/1       Running   0          6m
 10.246.1.23
 ----
 
-[[Access_Kubernetes_Application_Minion]]
+[[Access_Kubernetes_Application_Node]]
 #### Access the application (using node)
 
 . Log in to node and access the application:
@@ -475,7 +475,7 @@ services/mysql-service
 replicationcontrollers/wildfly-rc
 ----
 +
-. Access the application using <<Access_Kubernetes_Application_Minion>> or <<Access_Kubernetes_Application_Proxy>>.
+. Access the application using <<Access_Kubernetes_Application_Node>> or <<Access_Kubernetes_Application_Proxy>>.
 
 ### Rescheduling Pods
 
