@@ -3616,10 +3616,10 @@ Kubernetes is an open source system for managing containerized applications acro
 <p><strong>Pods</strong> are the smallest deployable units that can be created, scheduled, and managed. Its a logical collection of containers that belong to an application.</p>
 </li>
 <li>
-<p><strong>Master</strong> is the central control point that provides a unified view of the cluster. There is a single master node that control multiple minions.</p>
+<p><strong>Master</strong> is the central control point that provides a unified view of the cluster. There is a single master node that control multiple nodes.</p>
 </li>
 <li>
-<p><strong>Node</strong> is a worker node that run tasks as delegated by the master. Minions can run one or more pods. It provides an application-specific &#8220;virtual host&#8221; in a containerized environment.</p>
+<p><strong>Node</strong> is a worker node that run tasks as delegated by the master. nodes can run one or more pods. It provides an application-specific &#8220;virtual host&#8221; in a containerized environment.</p>
 </li>
 </ol>
 </div>
@@ -3633,19 +3633,19 @@ Kubernetes is an open source system for managing containerized applications acro
 <div class="title">Figure 41. Kubernetes Key Components</div>
 </div>
 <div class="paragraph">
-<p>After the 50,000 feet view, lets fly a little lower at 30,000 feet and take a look at how Kubernetes make all of this happen. There are a few key components at Master and Minion that make this happen.</p>
+<p>After the 50,000 feet view, lets fly a little lower at 30,000 feet and take a look at how Kubernetes make all of this happen. There are a few key components at Master and Node that make this happen.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><strong>Replication Controller</strong> is a resource at Master that ensures that requested number of pods are running on minions at all times.</p>
+<p><strong>Replication Controller</strong> is a resource at Master that ensures that requested number of pods are running on nodes at all times.</p>
 </li>
 <li>
 <p><strong>Service</strong> is an object on master that provides load balancing across a replicated group of pods.
 Label is an arbitrary key/value pair in a distributed watchable storage that the Replication Controller uses for service discovery.</p>
 </li>
 <li>
-<p><strong>Kubelet</strong> Each minion runs services to run containers and be managed from the master. In addition to Docker, Kubelet is another key service installed there. It reads container manifests as YAML files that describes a pod. Kubelet ensures that the containers defined in the pods are started and continue running.</p>
+<p><strong>Kubelet</strong> Each node runs services to run containers and be managed from the master. In addition to Docker, Kubelet is another key service installed there. It reads container manifests as YAML files that describes a pod. Kubelet ensures that the containers defined in the pods are started and continue running.</p>
 </li>
 <li>
 <p>Master serves <strong>RESTful Kubernetes API</strong> that validate and configure Pod, Service, and Replication Controller.</p>
@@ -3777,7 +3777,7 @@ VM, run `vagrant status NAME`.</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>By default, the Vagrant setup will create a single kubernetes-master and 1 kubernetes-minion. Each VM will take 1 GB, so make sure you have at least 2GB to 4GB of free memory (plus appropriate free disk space).</p>
+<p>By default, the Vagrant setup will create a single kubernetes-master and 1 kubernetes-node. Each VM will take 1 GB, so make sure you have at least 2GB to 4GB of free memory (plus appropriate free disk space).</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -3786,7 +3786,7 @@ VM, run `vagrant status NAME`.</code></pre>
 <div class="title">Note</div>
 </td>
 <td class="content">
-By default, only one minion is created. This can be manipulated by setting an environment variable NUM_MINIONS variable to an integer before invoking <code>kube-up.sh</code> script.
+By default, only one node is created. This can be manipulated by setting an environment variable NUM_MINIONS variable to an integer before invoking <code>kube-up.sh</code> script.
 </td>
 </tr>
 </table>
@@ -3884,7 +3884,7 @@ CONTROLLER   CONTAINER(S)   IMAGE(S)   SELECTOR   REPLICAS</code></pre>
 <div class="title">Note</div>
 </td>
 <td class="content">
-In this case, all the pods are running on a single minion. This is because, that is the default number for a Kubernetes cluster. The pod can very be on another minion if more number of minions are configured to start in the cluster.
+In this case, all the pods are running on a single node. This is because, that is the default number for a Kubernetes cluster. The pod can very be on another node if more number of nodes are configured to start in the cluster.
 </td>
 </tr>
 </table>
@@ -4099,11 +4099,11 @@ wildfly-rc-w2kk5   1/1       Running   0          6m</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="Access_Kubernetes_Application_Minion">Access the application (using minion)</h4>
+<h4 id="Access_Kubernetes_Application_Minion">Access the application (using node)</h4>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Log in to minion and access the application:</p>
+<p>Log in to node and access the application:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-text" data-lang="text">vagrant ssh minion-1
@@ -4370,7 +4370,7 @@ wildfly-rc-w2kk5   1/1       Running   0          16h</code></pre>
 </ol>
 </div>
 <div class="paragraph">
-<p>Alternatively, the logs can also be seen by logging into the minion:</p>
+<p>Alternatively, the logs can also be seen by logging into the node:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
