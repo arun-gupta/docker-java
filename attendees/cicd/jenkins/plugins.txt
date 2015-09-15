@@ -17,4 +17,4 @@ workflow-cps 1.10
 git-server 1.5
 docker-workflow 1.2
 docker-commons 1.0
-script-security 1.14
+script-security 1.15
