@@ -558,7 +558,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#Common_Docker_Commands">Common Docker Commands</a></li>
 <li><a href="#_troubleshooting">Troubleshooting</a>
 <ul class="sectlevel2">
+<li><a href="#_network_timed_out">Network Timed Out</a>
+<ul class="sectlevel3">
+<li><a href="#_restart_docker_machine">Restart Docker Machine</a></li>
 <li><a href="#_loading_images_offline">Loading Images Offline</a></li>
+</ul>
+</li>
 <li><a href="#_cannot_create_docker_machine_on_windows">Cannot create Docker Machine on Windows</a></li>
 </ul>
 </li>
@@ -876,8 +881,7 @@ docker pull arungupta/wildfly-management
 docker pull arungupta/javaee7-hol
 docker pull mysql
 docker pull swarm
-docker pull arungupta/wildfly-mysql-javaee7
-arungupta/javaee7-docker-maven</code></pre>
+docker pull arungupta/wildfly-mysql-javaee7</code></pre>
 </div>
 </div>
 <div class="sect3">
@@ -4617,7 +4621,7 @@ d970ddff7046        gcr.io/google_containers/pause:0.8.0                        
 <h2 id="_troubleshooting">Troubleshooting</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_loading_images_offline">Loading Images Offline</h3>
+<h3 id="_network_timed_out">Network Timed Out</h3>
 <div class="paragraph">
 <p>Depending upon the network speed and restrictions, you may not be able to download Docker images from Docker Hub. The error message may look like:</p>
 </div>
@@ -4630,26 +4634,24 @@ Network timed out while trying to connect to https://index.docker.io/v1/reposito
 </div>
 </div>
 <div class="paragraph">
-<p>If you are not able to download images from Docker Hub, then they can uploaded from a previously saved <code>.tar</code> file.</p>
+<p>This section provide a couple of alternatives to solve this.</p>
 </div>
+<div class="sect3">
+<h4 id="_restart_docker_machine">Restart Docker Machine</h4>
 <div class="paragraph">
-<p>Save the tar file:</p>
+<p>It seems like Docker Machine gets into a strange state and restarting it fixes that.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">docker save -o &lt;save image to path&gt; &lt;image name&gt;</code></pre>
+<pre class="highlight"><code class="language-text" data-lang="text">docker-machine restart &lt;MACHINE_NAME&gt;
+eval $(docker-machine env &lt;MACHINE_NAME&gt;)</code></pre>
 </div>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_loading_images_offline">Loading Images Offline</h4>
 <div class="paragraph">
-<p>For example:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">docker save -o arungupta-javaee7-hol.tar arungupta/javaee7-hol</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>All images required for this workshop can be downloaded from:</p>
+<p>Images can be downloaded from a previously saved <code>.tar</code> file. All images required for this workshop can be downloaded from:</p>
 </div>
 <div class="paragraph">
 <p><a href="https://drive.google.com/folderview?id=0B8g4lYJ4uB37RkdqbFpPZU5ZS2s&amp;usp=sharing" class="bare">https://drive.google.com/folderview?id=0B8g4lYJ4uB37RkdqbFpPZU5ZS2s&amp;usp=sharing</a></p>
@@ -4672,6 +4674,7 @@ Network timed out while trying to connect to https://index.docker.io/v1/reposito
 </div>
 <div class="paragraph">
 <p>Now <code>docker images</code> should show the image.</p>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -4709,7 +4712,7 @@ Network timed out while trying to connect to https://index.docker.io/v1/reposito
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-09-08 10:24:58 CEST
+Last updated 2015-09-08 09:24:58 BST
 </div>
 </div>
 </body>
