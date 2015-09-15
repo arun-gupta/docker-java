@@ -161,7 +161,6 @@ docker pull arungupta/javaee7-hol
 docker pull mysql
 docker pull swarm
 docker pull arungupta/wildfly-mysql-javaee7
-arungupta/javaee7-docker-maven
 ----
 
 #### Create Docker Swarm Cluster
