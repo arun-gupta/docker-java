@@ -18,20 +18,20 @@ A typical application would have a cluster of containers across multiple hosts. 
 At a very high level, there are three key components:
 
 . *Pods* are the smallest deployable units that can be created, scheduled, and managed. Its a logical collection of containers that belong to an application.
-. *Master* is the central control point that provides a unified view of the cluster. There is a single master node that control multiple minions.
-. *Node* is a worker node that run tasks as delegated by the master. Minions can run one or more pods. It provides an application-specific "`virtual host`" in a containerized environment.
+. *Master* is the central control point that provides a unified view of the cluster. There is a single master node that control multiple worker nodes.
+. *Node* (née minions) is a worker node that run tasks as delegated by the master. Nodes can run one or more pods. It provides an application-specific "`virtual host`" in a containerized environment.
 
 A picture is always worth a thousand words and so this is a high-level logical block diagram for Kubernetes:
 
 .Kubernetes Key Components
 image::kubernetes-key-components.png[]
 
-After the 50,000 feet view, lets fly a little lower at 30,000 feet and take a look at how Kubernetes make all of this happen. There are a few key components at Master and Minion that make this happen.
+After the 50,000 feet view, lets fly a little lower at 30,000 feet and take a look at how Kubernetes make all of this happen. There are a few key components at Master and Node that make this happen.
 
-. *Replication Controller* is a resource at Master that ensures that requested number of pods are running on minions at all times.
+. *Replication Controller* is a resource at Master that ensures that requested number of pods are running on nodes at all times.
 . *Service* is an object on master that provides load balancing across a replicated group of pods.
 Label is an arbitrary key/value pair in a distributed watchable storage that the Replication Controller uses for service discovery.
-. *Kubelet* Each minion runs services to run containers and be managed from the master. In addition to Docker, Kubelet is another key service installed there. It reads container manifests as YAML files that describes a pod. Kubelet ensures that the containers defined in the pods are started and continue running.
+. *Kubelet* Each node runs services to run containers and be managed from the master. In addition to Docker, Kubelet is another key service installed there. It reads container manifests as YAML files that describes a pod. Kubelet ensures that the containers defined in the pods are started and continue running.
 . Master serves *RESTful Kubernetes API* that validate and configure Pod, Service, and Replication Controller.
 
 ### Start Kubernetes Cluster
@@ -129,9 +129,9 @@ above with their current state. For more information about a specific
 VM, run `vagrant status NAME`.
 ----
 +
-By default, the Vagrant setup will create a single kubernetes-master and 1 kubernetes-minion. Each VM will take 1 GB, so make sure you have at least 2GB to 4GB of free memory (plus appropriate free disk space).
+By default, the Vagrant setup will create a single Master and one node. Each VM will take 1 GB, so make sure you have at least 2GB to 4GB of free memory (plus appropriate free disk space).
 +
-NOTE: By default, only one minion is created. This can be manipulated by setting an environment variable NUM_MINIONS variable to an integer before invoking `kube-up.sh` script.
+NOTE: By default, only one node is created. This can be manipulated by setting an environment variable NUM_MINIONS variable to an integer before invoking `kube-up.sh` script.
 +
 .Kubernetes Cluster using Vagrant
 image::kubernetes-cluster-vagrant.png[]
@@ -192,7 +192,7 @@ Kubernetes services is an abstraction which defines a logical set of pods. A ser
 .Kubernetes Service
 image::kubernetes-service.png[]
 
-NOTE: In this case, all the pods are running on a single minion. This is because, that is the default number for a Kubernetes cluster. The pod can very be on another minion if more number of minions are configured to start in the cluster.
+NOTE: In this case, all the pods are running on a single node. This is because, that is the default number for a Kubernetes cluster. The pod can very be on another node if more number of nodes are configured to start in the cluster.
 
 Any Service that a Pod wants to access must be created before the Pod itself, or else the environment variables will not be populated.
 
@@ -370,9 +370,9 @@ wildfly-rc-w2kk5   1/1       Running   0          6m
 ----
 
 [[Access_Kubernetes_Application_Minion]]
-#### Access the application (using minion)
+#### Access the application (using node)
 
-. Log in to minion and access the application:
+. Log in to node and access the application:
 +
 [source, text]
 ----
@@ -593,9 +593,9 @@ wildfly-rc-w2kk5   1/1       Running   0          16h
   . . .
 ----
 
-Alternatively, the logs can also be seen by logging into the minion:
+Alternatively, the logs can also be seen by logging into the node:
 
-. Log in to Minion-1 VM:
+. Log in to the node VM:
 +
 [source, text]
 ----
