@@ -143,14 +143,39 @@ image::docker-compose-output.png[]
 
 ### Stop Services
 
-. Stop the services as:
-+
+Stop the services as:
+
+  docker-compose stop
+  Stopping attendees_mywildfly_1...
+  Stopping attendees_mysqldb_1...
+
+[WARNING]
+====
+Stopping and starting the containers again will give the following error:
+
 [source, text]
 ----
-> docker-compose stop
-Stopping attendees_mywildfly_1...
-Stopping attendees_mysqldb_1...
+wildfly_1 | 
+wildfly_1 | 09:11:07,802 ERROR [org.jboss.as.controller.management-operation] (management-handler-thread - 4) JBAS014613: Operation ("add") failed - address: ([
+wildfly_1 |     ("subsystem" => "datasources"),
+wildfly_1 |     ("jdbc-driver" => "mysql")
+wildfly_1 | ]) - failure description: "JBAS014803: Duplicate resource [
+wildfly_1 |     (\"subsystem\" => \"datasources\"),
+wildfly_1 |     (\"jdbc-driver\" => \"mysql\")
+wildfly_1 | ]"
 ----
+
+This is expected because the JDBC resource is created during every run of the container. In a real-world application, this would be pre-baked in the configuration already.
+====
+
+### Remove Containers
+
+Stop the services as:
+
+  docker-compose rm -f
+  Going to remove attendees_mywildfly_1, attendees_mysqldb_1
+  Removing attendees_mywildfly_1... done
+  Removing attendees_mysqldb_1... done
 
 ### Scale Services
 

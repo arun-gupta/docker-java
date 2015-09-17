@@ -516,6 +516,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_start_services">Start Services</a></li>
 <li><a href="#_verify_application">Verify Application</a></li>
 <li><a href="#_stop_services">Stop Services</a></li>
+<li><a href="#_remove_containers">Remove Containers</a></li>
 <li><a href="#_scale_services">Scale Services</a></li>
 </ul>
 </li>
@@ -3079,19 +3080,58 @@ mysqldb_1   | 2015-06-05 15:40:18 1 [Warning] IP address '172.17.0.24' could not
 </div>
 <div class="sect2">
 <h3 id="_stop_services">Stop Services</h3>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
+<div class="paragraph">
 <p>Stop the services as:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>docker-compose stop
+Stopping attendees_mywildfly_1...
+Stopping attendees_mysqldb_1...</pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Stopping and starting the containers again will give the following error:</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">&gt; docker-compose stop
-Stopping attendees_mywildfly_1...
-Stopping attendees_mysqldb_1...</code></pre>
+<pre class="highlight"><code class="language-text" data-lang="text">wildfly_1 |
+wildfly_1 | 09:11:07,802 ERROR [org.jboss.as.controller.management-operation] (management-handler-thread - 4) JBAS014613: Operation ("add") failed - address: ([
+wildfly_1 |     ("subsystem" =&gt; "datasources"),
+wildfly_1 |     ("jdbc-driver" =&gt; "mysql")
+wildfly_1 | ]) - failure description: "JBAS014803: Duplicate resource [
+wildfly_1 |     (\"subsystem\" =&gt; \"datasources\"),
+wildfly_1 |     (\"jdbc-driver\" =&gt; \"mysql\")
+wildfly_1 | ]"</code></pre>
 </div>
 </div>
-</li>
-</ol>
+<div class="paragraph">
+<p>This is expected because the JDBC resource is created during every run of the container. In a real-world application, this would be pre-baked in the configuration already.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_remove_containers">Remove Containers</h3>
+<div class="paragraph">
+<p>Stop the services as:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>docker-compose rm -f
+Going to remove attendees_mywildfly_1, attendees_mysqldb_1
+Removing attendees_mywildfly_1... done
+Removing attendees_mysqldb_1... done</pre>
+</div>
 </div>
 </div>
 <div class="sect2">
