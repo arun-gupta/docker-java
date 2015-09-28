@@ -12,8 +12,8 @@
 
 # Program paths
 ASCIIDOCTOR=asciidoctor
-FOPUB=~/tools/asciidoctor-fopub/fopub
-ASCIIDOCTOR_PDF=~/tools/asciidoctor-pdf/bin/asciidoctor-pdf
+FOPUB=./asciidoctor-tools/asciidoctor-fopub/fopub
+ASCIIDOCTOR_PDF=./asciidcotor-tools/asciidoctor-pdf/bin/asciidoctor-pdf
 #FOPUB=~/projects/asciidoctor/fopub/fopub
 #ASCIIDOCTOR_PDF=~/projects/asciidoctor/asciidoctor-pdf/bin/asciidoctor-pdf
 
