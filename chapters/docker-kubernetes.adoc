@@ -142,12 +142,10 @@ By default, each VM in the cluster is running Fedora, Kubelet is installed into 
 +
 image::kubernetes-master-default-output-certificate.png[]
 +
-Click on '`Advanced`' and then on '`Proceed to 10.245.1.2`' to see the output as:
+Click on '`Advanced`', on '`Proceed to 10.245.1.2`', enter the username as '`vagrant`' and password as '`vagrant`' to see the output as:
 +
 .Kubernetes Output from Master
 image::kubernetes-master-default-output.png[]
-+
-Use '`vagrant`' as the username and '`vagrant`' as the password.
 +
 Check the list of nodes as:
 +
