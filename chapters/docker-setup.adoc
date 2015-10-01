@@ -27,9 +27,7 @@ Install Git Client as explained at: https://git-scm.com/book/en/v2/Getting-Start
 
 Docker currently runs natively on Linux. It can be configured to run in a virtual machine on Mac or Windows. This is why Virtualbox is a requirement for Mac or Windows.
 
-Downloads are available from https://www.virtualbox.org/.
-
-Virtual Box 5.0.0 does not allow Kubernetes cluster to be started: https://github.com/kubernetes/kubernetes/issues/12614. Make sure to download VirtualBox 4.3.30[https://www.virtualbox.org/wiki/Download_Old_Builds_4_3].
+Virtual Box 5.0.0 does not allow Kubernetes cluster to be started: https://github.com/kubernetes/kubernetes/issues/12614. Make sure to download VirtualBox 4.3.30[https://www.virtualbox.org/wiki/Download_Old_Builds_4_3] and install.
 
 [WARNING]
 ====
