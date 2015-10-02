@@ -42,6 +42,8 @@ Linux Users
 
 Download Vagrant from https://www.vagrantup.com/downloads.html and install.
 
+Kubernetes requires >= 1.6.2. So if you have an older version then make sure you install the latest one.
+
 ### Docker Machine
 
 Docker Machine makes it really easy to create Docker hosts on your computer, on cloud providers and inside your own data center. It creates servers, installs Docker on them, then configures the Docker client to talk to them.
