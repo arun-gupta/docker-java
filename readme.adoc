@@ -17,6 +17,8 @@ include::chapters/docker-setup.adoc[]
 
 include::chapters/docker-basics.adoc[]
 
+include::chapters/docker-image.adoc[]
+
 include::chapters/docker-container.adoc[]
 
 include::chapters/docker-javaee7.adoc[]

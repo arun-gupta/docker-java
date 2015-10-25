@@ -449,11 +449,25 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 </ul>
 </li>
-<li><a href="#_docker_basics">Docker Basics</a>
+<li><a href="#Docker_Basics">Docker Basics</a>
 <ul class="sectlevel2">
 <li><a href="#_docker_machine_2">Docker Machine</a></li>
 <li><a href="#_docker_client_2">Docker Client</a></li>
 <li><a href="#_verify_docker_configuration">Verify Docker Configuration</a></li>
+</ul>
+</li>
+<li><a href="#_docker_image">Docker Image</a>
+<ul class="sectlevel2">
+<li><a href="#_dockerfile">Dockerfile</a></li>
+<li><a href="#_create_your_first_docker_image">Create your first Docker image</a>
+<ul class="sectlevel3">
+<li><a href="#_run_wildfly">Run WildFly</a></li>
+<li><a href="#_deploy_java_ee_7_application">Deploy Java EE 7 Application</a></li>
+<li><a href="#_difference_between_cmd_and_entrypoint">Difference between CMD and ENTRYPOINT</a></li>
+<li><a href="#_difference_between_add_and_copy">Difference between ADD and COPY</a></li>
+</ul>
+</li>
+<li><a href="#_import_and_export_images">Import and export images</a></li>
 </ul>
 </li>
 <li><a href="#_run_container">Run Container</a>
@@ -912,7 +926,7 @@ docker pull arungupta/wildfly-mysql-javaee7</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_docker_basics">Docker Basics</h2>
+<h2 id="Docker_Basics">Docker Basics</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p><strong>PURPOSE</strong>: This chapter introduces the basic terminology of Docker.</p>
@@ -1199,6 +1213,287 @@ PING dockerhost (192.168.99.101): 56 data bytes
 </div>
 <div class="paragraph">
 <p>If it does, you&#8217;re ready to start with the lab.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_docker_image">Docker Image</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>PURPOSE</strong>: This chapter explains how to create a Docker image.</p>
+</div>
+<div class="paragraph">
+<p>As explained in <a href="#Docker_Basics">Docker Basics</a>, Docker image is the <strong>build component</strong> of Docker and a read-only template of application operating system.</p>
+</div>
+<div class="sect2">
+<h3 id="_dockerfile">Dockerfile</h3>
+<div class="paragraph">
+<p>Docker build images by reading instructions from a <em>Dockerfile</em>. A <em>Dockerfile</em> is a text document that contains all the commands a user could call on the command line to assemble an image. <code>docker build</code> command uses this file and executes all the commands in succession to create an image.</p>
+</div>
+<div class="paragraph">
+<p><code>build</code> command is also passed a context that is used during image creation. This context can be a path on your local filesystem or a URL to a Git repository.</p>
+</div>
+<div class="paragraph">
+<p><em>Dockerfile</em> is usually called <em>Dockerfile</em>. The complete list of commands that can be specified in this file are explained at <a href="https://docs.docker.com/reference/builder/" class="bare">https://docs.docker.com/reference/builder/</a>. The common commands are listed below:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 1. Common commands for Dockerfile</caption>
+<colgroup>
+<col style="width: 11%;">
+<col style="width: 44%;">
+<col style="width: 44%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Command</th>
+<th class="tableblock halign-left valign-top">Purpose</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">FROM</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">First non-comment instruction in <em>Dockerfile</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>FROM ubuntu</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">COPY</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Copies mulitple source files from the context to the file system of the container at the specified path</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>COPY .bash_profile /home</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ENV</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets the environment variable</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ENV HOSTNAME=test</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">RUN</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Executes a command</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>RUN apt-get update</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CMD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Defaults for an executing container</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CMD ["/bin/echo", "hello world"]</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">EXPOSE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Informs the network ports that the container will listen on</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>EXPOSE 8093</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_create_your_first_docker_image">Create your first Docker image</h3>
+<div class="paragraph">
+<p><em>Hello World</em> Dockerfile is shown:</p>
+</div>
+<div class="listingblock">
+<div class="title">Hello World Dockerfile</div>
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">FROM ubuntu
+
+CMD ["/bin/echo", "hello world"]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This image uses <code>ubuntu</code> as the base image. <code>CMD</code> command defines the command that needs to run. It provides a different entry point of <code>/bin/echo</code> and gives the argument &#8220;hello world&#8221;.</p>
+</div>
+<div class="paragraph">
+<p>Build this image as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">&gt; docker build -t helloworld .
+Sending build context to Docker daemon 2.048 kB
+Step 0 : FROM ubuntu
+Pulling repository docker.io/library/ubuntu
+a5a467fddcb8: Download complete
+3fd0c2ae8ed2: Download complete
+9e19ac89d27c: Download complete
+ac65c371c3a5: Download complete
+Status: Downloaded newer image for ubuntu:latest
+ ---&gt; a5a467fddcb8
+Step 1 : CMD /bin/echo hello world
+ ---&gt; Running in 132bb0bf823f
+ ---&gt; e81a394f71e3
+Removing intermediate container 132bb0bf823f
+Successfully built e81a394f71e3</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>List the images available:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">&gt; docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
+helloworld          latest              9c0e7b56cbee        13 minutes ago      187.9 MB</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run the container:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>docker run -it helloworld</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>to see the output:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>hello world</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Change the base image from <code>ubuntu</code> to <code>busybox</code>, build the image again:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>docker build -t helloworld2 .</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">&gt; docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
+helloworld          latest              e81a394f71e3        26 minutes ago      187.9 MB
+helloworld2         latest              c458787fadcf        3 seconds ago       1.113 MB
+ubuntu              latest              a5a467fddcb8        2 days ago          187.9 MB
+busybox             latest              3d5bcd78e074        4 days ago          1.113 MB</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_run_wildfly">Run WildFly</h4>
+<div class="paragraph">
+<p>Create a new text file <em>Dockerfile</em> in an empty directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">FROM jboss/wildfly</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Build the image:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>docker build -t mywildfly .</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run the container:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>docker run -it mywildfly</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_deploy_java_ee_7_application">Deploy Java EE 7 Application</h4>
+<div class="paragraph">
+<p>Create a new text file <em>Dockerfile</em> in an empty directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">FROM jboss/wildfly
+
+CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-c", "standalone-full.xml", "-b", "0.0.0.0"]
+
+RUN curl -L https://github.com/javaee-samples/javaee7-hol/raw/master/solution/movieplex7-1.0-SNAPSHOT.war -o /opt/jboss/wildfly/standalone/deployments/movieplex7-1.0-SNAPSHOT.war</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Three things happen in this image:
+. Uses &#8220;jboss/wildfly&#8221; as the base image
+. Starts WildFly application server in Full Platform mode
+. Copies the WAR file from from a URL to the deployment directory of WildFly</p>
+</div>
+<div class="paragraph">
+<p>Build the image:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>docker build -t movieplex .</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_difference_between_cmd_and_entrypoint">Difference between CMD and ENTRYPOINT</h4>
+<div class="paragraph">
+<p><strong>TL;DR</strong> <code>CMD</code> will work for most of the cases.</p>
+</div>
+<div class="paragraph">
+<p>Default entry point for a container is <code>/bin/sh</code>, the default shell.</p>
+</div>
+<div class="paragraph">
+<p>Running a container as <code>docker run -it ubuntu</code> uses that command and starts the default shell. The output is shown as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">&gt; docker run -it ubuntu
+root@88976ddee107:/#</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>ENTRYPOINT</code> allows to override the entry point to some other command, and even customize it. For example, a container can be started as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">&gt; docker run -it --entrypoint=/bin/cat ubuntu /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+. . .</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This command overrides the entry point to the container to <code>/bin/cat</code>. The argument(s) passed to the CLI are used by the entry point.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_difference_between_add_and_copy">Difference between ADD and COPY</h4>
+<div class="paragraph">
+<p><strong>TL;DR</strong> <code>COPY</code> will work for most of the cases.</p>
+</div>
+<div class="paragraph">
+<p><code>ADD</code> has all capabilities of <code>COPY</code> and has the following additional features:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Allows tar file auto-extraction in the image, for example, <code>ADD app.tar.gz /opt/var/myapp</code>.</p>
+</li>
+<li>
+<p>Allows files to be downloaded from a remote URL. However, the downloaded files will become part of the image. This causes the image size to bloat. So its recommended to use <code>curl</code> or <code>wget</code> to download the archive explicitly, extract, and remove the archive.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_import_and_export_images">Import and export images</h3>
+<div class="paragraph">
+<p>Docker images can be saved using <code>save</code> command to a .tar file:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>docker save helloworld &gt; helloworld.tar</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>These tar files can then be imported using <code>load</code> command:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>docker load -i helloworld.tar</pre>
+</div>
 </div>
 </div>
 </div>
@@ -4775,7 +5070,7 @@ eval $(docker-machine env &lt;MACHINE_NAME&gt;)</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-10-01 15:03:55 PDT
+Last updated 2015-10-25 13:59:25 PDT
 </div>
 </div>
 </body>
