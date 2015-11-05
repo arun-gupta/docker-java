@@ -130,14 +130,13 @@ This shows the output similar to the one below:
 ----
 docker-machine ls
 NAME            ACTIVE   DRIVER       STATE     URL                         SWARM
-lab                      virtualbox   Running   tcp://192.168.99.101:2376   
-summit2015               virtualbox   Running   tcp://192.168.99.100:2376   
+default         -        virtualbox   Running   tcp://192.168.99.100:2376   
 swarm-master    *        virtualbox   Running   tcp://192.168.99.102:2376   swarm-master (master)
-swarm-node-01            virtualbox   Running   tcp://192.168.99.103:2376   swarm-master
-swarm-node-02            virtualbox   Running   tcp://192.168.99.104:2376   swarm-master
+swarm-node-01   -        virtualbox   Running   tcp://192.168.99.103:2376   swarm-master
+swarm-node-02   -        virtualbox   Running   tcp://192.168.99.104:2376   swarm-master
 ----
 +
-The machines that are part of the cluster have the cluster’s name in the SWARM column, blank otherwise. For example, "`lab`" and "`summit2015`" are standalone machines where as all other machines are part of the "`swarm-master`" cluster. The Swarm master is also identified by (master) in the SWARM column.
+The machines that are part of the cluster have the cluster’s name in the SWARM column, blank otherwise. For example, "`default`" is standalone machines where as all other machines are part of the "`swarm-master`" cluster. The Swarm master is also identified by (master) in the SWARM column.
 +
 . Connect to the Swarm cluster and find some information about it:
 

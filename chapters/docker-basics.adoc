@@ -62,17 +62,17 @@ Once your Docker host has been created, it then has a number of commands for man
 . Upgrade Docker
 . Configure the Docker client to talk to a host
 
-You used Docker Machine already during the attendee setup. We won't need it too much further on. But if you need to create hosts, it's a very handy tool to know about. From now on we're mostly going to use the docker client.
+Docker Machine was already installed during the attendee setup. We won't need it too much further on. But if you need to create hosts, it's a very handy tool to know about. From now on we're mostly going to use Docker client.
 
 Find out more about the details at the link:https://docs.docker.com/machine/[Docker Machine Website].
 
-Check if docker machine is working:
+Open Docker shell, check if docker machine is working:
 
   docker-machine -v
 
 It shows the output similar to the one shown below:
 
-  docker-machine version 0.3.0 (0a251fe)
+  docker-machine version 0.5.0 (04cfa58)
 
 NOTE: The exact version may differ based upon how recently the installation was performed.
 
@@ -86,7 +86,7 @@ Check if your client is working using the following command:
 
 It shows the output similar to the following:
 
-  Docker version 1.7.0, build 0baf609
+  Docker version 1.9.0, build 76d6bc9
 
 NOTE: The exact version may differ based upon how recently the installation was performed.
 
@@ -101,11 +101,11 @@ Get a full list of available commands with
 
   docker
 
-A more comprehensive list of commands is also available in <<Common_Docker_Commands>>.
+A more commonly used list of commands is available at <<Common_Docker_Commands>>.
 
 ### Verify Docker Configuration
 
-Check if your Docker Host is running:
+Open Docker shell, check if your Docker Host is running:
 
   docker-machine ls
 
@@ -114,16 +114,16 @@ You should see the output similar to:
 [source, text]
 ----
 NAME        ACTIVE   DRIVER       STATE     URL                         SWARM
-lab                  virtualbox   Running   tcp://192.168.99.101:2376   
+default     *        virtualbox   Running   tcp://192.168.99.100:2376   
 ----
 
 This machine is shown in "`Running`" state. If the machine state is stopped, start it with:
 
-  docker-machine start lab
+  docker-machine start default
 
 After it is started you can find out IP address of your Docker Host with:
 
-  docker-machine ip lab
+  docker-machine ip default
 
 We already did this during the setup document, remember? So, this is a good chance to check, if you already added this IP to your hosts file.
 
@@ -141,4 +141,4 @@ PING dockerhost (192.168.99.101): 56 data bytes
 64 bytes from 192.168.99.101: icmp_seq=1 ttl=64 time=0.387 ms
 ----
 
-If it does, you're ready to start with the lab.
+If it does, you're ready to start with the workshop.

@@ -48,7 +48,7 @@ Make sure to get IP address of the Docker Host as:
 +
 [source, text]
 ----
-docker-machine ip lab
+docker-machine ip default
 ----
 +
 Also, make sure to specify the correct directory for `.docker` on your machine.
