@@ -135,12 +135,11 @@ NOTE: Kubernetes 1.0.1 is the only version verified to work with Virtual Box. Mo
 . Download WildFly 9.0 from http://download.jboss.org/wildfly/9.0.0.Final/wildfly-9.0.0.Final.zip.
 . Install it by extracting the archive.
 
-### JBoss Developer Studio 9 - Beta 2
+### JBoss Developer Studio 9.0
 
 To install JBoss Developer Studio stand-alone, complete the following steps:
 
-. Download http://tools.jboss.org/downloads/devstudio/mars/9.0.0.Beta2.html[9.0.0 Beta 2] or
-https://devstudio.redhat.com/9.0/snapshots/builds/devstudio.product_master/latest/installer/[Latest Nightly].
+. Download http://tools.jboss.org/downloads/devstudio/mars/9.0.0.GA.html[9.0.0].
 . Start the installer as:
 +
 [source, text]
