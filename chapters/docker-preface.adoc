@@ -6,4 +6,4 @@ Docker is the developer-friendly Linux container technology that enables creatio
 
 This lab offers developers an intro-level, hands-on session with Docker, from installation, to exploring Docker Hub, to crafting their own images, to adding Java apps and running custom containers. It will also explain how to use Swarm to orchesorchestrate these containers together. This is a BYOL (bring your own laptop) session, so bring your Windows, OSX, or Linux laptop and be ready to dig into a tool that promises to be at the forefront of our industry for some time to come.
 
-NOTE: Latest content of this lab is always at https://github.com/javaee-samples/docker-java
+NOTE: Latest content of this workshop is always at https://github.com/javaee-samples/docker-java

@@ -1,6 +1,6 @@
 ## Setup Environments
 
-This section describes what, how, and where to install the software needed for this lab. This lab is designed for a BYOL (Brying Your Own Laptop) style hands-on-lab.
+This section describes the software needed for this workshop. This workshop is designed for a BYOL (Brying Your Own Laptop) style hands-on-lab.
 
 ### Hardware
 
