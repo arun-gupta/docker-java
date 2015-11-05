@@ -26,22 +26,21 @@ _Dockerfile_ is usually called _Dockerfile_. The complete list of commands that 
 
 === Create your first Docker image
 
-Create a new text file _Dockerfile_ in an empty directory and use the following contents:
-
-.Hello World Dockerfile
+. Create a new directory.
+. Create a new text file, name it _Dockerfile_, and use the following contents:
++
 [source, text]
 ----
 FROM ubuntu
 
 CMD ["/bin/echo", "hello world"]
 ----
-
++
 This image uses `ubuntu` as the base image. `CMD` command defines the command that needs to run. It provides a different entry point of `/bin/echo` and gives the argument "`hello world`".
-
-Build this image as:
-
-[source, text]
-----
++
+. Build this image:
++
+```console
 > docker build -t helloworld .
 Sending build context to Docker daemon 2.048 kB
 Step 0 : FROM ubuntu
@@ -57,75 +56,80 @@ Step 1 : CMD /bin/echo hello world
  ---> e81a394f71e3
 Removing intermediate container 132bb0bf823f
 Successfully built e81a394f71e3
-----
-
-List the images available:
-
-[source, text]
-----
+```
++
+`.` in this command is the context for `docker build`.
++
+. List the images available:
++
+```console
 > docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
 helloworld          latest              9c0e7b56cbee        13 minutes ago      187.9 MB
-----
-
-Run the container:
-
+```
++
+. Run the container:
++
   docker run -it helloworld
-
++
 to see the output:
-
++
   hello world
-
-Change the base image from `ubuntu` to `busybox`, build the image again:
-
++
+. Change the base image from `ubuntu` to `busybox` in `Dockerfile`. Build the image again:
++
   docker build -t helloworld2 .
-
-[source, text]
-----
++
+and view the images as:
++
+```console
 > docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
 helloworld          latest              e81a394f71e3        26 minutes ago      187.9 MB
 helloworld2         latest              c458787fadcf        3 seconds ago       1.113 MB
 ubuntu              latest              a5a467fddcb8        2 days ago          187.9 MB
 busybox             latest              3d5bcd78e074        4 days ago          1.113 MB
-----
+```
 
-=== Run WildFly
+=== WildFly Image
 
-Create a new text file _Dockerfile_ in an empty directory and use the following contents:
-
+. Create a new directory.
+. Create a new text file, name it _Dockerfile_, and use the following contents:
++
 [source, text]
 ----
 FROM jboss/wildfly
 ----
-
-Build the image:
-
++
+. Build the image:
++
   docker build -t mywildfly .
-
-Run the container:
-
++
+. Run the container:
++
   docker run -it mywildfly
 
-=== Deploy Java EE 7 Application
+=== Java EE 7 Application Image
 
-Create a new text file _Dockerfile_ in an empty directory:
-
+. Create a new directory.
+. Create a new text file, name it _Dockerfile_, and use the following contents:
++
 [source, text]
 ----
-FROM jboss/wildfly
+FROM jboss/wildfly <1>
 
-CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-c", "standalone-full.xml", "-b", "0.0.0.0"]
+CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-c", "standalone-full.xml", "-b", "0.0.0.0"] <2>
 
-RUN curl -L https://github.com/javaee-samples/javaee7-hol/raw/master/solution/movieplex7-1.0-SNAPSHOT.war -o /opt/jboss/wildfly/standalone/deployments/movieplex7-1.0-SNAPSHOT.war
+RUN curl -L https://github.com/javaee-samples/javaee7-hol/raw/master/solution/movieplex7-1.0-SNAPSHOT.war -o /opt/jboss/wildfly/standalone/deployments/movieplex7-1.0-SNAPSHOT.war <3>
 ----
-
-Three things happen in this image:
-. Uses "`jboss/wildfly`" as the base image
-. Starts WildFly application server in Full Platform mode
-. Copies the WAR file from from a URL to the deployment directory of WildFly
-
-Build the image:
++
+Three things in this image:
++
+<1> Uses "`jboss/wildfly`" as the base image
+<2> Starts WildFly application server in Full Platform mode
+<3> Copies the WAR file from from a URL to the deployment directory of WildFly
++
+. Build the image:
 
   docker build -t movieplex .
 
@@ -139,23 +143,21 @@ Default entry point for a container is `/bin/sh`, the default shell.
 
 Running a container as `docker run -it ubuntu` uses that command and starts the default shell. The output is shown as:
 
-[source, text]
-----
+```console
 > docker run -it ubuntu
 root@88976ddee107:/#
-----
+```
 
 `ENTRYPOINT` allows to override the entry point to some other command, and even customize it. For example, a container can be started as:
 
-[source, text]
-----
+```console
 > docker run -it --entrypoint=/bin/cat ubuntu /etc/passwd
 root:x:0:0:root:/root:/bin/bash
 daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
 bin:x:2:2:bin:/bin:/usr/sbin/nologin
 sys:x:3:3:sys:/dev:/usr/sbin/nologin
 . . .
-----
+```
 
 This command overrides the entry point to the container to `/bin/cat`. The argument(s) passed to the CLI are used by the entry point.
 

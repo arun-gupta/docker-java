@@ -462,8 +462,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_dockerfile">Dockerfile</a></li>
 <li><a href="#_create_your_first_docker_image">Create your first Docker image</a></li>
-<li><a href="#_run_wildfly">Run WildFly</a></li>
-<li><a href="#_deploy_java_ee_7_application">Deploy Java EE 7 Application</a></li>
+<li><a href="#_wildfly_image">WildFly Image</a></li>
+<li><a href="#_java_ee_7_application_image">Java EE 7 Application Image</a></li>
 <li><a href="#_dockerfile_command_design_patterns">Dockerfile Command Design Patterns</a>
 <ul class="sectlevel3">
 <li><a href="#_difference_between_cmd_and_entrypoint">Difference between CMD and ENTRYPOINT</a></li>
@@ -1214,11 +1214,14 @@ PING dockerhost (192.168.99.101): 56 data bytes
 </div>
 <div class="sect2">
 <h3 id="_create_your_first_docker_image">Create your first Docker image</h3>
-<div class="paragraph">
-<p>Create a new text file <em>Dockerfile</em> in an empty directory and use the following contents:</p>
-</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Create a new directory.</p>
+</li>
+<li>
+<p>Create a new text file, name it <em>Dockerfile</em>, and use the following contents:</p>
 <div class="listingblock">
-<div class="title">Hello World Dockerfile</div>
 <div class="content">
 <pre class="highlight"><code class="language-text" data-lang="text">FROM ubuntu
 
@@ -1228,12 +1231,12 @@ CMD ["/bin/echo", "hello world"]</code></pre>
 <div class="paragraph">
 <p>This image uses <code>ubuntu</code> as the base image. <code>CMD</code> command defines the command that needs to run. It provides a different entry point of <code>/bin/echo</code> and gives the argument &#8220;hello world&#8221;.</p>
 </div>
-<div class="paragraph">
-<p>Build this image as:</p>
-</div>
+</li>
+<li>
+<p>Build this image:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">&gt; docker build -t helloworld .
+<pre class="highlight"><code class="language-console" data-lang="console">&gt; docker build -t helloworld .
 Sending build context to Docker daemon 2.048 kB
 Step 0 : FROM ubuntu
 Pulling repository docker.io/library/ubuntu
@@ -1251,18 +1254,21 @@ Successfully built e81a394f71e3</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>List the images available:</p>
+<p><code>.</code> in this command is the context for <code>docker build</code>.</p>
 </div>
+</li>
+<li>
+<p>List the images available:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">&gt; docker images
+<pre class="highlight"><code class="language-console" data-lang="console">&gt; docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
 helloworld          latest              9c0e7b56cbee        13 minutes ago      187.9 MB</code></pre>
 </div>
 </div>
-<div class="paragraph">
+</li>
+<li>
 <p>Run the container:</p>
-</div>
 <div class="literalblock">
 <div class="content">
 <pre>docker run -it helloworld</pre>
@@ -1276,17 +1282,20 @@ helloworld          latest              9c0e7b56cbee        13 minutes ago      
 <pre>hello world</pre>
 </div>
 </div>
-<div class="paragraph">
-<p>Change the base image from <code>ubuntu</code> to <code>busybox</code>, build the image again:</p>
-</div>
+</li>
+<li>
+<p>Change the base image from <code>ubuntu</code> to <code>busybox</code> in <code>Dockerfile</code>. Build the image again:</p>
 <div class="literalblock">
 <div class="content">
 <pre>docker build -t helloworld2 .</pre>
 </div>
 </div>
+<div class="paragraph">
+<p>and view the images as:</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">&gt; docker images
+<pre class="highlight"><code class="language-console" data-lang="console">&gt; docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
 helloworld          latest              e81a394f71e3        26 minutes ago      187.9 MB
 helloworld2         latest              c458787fadcf        3 seconds ago       1.113 MB
@@ -1294,61 +1303,88 @@ ubuntu              latest              a5a467fddcb8        2 days ago          
 busybox             latest              3d5bcd78e074        4 days ago          1.113 MB</code></pre>
 </div>
 </div>
+</li>
+</ol>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_run_wildfly">Run WildFly</h3>
-<div class="paragraph">
-<p>Create a new text file <em>Dockerfile</em> in an empty directory and use the following contents:</p>
-</div>
+<h3 id="_wildfly_image">WildFly Image</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Create a new directory.</p>
+</li>
+<li>
+<p>Create a new text file, name it <em>Dockerfile</em>, and use the following contents:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-text" data-lang="text">FROM jboss/wildfly</code></pre>
 </div>
 </div>
-<div class="paragraph">
+</li>
+<li>
 <p>Build the image:</p>
-</div>
 <div class="literalblock">
 <div class="content">
 <pre>docker build -t mywildfly .</pre>
 </div>
 </div>
-<div class="paragraph">
+</li>
+<li>
 <p>Run the container:</p>
-</div>
 <div class="literalblock">
 <div class="content">
 <pre>docker run -it mywildfly</pre>
 </div>
 </div>
+</li>
+</ol>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_deploy_java_ee_7_application">Deploy Java EE 7 Application</h3>
-<div class="paragraph">
-<p>Create a new text file <em>Dockerfile</em> in an empty directory:</p>
-</div>
+<h3 id="_java_ee_7_application_image">Java EE 7 Application Image</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Create a new directory.</p>
+</li>
+<li>
+<p>Create a new text file, name it <em>Dockerfile</em>, and use the following contents:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">FROM jboss/wildfly
+<pre class="highlight"><code class="language-text" data-lang="text">FROM jboss/wildfly <b class="conum">(1)</b>
 
-CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-c", "standalone-full.xml", "-b", "0.0.0.0"]
+CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-c", "standalone-full.xml", "-b", "0.0.0.0"] <b class="conum">(2)</b>
 
-RUN curl -L https://github.com/javaee-samples/javaee7-hol/raw/master/solution/movieplex7-1.0-SNAPSHOT.war -o /opt/jboss/wildfly/standalone/deployments/movieplex7-1.0-SNAPSHOT.war</code></pre>
+RUN curl -L https://github.com/javaee-samples/javaee7-hol/raw/master/solution/movieplex7-1.0-SNAPSHOT.war -o /opt/jboss/wildfly/standalone/deployments/movieplex7-1.0-SNAPSHOT.war <b class="conum">(3)</b></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Three things happen in this image:
-. Uses &#8220;jboss/wildfly&#8221; as the base image
-. Starts WildFly application server in Full Platform mode
-. Copies the WAR file from from a URL to the deployment directory of WildFly</p>
+<p>Three things in this image:</p>
 </div>
-<div class="paragraph">
+<div class="colist arabic">
+<ol>
+<li>
+<p>Uses &#8220;jboss/wildfly&#8221; as the base image</p>
+</li>
+<li>
+<p>Starts WildFly application server in Full Platform mode</p>
+</li>
+<li>
+<p>Copies the WAR file from from a URL to the deployment directory of WildFly</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
 <p>Build the image:</p>
-</div>
 <div class="literalblock">
 <div class="content">
 <pre>docker build -t movieplex .</pre>
 </div>
+</div>
+</li>
+</ol>
 </div>
 </div>
 <div class="sect2">
@@ -1366,7 +1402,7 @@ RUN curl -L https://github.com/javaee-samples/javaee7-hol/raw/master/solution/mo
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">&gt; docker run -it ubuntu
+<pre class="highlight"><code class="language-console" data-lang="console">&gt; docker run -it ubuntu
 root@88976ddee107:/#</code></pre>
 </div>
 </div>
@@ -1375,7 +1411,7 @@ root@88976ddee107:/#</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">&gt; docker run -it --entrypoint=/bin/cat ubuntu /etc/passwd
+<pre class="highlight"><code class="language-console" data-lang="console">&gt; docker run -it --entrypoint=/bin/cat ubuntu /etc/passwd
 root:x:0:0:root:/root:/bin/bash
 daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
 bin:x:2:2:bin:/bin:/usr/sbin/nologin
