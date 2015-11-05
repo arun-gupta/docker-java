@@ -19,10 +19,10 @@ Start WildFly server as:
 
 [source, text]
 ----
-docker run --name wildfly -d -p 8080:8080 -v /Users/youruser/tmp/deployments:/opt/jboss/wildfly/standalone/deployments/:rw jboss/wildfly
+docker run --name wildfly -d -p 8080:8080 -v /Users/youruser/javaee7-simple-sample/target:/opt/jboss/wildfly/standalone/deployments/:rw jboss/wildfly
 ----
 
-Make sure to replace `/Users/youruser/tmp/deployments` to a directory on your local machine. Also, make sure this directory already exists. For example, on my machine this directory is `/Users/arungupta/tmp/deployments`.
+Make sure to replace `/Users/youruser/javaee7-simple-sample/target` to the target directory of your checked out project. 
 
 This command starts a container named "`wildfly`". 
 

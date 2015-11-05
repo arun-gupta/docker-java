@@ -2143,11 +2143,11 @@ Exact port number may be different in your case.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">docker run --name wildfly -d -p 8080:8080 -v /Users/youruser/tmp/deployments:/opt/jboss/wildfly/standalone/deployments/:rw jboss/wildfly</code></pre>
+<pre class="highlight"><code class="language-text" data-lang="text">docker run --name wildfly -d -p 8080:8080 -v /Users/youruser/javaee7-simple-sample/target:/opt/jboss/wildfly/standalone/deployments/:rw jboss/wildfly</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Make sure to replace <code>/Users/youruser/tmp/deployments</code> to a directory on your local machine. Also, make sure this directory already exists. For example, on my machine this directory is <code>/Users/arungupta/tmp/deployments</code>.</p>
+<p>Make sure to replace <code>/Users/youruser/javaee7-simple-sample/target</code> to the target directory of your checked out project.</p>
 </div>
 <div class="paragraph">
 <p>This command starts a container named &#8220;wildfly&#8221;.</p>
