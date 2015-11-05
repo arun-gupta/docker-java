@@ -40,7 +40,7 @@ Kubernetes cluster can be easily started using Vagrant. There are two options to
 
 #### Using Previously Downloaded Kubernetes Distribution
 
-. Setup a Kubernetes cluster as:
+. Setup a Kubernetes cluster using a previously configured Kubernetes distribution as explained in <<Kubernetes_Setup>>:
 +
 [source, text]
 ----

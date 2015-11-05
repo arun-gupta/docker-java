@@ -42,7 +42,7 @@ Linux Users
 
 Download Vagrant from https://www.vagrantup.com/downloads.html and install.
 
-Kubernetes requires >= 1.6.2. So if you have an older version then make sure you install the latest one.
+Kubernetes requires Vagrant >= 1.6.2. So if you have an older version then make sure you install the latest one.
 
 ### Docker Machine
 
@@ -115,6 +115,7 @@ chmod +x /usr/local/bin/docker
 curl -L http://test.docker.com.s3.amazonaws.com/builds/Windows/x86_64/docker-1.7.0.exe -o docker.exe
 ----
 
+[[Kubernetes_Setup]]
 ### Kubernetes
 
 . Download Kubernetes (1.0.1) from https://github.com/kubernetes/kubernetes/releases/download/v1.0.1/kubernetes.tar.gz.
