@@ -1,7 +1,7 @@
 # Docker and Kubernetes for Java Developers
-v1.3.2, Oct 1, 2015
+v1.4, Nov 5, 2015
 :toc:
-:toc-title: Table of Dockernetes
+:toc-title: Table of Contents
 :toclevels: 3
 :toc-placement!:
 :imagesdir: ./chapters/images

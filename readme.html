@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="v1.3.2, Oct 1, 2015">
+<meta name="author" content="v1.4, Nov 5, 2015">
 <title>Docker and Kubernetes for Java Developers</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -422,7 +422,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="header">
 <h1>Docker and Kubernetes for Java Developers</h1>
 <div class="details">
-<span id="author" class="author">v1.3.2, Oct 1, 2015</span><br>
+<span id="author" class="author">v1.4, Nov 5, 2015</span><br>
 </div>
 </div>
 <div id="content">
@@ -433,7 +433,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <a href="https://htmlpreview.github.io/?https://github.com/javaee-samples/docker-java/blob/master/readme.html" class="bare">https://htmlpreview.github.io/?https://github.com/javaee-samples/docker-java/blob/master/readme.html</a></p>
 </div>
 <div id="toc" class="toc">
-<div id="toctitle" class="title">Table of Dockernetes</div>
+<div id="toctitle" class="title">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#_preface">Preface</a></li>
 <li><a href="#_setup_environments">Setup Environments</a>
@@ -613,7 +613,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="title">Note</div>
 </td>
 <td class="content">
-Latest content of this lab is always at <a href="https://github.com/javaee-samples/docker-java" class="bare">https://github.com/javaee-samples/docker-java</a>
+Latest content of this workshop is always at <a href="https://github.com/javaee-samples/docker-java" class="bare">https://github.com/javaee-samples/docker-java</a>
 </td>
 </tr>
 </table>
@@ -624,7 +624,7 @@ Latest content of this lab is always at <a href="https://github.com/javaee-sampl
 <h2 id="_setup_environments">Setup Environments</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This section describes what, how, and where to install the software needed for this lab. This lab is designed for a BYOL (Brying Your Own Laptop) style hands-on-lab.</p>
+<p>This section describes the software needed for this workshop. This workshop is designed for a BYOL (Brying Your Own Laptop) style hands-on-lab.</p>
 </div>
 <div class="sect2">
 <h3 id="_hardware">Hardware</h3>
@@ -983,13 +983,13 @@ By default, Docker obtains these base images from Docker Hub.
 </ol>
 </div>
 <div class="paragraph">
-<p>You used Docker Machine already during the attendee setup. We won&#8217;t need it too much further on. But if you need to create hosts, it&#8217;s a very handy tool to know about. From now on we&#8217;re mostly going to use the docker client.</p>
+<p>Docker Machine was already installed during the attendee setup. We won&#8217;t need it too much further on. But if you need to create hosts, it&#8217;s a very handy tool to know about. From now on we&#8217;re mostly going to use Docker client.</p>
 </div>
 <div class="paragraph">
 <p>Find out more about the details at the <a href="https://docs.docker.com/machine/">Docker Machine Website</a>.</p>
 </div>
 <div class="paragraph">
-<p>Check if docker machine is working:</p>
+<p>Open Docker shell, check if docker machine is working:</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -1001,7 +1001,7 @@ By default, Docker obtains these base images from Docker Hub.
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>docker-machine version 0.3.0 (0a251fe)</pre>
+<pre>docker-machine version 0.5.0 (04cfa58)</pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -1035,7 +1035,7 @@ The exact version may differ based upon how recently the installation was perfor
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>Docker version 1.7.0, build 0baf609</pre>
+<pre>Docker version 1.9.0, build 76d6bc9</pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -1078,13 +1078,13 @@ The exact version may differ based upon how recently the installation was perfor
 </div>
 </div>
 <div class="paragraph">
-<p>A more comprehensive list of commands is also available in <a href="#Common_Docker_Commands">Common Docker Commands</a>.</p>
+<p>A more commonly used list of commands is available at <a href="#Common_Docker_Commands">Common Docker Commands</a>.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_verify_docker_configuration">Verify Docker Configuration</h3>
 <div class="paragraph">
-<p>Check if your Docker Host is running:</p>
+<p>Open Docker shell, check if your Docker Host is running:</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -1097,7 +1097,7 @@ The exact version may differ based upon how recently the installation was perfor
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-text" data-lang="text">NAME        ACTIVE   DRIVER       STATE     URL                         SWARM
-lab                  virtualbox   Running   tcp://192.168.99.101:2376</code></pre>
+default     *        virtualbox   Running   tcp://192.168.99.100:2376</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1105,7 +1105,7 @@ lab                  virtualbox   Running   tcp://192.168.99.101:2376</code></pr
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>docker-machine start lab</pre>
+<pre>docker-machine start default</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1113,7 +1113,7 @@ lab                  virtualbox   Running   tcp://192.168.99.101:2376</code></pr
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>docker-machine ip lab</pre>
+<pre>docker-machine ip default</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1139,7 +1139,7 @@ PING dockerhost (192.168.99.101): 56 data bytes
 </div>
 </div>
 <div class="paragraph">
-<p>If it does, you&#8217;re ready to start with the lab.</p>
+<p>If it does, you&#8217;re ready to start with the workshop.</p>
 </div>
 </div>
 </div>
@@ -2785,7 +2785,7 @@ arungupta/javaee7-docker-maven    latest              2e51b3fca40f        4 seco
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">docker-machine ip lab</code></pre>
+<pre class="highlight"><code class="language-text" data-lang="text">docker-machine ip default</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3596,15 +3596,14 @@ Labels:
 <div class="content">
 <pre class="highlight"><code class="language-text" data-lang="text">docker-machine ls
 NAME            ACTIVE   DRIVER       STATE     URL                         SWARM
-lab                      virtualbox   Running   tcp://192.168.99.101:2376
-summit2015               virtualbox   Running   tcp://192.168.99.100:2376
+default         -        virtualbox   Running   tcp://192.168.99.100:2376
 swarm-master    *        virtualbox   Running   tcp://192.168.99.102:2376   swarm-master (master)
-swarm-node-01            virtualbox   Running   tcp://192.168.99.103:2376   swarm-master
-swarm-node-02            virtualbox   Running   tcp://192.168.99.104:2376   swarm-master</code></pre>
+swarm-node-01   -        virtualbox   Running   tcp://192.168.99.103:2376   swarm-master
+swarm-node-02   -        virtualbox   Running   tcp://192.168.99.104:2376   swarm-master</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The machines that are part of the cluster have the cluster’s name in the SWARM column, blank otherwise. For example, &#8220;lab&#8221; and &#8220;summit2015&#8221; are standalone machines where as all other machines are part of the &#8220;swarm-master&#8221; cluster. The Swarm master is also identified by (master) in the SWARM column.</p>
+<p>The machines that are part of the cluster have the cluster’s name in the SWARM column, blank otherwise. For example, &#8220;default&#8221; is standalone machines where as all other machines are part of the &#8220;swarm-master&#8221; cluster. The Swarm master is also identified by (master) in the SWARM column.</p>
 </div>
 </li>
 <li>
@@ -5098,7 +5097,7 @@ token</a> and pass it to Docker Machine using the global <code>--github-api-toke
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-10-25 21:59:25 CET
+Last updated 2015-11-05 21:45:27 CET
 </div>
 </div>
 </body>
