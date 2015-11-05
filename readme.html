@@ -583,6 +583,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_cannot_create_docker_machine_on_windows">Cannot create Docker Machine on Windows</a></li>
 <li><a href="#_no_route_to_host">No route to host</a></li>
 <li><a href="#_docker_machine_creation_fails_with_an_error_about_dial_tcp_i_o_timeout">Docker machine creation fails with an error about dial tcp: i/o timeout</a></li>
+<li><a href="#__you_may_be_getting_rate_limited_by_github_error_message">&#8220;You may be getting rate limited by Github&#8221; error message</a></li>
+<li><a href="#_docker_machine_troubleshooting">Docker Machine Troubleshooting</a></li>
 </ul>
 </li>
 <li><a href="#_references">References</a></li>
@@ -4971,7 +4973,7 @@ d970ddff7046        gcr.io/google_containers/pause:0.8.0                        
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">$ docker pull arungupta/wildfly-mysql-javaee7
+<pre class="highlight"><code class="language-console" data-lang="console">$ docker pull arungupta/wildfly-mysql-javaee7
 Using default tag: latest
 Pulling repository docker.io/arungupta/wildfly-mysql-javaee7
 Network timed out while trying to connect to https://index.docker.io/v1/repositories/arungupta/wildfly-mysql-javaee7/images. You may want to check your internet connection or if you are behind a proxy.</code></pre>
@@ -4987,7 +4989,7 @@ Network timed out while trying to connect to https://index.docker.io/v1/reposito
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">docker-machine restart &lt;MACHINE_NAME&gt;
+<pre class="highlight"><code class="language-console" data-lang="console">docker-machine restart &lt;MACHINE_NAME&gt;
 eval $(docker-machine env &lt;MACHINE_NAME&gt;)</code></pre>
 </div>
 </div>
@@ -5040,7 +5042,7 @@ eval $(docker-machine env &lt;MACHINE_NAME&gt;)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">vagrant halt minion-1
+<pre class="highlight"><code class="language-console" data-lang="console">vagrant halt minion-1
 ./cluster/kube-up.sh</code></pre>
 </div>
 </div>
@@ -5072,6 +5074,42 @@ eval $(docker-machine env &lt;MACHINE_NAME&gt;)</code></pre>
 </div>
 <div class="paragraph">
 <p>Issue: <a href="https://github.com/docker/machine/issues/2186" class="bare">https://github.com/docker/machine/issues/2186</a> is raised so that the docker-machine team can hopefully find a way around this.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="__you_may_be_getting_rate_limited_by_github_error_message">&#8220;You may be getting rate limited by Github&#8221; error message</h3>
+<div class="paragraph">
+<p>Credits: <a href="https://github.com/docker/machine/blob/master/README.md#troubleshooting" class="bare">https://github.com/docker/machine/blob/master/README.md#troubleshooting</a></p>
+</div>
+<div class="paragraph">
+<p>In order to <code>create</code> or <code>upgrade</code> virtual machines running Docker, Docker
+Machine will check the Github API for the latest release of the [boot2docker
+operating system](<a href="https://github.com/boot2docker/boot2docker" class="bare">https://github.com/boot2docker/boot2docker</a>).  The Github API
+allows for a small number of unauthenticated requests from a given client, but
+if you share an IP address with many other users (e.g. in an office), you may
+get rate limited by their API, and Docker Machine will error out with messages
+indicating this.</p>
+</div>
+<div class="paragraph">
+<p>In order to work around this issue, you can <a href="https://help.github.com/articles/creating-an-access-token-for-command-line-use/">generate a
+token</a> and pass it to Docker Machine using the global <code>--github-api-token</code> flag:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-console" data-lang="console">$ docker-machine --github-api-token=token create -d virtualbox newbox</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This should eliminate any issues you&#8217;ve been experiencing with rate limiting.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_docker_machine_troubleshooting">Docker Machine Troubleshooting</h3>
+<div class="paragraph">
+<p><a href="https://github.com/docker/machine/blob/master/README.md#troubleshooting">Docker Machine Troubleshooting</a> section has good tips on what can possibly go wrong with Docker Machine. Look there if your issue is not explained here.</p>
+</div>
+<div class="paragraph">
+<p>===</p>
 </div>
 </div>
 </div>
