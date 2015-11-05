@@ -4,154 +4,28 @@ This section describes what, how, and where to install the software needed for t
 
 ### Hardware
 
-. Operating System: Mac OS X (10.8 or later), Windows 7 (SP1), Fedora (21 or later)
+. Operating System: Mac OS X (10.8+), Windows 7+, Ubuntu 12+, CentOS 7+, Fedora 21+
 . Memory: At least 4 GB+, preferred 8 GB
 
-### Software
+### Docker
 
-. Java: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html[Oracle JDK 8u45]
-. Web Browser
-.. https://www.google.com/chrome/browser/desktop/[Chrome]
-.. link:http://www.getfirefox.com[Firefox]
+#### Docker Toolbox or Packages
 
-### Git Client
+Docker runs natively on Linux. Because the Docker daemon uses Linux-specific kernel features, you can’t run Docker natively in OS X or Windows. Instead, you must use `docker-machine` to create and attach to a virtual machine (VM). This machine is a Linux VM that hosts Docker for you on your Mac or Windows. This can be easily installed using https://www.docker.com/docker-toolbox[Docker Toolbox].
 
-Install Git Client as explained at: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
+Follow the instructions to install Docker:
 
-### Maven
+. https://github.com/docker/toolbox/releases/download/v1.9.0/DockerToolbox-1.9.0.pkg[Docker Tool Box 1.9.0 for Mac]
+. https://github.com/docker/toolbox/releases/download/v1.9.0/DockerToolbox-1.9.0.exe[Docker Toolbox 1.9.0 for Windows]
+. http://docs.docker.com/engine/installation/ubuntulinux/[Docker on Ubuntu]
+. http://docs.docker.com/engine/installation/centos/[Docker on Centos]
+. http://docs.docker.com/engine/installation/fedora/[Docker on Fedora]
 
-. Download Apache Maven from https://maven.apache.org/download.cgi.
-. Unzip to a directory of your choice and add it to the `PATH`.
+Complete set of operating systems are listed at http://docs.docker.com/engine/installation/[Install Docker Engine].
 
-### VirtualBox
+#### Pull Docker images
 
-Docker currently runs natively on Linux. It can be configured to run in a virtual machine on Mac or Windows. This is why Virtualbox is a requirement for Mac or Windows.
-
-Virtual Box 5.0.0 does not allow Kubernetes cluster to be started: https://github.com/kubernetes/kubernetes/issues/12614. Make sure to download VirtualBox 4.3.30[https://www.virtualbox.org/wiki/Download_Old_Builds_4_3] and install.
-
-[WARNING]
-====
-Linux Users
-
-. Have your kernel updated
-. Users should have the GNU compiler, build and header files for your current Linux kernel
-. Create a `/usr/src/linux` link to the current kernel source
-====
-
-### Vagrant
-
-Download Vagrant from https://www.vagrantup.com/downloads.html and install.
-
-Kubernetes requires Vagrant >= 1.6.2. So if you have an older version then make sure you install the latest one.
-
-### Docker Machine
-
-Docker Machine makes it really easy to create Docker hosts on your computer, on cloud providers and inside your own data center. It creates servers, installs Docker on them, then configures the Docker client to talk to them.
-
-[source, text]
-----
-# Mac
-curl -L https://github.com/docker/machine/releases/download/v0.4.0/docker-machine_darwin-amd64 > /usr/local/bin/docker-machine
-chmod +x /usr/local/bin/docker-machine
-
-# Linux
-curl -L  https://github.com/docker/machine/releases/download/v0.4.0/docker-machine_linux-amd64 > /usr/local/bin/docker-machine
-chmod +x /usr/local/bin/docker-machine
-
-#Windows
-curl https://github.com/docker/machine/releases/download/v0.4.0/docker-machine.exe
-----
-
-### Create Lab Docker Host
-
-. Create Docker Host to be used in the lab:
-+
-[source, text]
-----
-docker-machine create --driver=virtualbox lab
-eval "$(docker-machine env lab)"
-----
-+
-Use the following command on Windows:
-+
-[source, text]
-----
-(docker-machine env lab --shell cmd
-----
-+
-And then execute all the `set` commands.
-+
-. To make it easier to start/stop the containers, an entry is added into the host mapping table of your operating system. Find out the IP address of your machine:
-+
-[source, text]
-----
-docker-machine ip lab
-----
-+
-This will provide the IP address associated with the Docker Machine created earlier.
-+
-. Edit `/etc/hosts` (Mac OS or Linux) or `C:\Windows\System32\drivers\etc\hosts` (Windows) and add:
-+
-[source, text]
-----
-<IP ADDRESS>  dockerhost
-----
-
-### Docker Client
-
-Docker Client is used to communicate with Docker Host.
-
-[source, text]
-----
-# Mac
-curl -L https://get.docker.com/builds/Darwin/x86_64/docker-latest > /usr/local/bin/docker
-chmod +x /usr/local/bin/docker
-
-# Linux
-curl -L https://get.docker.com/builds/Linux/x86_64/docker-latest > docker-latest-linux
-chmod +x /usr/local/bin/docker
-
-# Windows
-curl -L http://test.docker.com.s3.amazonaws.com/builds/Windows/x86_64/docker-1.7.0.exe -o docker.exe
-----
-
-[[Kubernetes_Setup]]
-### Kubernetes
-
-. Download Kubernetes (1.0.1) from https://github.com/kubernetes/kubernetes/releases/download/v1.0.1/kubernetes.tar.gz.
-. Extract the archive and install it by:
-
-[source, text]
-----
-export KUBERNETES_PROVIDER=vagrant
-cd kubernetes
-./cluster/kube-up.sh
-----
-
-NOTE: Kubernetes 1.0.1 is the only version verified to work with Virtual Box. More details at: https://github.com/kubernetes/kubernetes/issues/12614
-
-### WildFly
-
-. Download WildFly 9.0 from http://download.jboss.org/wildfly/9.0.0.Final/wildfly-9.0.0.Final.zip.
-. Install it by extracting the archive.
-
-### JBoss Developer Studio 9.0
-
-To install JBoss Developer Studio stand-alone, complete the following steps:
-
-. Download http://tools.jboss.org/downloads/devstudio/mars/9.0.0.GA.html[9.0.0].
-. Start the installer as:
-+
-[source, text]
-----
-java -jar <JAR FILE NAME>
-----
-+
-Follow the on-screen instructions to complete the installation process.
-
-### Pull Docker images
-
-IMPORTANT: These commands need to be issued from the shell or command prompt where `docker-machine env lab` and associated commands were issued.
+IMPORTANT: For Mac and Windows, these commands need to be issued from the Docker shell or command prompt where `eval $(docker-machine env default)` command was issued.
 
 [source, text]
 ----
@@ -180,3 +54,74 @@ docker-machine create -d virtualbox --swarm --swarm-master --swarm-discovery tok
 ----
 
 Detailed explanation for this is available in <<Docker_Swarm>>.
+
+#### Create Docker Host Mapping
+
+. To make it easier to start/stop the containers, an entry is added into the host mapping table of your operating system. Find out the IP address of your machine:
++
+[source, text]
+----
+docker-machine ip default
+----
++
+This will provide the IP address associated with the Docker Machine created earlier.
++
+. Edit `/etc/hosts` (Mac OS or Linux) or `C:\Windows\System32\drivers\etc\hosts` (Windows) and add:
++
+[source, text]
+----
+<IP ADDRESS>  dockerhost
+----
+
+#### Optional Software
+
+The following software needs to be downloaded if you want to build/deploy a Java EE application.
+
+##### Java Development Kit
+
+. Java: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html[Oracle JDK 8u65]
+
+##### Maven
+
+. Download Apache Maven from https://maven.apache.org/download.cgi.
+. Unzip to a directory of your choice and add it to the `PATH`.
+
+##### WildFly
+
+. Download WildFly 9.0 from http://download.jboss.org/wildfly/9.0.0.Final/wildfly-9.0.0.Final.zip.
+. Install it by extracting the archive.
+
+##### JBoss Developer Studio 9.0
+
+To install JBoss Developer Studio stand-alone, complete the following steps:
+
+. Download http://tools.jboss.org/downloads/devstudio/mars/9.0.0.GA.html[9.0.0].
+. Start the installer as:
++
+[source, text]
+----
+java -jar <JAR FILE NAME>
+----
++
+Follow the on-screen instructions to complete the installation process.
+
+[[Kubernetes_Setup]]
+### Kubernetes
+
+. Download Vagrant from https://www.vagrantup.com/downloads.html and install.
++
+Kubernetes requires Vagrant >= 1.6.2. So if you have an older version then make sure you install the latest one.
++
+. Download Kubernetes (1.0.1) from https://github.com/kubernetes/kubernetes/releases/download/v1.0.1/kubernetes.tar.gz.
+. Extract the archive and install it by:
+
+[source, text]
+----
+export KUBERNETES_PROVIDER=vagrant
+cd kubernetes
+./cluster/kube-up.sh
+----
+
+NOTE: Kubernetes 1.0.1 is the only version verified to work with Virtual Box. More details at: https://github.com/kubernetes/kubernetes/issues/12614
+
+
