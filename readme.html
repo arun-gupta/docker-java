@@ -459,15 +459,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_docker_image">Docker Image</a>
 <ul class="sectlevel2">
 <li><a href="#_dockerfile">Dockerfile</a></li>
-<li><a href="#_create_your_first_docker_image">Create your first Docker image</a>
-<ul class="sectlevel3">
+<li><a href="#_create_your_first_docker_image">Create your first Docker image</a></li>
 <li><a href="#_run_wildfly">Run WildFly</a></li>
 <li><a href="#_deploy_java_ee_7_application">Deploy Java EE 7 Application</a></li>
+<li><a href="#_dockerfile_command_design_patterns">Dockerfile Command Design Patterns</a>
+<ul class="sectlevel3">
 <li><a href="#_difference_between_cmd_and_entrypoint">Difference between CMD and ENTRYPOINT</a></li>
 <li><a href="#_difference_between_add_and_copy">Difference between ADD and COPY</a></li>
+<li><a href="#_import_and_export_images">Import and export images</a></li>
 </ul>
 </li>
-<li><a href="#_import_and_export_images">Import and export images</a></li>
 </ul>
 </li>
 <li><a href="#_run_container">Run Container</a>
@@ -1288,7 +1289,7 @@ PING dockerhost (192.168.99.101): 56 data bytes
 <div class="sect2">
 <h3 id="_create_your_first_docker_image">Create your first Docker image</h3>
 <div class="paragraph">
-<p><em>Hello World</em> Dockerfile is shown:</p>
+<p>Create a new text file <em>Dockerfile</em> in an empty directory and use the following contents:</p>
 </div>
 <div class="listingblock">
 <div class="title">Hello World Dockerfile</div>
@@ -1367,10 +1368,11 @@ ubuntu              latest              a5a467fddcb8        2 days ago          
 busybox             latest              3d5bcd78e074        4 days ago          1.113 MB</code></pre>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_run_wildfly">Run WildFly</h4>
+</div>
+<div class="sect2">
+<h3 id="_run_wildfly">Run WildFly</h3>
 <div class="paragraph">
-<p>Create a new text file <em>Dockerfile</em> in an empty directory:</p>
+<p>Create a new text file <em>Dockerfile</em> in an empty directory and use the following contents:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1394,8 +1396,8 @@ busybox             latest              3d5bcd78e074        4 days ago          
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_deploy_java_ee_7_application">Deploy Java EE 7 Application</h4>
+<div class="sect2">
+<h3 id="_deploy_java_ee_7_application">Deploy Java EE 7 Application</h3>
 <div class="paragraph">
 <p>Create a new text file <em>Dockerfile</em> in an empty directory:</p>
 </div>
@@ -1423,6 +1425,8 @@ RUN curl -L https://github.com/javaee-samples/javaee7-hol/raw/master/solution/mo
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_dockerfile_command_design_patterns">Dockerfile Command Design Patterns</h3>
 <div class="sect3">
 <h4 id="_difference_between_cmd_and_entrypoint">Difference between CMD and ENTRYPOINT</h4>
 <div class="paragraph">
@@ -1476,9 +1480,8 @@ sys:x:3:3:sys:/dev:/usr/sbin/nologin
 </ol>
 </div>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_import_and_export_images">Import and export images</h3>
+<div class="sect3">
+<h4 id="_import_and_export_images">Import and export images</h4>
 <div class="paragraph">
 <p>Docker images can be saved using <code>save</code> command to a .tar file:</p>
 </div>
@@ -1493,6 +1496,7 @@ sys:x:3:3:sys:/dev:/usr/sbin/nologin
 <div class="literalblock">
 <div class="content">
 <pre>docker load -i helloworld.tar</pre>
+</div>
 </div>
 </div>
 </div>

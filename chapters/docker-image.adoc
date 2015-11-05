@@ -26,7 +26,7 @@ _Dockerfile_ is usually called _Dockerfile_. The complete list of commands that 
 
 === Create your first Docker image
 
-_Hello World_ Dockerfile is shown:
+Create a new text file _Dockerfile_ in an empty directory and use the following contents:
 
 .Hello World Dockerfile
 [source, text]
@@ -90,9 +90,9 @@ ubuntu              latest              a5a467fddcb8        2 days ago          
 busybox             latest              3d5bcd78e074        4 days ago          1.113 MB
 ----
 
-==== Run WildFly
+=== Run WildFly
 
-Create a new text file _Dockerfile_ in an empty directory:
+Create a new text file _Dockerfile_ in an empty directory and use the following contents:
 
 [source, text]
 ----
@@ -107,7 +107,7 @@ Run the container:
 
   docker run -it mywildfly
 
-==== Deploy Java EE 7 Application
+=== Deploy Java EE 7 Application
 
 Create a new text file _Dockerfile_ in an empty directory:
 
@@ -128,6 +128,8 @@ Three things happen in this image:
 Build the image:
 
   docker build -t movieplex .
+
+=== Dockerfile Command Design Patterns
 
 ==== Difference between CMD and ENTRYPOINT
 
@@ -166,7 +168,7 @@ This command overrides the entry point to the container to `/bin/cat`. The argum
 . Allows tar file auto-extraction in the image, for example, `ADD app.tar.gz /opt/var/myapp`.
 . Allows files to be downloaded from a remote URL. However, the downloaded files will become part of the image. This causes the image size to bloat. So its recommended to use `curl` or `wget` to download the archive explicitly, extract, and remove the archive.
 
-=== Import and export images
+==== Import and export images
 
 Docker images can be saved using `save` command to a .tar file:
 
