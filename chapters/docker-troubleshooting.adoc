@@ -65,3 +65,22 @@ vagrant halt minion-1
 ----
 
 These commands need to be given in the '`kubernetes`' directory.
+
+=== Docker machine creation fails with an error about dial tcp: i/o timeout
+
+If you get the following error when creating a docker machine
+
+[source, text]
+----
+Error creating machine: Error in driver during machine creation: Get https://api.github.com/repos/boot2docker/boot2docker/releases: dial tcp: i/o timeout
+----
+
+Then you need to go to the boot2docker releases page on
+
+https://github.com/boot2docker/boot2docker/releases
+
+And download the latest .iso
+
+After that you can move that iso to the docker cache directory. This is located in `~/.docker/machine/cache` on Mac & Linux and `/Users/yourUserName/.docker/machine/cache` on Windows.
+
+Issue: https://github.com/docker/machine/issues/2186 is raised so that the docker-machine team can hopefully find a way around this.
