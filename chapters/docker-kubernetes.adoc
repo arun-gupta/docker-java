@@ -24,7 +24,7 @@ At a very high level, there are three key components:
 A picture is always worth a thousand words and so this is a high-level logical block diagram for Kubernetes:
 
 .Kubernetes Key Components
-image::kubernetes-key-components.png[]
+image::images/kubernetes-key-components.png[]
 
 After the 50,000 feet view, lets fly a little lower at 30,000 feet and take a look at how Kubernetes make all of this happen. There are a few key components at Master and Node that make this happen.
 
@@ -134,18 +134,18 @@ By default, the Vagrant setup will create a single Master and one node. Each VM 
 NOTE: By default, only one node is created. This can be manipulated by setting an environment variable NUM_MINIONS variable to an integer before invoking `kube-up.sh` script.
 +
 .Kubernetes Cluster using Vagrant
-image::kubernetes-cluster-vagrant.png[]
+image::images/kubernetes-cluster-vagrant.png[]
 +
 By default, each VM in the cluster is running Fedora, Kubelet is installed into ``systemd'', and all other Kubernetes services are running as containers on Master.
 +
 . Access https://10.245.1.2 (or whatever IP address is assigned to your kubernetes cluster start up log). This may present the warning as shown below:
 +
-image::kubernetes-master-default-output-certificate.png[]
+image::images/kubernetes-master-default-output-certificate.png[]
 +
 Click on '`Advanced`', on '`Proceed to 10.245.1.2`', enter the username as '`vagrant`' and password as '`vagrant`' to see the output as:
 +
 .Kubernetes Output from Master
-image::kubernetes-master-default-output.png[]
+image::images/kubernetes-master-default-output.png[]
 +
 Check the list of nodes as:
 +
@@ -188,7 +188,7 @@ Pods, and the IP addresses assigned to them, are ephemeral. If a pod dies then K
 Kubernetes services is an abstraction which defines a logical set of pods. A service is typically back-ended by one or more physical pods (associated using labels), and it has a permanent IP address that can be used by other pods/applications. For example, WildFly pod can not directly connect to a MySQL pod but can connect to MySQL service. In essence, Kubernetes service offers clients an IP and port pair which, when accessed, redirects to the appropriate backends.
 
 .Kubernetes Service
-image::kubernetes-service.png[]
+image::images/kubernetes-service.png[]
 
 NOTE: In this case, all the pods are running on a single node. This is because, that is the default number for a Kubernetes cluster. The pod can very be on another node if more number of nodes are configured to start in the cluster.
 

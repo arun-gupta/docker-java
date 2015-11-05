@@ -108,7 +108,7 @@ curl -L https://get.docker.com/builds/Darwin/x86_64/docker-latest > /usr/local/b
 chmod +x /usr/local/bin/docker
 
 # Linux
-curl -L https://get.docker.com/builds/Linux/x86_64/docker-latest > docker-latest-linux
+curl -L https://get.docker.com/builds/Linux/x86_64/docker-latest > /usr/local/bin/docker
 chmod +x /usr/local/bin/docker
 
 # Windows
@@ -123,6 +123,7 @@ curl -L http://test.docker.com.s3.amazonaws.com/builds/Windows/x86_64/docker-1.7
 
 [source, text]
 ----
+export VAGRANT_DEFAULT_PROVIDER=virtualbox
 export KUBERNETES_PROVIDER=vagrant
 cd kubernetes
 ./cluster/kube-up.sh
