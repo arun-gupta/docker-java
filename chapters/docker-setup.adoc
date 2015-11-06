@@ -27,31 +27,28 @@ Complete set of operating systems are listed at http://docs.docker.com/engine/in
 
 IMPORTANT: For Mac and Windows, these commands need to be issued from the Docker shell or command prompt where `eval $(docker-machine env default)` command was issued.
 
-[source, text]
-----
+```console
 docker pull jboss/wildfly
 docker pull arungupta/wildfly-management
 docker pull arungupta/javaee7-hol
 docker pull mysql
 docker pull swarm
 docker pull arungupta/wildfly-mysql-javaee7
-----
+```
 
 #### Create Docker Swarm Cluster
 
 Create Docker Swarm cluster as:
 
-[source, text]
-----
+```console
 docker run swarm create
-----
+```
 
 This will generate a token. Use this token to create a Swarm Master.
 
-[source, text]
-----
+```console
 docker-machine create -d virtualbox --swarm --swarm-master --swarm-discovery token://<token> swarm-master
-----
+```
 
 Detailed explanation for this is available in <<Docker_Swarm>>.
 
@@ -59,10 +56,9 @@ Detailed explanation for this is available in <<Docker_Swarm>>.
 
 . To make it easier to start/stop the containers, an entry is added into the host mapping table of your operating system. Find out the IP address of your machine:
 +
-[source, text]
-----
+```console
 docker-machine ip default
-----
+```
 +
 This will provide the IP address associated with the Docker Machine created earlier.
 +
@@ -98,10 +94,9 @@ To install JBoss Developer Studio stand-alone, complete the following steps:
 . Download http://tools.jboss.org/downloads/devstudio/mars/9.0.0.GA.html[9.0.0].
 . Start the installer as:
 +
-[source, text]
-----
+```console
 java -jar <JAR FILE NAME>
-----
+```
 +
 Follow the on-screen instructions to complete the installation process.
 
@@ -112,16 +107,13 @@ Follow the on-screen instructions to complete the installation process.
 +
 Kubernetes requires Vagrant >= 1.6.2. So if you have an older version then make sure you install the latest one.
 +
-. Download Kubernetes (1.0.1) from https://github.com/kubernetes/kubernetes/releases/download/v1.0.1/kubernetes.tar.gz.
-. Extract the archive and install it by:
+. If you've not installed Docker Toolbox, then you need to additionally download Virtual Box 5.0.8 from https://www.virtualbox.org/wiki/Downloads.
+. Download Kubernetes (1.0.7) from https://github.com/kubernetes/kubernetes/releases/download/v1.0.7/kubernetes.tar.gz.
+. Extract the archive and install it:
 
-[source, text]
-----
+```console
 export KUBERNETES_PROVIDER=vagrant
 cd kubernetes
 ./cluster/kube-up.sh
-----
-
-NOTE: Kubernetes 1.0.1 is the only version verified to work with Virtual Box. More details at: https://github.com/kubernetes/kubernetes/issues/12614
-
+```
 

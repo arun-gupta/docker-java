@@ -688,7 +688,7 @@ For Mac and Windows, these commands need to be issued from the Docker shell or c
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">docker pull jboss/wildfly
+<pre class="highlight"><code class="language-console" data-lang="console">docker pull jboss/wildfly
 docker pull arungupta/wildfly-management
 docker pull arungupta/javaee7-hol
 docker pull mysql
@@ -704,7 +704,7 @@ docker pull arungupta/wildfly-mysql-javaee7</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">docker run swarm create</code></pre>
+<pre class="highlight"><code class="language-console" data-lang="console">docker run swarm create</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -712,7 +712,7 @@ docker pull arungupta/wildfly-mysql-javaee7</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">docker-machine create -d virtualbox --swarm --swarm-master --swarm-discovery token://&lt;token&gt; swarm-master</code></pre>
+<pre class="highlight"><code class="language-console" data-lang="console">docker-machine create -d virtualbox --swarm --swarm-master --swarm-discovery token://&lt;token&gt; swarm-master</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -727,7 +727,7 @@ docker pull arungupta/wildfly-mysql-javaee7</code></pre>
 <p>To make it easier to start/stop the containers, an entry is added into the host mapping table of your operating system. Find out the IP address of your machine:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">docker-machine ip default</code></pre>
+<pre class="highlight"><code class="language-console" data-lang="console">docker-machine ip default</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -800,7 +800,7 @@ docker pull arungupta/wildfly-mysql-javaee7</code></pre>
 <p>Start the installer as:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">java -jar &lt;JAR FILE NAME&gt;</code></pre>
+<pre class="highlight"><code class="language-console" data-lang="console">java -jar &lt;JAR FILE NAME&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -823,31 +823,22 @@ docker pull arungupta/wildfly-mysql-javaee7</code></pre>
 </div>
 </li>
 <li>
-<p>Download Kubernetes (1.0.1) from <a href="https://github.com/kubernetes/kubernetes/releases/download/v1.0.1/kubernetes.tar.gz" class="bare">https://github.com/kubernetes/kubernetes/releases/download/v1.0.1/kubernetes.tar.gz</a>.</p>
+<p>If you&#8217;ve not installed Docker Toolbox, then you need to additionally download Virtual Box 5.0.8 from <a href="https://www.virtualbox.org/wiki/Downloads" class="bare">https://www.virtualbox.org/wiki/Downloads</a>.</p>
 </li>
 <li>
-<p>Extract the archive and install it by:</p>
+<p>Download Kubernetes (1.0.7) from <a href="https://github.com/kubernetes/kubernetes/releases/download/v1.0.7/kubernetes.tar.gz" class="bare">https://github.com/kubernetes/kubernetes/releases/download/v1.0.7/kubernetes.tar.gz</a>.</p>
+</li>
+<li>
+<p>Extract the archive and install it:</p>
 </li>
 </ol>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">export KUBERNETES_PROVIDER=vagrant
+<pre class="highlight"><code class="language-console" data-lang="console">export KUBERNETES_PROVIDER=vagrant
 cd kubernetes
 ./cluster/kube-up.sh</code></pre>
 </div>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-Kubernetes 1.0.1 is the only version verified to work with Virtual Box. More details at: <a href="https://github.com/kubernetes/kubernetes/issues/12614" class="bare">https://github.com/kubernetes/kubernetes/issues/12614</a>
-</td>
-</tr>
-</table>
 </div>
 </div>
 </div>
