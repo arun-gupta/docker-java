@@ -62,15 +62,15 @@ Once your Docker host has been created, it then has a number of commands for man
 . Upgrade Docker
 . Configure the Docker client to talk to a host
 
-Docker Machine was already installed during the attendee setup. We won't need it too much further on. But if you need to create hosts, it's a very handy tool to know about. From now on we're mostly going to use Docker client.
+Docker Machine was already installed as part of Docker Toolbox during the setup.
 
-Find out more about the details at the link:https://docs.docker.com/machine/[Docker Machine Website].
+Find out more details at link:https://docs.docker.com/machine/[Docker Machine Website].
 
 Open Docker shell, check if docker machine is working:
 
   docker-machine -v
 
-It shows the output similar to the one shown below:
+It shows the output:
 
   docker-machine version 0.5.0 (04cfa58)
 
@@ -84,7 +84,7 @@ Check if your client is working using the following command:
 
   docker -v
 
-It shows the output similar to the following:
+It shows the output:
 
   Docker version 1.9.0, build 76d6bc9
 
@@ -141,4 +141,4 @@ PING dockerhost (192.168.99.101): 56 data bytes
 64 bytes from 192.168.99.101: icmp_seq=1 ttl=64 time=0.387 ms
 ----
 
-If it does, you're ready to start with the workshop.
+If it does, you're ready to start the workshop.

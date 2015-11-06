@@ -458,7 +458,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_verify_docker_configuration">Verify Docker Configuration</a></li>
 </ul>
 </li>
-<li><a href="#_docker_image">Docker Image</a>
+<li><a href="#_build_an_image">Build an Image</a>
 <ul class="sectlevel2">
 <li><a href="#_dockerfile">Dockerfile</a></li>
 <li><a href="#_create_your_first_docker_image">Create your first Docker image</a></li>
@@ -473,10 +473,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 </ul>
 </li>
-<li><a href="#_run_container">Run Container</a>
+<li><a href="#_run_a_container">Run a Container</a>
 <ul class="sectlevel2">
 <li><a href="#_pull_image">Pull Image</a></li>
-<li><a href="#_run_container_2">Run Container</a>
+<li><a href="#_run_container">Run Container</a>
 <ul class="sectlevel3">
 <li><a href="#_interactive_container">Interactive Container</a></li>
 <li><a href="#_detached_container">Detached Container</a></li>
@@ -484,16 +484,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_run_container_with_default_port">Run Container with Default Port</a></li>
 <li><a href="#_run_container_with_specified_port">Run Container with Specified Port</a></li>
-<li><a href="#Enabling_WildFly_Administration">Enabling WildFly Administration</a>
+<li><a href="#_stop_container">Stop Container</a></li>
+<li><a href="#_remove_container">Remove Container</a></li>
+<li><a href="#Enabling_WildFly_Administration">Enable WildFly Administration</a>
 <ul class="sectlevel3">
 <li><a href="#_default_port_mapping">Default Port Mapping</a></li>
 <li><a href="#Management_Fixed_Port_Mapping">Fixed Port Mapping</a></li>
-</ul>
-</li>
-<li><a href="#_stop_and_remove_container">Stop and Remove Container</a>
-<ul class="sectlevel3">
-<li><a href="#_stop_container">Stop Container</a></li>
-<li><a href="#_remove_container">Remove Container</a></li>
 </ul>
 </li>
 </ul>
@@ -537,7 +533,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_scale_services">Scale Services</a></li>
 </ul>
 </li>
-<li><a href="#Docker_Swarm">Java EE Application on Docker Swarm Cluster</a>
+<li><a href="#Docker_Swarm">Deploy Application on Docker Swarm Cluster</a>
 <ul class="sectlevel2">
 <li><a href="#_key_components_of_docker_swarm">Key Components of Docker Swarm</a></li>
 <li><a href="#_create_a_docker_swarm_cluster">Create a Docker Swarm Cluster</a></li>
@@ -545,7 +541,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_deploy_java_ee_application_to_docker_swarm_cluster_using_docker_compose">Deploy Java EE Application to Docker Swarm Cluster using Docker Compose</a></li>
 </ul>
 </li>
-<li><a href="#_java_application_on_kubernetes_cluster">Java Application on Kubernetes Cluster</a>
+<li><a href="#_deploy_application_on_kubernetes_cluster">Deploy Application on Kubernetes Cluster</a>
 <ul class="sectlevel2">
 <li><a href="#_key_components">Key Components</a></li>
 <li><a href="#_start_kubernetes_cluster">Start Kubernetes Cluster</a>
@@ -716,7 +712,7 @@ docker pull arungupta/wildfly-mysql-javaee7</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Detailed explanation for this is available in <a href="#Docker_Swarm">Java EE Application on Docker Swarm Cluster</a>.</p>
+<p>Detailed explanation for this is available in <a href="#Docker_Swarm">Deploy Application on Docker Swarm Cluster</a>.</p>
 </div>
 </div>
 <div class="sect3">
@@ -974,10 +970,10 @@ By default, Docker obtains these base images from Docker Hub.
 </ol>
 </div>
 <div class="paragraph">
-<p>Docker Machine was already installed during the attendee setup. We won&#8217;t need it too much further on. But if you need to create hosts, it&#8217;s a very handy tool to know about. From now on we&#8217;re mostly going to use Docker client.</p>
+<p>Docker Machine was already installed as part of Docker Toolbox during the setup.</p>
 </div>
 <div class="paragraph">
-<p>Find out more about the details at the <a href="https://docs.docker.com/machine/">Docker Machine Website</a>.</p>
+<p>Find out more details at <a href="https://docs.docker.com/machine/">Docker Machine Website</a>.</p>
 </div>
 <div class="paragraph">
 <p>Open Docker shell, check if docker machine is working:</p>
@@ -988,7 +984,7 @@ By default, Docker obtains these base images from Docker Hub.
 </div>
 </div>
 <div class="paragraph">
-<p>It shows the output similar to the one shown below:</p>
+<p>It shows the output:</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -1022,7 +1018,7 @@ The exact version may differ based upon how recently the installation was perfor
 </div>
 </div>
 <div class="paragraph">
-<p>It shows the output similar to the following:</p>
+<p>It shows the output:</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -1130,13 +1126,13 @@ PING dockerhost (192.168.99.101): 56 data bytes
 </div>
 </div>
 <div class="paragraph">
-<p>If it does, you&#8217;re ready to start with the workshop.</p>
+<p>If it does, you&#8217;re ready to start the workshop.</p>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_docker_image">Docker Image</h2>
+<h2 id="_build_an_image">Build an Image</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p><strong>PURPOSE</strong>: This chapter explains how to create a Docker image.</p>
@@ -1456,7 +1452,7 @@ sys:x:3:3:sys:/dev:/usr/sbin/nologin
 </div>
 </div>
 <div class="sect1">
-<h2 id="_run_container">Run Container</h2>
+<h2 id="_run_a_container">Run a Container</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The first step in running any application on Docker is to run a container from an image. There are plenty of images available from the official Docker registry (aka <a href="https://hub.docker.com">Docker Hub</a>). To run any of them, you just have to ask the Docker Client to run it. The client will check if the image already exists on Docker Host. If it exists then it&#8217;ll run it, otherwise the host will download the image and then run it.</p>
@@ -1551,7 +1547,7 @@ jboss/wildfly       latest              e908c8c95a8b        5 days ago          
 </div>
 </div>
 <div class="sect2">
-<h3 id="_run_container_2">Run Container</h3>
+<h3 id="_run_container">Run Container</h3>
 <div class="sect3">
 <h4 id="_interactive_container">Interactive Container</h4>
 <div class="paragraph">
@@ -1743,7 +1739,69 @@ See more about networking on the Docker website <a href="https://docs.docker.com
 </div>
 </div>
 <div class="sect2">
-<h3 id="Enabling_WildFly_Administration">Enabling WildFly Administration</h3>
+<h3 id="_stop_container">Stop Container</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Stop a specific container:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">docker stop &lt;CONTAINER ID&gt;</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Stop all the running containers</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">docker stop $(docker ps -q)</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Stop only the exited containers</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">docker ps -a -f "exited=-1"</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_remove_container">Remove Container</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Remove a specific container:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">docker rm 0bc123a8ece0</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Remove containers meeting a regular expression</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">docker ps -a | grep wildfly | awk '{print $1}' | xargs docker rm</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Remove all containers, without any criteria</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">docker rm $(docker ps -aq)</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="Enabling_WildFly_Administration">Enable WildFly Administration</h3>
 <div class="paragraph">
 <p>Default WildFly image exposes only port 8080 and thus is not available for administration using either the CLI or Admin Console. Lets expose the ports in different ways.</p>
 </div>
@@ -1881,71 +1939,6 @@ Exact port number may be different in your case.
 <pre class="highlight"><code class="language-text" data-lang="text">8080/tcp -&gt; 0.0.0.0:8080
 9990/tcp -&gt; 0.0.0.0:9990</code></pre>
 </div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_stop_and_remove_container">Stop and Remove Container</h3>
-<div class="sect3">
-<h4 id="_stop_container">Stop Container</h4>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Stop a specific container:</p>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">docker stop &lt;CONTAINER ID&gt;</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>Stop all the running containers</p>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">docker stop $(docker ps -q)</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>Stop only the exited containers</p>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">docker ps -a -f "exited=-1"</code></pre>
-</div>
-</div>
-</li>
-</ol>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_remove_container">Remove Container</h4>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Remove a specific container:</p>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">docker rm 0bc123a8ece0</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>Remove containers meeting a regular expression</p>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">docker ps -a | grep wildfly | awk '{print $1}' | xargs docker rm</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>Remove all containers, without any criteria</p>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">docker rm $(docker ps -aq)</code></pre>
-</div>
-</div>
-</li>
-</ol>
 </div>
 </div>
 </div>
@@ -2344,7 +2337,7 @@ Windows users, please make sure to use <code>-v /c/Users/</code> notation for dr
 <div class="sect2">
 <h3 id="_deploy_application_using_web_console">Deploy Application Using Web Console</h3>
 <div class="paragraph">
-<p>WildFly comes with a web-based administration console. It also relies on the same management APIs that are used by JBoss Developer Tools and the CLI. It provides a simple and easy to use web-based console to manage WildFly instance. For a Docker image, it needs to be explicitly enabled as explained in <a href="#Enabling_WildFly_Administration">Enabling WildFly Administration</a>. Once enabled, it can be accessed at <a href="http://dockerhost:9990" class="bare">http://dockerhost:9990</a>.</p>
+<p>WildFly comes with a web-based administration console. It also relies on the same management APIs that are used by JBoss Developer Tools and the CLI. It provides a simple and easy to use web-based console to manage WildFly instance. For a Docker image, it needs to be explicitly enabled as explained in <a href="#Enabling_WildFly_Administration">Enable WildFly Administration</a>. Once enabled, it can be accessed at <a href="http://dockerhost:9990" class="bare">http://dockerhost:9990</a>.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -3395,7 +3388,7 @@ Removing attendees_mysqldb_1... done</pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="Docker_Swarm">Java EE Application on Docker Swarm Cluster</h2>
+<h2 id="Docker_Swarm">Deploy Application on Docker Swarm Cluster</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Docker Swarm is native clustering for Docker. It allows you create and access to a pool of Docker hosts using the full suite of Docker tools. Because Docker Swarm serves the standard Docker API, any tool that already communicates with a Docker daemon can use Swarm to transparently scale to multiple hosts</p>
@@ -3876,7 +3869,7 @@ ac9c967e4b1d        mysql:latest                      "/entrypoint.sh mysq   38 
 </div>
 </div>
 <div class="sect1">
-<h2 id="_java_application_on_kubernetes_cluster">Java Application on Kubernetes Cluster</h2>
+<h2 id="_deploy_application_on_kubernetes_cluster">Deploy Application on Kubernetes Cluster</h2>
 <div class="sectionbody">
 <div class="quoteblock">
 <blockquote>

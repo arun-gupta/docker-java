@@ -1,4 +1,4 @@
-== Docker Image
+== Build an Image
 
 *PURPOSE*: This chapter explains how to create a Docker image.
 

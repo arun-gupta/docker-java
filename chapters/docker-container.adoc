@@ -1,4 +1,4 @@
-## Run Container
+## Run a Container
 
 The first step in running any application on Docker is to run a container from an image. There are plenty of images available from the official Docker registry (aka https://hub.docker.com[Docker Hub]). To run any of them, you just have to ask the Docker Client to run it. The client will check if the image already exists on Docker Host. If it exists then it'll run it, otherwise the host will download the image and then run it.
 
@@ -200,8 +200,54 @@ Now we're ready to test http://dockerhost:8080 again. This works with the expose
 .Welcome WildFly
 image::plain-wildfly1.png[]
 
+### Stop Container
+
+. Stop a specific container:
++
+[source, text]
+----
+docker stop <CONTAINER ID>
+----
++
+. Stop all the running containers
++
+[source, text]
+----
+docker stop $(docker ps -q)
+----
++
+. Stop only the exited containers
++
+[source, text]
+----
+docker ps -a -f "exited=-1"
+----
+
+### Remove Container
+
+. Remove a specific container:
++
+[source, text]
+----
+docker rm 0bc123a8ece0
+----
++
+. Remove containers meeting a regular expression
++
+[source, text]
+----
+docker ps -a | grep wildfly | awk '{print $1}' | xargs docker rm
+----
++
+. Remove all containers, without any criteria
++
+[source, text]
+----
+docker rm $(docker ps -aq)
+----
+
 [[Enabling_WildFly_Administration]]
-### Enabling WildFly Administration
+### Enable WildFly Administration
 
 Default WildFly image exposes only port 8080 and thus is not available for administration using either the CLI or Admin Console. Lets expose the ports in different ways.
 
@@ -293,52 +339,4 @@ In this case, Docker port mapping will be shown as:
 ----
 8080/tcp -> 0.0.0.0:8080
 9990/tcp -> 0.0.0.0:9990
-----
-
-### Stop and Remove Container
-
-#### Stop Container
-
-. Stop a specific container:
-+
-[source, text]
-----
-docker stop <CONTAINER ID>
-----
-+
-. Stop all the running containers
-+
-[source, text]
-----
-docker stop $(docker ps -q)
-----
-+
-. Stop only the exited containers
-+
-[source, text]
-----
-docker ps -a -f "exited=-1"
-----
-
-#### Remove Container
-
-. Remove a specific container:
-+
-[source, text]
-----
-docker rm 0bc123a8ece0
-----
-+
-. Remove containers meeting a regular expression
-+
-[source, text]
-----
-docker ps -a | grep wildfly | awk '{print $1}' | xargs docker rm
-----
-+
-. Remove all containers, without any criteria
-+
-[source, text]
-----
-docker rm $(docker ps -aq)
 ----
