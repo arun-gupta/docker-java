@@ -1,9 +1,9 @@
-## Java EE Application on Kubernetes Cluster
+## Java Application on Kubernetes Cluster
 
 [quote, github.com/GoogleCloudPlatform/kubernetes/]
 Kubernetes is an open source system for managing containerized applications across multiple hosts, providing basic mechanisms for deployment, maintenance, and scaling of applications.
 
-Kubernetes, or "`k8s`" in short, allows the user to provide declarative primitives for the desired state, for example "`need 5 WildFly servers and 1 MySQL server running`". Kubernetes self-healing mechanisms, such as auto-restarting, re-scheduling, and replicating containers then ensure this state is met. The user just define the state and Kubernetes ensures that the state is met at all times on the cluster.
+Kubernetes, or "`k8s`" in short, allows the user to provide declarative primitives for the desired state, for example "`need 5 WildFly servers and 1 MySQL server running`". Kubernetes self-healing mechanisms, such as auto-restarting, re-scheduling, and replicating containers then ensure that this state is met. The user just define the state and Kubernetes ensures that the state is met at all times on the cluster.
 
 *How is it related to Docker?*
 
@@ -45,7 +45,6 @@ Kubernetes cluster can be easily started using Vagrant. There are two options to
 [source, text]
 ----
 cd kubernetes
-
 export KUBERNETES_PROVIDER=vagrant
 ./cluster/kube-up.sh
 ----
@@ -65,6 +64,11 @@ Using credentials: vagrant:vagrant
 
 . . .
 
+Validate output:
+NAME                 STATUS    MESSAGE              ERROR
+controller-manager   Healthy   ok                   nil
+scheduler            Healthy   ok                   nil
+etcd-0               Healthy   {"health": "true"}   nil
 Cluster validation succeeded
 Done, listing cluster services:
 
@@ -75,7 +79,7 @@ KubeUI is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/serv
 +
 Note down the address for Kubernetes master, `https://10.245.1.2` in this case.
 
-#### Download and Start the Cluster Together
+#### Download and Start the Kubernetes Cluster
 
 . Alternatively, the cluster can also be started as:
 +
@@ -181,6 +185,7 @@ kubernetes> ./cluster/kubectl.sh get rc
 CONTROLLER   CONTAINER(S)   IMAGE(S)   SELECTOR   REPLICAS
 ----
 
+[[Deploy_JavaEE_Kubernetes_Multiple_Config]]
 ### Deploy Java EE Application (multiple configuration files)
 
 Pods, and the IP addresses assigned to them, are ephemeral. If a pod dies then Kubernetes will recreate that pod because of its self-healing features, but it might recreate it on a different host. Even if it is on the same host, a different IP address could be assigned to it. And so any application cannot rely upon the IP address of the pod.
@@ -190,7 +195,7 @@ Kubernetes services is an abstraction which defines a logical set of pods. A ser
 .Kubernetes Service
 image::kubernetes-service.png[]
 
-NOTE: In this case, all the pods are running on a single node. This is because, that is the default number for a Kubernetes cluster. The pod can very be on another node if more number of nodes are configured to start in the cluster.
+NOTE: In this case, all the pods are running on a single node. This is because, that is the default number for a Kubernetes cluster. The pod can be on another node if more number of nodes are configured to start in the cluster.
 
 Any Service that a Pod wants to access must be created before the Pod itself, or else the environment variables will not be populated.
 
@@ -395,7 +400,7 @@ Send a PR for https://github.com/javaee-samples/docker-java/issues/80
 
 Kubernetes allow multiple resources to be specified in a single configuration file. This allows to create a "`Kubernetes Application`" that can consists of multiple resources easily.
 
-Previous section showed how to deploy the Java EE application using multiple configuration files. This application can be delpoyed using a single configuration file as well.
+<<Deploy_JavaEE_Kubernetes_Multiple_Config>> showed how to deploy the Java EE application using multiple configuration files. This application can be delpoyed using a single configuration file as well.
 
 . Start the application using the configuration file:
 +

@@ -545,17 +545,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_deploy_java_ee_application_to_docker_swarm_cluster_using_docker_compose">Deploy Java EE Application to Docker Swarm Cluster using Docker Compose</a></li>
 </ul>
 </li>
-<li><a href="#_java_ee_application_on_kubernetes_cluster">Java EE Application on Kubernetes Cluster</a>
+<li><a href="#_java_application_on_kubernetes_cluster">Java Application on Kubernetes Cluster</a>
 <ul class="sectlevel2">
 <li><a href="#_key_components">Key Components</a></li>
 <li><a href="#_start_kubernetes_cluster">Start Kubernetes Cluster</a>
 <ul class="sectlevel3">
 <li><a href="#_using_previously_downloaded_kubernetes_distribution">Using Previously Downloaded Kubernetes Distribution</a></li>
-<li><a href="#_download_and_start_the_cluster_together">Download and Start the Cluster Together</a></li>
+<li><a href="#_download_and_start_the_kubernetes_cluster">Download and Start the Kubernetes Cluster</a></li>
 <li><a href="#_verify_the_cluster">Verify the Cluster</a></li>
 </ul>
 </li>
-<li><a href="#_deploy_java_ee_application_multiple_configuration_files">Deploy Java EE Application (multiple configuration files)</a>
+<li><a href="#Deploy_JavaEE_Kubernetes_Multiple_Config">Deploy Java EE Application (multiple configuration files)</a>
 <ul class="sectlevel3">
 <li><a href="#_start_mysql_pod">Start MySQL Pod</a></li>
 <li><a href="#_start_mysql_service">Start MySQL service</a></li>
@@ -3876,7 +3876,7 @@ ac9c967e4b1d        mysql:latest                      "/entrypoint.sh mysq   38 
 </div>
 </div>
 <div class="sect1">
-<h2 id="_java_ee_application_on_kubernetes_cluster">Java EE Application on Kubernetes Cluster</h2>
+<h2 id="_java_application_on_kubernetes_cluster">Java Application on Kubernetes Cluster</h2>
 <div class="sectionbody">
 <div class="quoteblock">
 <blockquote>
@@ -3887,7 +3887,7 @@ Kubernetes is an open source system for managing containerized applications acro
 </div>
 </div>
 <div class="paragraph">
-<p>Kubernetes, or &#8220;k8s&#8221; in short, allows the user to provide declarative primitives for the desired state, for example &#8220;need 5 WildFly servers and 1 MySQL server running&#8221;. Kubernetes self-healing mechanisms, such as auto-restarting, re-scheduling, and replicating containers then ensure this state is met. The user just define the state and Kubernetes ensures that the state is met at all times on the cluster.</p>
+<p>Kubernetes, or &#8220;k8s&#8221; in short, allows the user to provide declarative primitives for the desired state, for example &#8220;need 5 WildFly servers and 1 MySQL server running&#8221;. Kubernetes self-healing mechanisms, such as auto-restarting, re-scheduling, and replicating containers then ensure that this state is met. The user just define the state and Kubernetes ensures that the state is met at all times on the cluster.</p>
 </div>
 <div class="paragraph">
 <p><strong>How is it related to Docker?</strong></p>
@@ -3963,7 +3963,6 @@ Label is an arbitrary key/value pair in a distributed watchable storage that the
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-text" data-lang="text">cd kubernetes
-
 export KUBERNETES_PROVIDER=vagrant
 ./cluster/kube-up.sh</code></pre>
 </div>
@@ -3995,6 +3994,11 @@ Using credentials: vagrant:vagrant
 
 . . .
 
+Validate output:
+NAME                 STATUS    MESSAGE              ERROR
+controller-manager   Healthy   ok                   nil
+scheduler            Healthy   ok                   nil
+etcd-0               Healthy   {"health": "true"}   nil
 Cluster validation succeeded
 Done, listing cluster services:
 
@@ -4011,7 +4015,7 @@ KubeUI is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/serv
 </div>
 </div>
 <div class="sect3">
-<h4 id="_download_and_start_the_cluster_together">Download and Start the Cluster Together</h4>
+<h4 id="_download_and_start_the_kubernetes_cluster">Download and Start the Kubernetes Cluster</h4>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -4157,7 +4161,7 @@ CONTROLLER   CONTAINER(S)   IMAGE(S)   SELECTOR   REPLICAS</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_deploy_java_ee_application_multiple_configuration_files">Deploy Java EE Application (multiple configuration files)</h3>
+<h3 id="Deploy_JavaEE_Kubernetes_Multiple_Config">Deploy Java EE Application (multiple configuration files)</h3>
 <div class="paragraph">
 <p>Pods, and the IP addresses assigned to them, are ephemeral. If a pod dies then Kubernetes will recreate that pod because of its self-healing features, but it might recreate it on a different host. Even if it is on the same host, a different IP address could be assigned to it. And so any application cannot rely upon the IP address of the pod.</p>
 </div>
@@ -4177,7 +4181,7 @@ CONTROLLER   CONTAINER(S)   IMAGE(S)   SELECTOR   REPLICAS</code></pre>
 <div class="title">Note</div>
 </td>
 <td class="content">
-In this case, all the pods are running on a single node. This is because, that is the default number for a Kubernetes cluster. The pod can very be on another node if more number of nodes are configured to start in the cluster.
+In this case, all the pods are running on a single node. This is because, that is the default number for a Kubernetes cluster. The pod can be on another node if more number of nodes are configured to start in the cluster.
 </td>
 </tr>
 </table>
@@ -4429,7 +4433,7 @@ wildfly-rc-w2kk5   1/1       Running   0          6m</code></pre>
 <p>Kubernetes allow multiple resources to be specified in a single configuration file. This allows to create a &#8220;Kubernetes Application&#8221; that can consists of multiple resources easily.</p>
 </div>
 <div class="paragraph">
-<p>Previous section showed how to deploy the Java EE application using multiple configuration files. This application can be delpoyed using a single configuration file as well.</p>
+<p><a href="#Deploy_JavaEE_Kubernetes_Multiple_Config">Deploy Java EE Application (multiple configuration files)</a> showed how to deploy the Java EE application using multiple configuration files. This application can be delpoyed using a single configuration file as well.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
