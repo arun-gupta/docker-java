@@ -4,10 +4,11 @@
 |==================
 | Feature | Docker Swarm | Kubernetes
 | Single Master | Yes | Yes
-| Multiple Master | Yes | Proposal: http://kubernetes.io/v1.0/docs/proposals/high-availability.html
-| Dynamic Scaling | Compose Services | Replication Controller
+| Multiple Master | Yes | Proposal: http://kubernetes.io/v1.0/docs/proposals/high-availability.html http://kubernetes.io/v1.0/docs/admin/high-availability.html
 | Multi-host networking | 1.9+ | Yes
+| Multiple clouds | https://docs.docker.com/machine/drivers/ | https://get.k8s.io/
 | Cluster across multiple clouds | Yes | ?
+| Dynamic Scaling | Compose Services (partial) | Replication Controller
 | Container distribution strategies | spread, binpack, random | Yes
 | Pluggable strategies | Yes | Yes
 | Development | Docker Machine | Vagrant
