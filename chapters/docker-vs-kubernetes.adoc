@@ -13,5 +13,7 @@
 | Pluggable strategies | Yes | Yes
 | Development | Docker Machine | Vagrant
 | Service Discovery | `container_name` in Compose | Service
-| Supported | 1.9+ | Yes
+| Commercially supported | 1.9+ | Yes
+| Affinity | Yes | ?
+| Constraits | Yes | ?
 |==================
