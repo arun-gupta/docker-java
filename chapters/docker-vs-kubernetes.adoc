@@ -1,0 +1,16 @@
+== Docker Swarm vs Kubernetes
+
+[width="100%", options="header"]
+|==================
+| Feature | Docker Swarm | Kubernetes
+| Single Master | Yes | Yes
+| Multiple Master | Yes | Proposal: http://kubernetes.io/v1.0/docs/proposals/high-availability.html
+| Dynamic Scaling | Compose Services | Replication Controller
+| Multi-host networking | 1.9+ | Yes
+| Cluster across multiple clouds | Yes | ?
+| Container distribution strategies | spread, binpack, random | Yes
+| Pluggable strategies | Yes | Yes
+| Development | Docker Machine | Vagrant
+| Service Discovery | `container_name` in Compose | Service
+| Supported | 1.9+ | Yes
+|==================
