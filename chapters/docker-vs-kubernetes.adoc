@@ -14,6 +14,6 @@
 | Development | Docker Machine | Vagrant
 | Service Discovery | `container_name` in Compose | Service
 | Commercially supported | 1.9+ | Yes
-| Affinity | Yes | ?
-| Constraits | Yes | ?
+| Affinity | Labels | Pods
+| Constraits | `-c`, `-m` | Labels
 |==================
