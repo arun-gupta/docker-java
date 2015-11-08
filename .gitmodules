@@ -1,6 +1,0 @@
-[submodule "asciidoctor-tools/asciidoctor-fopub"]
-	path = asciidoctor-tools/asciidoctor-fopub
-	url = git@github.com:asciidoctor/asciidoctor-fopub.git
-[submodule "asciidoctor-tools/asciidoctor-pdf"]
-	path = asciidoctor-tools/asciidoctor-pdf
-	url = git@github.com:asciidoctor/asciidoctor-pdf.git
