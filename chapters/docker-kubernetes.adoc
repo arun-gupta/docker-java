@@ -407,7 +407,7 @@ Kubernetes allow multiple resources to be specified in a single configuration fi
 +
 [source, text]
 ----
-kubectl delete -l se,po context=docker-k8s-lab
+./cluster/kubectl.sh delete se,po,replicationController -l context="docker-k8s-lab"
 ----
 +
 . Start the application using the configuration file:

@@ -655,8 +655,9 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_rescheduling_pods">14.5. Rescheduling Pods</a></li>
 <li><a href="#_scaling_pods">14.6. Scaling Pods</a></li>
 <li><a href="#_application_logs">14.7. Application Logs</a></li>
-<li><a href="#_stop_kubernetes_cluster">14.8. Stop Kubernetes Cluster</a></li>
-<li><a href="#_debug_kubernetes_master">14.9. Debug Kubernetes Master</a></li>
+<li><a href="#_delete_kubernetes_resources">14.8. Delete Kubernetes Resources</a></li>
+<li><a href="#_stop_kubernetes_cluster">14.9. Stop Kubernetes Cluster</a></li>
+<li><a href="#_debug_kubernetes_master">14.10. Debug Kubernetes Master</a></li>
 </ul>
 </li>
 <li><a href="#Common_Docker_Commands">15. Common Docker Commands</a></li>
@@ -4521,13 +4522,10 @@ wildfly-rc-w2kk5   1/1       Running   0          6m</code></pre>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Delete Kubernetes Resources:</p>
-<div class="paragraph">
 <p>First delete the the existing pods and replication controller using the context label:</p>
-</div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="text">kubectl delete -l se,po context=docker-k8s-lab</code></pre>
+<pre class="CodeRay highlight"><code data-lang="text">./cluster/kubectl.sh delete se,po,replicationController -l context="docker-k8s-lab"</code></pre>
 </div>
 </div>
 </li>
@@ -4823,7 +4821,18 @@ Password:
 </div>
 </div>
 <div class="sect2">
-<h3 id="_stop_kubernetes_cluster">14.8. Stop Kubernetes Cluster</h3>
+<h3 id="_delete_kubernetes_resources">14.8. Delete Kubernetes Resources</h3>
+<div class="paragraph">
+<p>Individual resources (service, replication controller, or pod) can be deleted by using <code>delete</code> command instead of <code>create</code> command. Alternatively, all services and replication controllers can be deleted using a label as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="text">kubectl delete -l se,po context=docker-k8s-lab</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_stop_kubernetes_cluster">14.9. Stop Kubernetes Cluster</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="text">&gt; ./cluster/kube-down.sh
@@ -4837,7 +4846,7 @@ Done</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_debug_kubernetes_master">14.9. Debug Kubernetes Master</h3>
+<h3 id="_debug_kubernetes_master">14.10. Debug Kubernetes Master</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
