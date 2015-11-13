@@ -402,6 +402,14 @@ Kubernetes allow multiple resources to be specified in a single configuration fi
 
 <<Deploy_JavaEE_Kubernetes_Multiple_Config>> showed how to deploy the Java EE application using multiple configuration files. This application can be delpoyed using a single configuration file as well.
 
+
+. First delete the the existing pods and replication controller using the context label:
++
+[source, text]
+----
+./cluster/kubectl.sh delete se,po,replicationController -l context="docker-k8s-lab"
+----
++
 . Start the application using the configuration file:
 +
 [source, yaml]
