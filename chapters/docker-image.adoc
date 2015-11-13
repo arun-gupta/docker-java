@@ -70,7 +70,7 @@ helloworld          latest              9c0e7b56cbee        13 minutes ago      
 +
 . Run the container:
 +
-  docker run -it helloworld
+  docker run helloworld
 +
 to see the output:
 +
