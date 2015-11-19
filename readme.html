@@ -525,13 +525,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_test_java_ee_applications_on_docker">Test Java EE Applications on Docker</a></li>
 <li><a href="#Docker_Compose">Multiple Containers Using Docker Compose</a>
 <ul class="sectlevel2">
+<li><a href="#_single_host_container_linking">Single Host Container Linking</a>
+<ul class="sectlevel3">
 <li><a href="#_configuration_file">Configuration File</a></li>
 <li><a href="#_start_services">Start Services</a></li>
 <li><a href="#_verify_application">Verify Application</a></li>
 <li><a href="#_stop_services">Stop Services</a></li>
 <li><a href="#_remove_containers">Remove Containers</a></li>
 <li><a href="#_scale_services">Scale Services</a></li>
-<li><a href="#_use_multi_host_networking">Use multi-host networking</a></li>
+</ul>
+</li>
+<li><a href="#_multi_host_networking">Multi-host Networking</a></li>
 </ul>
 </li>
 <li><a href="#Docker_Swarm">Deploy Application on Docker Swarm Cluster</a>
@@ -3161,10 +3165,12 @@ Docker Compose is a tool for defining and running complex applications with Dock
 </tbody>
 </table>
 <div class="paragraph">
-<p>Docker Compose script is only available for OSX and Linux. <a href="https://github.com/arun-gupta/docker-java/issues/3" class="bare">https://github.com/arun-gupta/docker-java/issues/3</a> is used for tracking Docker Compose on Windows.</p>
+<p>Docker Compose applications can use &#8220;classic&#8221; container linking that is confined to a single host. Alternatively, it can use multi-host networking introduced in Docker 1.9.</p>
 </div>
 <div class="sect2">
-<h3 id="_configuration_file">Configuration File</h3>
+<h3 id="_single_host_container_linking">Single Host Container Linking</h3>
+<div class="sect3">
+<h4 id="_configuration_file">Configuration File</h4>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -3212,8 +3218,8 @@ mywildfly:
 </ol>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_start_services">Start Services</h3>
+<div class="sect3">
+<h4 id="_start_services">Start Services</h4>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -3308,8 +3314,8 @@ mysqldb_1   | 2015-06-05 15:40:18 1 [Warning] IP address '172.17.0.24' could not
 </ol>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_verify_application">Verify Application</h3>
+<div class="sect3">
+<h4 id="_verify_application">Verify Application</h4>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -3324,8 +3330,8 @@ mysqldb_1   | 2015-06-05 15:40:18 1 [Warning] IP address '172.17.0.24' could not
 <div class="title">Figure 39. Output From Servers Run Using Docker Compose</div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_stop_services">Stop Services</h3>
+<div class="sect3">
+<h4 id="_stop_services">Stop Services</h4>
 <div class="paragraph">
 <p>Stop the services as:</p>
 </div>
@@ -3366,8 +3372,8 @@ wildfly_1 | ]"</code></pre>
 </table>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_remove_containers">Remove Containers</h3>
+<div class="sect3">
+<h4 id="_remove_containers">Remove Containers</h4>
 <div class="paragraph">
 <p>Stop the services as:</p>
 </div>
@@ -3380,14 +3386,15 @@ Removing attendees_mysqldb_1... done</pre>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_scale_services">Scale Services</h3>
+<div class="sect3">
+<h4 id="_scale_services">Scale Services</h4>
 <div class="paragraph">
 <p><a href="https://github.com/arun-gupta/docker-java/issues/51" class="bare">https://github.com/arun-gupta/docker-java/issues/51</a></p>
 </div>
 </div>
+</div>
 <div class="sect2">
-<h3 id="_use_multi_host_networking">Use multi-host networking</h3>
+<h3 id="_multi_host_networking">Multi-host Networking</h3>
 <div class="paragraph">
 <p>Start a Java EE application with WildFly and MySQL containers.</p>
 </div>

@@ -26,9 +26,11 @@ An application using Docker containers will typically consist of multiple contai
 | `migrate-to-labels  Recreate containers to add labels
 |====
 
-Docker Compose script is only available for OSX and Linux. https://github.com/arun-gupta/docker-java/issues/3 is used for tracking Docker Compose on Windows.
+Docker Compose applications can use "`classic`" container linking that is confined to a single host. Alternatively, it can use multi-host networking introduced in Docker 1.9.
 
-### Configuration File
+### Single Host Container Linking
+
+#### Configuration File
 
 . Entry point to Compose is `docker-compose.yml`. Lets use the following file:
 +
@@ -57,7 +59,7 @@ This file is available in https://github.com/javaee-samples/docker-java/raw/mast
 .. MySQL container is linked with WildFly container using `links`
 .. Port forwarding is achieved using `ports`
 
-### Start Services
+#### Start Services
 
 . All services can be started, in detached mode, by giving the command:
 +
@@ -134,14 +136,14 @@ mysqldb_1   | Version: '5.6.25'  socket: '/var/run/mysqld/mysqld.sock'  port: 33
 mysqldb_1   | 2015-06-05 15:40:18 1 [Warning] IP address '172.17.0.24' could not be resolved: Name or service not known
 ----
 
-### Verify Application
+#### Verify Application
 
 . Access the application at http://dockerhost:8080/employees/resources/employees/. This is shown in the browser as:
 
 .Output From Servers Run Using Docker Compose
 image::docker-compose-output.png[]
 
-### Stop Services
+#### Stop Services
 
 Stop the services as:
 
@@ -168,7 +170,7 @@ wildfly_1 | ]"
 This is expected because the JDBC resource is created during every run of the container. In a real-world application, this would be pre-baked in the configuration already.
 ====
 
-### Remove Containers
+#### Remove Containers
 
 Stop the services as:
 
@@ -177,11 +179,11 @@ Stop the services as:
   Removing attendees_mywildfly_1... done
   Removing attendees_mysqldb_1... done
 
-### Scale Services
+#### Scale Services
 
 https://github.com/arun-gupta/docker-java/issues/51
 
-### Use multi-host networking
+### Multi-host Networking
 
 Start a Java EE application with WildFly and MySQL containers.
 
