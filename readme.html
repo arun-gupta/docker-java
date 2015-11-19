@@ -531,6 +531,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_stop_services">Stop Services</a></li>
 <li><a href="#_remove_containers">Remove Containers</a></li>
 <li><a href="#_scale_services">Scale Services</a></li>
+<li><a href="#_use_multi_host_networking">Use multi-host networking</a></li>
 </ul>
 </li>
 <li><a href="#Docker_Swarm">Deploy Application on Docker Swarm Cluster</a>
@@ -3383,6 +3384,49 @@ Removing attendees_mysqldb_1... done</pre>
 <h3 id="_scale_services">Scale Services</h3>
 <div class="paragraph">
 <p><a href="https://github.com/arun-gupta/docker-java/issues/51" class="bare">https://github.com/arun-gupta/docker-java/issues/51</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_use_multi_host_networking">Use multi-host networking</h3>
+<div class="paragraph">
+<p>Start a Java EE application with WildFly and MySQL containers.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Create a new directory and name it <code>wildfly-mysql-javaee7</code>.</p>
+</li>
+<li>
+<p>Create a new file <code>docker-compose.yml</code> and copy the contents from the following:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">mysqldb:
+  container_name: "db"
+  image: mysql:latest
+  environment:
+    MYSQL_DATABASE: sample
+    MYSQL_USER: mysql
+    MYSQL_PASSWORD: mysql
+    MYSQL_ROOT_PASSWORD: supersecret
+mywildfly:
+  image: arungupta/wildfly-mysql-javaee7
+  environment:
+    - MYSQL_URI=db:3306
+  ports:
+    - 8080:8080</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Run the application as:</p>
+<div class="paragraph">
+<p><code>docker-compose --x-networking up -d</code></p>
+</div>
+<div class="paragraph">
+<p><code>--x-networking</code> will create a bridge network. Docker 1.9 is required to run this application.</p>
+</div>
+</li>
+</ol>
 </div>
 </div>
 </div>

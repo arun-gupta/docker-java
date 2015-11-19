@@ -181,3 +181,33 @@ Stop the services as:
 
 https://github.com/arun-gupta/docker-java/issues/51
 
+### Use multi-host networking
+
+Start a Java EE application with WildFly and MySQL containers.
+
+. Create a new directory and name it `wildfly-mysql-javaee7`.
+. Create a new file `docker-compose.yml` and copy the contents from the following:
++
+[source, yaml]
+----
+mysqldb:
+  container_name: "db"
+  image: mysql:latest
+  environment:
+    MYSQL_DATABASE: sample
+    MYSQL_USER: mysql
+    MYSQL_PASSWORD: mysql
+    MYSQL_ROOT_PASSWORD: supersecret
+mywildfly:
+  image: arungupta/wildfly-mysql-javaee7
+  environment:
+    - MYSQL_URI=db:3306
+  ports:
+    - 8080:8080
+----
++
+. Run the application as:
++
+`docker-compose --x-networking up -d`
++
+`--x-networking` will create a bridge network. Docker 1.9 is required to run this application.
