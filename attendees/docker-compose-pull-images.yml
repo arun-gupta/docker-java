@@ -1,0 +1,13 @@
+ubuntu:
+  image: ubuntu
+wildfly:
+  image: jboss/wildfly
+mysql:
+  image: mysql
+javaee7-hol:
+  image: arungupta/javaee7-hol
+swarm:
+  image: swarm
+wildfly-mysql-javaee7:
+  image: arungupta/wildfly-mysql-javaee7
+
