@@ -16,4 +16,5 @@
 | Commercially supported | 1.9+ | Yes
 | Affinity | Labels | Pods
 | Constraits | `-c`, `-m` | Labels
+| Persistent Volumes | https://docs.docker.com/v1.8/userguide/dockervolumes/ | http://kubernetes.io/v1.0/docs/user-guide/persistent-volumes.html
 |==================
