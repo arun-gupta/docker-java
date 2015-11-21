@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: couchbase-rc
+  labels:
+    name: couchbase
+    context: docker-k8s-lab
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: couchbase
+    spec:
+      containers:
+      - name: couchbase-rc-pod
+        image: couchbase/server
+        ports:
+        - containerPort: 8091
+        - containerPort: 8092
+        - containerPort: 8093
+        - containerPort: 11210
