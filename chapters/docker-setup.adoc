@@ -113,8 +113,9 @@ Kubernetes requires Vagrant >= 1.6.2. So if you have an older version then make 
 +
 . If you've not installed Docker Toolbox, then you need to additionally download Virtual Box 5.0.8 from https://www.virtualbox.org/wiki/Downloads.
 . Download Kubernetes (1.1.2) from https://github.com/kubernetes/kubernetes/releases/download/v1.1.2/kubernetes.tar.gz.
+. On Windows, Python interpreter needs to be installed and included in the `%PATH%`. Download from https://www.python.org/downloads/windows/ and setup `%PATH%` in Control Panel.
 . Extract the archive and install it:
-
++
 ```console
 export KUBERNETES_PROVIDER=vagrant
 cd kubernetes
