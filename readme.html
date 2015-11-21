@@ -860,6 +860,28 @@ cd kubernetes
 ./cluster/kube-up.sh</code></pre>
 </div>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Vagrant provider should be included in the path. For example, for VirtualBox, <code>vboxmanage</code> command should work from the shell or command prompt where <code>./cluster/kube-up.sh</code> script is invoked.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If you installed more than one Vagrant provider (such as VirtualBox and Parallels), Kubernetes will usually pick the appropriate one. You can override which one Kubernetes will use by setting the VAGRANT_DEFAULT_PROVIDER environment variable:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-console" data-lang="console">export VAGRANT_DEFAULT_PROVIDER=virtualbox
+export KUBERNETES_PROVIDER=vagrant
+./cluster/kube-up.sh</code></pre>
+</div>
+</div>
 </li>
 </ol>
 </div>
