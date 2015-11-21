@@ -11,7 +11,7 @@ Docker provides the lifecycle management of containers. A Docker image defines a
 
 *How does Kubernetes simplify containerized application deployment?*
 
-A typical application would have a cluster of containers across multiple hosts. For example, your web tier (for example Undertow) might run as a few instances, and likely on a set of containers. Similarly, your application tier (for example, WildFly) would run on a different set of containers. The web tier would need to delegate the request to application tier. The web, application, and database tier would generally run on a separate set of containers. These containers would need to talk to each other. Using any of the solutions mentioned above would require scripting to start the containers, and monitoring/bouncing if something goes down. Kubernetes does all of that for the user after the application state has been defined.
+A typical application would have a cluster of containers across multiple hosts. For example, your web tier (for example Apache) might run as a few instances, and likely on a set of containers. Similarly, your application tier (for example, WildFly) would run on a different set of containers. The web tier would need to delegate the request to application tier. The web, application, and database tier would generally run on a separate set of containers. These containers would need to talk to each other. Using any of the solutions mentioned above would require scripting to start the containers, and monitoring/bouncing if something goes down. Kubernetes does all of that for the user after the application state has been defined.
 
 ### Key Components
 
@@ -57,24 +57,36 @@ It shows the output as:
 +
 [source, text]
 ----
-Starting cluster using provider: vagrant
+... Starting cluster using provider: vagrant
 ... calling verify-prereqs
 ... calling kube-up
-Using credentials: vagrant:vagrant
+Bringing machine 'master' up with 'virtualbox' provider...
+Bringing machine 'minion-1' up with 'virtualbox' provider...
+==> master: Importing base box 'kube-fedora21'...
+==> master: Matching MAC address for NAT networking...
+==> master: Setting the name of the VM: kubernetes-112_master_1447998973006_60233
 
 . . .
 
+... calling validate-cluster
+Found 1 node(s).
+NAME         LABELS                              STATUS    AGE
+10.245.1.3   kubernetes.io/hostname=10.245.1.3   Ready     11s
 Validate output:
 NAME                 STATUS    MESSAGE              ERROR
 controller-manager   Healthy   ok                   nil
 scheduler            Healthy   ok                   nil
 etcd-0               Healthy   {"health": "true"}   nil
+etcd-1               Healthy   {"health": "true"}   nil
 Cluster validation succeeded
 Done, listing cluster services:
 
 Kubernetes master is running at https://10.245.1.2
+Heapster is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/heapster
 KubeDNS is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/kube-dns
 KubeUI is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/kube-ui
+Grafana is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/monitoring-grafana
+InfluxDB is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/monitoring-influxdb
 ----
 +
 Note down the address for Kubernetes master, `https://10.245.1.2` in this case.
@@ -85,33 +97,46 @@ Note down the address for Kubernetes master, `https://10.245.1.2` in this case.
 +
 [source, text]
 ----
-> curl -sS https://get.k8s.io | bash
-Downloading kubernetes release v0.21.1 to /Users/arungupta/tools/kubernetes.tar.gz
---2015-07-13 15:56:54--  https://storage.googleapis.com/kubernetes-release/release/v0.21.1/kubernetes.tar.gz
-Resolving storage.googleapis.com... 74.125.28.128, 2607:f8b0:400e:c02::80
-Connecting to storage.googleapis.com|74.125.28.128|:443... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 117901998 (112M) [application/x-tar]
-Saving to: 'kubernetes.tar.gz'
-
-kubernetes.tar.gz               100%[=========================================================>] 112.44M  6.21MB/s   in 18s    
-
-2015-07-13 15:57:13 (6.13 MB/s) - 'kubernetes.tar.gz' saved [117901998/117901998]
+export KUBERNETES_PROVIDER=vagrant
+curl -sS https://get.k8s.io | bash
+Downloading kubernetes release v1.1.1 to /Users/arungupta/tmp/kubernetes.tar.gz
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  182M  100  182M    0     0  1158k      0  0:02:41  0:02:41 --:--:-- 1383k
+Unpacking kubernetes release v1.1.1
+Creating a kubernetes on vagrant...
+... Starting cluster using provider: vagrant
+... calling verify-prereqs
+... calling kube-up
+Bringing machine 'master' up with 'virtualbox' provider...
+Bringing machine 'minion-1' up with 'virtualbox' provider...
+==> master: Importing base box 'kube-fedora21'...
+==> master: Matching MAC address for NAT networking...
+==> master: Setting the name of the VM: kubernetes_master_1447999746508_72335
 
 . . .
 
+... calling validate-cluster
+Found 1 node(s).
+NAME         LABELS                              STATUS    AGE
+10.245.1.3   kubernetes.io/hostname=10.245.1.3   Ready     5s
+Validate output:
 NAME                 STATUS    MESSAGE              ERROR
 controller-manager   Healthy   ok                   nil
 scheduler            Healthy   ok                   nil
 etcd-0               Healthy   {"health": "true"}   nil
+etcd-1               Healthy   {"health": "true"}   nil
 Cluster validation succeeded
 Done, listing cluster services:
 
 Kubernetes master is running at https://10.245.1.2
+Heapster is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/heapster
 KubeDNS is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/kube-dns
 KubeUI is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/kube-ui
+Grafana is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/monitoring-grafana
+InfluxDB is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/monitoring-influxdb
 
-Kubernetes binaries at /Users/arungupta/tools/kubernetes/kubernetes/cluster/
+Kubernetes binaries at /Users/arungupta/tmp/kubernetes/cluster/
 You may want to add this directory to your PATH in $HOME/.profile
 Installation successful!
 ----
@@ -155,7 +180,7 @@ Check the list of nodes as:
 +
 [source, text]
 ----
-> ./cluster/kubectl.sh get nodes
+./cluster/kubectl.sh get nodes
 NAME         LABELS                              STATUS
 10.245.1.3   kubernetes.io/hostname=10.245.1.3   Ready
 ----
@@ -164,7 +189,7 @@ NAME         LABELS                              STATUS
 +
 [source, text]
 ----
-kubernetes> ./cluster/kubectl.sh get po
+./cluster/kubectl.sh get po
 NAME      READY     STATUS    RESTARTS   AGE
 ----
 +
@@ -172,16 +197,16 @@ NAME      READY     STATUS    RESTARTS   AGE
 +
 [source, text]
 ----
-kubernetes> ./cluster/kubectl.sh get se
-NAME         LABELS                                    SELECTOR   IP(S)        PORT(S)
-kubernetes   component=apiserver,provider=kubernetes   <none>     10.247.0.1   443/TCP
+./cluster/kubectl.sh get svc
+NAME         CLUSTER_IP   EXTERNAL_IP   PORT(S)   SELECTOR   AGE
+kubernetes   10.247.0.1   <none>        443/TCP   <none>     29m
 ----
 +
 . Check the list of replication controllers:
 +
 [source, text]
 ----
-kubernetes> ./cluster/kubectl.sh get rc
+./cluster/kubectl.sh get rc
 CONTROLLER   CONTAINER(S)   IMAGE(S)   SELECTOR   REPLICAS
 ----
 
@@ -207,8 +232,8 @@ The order of Service and the targeted Pods does not matter. However Service need
 +
 [source, text]
 ----
-./cluster/kubectl.sh create -f ../../attendees/kubernetes/app-mysql-pod.yaml
-pods/mysql-pod
+./cluster/kubectl.sh create -f ~/workspaces/docker-java/attendees/kubernetes/app-mysql-pod.yaml
+pod "mysql-pod" created
 ----
 +
 It uses the following configuration file:
@@ -249,12 +274,12 @@ spec:
 +
 [source, text]
 ----
-kubernetes> ./cluster/kubectl.sh get -w po
+./cluster/kubectl.sh get -w po
 NAME        READY     STATUS    RESTARTS   AGE
-mysql-pod   0/1       Pending   0          4s
+mysql-pod   0/1       Pending   0          16s
 NAME        READY     STATUS    RESTARTS   AGE
-mysql-pod   0/1       Running   0          44s
-mysql-pod   1/1       Running   0         44s
+mysql-pod   0/1       Running   0          53s
+mysql-pod   1/1       Running   0         53s
 ----
 +
 `-w` watches for changes to the requested object. Wait for the MySQL pod to be in Running status.
@@ -265,8 +290,8 @@ mysql-pod   1/1       Running   0         44s
 +
 [source, text]
 ----
-./cluster/kubectl.sh create -f ../../attendees/kubernetes/app-mysql-service.yaml
-services/mysql-service
+./cluster/kubectl.sh create -f ~/workspaces/docker-java/attendees/kubernetes/app-mysql-service.yaml
+service "mysql-service" created
 ----
 +
 It uses the following configuration file:
@@ -296,19 +321,19 @@ Once again, the label "`context: docker-k8s-lab`" is used. This simplifies query
 +
 [source, text]
 ----
-./cluster/kubectl.sh get -w se
-NAME            LABELS                                    SELECTOR                                IP(S)          PORT(S)
-kubernetes      component=apiserver,provider=kubernetes   <none>                                  10.247.0.1     443/TCP
-mysql-service   context=docker-k8s-lab,name=mysql-pod     context=docker-k8s-lab,name=mysql-pod   10.247.63.43   3306/TCP
+./cluster/kubectl.sh get svc
+NAME            CLUSTER_IP       EXTERNAL_IP   PORT(S)    SELECTOR                                AGE
+kubernetes      10.247.0.1       <none>        443/TCP    <none>                                  32m
+mysql-service   10.247.241.209   <none>        3306/TCP   context=docker-k8s-lab,name=mysql-pod   34s
 ----
 +
 If multiple services are running, then it can be narrowed by specifying the labels:
 +
 [source, text]
 ----
-./cluster/kubectl.sh  get -w po -l context=docker-k8s-lab,name=mysql-pod
-NAME        READY     STATUS    RESTARTS   AGE
-mysql-pod   1/1       Running   0          4m
+./cluster/kubectl.sh get svc -l context=docker-k8s-lab,name=mysql-pod
+NAME            CLUSTER_IP       EXTERNAL_IP   PORT(S)    SELECTOR                                AGE
+mysql-service   10.247.241.209   <none>        3306/TCP   context=docker-k8s-lab,name=mysql-pod   1m
 ----
 +
 This is also the selector label used by Service to target Pods.
@@ -325,8 +350,8 @@ Kubernetes also allows services to be resolved using DNS configuration. Send a P
 +
 [source, text]
 ----
-./cluster/kubectl.sh create -f ../../attendees/kubernetes/app-wildfly-rc.yaml
-replicationcontrollers/wildfly-rc
+./cluster/kubectl.sh create -f ~/workspaces/docker-java/attendees/kubernetes/app-wildfly-rc.yaml
+replicationcontroller "wildfly-rc" created
 ----
 +
 It uses the following configuration file:
@@ -354,22 +379,34 @@ spec:
         - containerPort: 8080
 ----
 +
+. Check status of the Replication Controller:
++
+[source, text]
+----
+./cluster/kubectl.sh get rc
+CONTROLLER   CONTAINER(S)     IMAGE(S)                              SELECTOR       REPLICAS   AGE
+wildfly-rc   wildfly-rc-pod   arungupta/wildfly-mysql-javaee7:k8s   name=wildfly   1          1m
+----
++
 . Check status of the Pod inside Replication Controller:
 +
 [source, text]
 ----
-./cluster/kubectl.sh get po
+./cluster/kubectl.sh get -w po
 NAME               READY     STATUS    RESTARTS   AGE
-mysql-pod          1/1       Running   0          1h
-wildfly-rc-w2kk5   1/1       Running   0          6m
+mysql-pod          1/1       Running   0          4m
+wildfly-rc-ca1ug   0/1       Pending   0          1m
+NAME               READY     STATUS    RESTARTS   AGE
+wildfly-rc-ca1ug   0/1       Running   0          3m
+wildfly-rc-ca1ug   1/1       Running   0         3m
 ----
 +
-. Get IP address of the Pod:
+. Use the Pod's name to get IP address:
 +
 [source, text]
 ----
-./cluster/kubectl.sh get -o template po wildfly-rc-w2kk5 --template={{.status.podIP}}
-10.246.1.23
+./cluster/kubectl.sh get -o template po wildfly-rc-ca1ug --template={{.status.podIP}}
+10.246.96.7
 ----
 
 [[Access_Kubernetes_Application_Node]]
@@ -382,13 +419,23 @@ wildfly-rc-w2kk5   1/1       Running   0          6m
 vagrant ssh minion-1
 ----
 +
-. Access the application using `curl http://10.246.1.23:8080/employees/resources/employees/` and replace IP address with the one obtained earlier:
+. Access the application using `curl http://10.246.96.7:8080/employees/resources/employees` and replace IP address with the one obtained earlier:
 +
 [source, text]
 ----
-Last login: Thu Jul 16 00:24:36 2015 from 10.0.2.2
-[vagrant@kubernetes-minion-1 ~]$ curl http://10.246.1.23:8080/employees/resources/employees/
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?><collection><employee><id>1</id><name>Penny</name></employee><employee><id>2</id><name>Sheldon</name></employee><employee><id>3</id><name>Amy</name></employee><employee><id>4</id><name>Leonard</name></employee><employee><id>5</id><name>Bernadette</name></employee><employee><id>6</id><name>Raj</name></employee><employee><id>7</id><name>Howard</name></employee><employee><id>8</id><name>Priya</name></employee></collection>
+> vagrant ssh minion-1
+Last login: Sat Nov 21 01:02:52 2015 from 10.0.2.2
+[vagrant@kubernetes-minion-1 ~]$ curl http://10.246.96.7:8080/employees/resources/employees
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?><collection><employee><id>1</id><name>Penny</name></employee><employee><id>2</id><name>Sheldon</name></employee><employee><id>3</id><name>Amy</name></employee><employee><id>4</id><name>Leonard</name></employee><employee><id>5</id><name>Bernadette</name></employee><employee><id>6</id><name>Raj</name></employee><employee><id>7</id><name>Howard</name></employee><employee><id>8</id><name>Priya</name></employee></collection>[vagrant@kubernetes-minion-1 ~]
+----
++
+. Log out of the minion
++
+[source, text]
+----
+[vagrant@kubernetes-minion-1 ~]$ exit
+logout
+Connection to 127.0.0.1 closed.
 ----
 
 [[Access_Kubernetes_Application_Proxy]]
@@ -402,12 +449,14 @@ Kubernetes allow multiple resources to be specified in a single configuration fi
 
 <<Deploy_JavaEE_Kubernetes_Multiple_Config>> showed how to deploy the Java EE application using multiple configuration files. This application can be delpoyed using a single configuration file as well.
 
-
 . First delete the the existing pods and replication controller using the context label:
 +
 [source, text]
 ----
-./cluster/kubectl.sh delete se,po,replicationController -l context="docker-k8s-lab"
+./cluster/kubectl.sh delete svc,po,replicationController -l context="docker-k8s-lab"
+service "mysql-service" deleted
+pod "mysql-pod" deleted
+replicationcontroller "wildfly-rc" deleted
 ----
 +
 . Start the application using the configuration file:
@@ -486,10 +535,10 @@ Notice that each section, one each for MySQL Pod, MySQL Service, and WildFly Rep
 +
 [source, text]
 ----
-./cluster/kubectl.sh create -f ../../attendees/kubernetes/app.yaml
-pods/mysql-pod
-services/mysql-service
-replicationcontrollers/wildfly-rc
+./cluster/kubectl.sh create -f ~/workspaces/docker-java/attendees/kubernetes/app.yaml
+pod "mysql-pod" created
+service "mysql-service" created
+replicationcontroller "wildfly-rc" created
 ----
 +
 . Access the application using <<Access_Kubernetes_Application_Node>> or <<Access_Kubernetes_Application_Proxy>>.
@@ -506,33 +555,30 @@ WildFly Replication Controller is already running with one Pod. Lets delete this
 ----
 ./cluster/kubectl.sh get po
 NAME               READY     STATUS    RESTARTS   AGE
-wildfly-rc-w2kk5   1/1       Running   0          6m
+mysql-pod          1/1       Running   0          21s
+wildfly-rc-l2cto   1/1       Running   0          21s
 ----
 +
 . Delete the Pod:
 +
 [source, text]
 ----
-./cluster/kubectl.sh delete po wildfly-rc-w2kk5
-pods/wildfly-rc-w2kk5
+./cluster/kubectl.sh delete po wildfly-rc-l2cto
+pod "wildfly-rc-l2cto" deleted
 ----
 +
-Status of the Pods can be seen in another shell:
+Status of the Pods can be seen:
 +
 [source, text]
 ----
 ./cluster/kubectl.sh get -w po
-NAME               READY     STATUS    RESTARTS   AGE
-wildfly-rc-w2kk5   1/1       Running   0          2m
-NAME               READY     STATUS    RESTARTS   AGE
-wildfly-rc-xz6wu   0/1       Pending   0         2s
-wildfly-rc-xz6wu   0/1       Pending   0         2s
-wildfly-rc-xz6wu   0/1       Pending   0         12s
-wildfly-rc-xz6wu   0/1       Running   0         14s
-wildfly-rc-xz6wu   1/1       Running   0         22s
+NAME               READY     STATUS        RESTARTS   AGE
+mysql-pod          1/1       Running       0          1m
+wildfly-rc-2o8vd   1/1       Running       0          13s
+wildfly-rc-l2cto   1/1       Terminating   0          1m
 ----
 +
-Notice how Pod with name "`wildfly-rc-w2kk5`" was deleted and a new Pod with the name "`wildfly-rc-xz6wu`" was created.
+Notice how Pod with name "`wildfly-rc-l2cto`" was deleted and a new Pod with the name "`wildfly-rc-2o8vd`" was created. The status "`Terminating`" does not update correctly and is filed as https://github.com/kubernetes/kubernetes/issues/17612.
 
 ### Scaling Pods
 
@@ -543,7 +589,7 @@ Replication Controller allows dynamic scaling up and down of Pods.
 [source, text]
 ----
 ./cluster/kubectl.sh scale --replicas=2 rc wildfly-rc
-scaled
+replicationcontroller "wildfly-rc" scaled
 ----
 +
 . Status of the Pods can be seen in another shell:
@@ -551,17 +597,12 @@ scaled
 [source, text]
 ----
 ./cluster/kubectl.sh get -w po
-NAME               READY     STATUS    RESTARTS   AGE
-wildfly-rc-bgtkg   1/1       Running   0          3m
-NAME               READY     STATUS    RESTARTS   AGE
-wildfly-rc-bymu7   0/1       Pending   0          2s
-wildfly-rc-bymu7   0/1       Pending   0         2s
-wildfly-rc-bymu7   0/1       Pending   0         2s
-wildfly-rc-bymu7   0/1       Running   0         3s
-wildfly-rc-bymu7   1/1       Running   0         12s
+TBD
 ----
 +
-Notice a new Pod with the name "`wildfly-rc-bymu7`" is created.
+Pods are not scaled correctly as explained at https://github.com/kubernetes/kubernetes/issues/17613.
++
+TBD: Notice a new Pod with the name "`wildfly-rc-bymu7`" is created.
 +
 . Scale down the number of Pods:
 +

@@ -112,7 +112,7 @@ Follow the on-screen instructions to complete the installation process.
 Kubernetes requires Vagrant >= 1.6.2. So if you have an older version then make sure you install the latest one.
 +
 . If you've not installed Docker Toolbox, then you need to additionally download Virtual Box 5.0.8 from https://www.virtualbox.org/wiki/Downloads.
-. Download Kubernetes (1.0.7) from https://github.com/kubernetes/kubernetes/releases/download/v1.0.7/kubernetes.tar.gz.
+. Download Kubernetes (1.1.2) from https://github.com/kubernetes/kubernetes/releases/download/v1.1.2/kubernetes.tar.gz.
 . Extract the archive and install it:
 
 ```console
