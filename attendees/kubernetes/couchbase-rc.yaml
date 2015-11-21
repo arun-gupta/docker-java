@@ -19,7 +19,9 @@ spec:
         - mountPath: "/opt/couchbase/var"
           name: mypd
         ports:
-        - containerPort: 8091
+        -
+          containerPort: 8091
+          hostPort: 8091
         - containerPort: 8092
         - containerPort: 8093
         - containerPort: 11210
