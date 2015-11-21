@@ -27,5 +27,5 @@ spec:
         - containerPort: 11210
       volumes:
       - name: mypd
-        persistentVolumClaim:
+        persistentVolumeClaim:
           claimName: myclaim-1
