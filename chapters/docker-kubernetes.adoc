@@ -623,6 +623,44 @@ wildfly-rc-bgtkg   1/1       Running   0          9m
 +
 Notice only one Pod is running now.
 
+## Couchbase Cluster and Persistent Volumes 
+
+A _Kubernetes Volume_ outlives any containers that run within the Pod, and data is preserved across Container restarts. However the volume will cease to exist when a Pod ceases to exist. This is solved by _Persistent Volumes_ that provide persistent, cluster-scoped storage for applications that require long lived data.
+
+Creating and using a persistent volume is a three step process:
+
+. Administrator provision a _networked storage in the cluster_. This is called as `PersistentVolume`.
+. User requests storage for pods by using _claims_. Claims can specify levels of resources (CPU and memory), specific sizes and access modes (e.g. can be mounted once read/write or many times write only). This is called as `PersistentVolumeClaim`.
+. Claims are mounted as volumes and used in pods for storage.
+
+Lets create the resources and use them:
+
+. Create persistent volume:
++
+```
+./cluster/kubectl.sh create -f ~/workspaces/docker-java/attendees/kubernetes/couchbase-pv.yaml 
+persistentvolume "pv0001" created
+```
++
+. Create a claim:
++
+```console
+./cluster/kubectl.sh create -f ~/workspaces/docker-java/attendees/kubernetes/couchbase-pvc.yaml 
+persistentvolumeclaim "myclaim-1" created
+```
++
+. Start the Couchbase Replication Controller:
++
+```console
+./cluster/kubectl.sh create -f ~/workspaces/docker-java/attendees/kubernetes/couchbase-rc.yaml 
+```
+
+This is giving the error:
+
+```
+error validating "/Users/arungupta/workspaces/docker-java/attendees/kubernetes/couchbase-rc.yaml": error validating data: found invalid field volumes for v1.Container; if you choose to ignore these errors, turn validation off with --validate=false
+```
+
 ### Application Logs
 
 . Get a list of the Pods:

@@ -15,6 +15,13 @@ spec:
       containers:
       - name: couchbase-rc-pod
         image: couchbase/server
+        volumeMounts:
+        - mountPath: "/opt/couchbase/var"
+          name: mypd
+        volumes:
+        - name: mypd
+          persistentVolumClaim:
+            claimName: myclaim-1
         ports:
         - containerPort: 8091
         - containerPort: 8092
