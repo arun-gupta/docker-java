@@ -18,12 +18,12 @@ spec:
         volumeMounts:
         - mountPath: "/opt/couchbase/var"
           name: mypd
-        volumes:
-        - name: mypd
-          persistentVolumClaim:
-            claimName: myclaim-1
         ports:
         - containerPort: 8091
         - containerPort: 8092
         - containerPort: 8093
         - containerPort: 11210
+      volumes:
+      - name: mypd
+        persistentVolumClaim:
+          claimName: myclaim-1
