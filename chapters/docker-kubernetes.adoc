@@ -642,23 +642,18 @@ Lets create the resources and use them:
 persistentvolume "pv0001" created
 ```
 +
-. Create a claim:
+. Create a claim for volume:
 +
 ```console
 ./cluster/kubectl.sh create -f ~/workspaces/docker-java/attendees/kubernetes/couchbase-pvc.yaml 
 persistentvolumeclaim "myclaim-1" created
 ```
 +
-. Start the Couchbase Replication Controller:
+. Start the Couchbase Replication Controller (claim is used in Pod's definition):
 +
 ```console
-./cluster/kubectl.sh create -f ~/workspaces/docker-java/attendees/kubernetes/couchbase-rc.yaml 
-```
-
-This is giving the error:
-
-```
-error validating "/Users/arungupta/workspaces/docker-java/attendees/kubernetes/couchbase-rc.yaml": error validating data: found invalid field volumes for v1.Container; if you choose to ignore these errors, turn validation off with --validate=false
+./cluster/kubectl.sh create -f ~/workspaces/docker-java/attendees/kubernetes/couchbase-rc.yaml
+replicationcontroller "couchbase-rc" created
 ```
 
 ### Application Logs
