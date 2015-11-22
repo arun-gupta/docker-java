@@ -3,7 +3,7 @@ kind: Service
 metadata: 
   name: couchbase-service
   labels: 
-    name: couchbase-pod
+    name: couchbase-service-pod
     context: docker-k8s-lab
 spec: 
   ports:

@@ -3,14 +3,11 @@ kind: ReplicationController
 metadata:
   name: couchbase-rc
   labels:
-    name: couchbase
+    name: couchbase-rc
     context: docker-k8s-lab
 spec:
   replicas: 1
   template:
-    metadata:
-      labels:
-        name: couchbase
     spec:
       containers:
       - name: couchbase-rc-pod
@@ -18,14 +15,13 @@ spec:
         metadata:
           name: couchbase-rc-pod
           labels:
-            name: couchbase
+            name: couchbase-rc-pod
             context: docker-k8s-lab
         volumeMounts:
         - mountPath: "/opt/couchbase/var"
           name: mypd
         ports:
-        -
-          containerPort: 8091
+        - containerPort: 8091
           hostPort: 8091
         - containerPort: 8092
         - containerPort: 8093
