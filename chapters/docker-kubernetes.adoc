@@ -623,7 +623,7 @@ wildfly-rc-bgtkg   1/1       Running   0          9m
 +
 Notice only one Pod is running now.
 
-## Couchbase Cluster and Persistent Volumes 
+### Couchbase Cluster and Persistent Volumes 
 
 A _Kubernetes Volume_ outlives any containers that run within the Pod, and data is preserved across Container restarts. However the volume will cease to exist when a Pod ceases to exist. This is solved by _Persistent Volumes_ that provide persistent, cluster-scoped storage for applications that require long lived data.
 
@@ -633,7 +633,7 @@ Creating and using a persistent volume is a three step process:
 . User requests storage for pods by using _claims_. Claims can specify levels of resources (CPU and memory), specific sizes and access modes (e.g. can be mounted once read/write or many times write only). This is called as `PersistentVolumeClaim`.
 . Claims are mounted as volumes and used in pods for storage.
 
-Lets create the resources and use them:
+#### Create Kubernetes resources
 
 . Create persistent volume:
 +
@@ -660,11 +660,12 @@ Check status of Replication Controller:
 +
 ```console
 ./cluster/kubectl.sh get -w po
-NAME                 READY     STATUS          RESTARTS   AGE
-couchbase-rc-8d9cn   0/1       ImageNotReady   0          5m
+NAME                 READY     STATUS    RESTARTS   AGE
+couchbase-rc-s5o22   0/1       Pending   0          9s
+NAME                 READY     STATUS    RESTARTS   AGE
+couchbase-rc-s5o22   0/1       Running   0          47s
+couchbase-rc-s5o22   1/1       Running   0         47s
 ```
-+
-Wait for the status to change from "`ImageNotReady`" to "`TBD`".
 +
 . Start Couchbase Service:
 +
@@ -672,6 +673,45 @@ Wait for the status to change from "`ImageNotReady`" to "`TBD`".
 ./cluster/kubectl.sh create -f ~/workspaces/docker-java/attendees/kubernetes/couchbase-service.yaml 
 service "couchbase-service" created
 ```
+
+#### Initialize Couchbase Cluster
+
+. Login to minion-1:
++
+```console
+vagrant ssh minion-1
+```
++
+. Get container id of the Couchbase server:
++
+```console
+[vagrant@kubernetes-minion-1 ~]$ sudo docker ps |  grep couchbase/server | awk '{ print $1 }'
+a9ce3308b43f
+```
++
+. Attach a bash shell to the Couchbase Docker container:
++
+```console
+sudo docker exec -it a9ce3308b43f bash
+root@couchbase-rc-s5o22:/# 
+```
++
+. Configure Data and Query service on Couchbase server:
++
+```console
+/opt/couchbase/bin/couchbase-cli cluster-init -u Administrator -p password -c localhost:8091 --cluster-ramsize=300 --cluster-index-ramsize=256 --services=data,query
+SUCCESS: init/edit localhost
+```
++
+. Install travel-sample bucket:
++
+```console
+TBD
+```
+
+#### Add a new Couchbase server to the cluster
+
+. Scale using RC
 
 ### Application Logs
 
