@@ -639,7 +639,7 @@ Lets create the resources and use them:
 +
 ```
 ./cluster/kubectl.sh create -f ~/workspaces/docker-java/attendees/kubernetes/couchbase-pv.yaml 
-persistentvolume "pv0001" created
+persistentvolume "pv001" created
 ```
 +
 . Create a claim for volume:
