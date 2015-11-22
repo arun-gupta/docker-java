@@ -646,7 +646,7 @@ persistentvolume "pv0001" created
 +
 ```console
 ./cluster/kubectl.sh create -f ~/workspaces/docker-java/attendees/kubernetes/couchbase-pvc.yaml 
-persistentvolumeclaim "myclaim-1" created
+persistentvolumeclaim "pvc001" created
 ```
 +
 . Start the Couchbase Replication Controller (claim is used in Pod's definition):
@@ -654,6 +654,23 @@ persistentvolumeclaim "myclaim-1" created
 ```console
 ./cluster/kubectl.sh create -f ~/workspaces/docker-java/attendees/kubernetes/couchbase-rc.yaml
 replicationcontroller "couchbase-rc" created
+```
++
+Check status of Replication Controller:
++
+```console
+./cluster/kubectl.sh get -w po
+NAME                 READY     STATUS          RESTARTS   AGE
+couchbase-rc-8d9cn   0/1       ImageNotReady   0          5m
+```
++
+Wait for the status to change from "`ImageNotReady`" to "`TBD`".
++
+. Start Couchbase Service:
++
+```console
+./cluster/kubectl.sh create -f ~/workspaces/docker-java/attendees/kubernetes/couchbase-service.yaml 
+service "couchbase-service" created
 ```
 
 ### Application Logs
