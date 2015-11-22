@@ -15,6 +15,11 @@ spec:
       containers:
       - name: couchbase-rc-pod
         image: couchbase/server
+        metadata:
+          name: couchbase-rc-pod
+          labels:
+            name: couchbase
+            context: docker-k8s-lab
         volumeMounts:
         - mountPath: "/opt/couchbase/var"
           name: mypd
