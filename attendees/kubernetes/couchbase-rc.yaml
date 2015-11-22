@@ -8,15 +8,15 @@ metadata:
 spec:
   replicas: 1
   template:
+    metadata:
+      name: couchbase-rc-pod
+      labels:
+        name: couchbase-rc-pod
+        context: docker-k8s-lab
     spec:
       containers:
       - name: couchbase-rc-pod
         image: couchbase/server
-        metadata:
-          name: couchbase-rc-pod
-          labels:
-            name: couchbase-rc-pod
-            context: docker-k8s-lab
         volumeMounts:
         - mountPath: "/opt/couchbase/var"
           name: mypd
@@ -29,4 +29,4 @@ spec:
       volumes:
       - name: mypd
         persistentVolumeClaim:
-          claimName: myclaim-1
+          claimName: pvc001
