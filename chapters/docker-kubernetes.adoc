@@ -637,7 +637,7 @@ Creating and using a persistent volume is a three step process:
 
 . Create persistent volume:
 +
-```
+```console
 ./cluster/kubectl.sh create -f ~/workspaces/docker-java/attendees/kubernetes/couchbase-pv.yaml 
 persistentvolume "pv001" created
 ```
@@ -685,7 +685,7 @@ vagrant ssh minion-1
 . Get container id of the Couchbase server:
 +
 ```console
-[vagrant@kubernetes-minion-1 ~]$ sudo docker ps |  grep couchbase/server | awk '{ print $1 }'
+sudo docker ps |  grep couchbase/server | awk '{ print $1 }'
 a9ce3308b43f
 ```
 +
@@ -706,8 +706,47 @@ SUCCESS: init/edit localhost
 . Install travel-sample bucket:
 +
 ```console
+curl -v -u Administrator:password -X POST http://localhost:8091/sampleBuckets/install -d '["travel-sample"]'
+*   Trying ::1...
+* connect to ::1 port 8091 failed: Connection refused
+*   Trying 127.0.0.1...
+* Connected to localhost (127.0.0.1) port 8091 (#0)
+* Server auth using Basic with user 'Administrator'
+> POST /sampleBuckets/install HTTP/1.1
+> Authorization: Basic QWRtaW5pc3RyYXRvcjpwYXNzd29yZA==
+> User-Agent: curl/7.40.0-DEV
+> Host: localhost:8091
+> Accept: */*
+> Content-Length: 17
+> Content-Type: application/x-www-form-urlencoded
+> 
+* upload completely sent off: 17 out of 17 bytes
+< HTTP/1.1 202 Accepted
+< Server: Couchbase Server
+< Pragma: no-cache
+< Date: Mon, 23 Nov 2015 04:31:22 GMT
+< Content-Type: application/json
+< Content-Length: 2
+< Cache-Control: no-cache
+< 
+* Connection #0 to host localhost left intact
+```
++
+. Querying using `cbq` gives error:
++
+```console
+{
+            "code": 4000,
+            "msg": "No primary index on keyspace travel-sample. Use CREATE PRIMARY INDEX to create one."
+        }
+```
++
+Create an index on `travel-sample` bucket:
++
+```console
 TBD
 ```
+
 
 #### Add a new Couchbase server to the cluster
 
