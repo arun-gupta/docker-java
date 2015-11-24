@@ -676,37 +676,23 @@ service "couchbase-service" created
 
 #### Initialize Couchbase Cluster
 
-. Login to minion-1:
+. Set data and index memory quota for Couchbase:
 +
 ```console
-vagrant ssh minion-1
-```
-+
-. Get container id of the Couchbase server:
-+
-```console
-sudo docker ps |  grep couchbase/server | awk '{ print $1 }'
-a9ce3308b43f
-```
-+
-. Attach a bash shell to the Couchbase Docker container:
-+
-```console
-sudo docker exec -it a9ce3308b43f bash
-root@couchbase-rc-s5o22:/# 
+./cluster/kubectl.sh exec couchbase-rc-s5o22 -- curl -v -X POST http://localhost:8091/pools/default -d memoryQuota=300 -d indexMemoryQuota=300
 ```
 +
 . Configure Data and Query service on Couchbase server:
 +
 ```console
-/opt/couchbase/bin/couchbase-cli cluster-init -u Administrator -p password -c localhost:8091 --cluster-ramsize=300 --cluster-index-ramsize=256 --services=data,query
+./cluster/kubectl.sh exec couchbase-rc-s5o22 -- /opt/couchbase/bin/couchbase-cli cluster-init -u Administrator -p password -c localhost:8091 --cluster-ramsize=256 --cluster-index-ramsize=256 --services=index,data,query
 SUCCESS: init/edit localhost
 ```
 +
 . Install travel-sample bucket:
 +
 ```console
-curl -v -u Administrator:password -X POST http://localhost:8091/sampleBuckets/install -d '["travel-sample"]'
+./cluster/kubectl.sh exec couchbase-rc-s5o22 -- curl -v -u Administrator:password -X POST http://localhost:8091/sampleBuckets/install -d '["travel-sample"]'
 *   Trying ::1...
 * connect to ::1 port 8091 failed: Connection refused
 *   Trying 127.0.0.1...
@@ -732,20 +718,13 @@ curl -v -u Administrator:password -X POST http://localhost:8091/sampleBuckets/in
 * Connection #0 to host localhost left intact
 ```
 +
-. Querying using `cbq` gives error:
+. Query using `cbq` gives error:
 +
 ```console
-{
-            "code": 4000,
-            "msg": "No primary index on keyspace travel-sample. Use CREATE PRIMARY INDEX to create one."
-        }
+./cluster/kubectl.sh exec couchbase-rc-s5o22 -- /opt/couchbase/bin/cbq
 ```
 +
-Create an index on `travel-sample` bucket:
-+
-```console
-TBD
-```
+does not return??
 
 
 #### Add a new Couchbase server to the cluster
