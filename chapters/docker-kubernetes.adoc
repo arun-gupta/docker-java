@@ -721,7 +721,7 @@ SUCCESS: init/edit localhost
 . Query using `cbq` gives error:
 +
 ```console
-./cluster/kubectl.sh exec couchbase-rc-s5o22 -- /opt/couchbase/bin/cbq
+./cluster/kubectl.sh exec -it couchbase-rc-s5o22 -- /opt/couchbase/bin/cbq
 ```
 +
 shows the message:
@@ -729,8 +729,6 @@ shows the message:
 ```console
 Couchbase query shell connected to http://localhost:8093/ . Type Ctrl-D to exit.
 ```
-+
-How to keep the session active?
 
 
 #### Add a new Couchbase server to the cluster
