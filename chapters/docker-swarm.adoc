@@ -56,7 +56,9 @@ myconsul:
   command: "-server -bootstrap"
 ----
 +
-This service is started as:
+This Compose file is available at https://github.com/arun-gupta/docker-images/blob/master/consul/docker-compose.yml.
++
+Start this service as:
 +
 [source, text]
 ----
@@ -122,7 +124,7 @@ Four options to look here:
 .. `--swarm-discovery` defines address of the discovery service
 .. `--cluster-advertise` advertise the machine on the network
 .. `--cluster-store` designate a distributed k/v storage backend for the cluster
-.. `--virtualbox-disk-size` sets the disk size for the created Machine to 5GB
+.. `--virtualbox-disk-size` sets the disk size for the created Machine to 5GB. This is required so that WildFly and Couchbase image can be downloaded on any of the nodes.
 +
 `--swarm` configures the Machine with Swarm, `--swarm-master` configures the created Machine to be Swarm master.
 +
@@ -163,7 +165,7 @@ Total Memory: 1.021 GiB
 Name: d074fd97682e
 ----
 +
-This cluster has one node and that one node has two containers.
+This cluster has one node and that node has two containers.
 +
 . Create a new Machine to join this cluster:
 +
@@ -215,14 +217,14 @@ swarm-node-01    -        virtualbox   Running   tcp://192.168.99.102:2376   swa
 swarm-node-02    -        virtualbox   Running   tcp://192.168.99.103:2376   swarm-master
 ----
 +
-The machines that are part of the cluster have cluster’s name in the SWARM column, blank otherwise. For example, "`consul-machine`" is a standalone machine where as all other machines are part of the "`swarm-master`" cluster. The Swarm master is also identified by (master) in the SWARM column.
+The machines that are part of the cluster have cluster’s name in the SWARM column, blank otherwise. For example, `consul-machine` is a standalone machine where as all other machines are part of the `swarm-master` cluster. The Swarm master is also identified by (master) in the SWARM column.
 +
 . Connect to the Swarm cluster and find some information about it:
 
   eval "$(docker-machine env --swarm swarm-master)"
   docker info
 +
-Note, `--swarm` is specified to connect to the Swarm cluster. Otherwise the command will connect to `swarm-master` only.
+Note, `--swarm` is specified to connect to the Swarm cluster. Otherwise the command will connect to `swarm-master` Machine only.
 +
 This shows the output as:
 +
@@ -411,7 +413,7 @@ e042754df336        host                      host
 5e93fc34b4d9        docker_gwbridge           bridge
 ----
 +
-Finally with `swarm-node-02`:
+Finally, with `swarm-node-02`:
 +
 [source, text]
 ----
@@ -471,7 +473,8 @@ mvn install -Pcouchbase -Ddocker.host=$(docker-machine ip swarm-master)
 Deploy the application to WildFly by specifying three parameters:
 
 . Host IP address where WildFly is running
-. Username and password of a user in WildFly's administrative realm
+. Username of a user in WildFly's administrative realm
+. Password of the user specified in WildFly's administrative realm
 
 [source, text]
 ----

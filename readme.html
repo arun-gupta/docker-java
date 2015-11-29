@@ -3573,7 +3573,10 @@ To see how to connect Docker to this machine, run: docker-machine env consul-mac
 </div>
 </div>
 <div class="paragraph">
-<p>This service is started as:</p>
+<p>This Compose file is available at <a href="https://github.com/arun-gupta/docker-images/blob/master/consul/docker-compose.yml" class="bare">https://github.com/arun-gupta/docker-images/blob/master/consul/docker-compose.yml</a>.</p>
+</div>
+<div class="paragraph">
+<p>Start this service as:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3657,7 +3660,7 @@ To see how to connect Docker to this machine, run: docker-machine env swarm-mast
 <p><code>--cluster-store</code> designate a distributed k/v storage backend for the cluster</p>
 </li>
 <li>
-<p><code>--virtualbox-disk-size</code> sets the disk size for the created Machine to 5GB</p>
+<p><code>--virtualbox-disk-size</code> sets the disk size for the created Machine to 5GB. This is required so that WildFly and Couchbase image can be downloaded on any of the nodes.</p>
 <div class="paragraph">
 <p><code>--swarm</code> configures the Machine with Swarm, <code>--swarm-master</code> configures the created Machine to be Swarm master.</p>
 </div>
@@ -3719,7 +3722,7 @@ Name: d074fd97682e</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This cluster has one node and that one node has two containers.</p>
+<p>This cluster has one node and that node has two containers.</p>
 </div>
 </li>
 <li>
@@ -3776,7 +3779,7 @@ swarm-node-02    -        virtualbox   Running   tcp://192.168.99.103:2376   swa
 </div>
 </div>
 <div class="paragraph">
-<p>The machines that are part of the cluster have cluster’s name in the SWARM column, blank otherwise. For example, &#8220;consul-machine&#8221; is a standalone machine where as all other machines are part of the &#8220;swarm-master&#8221; cluster. The Swarm master is also identified by (master) in the SWARM column.</p>
+<p>The machines that are part of the cluster have cluster’s name in the SWARM column, blank otherwise. For example, <code>consul-machine</code> is a standalone machine where as all other machines are part of the <code>swarm-master</code> cluster. The Swarm master is also identified by (master) in the SWARM column.</p>
 </div>
 </li>
 <li>
@@ -3788,7 +3791,7 @@ docker info</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Note, <code>--swarm</code> is specified to connect to the Swarm cluster. Otherwise the command will connect to <code>swarm-master</code> only.</p>
+<p>Note, <code>--swarm</code> is specified to connect to the Swarm cluster. Otherwise the command will connect to <code>swarm-master</code> Machine only.</p>
 </div>
 <div class="paragraph">
 <p>This shows the output as:</p>
@@ -4036,7 +4039,7 @@ e042754df336        host                      host
 </div>
 </div>
 <div class="paragraph">
-<p>Finally with <code>swarm-node-02</code>:</p>
+<p>Finally, with <code>swarm-node-02</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4124,7 +4127,10 @@ CONTAINER ID        IMAGE                     COMMAND                  CREATED  
 <p>Host IP address where WildFly is running</p>
 </li>
 <li>
-<p>Username and password of a user in WildFly&#8217;s administrative realm</p>
+<p>Username of a user in WildFly&#8217;s administrative realm</p>
+</li>
+<li>
+<p>Password of the user specified in WildFly&#8217;s administrative realm</p>
 </li>
 </ol>
 </div>
