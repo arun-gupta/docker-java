@@ -1,355 +1,508 @@
 [[Docker_Swarm]]
 ## Deploy Application on Docker Swarm Cluster
 
-Docker Swarm is native clustering for Docker. It allows you create and access to a pool of Docker hosts using the full suite of Docker tools. Because Docker Swarm serves the standard Docker API, any tool that already communicates with a Docker daemon can use Swarm to transparently scale to multiple hosts
+Docker Swarm is native clustering for Docker. It allows you create and access to a pool of Docker hosts using the full suite of Docker tools. Because Docker Swarm serves the standard Docker API, any tool that already communicates with a Docker daemon can use Swarm to transparently scale to multiple hosts.
 
 ### Key Components of Docker Swarm
 
 .Key Components of Docker Swarm
 image::docker-swarm-components.png[]
 
-*Swarm Manager*: Docker Swarm has a Manager, that is a pre-defined Docker Host, and is a single point for all administration. The swarm manager orchestrates and schedules containers on the entire cluster. Currently only a single instance of manager is allowed in the cluster. This is a SPOF for high availability architectures and additional managers will be allowed in a future version of Swarm with https://github.com/docker/swarm/issues/598[#598].
+*Swarm Manager*: Docker Swarm has a Manager, that is a pre-defined Docker Host, and is a single point for all administration. Swarm manager orchestrates and schedules containers on the entire cluster. Swarm Manager can be configured in https://docs.docker.com/swarm/multi-manager-setup/[High Availability].
 
 *Swarm Nodes*: The containers are deployed on Nodes that are additional Docker Hosts. Each Swarm Node must be accessible by the manager, each node must listen to the same network interface (TCP port). Each node runs a Docker Swarm agent that registers the referenced Docker daemon, monitors it, and updates the discovery backend with the node’s status. The containers run on a node.
 
 *Scheduler Strategy*: Different scheduler strategies ("`binpack`", "`spread`" (default), and "`random`") can be applied to pick the best node to run your container. The default strategy optimizes the node for least number of running containers. There are multiple kinds of filters, such as constraints and affinity.  This should allow for a decent scheduling algorithm.
 
-*Node Discovery Service*: By default, Swarm uses hosted discovery service, based on Docker Hub, using tokens to discover nodes that are part of a cluster. However etcd, consul, and ZooKeeper can be also be used for service discovery as well. This is particularly useful if there is no access to Internet, or you are running the setup in a closed network. A new discovery backend can be created as explained here. It would be useful to have the hosted Discovery Service inside the firewall and https://github.com/docker/swarm/issues/660[#660] will discuss this.
+*Node Discovery Service*: Swarm manager talks to a hosted discovery service. This service maintains a list of IPs in Swarm cluster. Docker Hub hosts a discovery service that can be used during development. In production, this is replaced by other services such as `etcd`, `consul`, or `zookeeper`. You can even use a static file. This is particularly useful if there is no access to Internet, or you are running the setup in a closed network.
 
-**Standard Docker API:** Docker Swarm serves the standard Docker API and thus any tool that talks to a single Docker host will seamlessly scale to multiple hosts now. That means that if you were using shell scripts using Docker CLI to configure multiple Docker hosts, the same CLI would can now talk to Swarm cluster and Docker Swarm will then act as proxy and run it on the cluster.
+**Standard Docker API:** Docker Swarm serves the standard Docker API and thus any tool that talks to a single Docker host will seamlessly scale to multiple hosts now. That means that if you were using shell scripts using Docker CLI to configure multiple Docker hosts, the same CLI would can now talk to Swarm cluster.
 
-There are lots of other concepts but these are the main ones.
+There are a lots of other concepts but these are the main ones.
 
-### Create a Docker Swarm Cluster
+### Create Discovery Service
 
-. The easiest way of using Swarm is, by using the official Docker image:
-
-  docker run swarm create
-+
-This command returns a discovery token, referred as <TOKEN> in this document, and is the unique cluster id. It will be used when creating master and nodes later. This cluster id is returned by the hosted discovery service on Docker Hub.
-+
-It shows the output as:
+. Create a Machine that will host discovery service:
 +
 [source, text]
 ----
-docker run swarm create
-Unable to find image 'swarm:latest' locally
-latest: Pulling from swarm
-55b38848634f: Pull complete 
-fd7bc7d11a30: Pull complete 
-db039e91413f: Pull complete 
-1e5a49ab6458: Pull complete 
-5d9ce3cdadc7: Pull complete 
-1f26e949f933: Pull complete 
-e08948058bed: Already exists 
-swarm:latest: The image you are pulling has been verified. Important: image verification is a tech preview feature and should not be relied on to provide security.
-Digest: sha256:0e417fe3f7f2c7683599b94852e4308d1f426c82917223fccf4c1c4a4eddb8ef
-Status: Downloaded newer image for swarm:latest
-1d528bf0568099a452fef5c029f39b85
+docker-machine create -d=virtualbox consul-machine
+Running pre-create checks...
+Creating machine...
+Waiting for machine to be running, this may take a few minutes...
+Machine is running, waiting for SSH to be available...
+Detecting operating system of created instance...
+Provisioning created instance...
+Copying certs to the local machine directory...
+Copying certs to the remote machine...
+Setting Docker configuration on the remote daemon...
+To see how to connect Docker to this machine, run: docker-machine env consul-machine
 ----
 +
-The last line is the <TOKEN>.
-+
-NOTE: Make sure to note this cluster id now as there is no means to list it later. This should be fixed with https://github.com/docker/swarm/issues/661[#661].
-+
-. Swarm is fully integrated with Docker Machine, and so is the easiest way to get started. Let's create a Swarm Master next:
+. Connect to this Machine:
+
+  eval $(docker-machine env consul-machine)
+
+. Run Consul service using the following Compose file:
 +
 [source, text]
 ----
-docker-machine create -d virtualbox --swarm --swarm-master --swarm-discovery token://<TOKEN> swarm-master
+myconsul:
+  image: progrium/consul
+  restart: always
+  hostname: consul
+  ports:
+    - 8500:8500
+  command: "-server -bootstrap"
 ----
 +
-Replace `<TOKEN>` with the cluster id obtained in the previous step. 
-+
-`--swarm` configures the machine with Swarm, `--swarm-master` configures the created machine to be Swarm master. Swarm master creation talks to the hosted service on Docker Hub and informs that a master is created in the cluster.
-+
-. Connect to this newly created master and find some more information about it:
+This service is started as:
 +
 [source, text]
 ----
-eval "$(docker-machine env swarm-master)"
-docker info
+docker-compose up -d
+Pulling myconsul (progrium/consul:latest)...
+latest: Pulling from progrium/consul
+3b4d28ce80e4: Pull complete
+e5ab901dcf2d: Pull complete
+30ad296c0ea0: Pull complete
+3dba40dec256: Pull complete
+f2ef4387b95e: Pull complete
+53bc8dcc4791: Pull complete
+75ed0b50ba1d: Pull complete
+17c3a7ed5521: Pull complete
+8aca9e0ecf68: Pull complete
+4d1828359d36: Pull complete
+46ed7df7f742: Pull complete
+b5e8ce623ef8: Pull complete
+049dca6ef253: Pull complete
+bdb608bc4555: Pull complete
+8b3d489cfb73: Pull complete
+c74500bbce24: Pull complete
+9f3e605442f6: Pull complete
+d9125e9e799b: Pull complete
+Digest: sha256:8cc8023462905929df9a79ff67ee435a36848ce7a10f18d6d0faba9306b97274
+Status: Downloaded newer image for progrium/consul:latest
+Creating consul_myconsul_1
 ----
++
+Started container can be verified as:
++
+[source, text]
+----
+docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                                                                            NAMES
+f05d8dd11e7f        progrium/consul     "/bin/start -server -"   30 seconds ago      Up 29 seconds       53/tcp, 53/udp, 8300-8302/tcp, 8400/tcp, 0.0.0.0:8500->8500/tcp, 8301-8302/udp   consul_myconsul_1
+----
+
+### Create Docker Swarm Cluster
+
+Swarm is fully integrated with Machine, and so is the easiest way to get started.
+
+. Create a Swarm Master and point to the Consul discovery service:
++
+[source, text]
+----
+docker-machine create -d virtualbox --virtualbox-disk-size "5000" --swarm --swarm-master --swarm-discovery="consul://$(docker-machine ip consul-machine):8500" --engine-opt="cluster-store=consul://$(docker-machine ip consul-machine):8500" --engine-opt="cluster-advertise=eth1:2376" swarm-master
+Running pre-create checks...
+Creating machine...
+Waiting for machine to be running, this may take a few minutes...
+Machine is running, waiting for SSH to be available...
+Detecting operating system of created instance...
+Provisioning created instance...
+Copying certs to the local machine directory...
+Copying certs to the remote machine...
+Setting Docker configuration on the remote daemon...
+Configuring swarm...
+To see how to connect Docker to this machine, run: docker-machine env swarm-master
+----
++
+Four options to look here:
++
+.. `--swarm-discovery` defines address of the discovery service
+.. `--cluster-advertise` advertise the machine on the network
+.. `--cluster-store` designate a distributed k/v storage backend for the cluster
+.. `--virtualbox-disk-size` sets the disk size for the created Machine to 5GB
++
+`--swarm` configures the Machine with Swarm, `--swarm-master` configures the created Machine to be Swarm master.
++
+. Find some information about this machine:
++
+[source, json]
+----
+docker-machine inspect --format='{{json .Driver}}'  swarm-master
+{"Boot2DockerImportVM":"","Boot2DockerURL":"","CPU":1,"DiskSize":5000,"HostOnlyCIDR":"192.168.99.1/24","HostOnlyNicType":"82540EM","HostOnlyPromiscMode":"deny","IPAddress":"192.168.99.102","MachineName":"swarm-master","Memory":1024,"NoShare":false,"SSHPort":51972,"SSHUser":"docker","StorePath":"/Users/arungupta/.docker/machine","SwarmDiscovery":"consul://192.168.99.100:8500","SwarmHost":"tcp://0.0.0.0:3376","SwarmMaster":true,"VBoxManager":{}}
+----
++
+Note that the disk size is 5GB.
++
+. Connecting to the master by using the command:
++
+  eval "$(docker-machine env --swarm swarm-master)"
 +
 NOTE: If you're on Windows, use the `docker-machine env swarm-master` command only and copy the output into an editor to replace all appearances of EXPORT with SET and issue the three commands at your command prompt, remove the quotes and all duplicate appearences of "/".
 +
-This will show the output as:
+. Find some information about the cluster:
 +
 [source, text]
 ----
-> docker info
+docker info
 Containers: 2
-Images: 7
-Storage Driver: aufs
- Root Dir: /mnt/sda1/var/lib/docker/aufs
- Backing Filesystem: extfs
- Dirs: 11
- Dirperm1 Supported: true
-Execution Driver: native-0.2
-Logging Driver: json-file
-Kernel Version: 4.0.5-boot2docker
-Operating System: Boot2Docker 1.7.0 (TCL 6.3); master : 7960f90 - Thu Jun 18 18:31:45 UTC 2015
+Images: 1
+Role: primary
+Strategy: spread
+Filters: health, port, dependency, affinity, constraint
+Nodes: 1
+ swarm-master: 192.168.99.102:2376
+  └ Containers: 2
+  └ Reserved CPUs: 0 / 1
+  └ Reserved Memory: 0 B / 1.021 GiB
+  └ Labels: executiondriver=native-0.2, kernelversion=4.1.13-boot2docker, operatingsystem=Boot2Docker 1.9.1 (TCL 6.4.1); master : cef800b - Fri Nov 20 19:33:59 UTC 2015, provider=virtualbox, storagedriver=aufs
 CPUs: 1
-Total Memory: 996.2 MiB
-Name: swarm-master
-ID: DLFR:OQ3E:B5P6:HFFD:VKLI:IOLU:URNG:HML5:UHJF:6JCL:ITFH:DS6J
-Debug mode (server): true
-File Descriptors: 22
-Goroutines: 36
-System Time: 2015-07-11T00:16:34.29965306Z
-EventsListeners: 1
-Init SHA1: 
-Init Path: /usr/local/bin/docker
-Docker Root Dir: /mnt/sda1/var/lib/docker
-Username: arungupta
-Registry: https://index.docker.io/v1/
-Labels:
- provider=virtualbox
+Total Memory: 1.021 GiB
+Name: d074fd97682e
 ----
 +
-. Create a Swarm node
-
- docker-machine create -d virtualbox --swarm --swarm-discovery token://<TOKEN> swarm-node-01
+This cluster has one node and that one node has two containers.
 +
-Replace `<TOKEN>` with the cluster id obtained in an earlier step. 
-+
-Node creation talks to the hosted service at Docker Hub and joins the previously created cluster. This is specified by `--swarm-discovery token://...` and specifying the cluster id obtained earlier.
-. To make it a real cluster, let's create a second node:
-
-  docker-machine create -d virtualbox --swarm --swarm-discovery token://<TOKEN> swarm-node-02
-+
-Replace `<TOKEN>` with the cluster id obtained in the previous step. 
-
-. List all the nodes created so far:
-
-  docker-machine ls
-+
-This shows the output similar to the one below:
+. Create a new Machine to join this cluster:
 +
 [source, text]
 ----
-docker-machine ls
-NAME            ACTIVE   DRIVER       STATE     URL                         SWARM
-default         -        virtualbox   Running   tcp://192.168.99.100:2376   
-swarm-master    *        virtualbox   Running   tcp://192.168.99.102:2376   swarm-master (master)
-swarm-node-01   -        virtualbox   Running   tcp://192.168.99.103:2376   swarm-master
-swarm-node-02   -        virtualbox   Running   tcp://192.168.99.104:2376   swarm-master
+docker-machine create -d virtualbox --virtualbox-disk-size "5000" --swarm --swarm-discovery="consul://$(docker-machine ip consul-machine):8500" --engine-opt="cluster-store=consul://$(docker-machine ip consul-machine):8500" --engine-opt="cluster-advertise=eth1:2376" swarm-node-01
+Running pre-create checks...
+Creating machine...
+Waiting for machine to be running, this may take a few minutes...
+Machine is running, waiting for SSH to be available...
+Detecting operating system of created instance...
+Provisioning created instance...
+Copying certs to the local machine directory...
+Copying certs to the remote machine...
+Setting Docker configuration on the remote daemon...
+Configuring swarm...
+To see how to connect Docker to this machine, run: docker-machine env swarm-node-01
 ----
 +
-The machines that are part of the cluster have the cluster’s name in the SWARM column, blank otherwise. For example, "`default`" is standalone machines where as all other machines are part of the "`swarm-master`" cluster. The Swarm master is also identified by (master) in the SWARM column.
+Notice no `--swarm-master` is specified in this command. This ensure that the created Machines are _worker_ nodes.
++
+. Create a second Swarm node to join this cluster:
++
+[source, text]
+----
+docker-machine create -d virtualbox --virtualbox-disk-size "5000" --swarm --swarm-discovery="consul://$(docker-machine ip consul-machine):8500" --engine-opt="cluster-store=consul://$(docker-machine ip consul-machine):8500" --engine-opt="cluster-advertise=eth1:2376" swarm-node-02
+Running pre-create checks...
+Creating machine...
+Waiting for machine to be running, this may take a few minutes...
+Machine is running, waiting for SSH to be available...
+Detecting operating system of created instance...
+Provisioning created instance...
+Copying certs to the local machine directory...
+Copying certs to the remote machine...
+Setting Docker configuration on the remote daemon...
+Configuring swarm...
+To see how to connect Docker to this machine, run: docker-machine env swarm-node-02
+----
++
+. List all the created Machines:
++
+[source, text]
+----
+docker-machine ls 
+NAME             ACTIVE   DRIVER       STATE     URL                         SWARM
+consul-machine   -        virtualbox   Running   tcp://192.168.99.100:2376   
+swarm-master     *        virtualbox   Running   tcp://192.168.99.101:2376   swarm-master (master)
+swarm-node-01    -        virtualbox   Running   tcp://192.168.99.102:2376   swarm-master
+swarm-node-02    -        virtualbox   Running   tcp://192.168.99.103:2376   swarm-master
+----
++
+The machines that are part of the cluster have cluster’s name in the SWARM column, blank otherwise. For example, "`consul-machine`" is a standalone machine where as all other machines are part of the "`swarm-master`" cluster. The Swarm master is also identified by (master) in the SWARM column.
 +
 . Connect to the Swarm cluster and find some information about it:
 
   eval "$(docker-machine env --swarm swarm-master)"
   docker info
 +
+Note, `--swarm` is specified to connect to the Swarm cluster. Otherwise the command will connect to `swarm-master` only.
++
 This shows the output as:
 +
 [source, text]
 ----
-> docker info
+docker info
 Containers: 4
 Images: 3
 Role: primary
 Strategy: spread
-Filters: affinity, health, constraint, port, dependency
+Filters: health, port, dependency, affinity, constraint
 Nodes: 3
  swarm-master: 192.168.99.102:2376
   └ Containers: 2
   └ Reserved CPUs: 0 / 1
-  └ Reserved Memory: 0 B / 1.022 GiB
-  └ Labels: executiondriver=native-0.2, kernelversion=4.0.5-boot2docker, operatingsystem=Boot2Docker 1.7.0 (TCL 6.3); master : 7960f90 - Thu Jun 18 18:31:45 UTC 2015, provider=virtualbox, storagedriver=aufs
+  └ Reserved Memory: 0 B / 1.021 GiB
+  └ Labels: executiondriver=native-0.2, kernelversion=4.1.13-boot2docker, operatingsystem=Boot2Docker 1.9.1 (TCL 6.4.1); master : cef800b - Fri Nov 20 19:33:59 UTC 2015, provider=virtualbox, storagedriver=aufs
  swarm-node-01: 192.168.99.103:2376
   └ Containers: 1
   └ Reserved CPUs: 0 / 1
-  └ Reserved Memory: 0 B / 1.022 GiB
-  └ Labels: executiondriver=native-0.2, kernelversion=4.0.5-boot2docker, operatingsystem=Boot2Docker 1.7.0 (TCL 6.3); master : 7960f90 - Thu Jun 18 18:31:45 UTC 2015, provider=virtualbox, storagedriver=aufs
+  └ Reserved Memory: 0 B / 1.021 GiB
+  └ Labels: executiondriver=native-0.2, kernelversion=4.1.13-boot2docker, operatingsystem=Boot2Docker 1.9.1 (TCL 6.4.1); master : cef800b - Fri Nov 20 19:33:59 UTC 2015, provider=virtualbox, storagedriver=aufs
  swarm-node-02: 192.168.99.104:2376
   └ Containers: 1
   └ Reserved CPUs: 0 / 1
-  └ Reserved Memory: 0 B / 1.022 GiB
-  └ Labels: executiondriver=native-0.2, kernelversion=4.0.5-boot2docker, operatingsystem=Boot2Docker 1.7.0 (TCL 6.3); master : 7960f90 - Thu Jun 18 18:31:45 UTC 2015, provider=virtualbox, storagedriver=aufs
+  └ Reserved Memory: 0 B / 1.021 GiB
+  └ Labels: executiondriver=native-0.2, kernelversion=4.1.13-boot2docker, operatingsystem=Boot2Docker 1.9.1 (TCL 6.4.1); master : cef800b - Fri Nov 20 19:33:59 UTC 2015, provider=virtualbox, storagedriver=aufs
 CPUs: 3
-Total Memory: 3.065 GiB
+Total Memory: 3.064 GiB
+Name: d074fd97682e
 ----
 +
-There are 3 nodes – one Swarm master and 2 Swarm nodes. There is a total of 4 containers running in this cluster – one Swarm agent on master and each node, and there is an additional swarm-agent-master running on the master. This can be verified by connecting to the master and listing all the containers.
+There are 3 nodes – one Swarm master and 2 Swarm _worker_ nodes. There is a total of 4 containers running in this cluster – one Swarm agent on master and each node, and there is an additional swarm-agent-master running on the master. This can be verified by connecting to the master and listing all the containers.
 +
 . List nodes in the cluster with the following command:
 +
 [source, text]
 ----
-docker run swarm list token://<TOKEN>
-----
-+
-This shows the output as:
-+
-[source, text]
-----
-> docker run swarm list token://1d528bf0568099a452fef5c029f39b85
+docker run swarm list consul://$(docker-machine ip consul-machine):8500
+192.168.99.102:2376
 192.168.99.103:2376
 192.168.99.104:2376
-192.168.99.102:2376
 ----
 
-### Deploy Java EE Application to Docker Swarm Cluster
+### Deploy Application to Docker Swarm Cluster
 
-The complete cluster is in place now, and we need to deploy the Java EE application to it.
+The cluster is now ready and we need to deploy our application to it. 
 
-Swarm takes care for the distribution of deployments across the nodes. The only thing, we need to do is to deploy the application as already explained in <<JavaEE7_Container_Linking>>.
+This application will provide a CRUD/REST interface on a data bucket in Couchbase. This is achieved by using a Java EE application deployed on WildFly and accessing the database. Follow the steps to deploy and access the application:
 
-. Start MySQL server as:
+. Start application environment using Docker Compose (WildFly and Couchbase)
+. Configure Couchbase server and install `travel-sample` bucket
+. Deploy the application
+
+Swarm takes care of distribution of deployments across the nodes.
+
+#### Start Application Environment Using Docker Compose
+
+Make sure you are connected to the cluster by giving the command `eval "$(docker-machine env --swarm swarm-master)"`.
+
+. List all the networks created by Docker so far:
 +
 [source, text]
 ----
-docker run --name mysqldb -e MYSQL_USER=mysql -e MYSQL_PASSWORD=mysql -e MYSQL_DATABASE=sample -e MYSQL_ROOT_PASSWORD=supersecret -p 3306:3306 -d mysql
+docker network ls
+NETWORK ID          NAME                   DRIVER
+33a619ddc5d2        swarm-node-02/bridge   bridge              
+e0b73c96ffec        swarm-node-02/none     null                
+b315e67f0363        swarm-node-02/host     host                
+879d6167be47        swarm-master/bridge    bridge              
+f771ddc7d957        swarm-node-01/none     null                
+e042754df336        swarm-node-01/host     host                
+d2f3b512f9dc        swarm-node-01/bridge   bridge              
+5b5bcf135d7b        swarm-master/none      null                
+fffc34eae907        swarm-master/host      host
 ----
 +
-`-e` define environment variables that are read by the database at startup and allow us to access the database with this user and password.
+Docker create three networks for each host automatically:
 +
-. Start WildFly and deploy Java EE 7 application as:
+[options="header", cols="1,3", width="80%"]
+|====
+| Network Name | Purpose
+| `bridge` | Default network that containers connect to. This is `docker0` network in all Docker installations.
+| `none` | Container-specific networking stack
+| `host` | Adds a container on hosts networking stack. Network configuration is identical to the host.
+|====
++
+This explains a total of nine networks, three for each node, as shown in this Swarm cluster.
++
+. Use Compose file to start WildFly and Couchbase:
 +
 [source, text]
 ----
-docker run -d --name mywildfly --link mysqldb:db -p 8080:8080 arungupta/wildfly-mysql-javaee7
+mycouchbase:
+  container_name: "db"
+  image: couchbase/server
+  ports:
+    - 8091:8091
+    - 8092:8092 
+    - 8093:8093 
+    - 11210:11210
+mywildfly:
+  image: arungupta/wildfly-admin
+  environment:
+    - COUCHBASE_URI=db
+  ports:
+    - 8080:8080
+    - 9990:9990
 ----
 +
-This is using the https://docs.docker.com/userguide/dockerlinks/[Docker Container Linking] explained earlier.
+In this Compose file:
 +
-. Check state of the cluster as:
+.. Couchbase service has a custom container name defined by `container_name`. This name is used when creating a new environment variable `COUCHBASE_URI` during WildFly startup.
+.. `arungupta/wildfly-admin` image is used as it binds WildFly’s management to all network interfaces, and in addition also exposes port 9990. This enables WildFly Maven Plugin to be used to deploy the application.
++
+Source for this file is at https://github.com/arun-gupta/docker-images/blob/master/wildfly-couchbase-javaee7/docker-compose.yml.
++
+This application environment can be started as:
 +
 [source, text]
 ----
-> docker info
-Containers: 7
-Images: 5
-Role: primary
-Strategy: spread
-Filters: affinity, health, constraint, port, dependency
-Nodes: 3
- swarm-master: 192.168.99.102:2376
-  └ Containers: 2
-  └ Reserved CPUs: 0 / 1
-  └ Reserved Memory: 0 B / 1.022 GiB
-  └ Labels: executiondriver=native-0.2, kernelversion=4.0.5-boot2docker, operatingsystem=Boot2Docker 1.7.0 (TCL 6.3); master : 7960f90 - Thu Jun 18 18:31:45 UTC 2015, provider=virtualbox, storagedriver=aufs
- swarm-node-01: 192.168.99.103:2376
-  └ Containers: 2
-  └ Reserved CPUs: 0 / 1
-  └ Reserved Memory: 0 B / 1.022 GiB
-  └ Labels: executiondriver=native-0.2, kernelversion=4.0.5-boot2docker, operatingsystem=Boot2Docker 1.7.0 (TCL 6.3); master : 7960f90 - Thu Jun 18 18:31:45 UTC 2015, provider=virtualbox, storagedriver=aufs
- swarm-node-02: 192.168.99.104:2376
-  └ Containers: 3
-  └ Reserved CPUs: 0 / 1
-  └ Reserved Memory: 0 B / 1.022 GiB
-  └ Labels: executiondriver=native-0.2, kernelversion=4.0.5-boot2docker, operatingsystem=Boot2Docker 1.7.0 (TCL 6.3); master : 7960f90 - Thu Jun 18 18:31:45 UTC 2015, provider=virtualbox, storagedriver=aufs
-CPUs: 3
-Total Memory: 3.065 GiB
+docker-compose --x-networking up -d
+Creating network "wildflycouchbasejavaee7" with driver "None"
+Pulling mywildfly (arungupta/wildfly-admin:latest)...
+swarm-node-02: Pulling arungupta/wildfly-admin:latest... : downloaded
+swarm-master: Pulling arungupta/wildfly-admin:latest... : downloaded
+swarm-node-01: Pulling arungupta/wildfly-admin:latest... : downloaded
+Creating wildflycouchbasejavaee7_mywildfly_1
+Pulling mycouchbase (couchbase/server:latest)...
+swarm-node-02: Pulling couchbase/server:latest... : downloaded
+swarm-master: Pulling couchbase/server:latest... : downloaded
+swarm-node-01: Pulling couchbase/server:latest... : downloaded
+Creating db
 ----
 +
-"`swarm-node-02`" is running three containers and so lets look at the list of running containers:
+`--x-networking` creates an overlay network for the Swarm cluster. This can be verified by listing networks again:
 +
 [source, text]
 ----
-> eval "$(docker-machine env swarm-node-02)"
-> docker ps -a
-CONTAINER ID        IMAGE                             COMMAND                CREATED              STATUS              PORTS                    NAMES
-805f3587f5df        arungupta/wildfly-mysql-javaee7   "/opt/jboss/wildfly/   About a minute ago   Up About a minute   0.0.0.0:8080->8080/tcp   mywildfly           
-ababc544df97        mysql                             "/entrypoint.sh mysq   5 minutes ago        Up 5 minutes        0.0.0.0:3306->3306/tcp   mysqldb             
-45b015bc79f4        swarm:latest                      "/swarm join --addr    17 minutes ago       Up 17 minutes       2375/tcp                 swarm-agent    
+docker network ls
+NETWORK ID          NAME                            DRIVER
+5e93fc34b4d9        swarm-node-01/docker_gwbridge   bridge              
+1c041242f51d        wildflycouchbasejavaee7         overlay             
+cc8697c6ce13        swarm-master/docker_gwbridge    bridge              
+f771ddc7d957        swarm-node-01/none              null                
+879d6167be47        swarm-master/bridge             bridge              
+5b5bcf135d7b        swarm-master/none               null                
+fffc34eae907        swarm-master/host               host                
+e042754df336        swarm-node-01/host              host                
+d2f3b512f9dc        swarm-node-01/bridge            bridge              
+33a619ddc5d2        swarm-node-02/bridge            bridge              
+e0b73c96ffec        swarm-node-02/none              null                
+b315e67f0363        swarm-node-02/host              host   
 ----
 +
-. Access the application as:
+Three new networks are created:
 +
-[source, text]
-----
-curl http://$(docker-machine ip swarm-node-02):8080/employees/resources/employees
-----
+... Containers connected to the multi-host network are automatically connected to the `docker_gwbridge` network. This network allows the containers to have external connectivity outside of their cluster, and is created on each worker node.
+... A new overlay network `wildflycouchbasejavaee7` is created. Connect to different Swarm nodes and check that the overlay network exists on them.
 +
-to see the output as:
-+
-[source, xml]
-----
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?><collection><employee><id>1</id><name>Penny</name></employee><employee><id>2</id><name>Sheldon</name></employee><employee><id>3</id><name>Amy</name></employee><employee><id>4</id><name>Leonard</name></employee><employee><id>5</id><name>Bernadette</name></employee><employee><id>6</id><name>Raj</name></employee><employee><id>7</id><name>Howard</name></employee><employee><id>8</id><name>Priya</name></employee></collection>
-----
-
-### Deploy Java EE Application to Docker Swarm Cluster using Docker Compose
-
-<<Docker_Compose>> explains how multi container applications can be easily started using Docker Compose.
-
-. Connect to '`swarm-node-02`':
-
-  eval "$(docker-machine env swarm-node-02)"
-
-. Stop the MySQL and WildFly containers:
-
-  docker ps -a | grep wildfly | awk '{print $1}' | xargs docker rm -f
-  docker ps -a | grep mysql | awk '{print $1}' | xargs docker rm -f
-
-. Use the `docker-compose.yml` file explained in <<Docker_Compose>> to start the containers as:
-
-  docker-compose up -d
-  Creating wildflymysqljavaee7_mysqldb_1...
-  Creating wildflymysqljavaee7_mywildfly_1...
-
-. Check the containers running in the cluster as:
-
-  eval "$(docker-machine env --swarm swarm-master)"
-  docker info
-+
-to see the output as:
+Lets begin with master:
 +
 [source, text]
 ----
-docker info
-Containers: 7
-Images: 5
-Role: primary
-Strategy: spread
-Filters: affinity, health, constraint, port, dependency
-Nodes: 3
- swarm-master: 192.168.99.102:2376
-  └ Containers: 2
-  └ Reserved CPUs: 0 / 1
-  └ Reserved Memory: 0 B / 1.022 GiB
-  └ Labels: executiondriver=native-0.2, kernelversion=4.0.5-boot2docker, operatingsystem=Boot2Docker 1.7.0 (TCL 6.3); master : 7960f90 - Thu Jun 18 18:31:45 UTC 2015, provider=virtualbox, storagedriver=aufs
- swarm-node-01: 192.168.99.103:2376
-  └ Containers: 2
-  └ Reserved CPUs: 0 / 1
-  └ Reserved Memory: 0 B / 1.022 GiB
-  └ Labels: executiondriver=native-0.2, kernelversion=4.0.5-boot2docker, operatingsystem=Boot2Docker 1.7.0 (TCL 6.3); master : 7960f90 - Thu Jun 18 18:31:45 UTC 2015, provider=virtualbox, storagedriver=aufs
- swarm-node-02: 192.168.99.104:2376
-  └ Containers: 3
-  └ Reserved CPUs: 0 / 1
-  └ Reserved Memory: 0 B / 1.022 GiB
-  └ Labels: executiondriver=native-0.2, kernelversion=4.0.5-boot2docker, operatingsystem=Boot2Docker 1.7.0 (TCL 6.3); master : 7960f90 - Thu Jun 18 18:31:45 UTC 2015, provider=virtualbox, storagedriver=aufs
-CPUs: 3
-Total Memory: 3.065 GiB
+eval "$(docker-machine env swarm-master)"
+docker network ls
+NETWORK ID          NAME                      DRIVER
+1c041242f51d        wildflycouchbasejavaee7   overlay             
+879d6167be47        bridge                    bridge              
+5b5bcf135d7b        none                      null                
+fffc34eae907        host                      host                
+cc8697c6ce13        docker_gwbridge           bridge            
 ----
 +
-. Connect to '`swarm-node-02`' again:
-
-  eval "$(docker-machine env swarm-node-02)"
-+
-and see the list of running containers as:
+Next, with `swarm-node-01`:
 +
 [source, text]
 ----
-docker ps -a
-CONTAINER ID        IMAGE                             COMMAND                CREATED             STATUS              PORTS                    NAMES
-b1e7d9bd2c09        arungupta/wildfly-mysql-javaee7   "/opt/jboss/wildfly/   38 seconds ago      Up 37 seconds       0.0.0.0:8080->8080/tcp   wildflymysqljavaee7_mywildfly_1   
-ac9c967e4b1d        mysql:latest                      "/entrypoint.sh mysq   38 seconds ago      Up 38 seconds       3306/tcp                 wildflymysqljavaee7_mysqldb_1     
-45b015bc79f4        swarm:latest                      "/swarm join --addr    20 minutes ago      Up 20 minutes       2375/tcp                 swarm-agent 
+eval "$(docker-machine env swarm-node-01)"
+docker network ls
+NETWORK ID          NAME                      DRIVER
+1c041242f51d        wildflycouchbasejavaee7   overlay             
+d2f3b512f9dc        bridge                    bridge              
+f771ddc7d957        none                      null                
+e042754df336        host                      host                
+5e93fc34b4d9        docker_gwbridge           bridge
+----
++
+Finally with `swarm-node-02`:
++
+[source, text]
+----
+eval "$(docker-machine env swarm-node-02)"
+docker network ls
+NETWORK ID          NAME                      DRIVER
+1c041242f51d        wildflycouchbasejavaee7   overlay             
+e0b73c96ffec        none                      null                
+b315e67f0363        host                      host                
+33a619ddc5d2        bridge                    bridge 
+----
++
+As seen, `wildflycouchbasejavaee7` overlay network exists on all Machines. This confirms that the overlay network created for Swarm cluster was added to each host in the cluster. `docker_gwbridge` only exists on Machines that have application containers running.
++
+Read more about https://docs.docker.com/engine/userguide/networking/dockernetworks/[Docker Networks].
++
+. Verify that WildFly and Couchbase are running:
++
+[source, text]
+----
+docker ps
+CONTAINER ID        IMAGE                     COMMAND                  CREATED             STATUS              PORTS                                                                                                             NAMES
+23a581295a2b        couchbase/server          "/entrypoint.sh couch"   9 seconds ago       Up 8 seconds        192.168.99.102:8091-8093->8091-8093/tcp, 11207/tcp, 11211/tcp, 192.168.99.102:11210->11210/tcp, 18091-18092/tcp   swarm-master/db
+7a8a885b23f3        arungupta/wildfly-admin   "/opt/jboss/wildfly/b"   9 seconds ago       Up 8 seconds        192.168.99.103:8080->8080/tcp, 192.168.99.103:9990->9990/tcp                                                      swarm-node-01/wildflycouchbasejavaee7_mywildfly_1
+----
++
+Note that Couchbase server is running on `swarm-master` node and WildFly is running on `swarm-node-01`.
+
+#### Configure Couchbase server
+
+. Clone https://github.com/arun-gupta/couchbase-javaee.git. This workspace contains a simple Java EE application that is deployed on WildFly and provides a REST API over `travel-sample` bucket in Couchbase.
+. Couchbase server can be configured using http://developer.couchbase.com/documentation/server/4.0/rest-api/rest-endpoints-all.html[REST API]. The application contains a Maven profile that allows to configure Couchbase server with `travel-sample` bucket. This can be invoked as:
++
+[source, text]
+----
+mvn install -Pcouchbase -Ddocker.host=$(docker-machine ip swarm-master)
+
+. . .
+
+* Server auth using Basic with user 'Administrator'
+> POST /sampleBuckets/install HTTP/1.1
+> Authorization: Basic QWRtaW5pc3RyYXRvcjpwYXNzd29yZA==
+
+. . .
+
+} [data not shown]
+* upload completely sent off: 17 out of 17 bytes
+< HTTP/1.1 202 Accepted
+* Server Couchbase Server is not blacklisted
+< Server: Couchbase Server
+
+. . .
 ----
 
-. Application can then be accessed again using:
+#### Deploy Application
 
-  curl http://$(docker-machine ip swarm-node-02):8080/employees/resources/employees
-+
-and shows the output as:
-+
-[source, xml]
+Deploy the application to WildFly by specifying three parameters:
+
+. Host IP address where WildFly is running
+. Username and password of a user in WildFly's administrative realm
+
+[source, text]
 ----
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?><collection><employee><id>1</id><name>Penny</name></employee><employee><id>2</id><name>Sheldon</name></employee><employee><id>3</id><name>Amy</name></employee><employee><id>4</id><name>Leonard</name></employee><employee><id>5</id><name>Bernadette</name></employee><employee><id>6</id><name>Raj</name></employee><employee><id>7</id><name>Howard</name></employee><employee><id>8</id><name>Priya</name></employee></collection>
+mvn install -Pwildfly -Dwildfly.hostname=$(docker-machine ip swarm-node-01) -Dwildfly.username=admin -Dwildfly.password=Admin#007
+
+. . .
+
+Nov 29, 2015 12:11:14 AM org.xnio.Xnio <clinit>
+INFO: XNIO version 3.3.1.Final
+Nov 29, 2015 12:11:14 AM org.xnio.nio.NioXnio <clinit>
+INFO: XNIO NIO Implementation Version 3.3.1.Final
+Nov 29, 2015 12:11:15 AM org.jboss.remoting3.EndpointImpl <clinit>
+INFO: JBoss Remoting version 4.0.9.Final
+[INFO] Authenticating against security realm: ManagementRealm
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+
+. . .
 ----
+
+#### Access Application
+
+Now that WildFly and Couchbase server have started, lets access the application. You need to specify IP address of the Machine where WildFly is running:
+
+[source, text]
+----
+curl http://$(docker-machine ip swarm-node-01):8080/couchbase-javaee/resources/airline
+[{"travel-sample":{"id":10123,"iata":"TQ","icao":"TXW","name":"Texas Wings","callsign":"TXW","type":"airline","country":"United States"}}, {"travel-sample":{"id":10642,"iata":null,"icao":"JRB","name":"Jc royal.britannica","callsign":null,"type":"airline","country":"United Kingdom"}}, {"travel-sample":{"id":112,"iata":"5W","icao":"AEU","name":"Astraeus","callsign":"FLYSTAR","type":"airline","country":"United Kingdom"}}, {"travel-sample":{"id":1355,"iata":"BA","icao":"BAW","name":"British Airways","callsign":"SPEEDBIRD","type":"airline","country":"United Kingdom"}}, {"travel-sample":{"id":10765,"iata":"K5","icao":"SQH","name":"SeaPort Airlines","callsign":"SASQUATCH","type":"airline","country":"United States"}}, {"travel-sample":{"id":13633,"iata":"WQ","icao":"PQW","name":"PanAm World Airways","callsign":null,"type":"airline","country":"United States"}}, {"travel-sample":{"id":139,"iata":"SB","icao":"ACI","name":"Air Caledonie International","callsign":"AIRCALIN","type":"airline","country":"France"}}, {"travel-sample":{"id":13391,"iata":"-+","icao":"--+","name":"U.S. Air","callsign":null,"type":"airline","country":"United States"}}, {"travel-sample":{"id":1191,"iata":"UU","icao":"REU","name":"Air Austral","callsign":"REUNION","type":"airline","country":"France"}}, {"travel-sample":{"id":1316,"iata":"FL","icao":"TRS","name":"AirTran Airways","callsign":"CITRUS","type":"airline","country":"United States"}}]
+----
+
+Check state of the cluster by connecting to different nodes.
 
 Add container visualiation using https://github.com/javaee-samples/docker-java/issues/55.

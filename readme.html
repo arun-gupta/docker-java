@@ -542,9 +542,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#Docker_Swarm">Deploy Application on Docker Swarm Cluster</a>
 <ul class="sectlevel2">
 <li><a href="#_key_components_of_docker_swarm">Key Components of Docker Swarm</a></li>
-<li><a href="#_create_a_docker_swarm_cluster">Create a Docker Swarm Cluster</a></li>
-<li><a href="#_deploy_java_ee_application_to_docker_swarm_cluster">Deploy Java EE Application to Docker Swarm Cluster</a></li>
-<li><a href="#_deploy_java_ee_application_to_docker_swarm_cluster_using_docker_compose">Deploy Java EE Application to Docker Swarm Cluster using Docker Compose</a></li>
+<li><a href="#_create_discovery_service">Create Discovery Service</a></li>
+<li><a href="#_create_docker_swarm_cluster_2">Create Docker Swarm Cluster</a></li>
+<li><a href="#_deploy_application_to_docker_swarm_cluster">Deploy Application to Docker Swarm Cluster</a>
+<ul class="sectlevel3">
+<li><a href="#_start_application_environment_using_docker_compose">Start Application Environment Using Docker Compose</a></li>
+<li><a href="#_configure_couchbase_server">Configure Couchbase server</a></li>
+<li><a href="#_deploy_application">Deploy Application</a></li>
+<li><a href="#_access_application">Access Application</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_deploy_application_on_kubernetes_cluster">Deploy Application on Kubernetes Cluster</a>
@@ -569,6 +576,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_deploy_java_ee_application_one_configuration_file">Deploy Java EE Application (one configuration file)</a></li>
 <li><a href="#_rescheduling_pods">Rescheduling Pods</a></li>
 <li><a href="#_scaling_pods">Scaling Pods</a></li>
+<li><a href="#_couchbase_cluster_and_persistent_volumes">Couchbase Cluster and Persistent Volumes</a>
+<ul class="sectlevel3">
+<li><a href="#_create_kubernetes_resources">Create Kubernetes resources</a></li>
+<li><a href="#_initialize_couchbase_cluster">Initialize Couchbase Cluster</a></li>
+<li><a href="#_add_a_new_couchbase_server_to_the_cluster">Add a new Couchbase server to the cluster</a></li>
+</ul>
+</li>
 <li><a href="#_application_logs">Application Logs</a></li>
 <li><a href="#_delete_kubernetes_resources">Delete Kubernetes Resources</a></li>
 <li><a href="#_stop_kubernetes_cluster">Stop Kubernetes Cluster</a></li>
@@ -3486,7 +3500,7 @@ mywildfly:
 <h2 id="Docker_Swarm">Deploy Application on Docker Swarm Cluster</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Docker Swarm is native clustering for Docker. It allows you create and access to a pool of Docker hosts using the full suite of Docker tools. Because Docker Swarm serves the standard Docker API, any tool that already communicates with a Docker daemon can use Swarm to transparently scale to multiple hosts</p>
+<p>Docker Swarm is native clustering for Docker. It allows you create and access to a pool of Docker hosts using the full suite of Docker tools. Because Docker Swarm serves the standard Docker API, any tool that already communicates with a Docker daemon can use Swarm to transparently scale to multiple hosts.</p>
 </div>
 <div class="sect2">
 <h3 id="_key_components_of_docker_swarm">Key Components of Docker Swarm</h3>
@@ -3497,7 +3511,7 @@ mywildfly:
 <div class="title">Figure 40. Key Components of Docker Swarm</div>
 </div>
 <div class="paragraph">
-<p><strong>Swarm Manager</strong>: Docker Swarm has a Manager, that is a pre-defined Docker Host, and is a single point for all administration. The swarm manager orchestrates and schedules containers on the entire cluster. Currently only a single instance of manager is allowed in the cluster. This is a SPOF for high availability architectures and additional managers will be allowed in a future version of Swarm with <a href="https://github.com/docker/swarm/issues/598">#598</a>.</p>
+<p><strong>Swarm Manager</strong>: Docker Swarm has a Manager, that is a pre-defined Docker Host, and is a single point for all administration. Swarm manager orchestrates and schedules containers on the entire cluster. Swarm Manager can be configured in <a href="https://docs.docker.com/swarm/multi-manager-setup/">High Availability</a>.</p>
 </div>
 <div class="paragraph">
 <p><strong>Swarm Nodes</strong>: The containers are deployed on Nodes that are additional Docker Hosts. Each Swarm Node must be accessible by the manager, each node must listen to the same network interface (TCP port). Each node runs a Docker Swarm agent that registers the referenced Docker daemon, monitors it, and updates the discovery backend with the node’s status. The containers run on a node.</p>
@@ -3506,86 +3520,168 @@ mywildfly:
 <p><strong>Scheduler Strategy</strong>: Different scheduler strategies (&#8220;binpack&#8221;, &#8220;spread&#8221; (default), and &#8220;random&#8221;) can be applied to pick the best node to run your container. The default strategy optimizes the node for least number of running containers. There are multiple kinds of filters, such as constraints and affinity.  This should allow for a decent scheduling algorithm.</p>
 </div>
 <div class="paragraph">
-<p><strong>Node Discovery Service</strong>: By default, Swarm uses hosted discovery service, based on Docker Hub, using tokens to discover nodes that are part of a cluster. However etcd, consul, and ZooKeeper can be also be used for service discovery as well. This is particularly useful if there is no access to Internet, or you are running the setup in a closed network. A new discovery backend can be created as explained here. It would be useful to have the hosted Discovery Service inside the firewall and <a href="https://github.com/docker/swarm/issues/660">#660</a> will discuss this.</p>
+<p><strong>Node Discovery Service</strong>: Swarm manager talks to a hosted discovery service. This service maintains a list of IPs in Swarm cluster. Docker Hub hosts a discovery service that can be used during development. In production, this is replaced by other services such as <code>etcd</code>, <code>consul</code>, or <code>zookeeper</code>. You can even use a static file. This is particularly useful if there is no access to Internet, or you are running the setup in a closed network.</p>
 </div>
 <div class="paragraph">
-<p><strong>Standard Docker API:</strong> Docker Swarm serves the standard Docker API and thus any tool that talks to a single Docker host will seamlessly scale to multiple hosts now. That means that if you were using shell scripts using Docker CLI to configure multiple Docker hosts, the same CLI would can now talk to Swarm cluster and Docker Swarm will then act as proxy and run it on the cluster.</p>
+<p><strong>Standard Docker API:</strong> Docker Swarm serves the standard Docker API and thus any tool that talks to a single Docker host will seamlessly scale to multiple hosts now. That means that if you were using shell scripts using Docker CLI to configure multiple Docker hosts, the same CLI would can now talk to Swarm cluster.</p>
 </div>
 <div class="paragraph">
-<p>There are lots of other concepts but these are the main ones.</p>
+<p>There are a lots of other concepts but these are the main ones.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_create_a_docker_swarm_cluster">Create a Docker Swarm Cluster</h3>
+<h3 id="_create_discovery_service">Create Discovery Service</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>The easiest way of using Swarm is, by using the official Docker image:</p>
+<p>Create a Machine that will host discovery service:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">docker-machine create -d=virtualbox consul-machine
+Running pre-create checks...
+Creating machine...
+Waiting for machine to be running, this may take a few minutes...
+Machine is running, waiting for SSH to be available...
+Detecting operating system of created instance...
+Provisioning created instance...
+Copying certs to the local machine directory...
+Copying certs to the remote machine...
+Setting Docker configuration on the remote daemon...
+To see how to connect Docker to this machine, run: docker-machine env consul-machine</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Connect to this Machine:</p>
 <div class="literalblock">
 <div class="content">
-<pre>docker run swarm create</pre>
+<pre>eval $(docker-machine env consul-machine)</pre>
 </div>
-</div>
-<div class="paragraph">
-<p>This command returns a discovery token, referred as &lt;TOKEN&gt; in this document, and is the unique cluster id. It will be used when creating master and nodes later. This cluster id is returned by the hosted discovery service on Docker Hub.</p>
-</div>
-<div class="paragraph">
-<p>It shows the output as:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">docker run swarm create
-Unable to find image 'swarm:latest' locally
-latest: Pulling from swarm
-55b38848634f: Pull complete
-fd7bc7d11a30: Pull complete
-db039e91413f: Pull complete
-1e5a49ab6458: Pull complete
-5d9ce3cdadc7: Pull complete
-1f26e949f933: Pull complete
-e08948058bed: Already exists
-swarm:latest: The image you are pulling has been verified. Important: image verification is a tech preview feature and should not be relied on to provide security.
-Digest: sha256:0e417fe3f7f2c7683599b94852e4308d1f426c82917223fccf4c1c4a4eddb8ef
-Status: Downloaded newer image for swarm:latest
-1d528bf0568099a452fef5c029f39b85</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The last line is the &lt;TOKEN&gt;.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-Make sure to note this cluster id now as there is no means to list it later. This should be fixed with <a href="https://github.com/docker/swarm/issues/661">#661</a>.
-</td>
-</tr>
-</table>
 </div>
 </li>
 <li>
-<p>Swarm is fully integrated with Docker Machine, and so is the easiest way to get started. Let&#8217;s create a Swarm Master next:</p>
+<p>Run Consul service using the following Compose file:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">docker-machine create -d virtualbox --swarm --swarm-master --swarm-discovery token://&lt;TOKEN&gt; swarm-master</code></pre>
+<pre class="highlight"><code class="language-text" data-lang="text">myconsul:
+  image: progrium/consul
+  restart: always
+  hostname: consul
+  ports:
+    - 8500:8500
+  command: "-server -bootstrap"</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Replace <code>&lt;TOKEN&gt;</code> with the cluster id obtained in the previous step.</p>
+<p>This service is started as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">docker-compose up -d
+Pulling myconsul (progrium/consul:latest)...
+latest: Pulling from progrium/consul
+3b4d28ce80e4: Pull complete
+e5ab901dcf2d: Pull complete
+30ad296c0ea0: Pull complete
+3dba40dec256: Pull complete
+f2ef4387b95e: Pull complete
+53bc8dcc4791: Pull complete
+75ed0b50ba1d: Pull complete
+17c3a7ed5521: Pull complete
+8aca9e0ecf68: Pull complete
+4d1828359d36: Pull complete
+46ed7df7f742: Pull complete
+b5e8ce623ef8: Pull complete
+049dca6ef253: Pull complete
+bdb608bc4555: Pull complete
+8b3d489cfb73: Pull complete
+c74500bbce24: Pull complete
+9f3e605442f6: Pull complete
+d9125e9e799b: Pull complete
+Digest: sha256:8cc8023462905929df9a79ff67ee435a36848ce7a10f18d6d0faba9306b97274
+Status: Downloaded newer image for progrium/consul:latest
+Creating consul_myconsul_1</code></pre>
+</div>
 </div>
 <div class="paragraph">
-<p><code>--swarm</code> configures the machine with Swarm, <code>--swarm-master</code> configures the created machine to be Swarm master. Swarm master creation talks to the hosted service on Docker Hub and informs that a master is created in the cluster.</p>
+<p>Started container can be verified as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                                                                            NAMES
+f05d8dd11e7f        progrium/consul     "/bin/start -server -"   30 seconds ago      Up 29 seconds       53/tcp, 53/udp, 8300-8302/tcp, 8400/tcp, 0.0.0.0:8500-&gt;8500/tcp, 8301-8302/udp   consul_myconsul_1</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_create_docker_swarm_cluster_2">Create Docker Swarm Cluster</h3>
+<div class="paragraph">
+<p>Swarm is fully integrated with Machine, and so is the easiest way to get started.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Create a Swarm Master and point to the Consul discovery service:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">docker-machine create -d virtualbox --virtualbox-disk-size "5000" --swarm --swarm-master --swarm-discovery="consul://$(docker-machine ip consul-machine):8500" --engine-opt="cluster-store=consul://$(docker-machine ip consul-machine):8500" --engine-opt="cluster-advertise=eth1:2376" swarm-master
+Running pre-create checks...
+Creating machine...
+Waiting for machine to be running, this may take a few minutes...
+Machine is running, waiting for SSH to be available...
+Detecting operating system of created instance...
+Provisioning created instance...
+Copying certs to the local machine directory...
+Copying certs to the remote machine...
+Setting Docker configuration on the remote daemon...
+Configuring swarm...
+To see how to connect Docker to this machine, run: docker-machine env swarm-master</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Four options to look here:</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p><code>--swarm-discovery</code> defines address of the discovery service</p>
+</li>
+<li>
+<p><code>--cluster-advertise</code> advertise the machine on the network</p>
+</li>
+<li>
+<p><code>--cluster-store</code> designate a distributed k/v storage backend for the cluster</p>
+</li>
+<li>
+<p><code>--virtualbox-disk-size</code> sets the disk size for the created Machine to 5GB</p>
+<div class="paragraph">
+<p><code>--swarm</code> configures the Machine with Swarm, <code>--swarm-master</code> configures the created Machine to be Swarm master.</p>
+</div>
+</li>
+</ol>
 </div>
 </li>
 <li>
-<p>Connect to this newly created master and find some more information about it:</p>
+<p>Find some information about this machine:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">eval "$(docker-machine env swarm-master)"
-docker info</code></pre>
+<pre class="highlight"><code class="language-json" data-lang="json">docker-machine inspect --format='{{json .Driver}}'  swarm-master
+{"Boot2DockerImportVM":"","Boot2DockerURL":"","CPU":1,"DiskSize":5000,"HostOnlyCIDR":"192.168.99.1/24","HostOnlyNicType":"82540EM","HostOnlyPromiscMode":"deny","IPAddress":"192.168.99.102","MachineName":"swarm-master","Memory":1024,"NoShare":false,"SSHPort":51972,"SSHUser":"docker","StorePath":"/Users/arungupta/.docker/machine","SwarmDiscovery":"consul://192.168.99.100:8500","SwarmHost":"tcp://0.0.0.0:3376","SwarmMaster":true,"VBoxManager":{}}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that the disk size is 5GB.</p>
+</div>
+</li>
+<li>
+<p>Connecting to the master by using the command:</p>
+<div class="literalblock">
+<div class="content">
+<pre>eval "$(docker-machine env --swarm swarm-master)"</pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -3600,89 +3696,87 @@ If you&#8217;re on Windows, use the <code>docker-machine env swarm-master</code>
 </tr>
 </table>
 </div>
-<div class="paragraph">
-<p>This will show the output as:</p>
-</div>
+</li>
+<li>
+<p>Find some information about the cluster:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">&gt; docker info
+<pre class="highlight"><code class="language-text" data-lang="text">docker info
 Containers: 2
-Images: 7
-Storage Driver: aufs
- Root Dir: /mnt/sda1/var/lib/docker/aufs
- Backing Filesystem: extfs
- Dirs: 11
- Dirperm1 Supported: true
-Execution Driver: native-0.2
-Logging Driver: json-file
-Kernel Version: 4.0.5-boot2docker
-Operating System: Boot2Docker 1.7.0 (TCL 6.3); master : 7960f90 - Thu Jun 18 18:31:45 UTC 2015
+Images: 1
+Role: primary
+Strategy: spread
+Filters: health, port, dependency, affinity, constraint
+Nodes: 1
+ swarm-master: 192.168.99.102:2376
+  └ Containers: 2
+  └ Reserved CPUs: 0 / 1
+  └ Reserved Memory: 0 B / 1.021 GiB
+  └ Labels: executiondriver=native-0.2, kernelversion=4.1.13-boot2docker, operatingsystem=Boot2Docker 1.9.1 (TCL 6.4.1); master : cef800b - Fri Nov 20 19:33:59 UTC 2015, provider=virtualbox, storagedriver=aufs
 CPUs: 1
-Total Memory: 996.2 MiB
-Name: swarm-master
-ID: DLFR:OQ3E:B5P6:HFFD:VKLI:IOLU:URNG:HML5:UHJF:6JCL:ITFH:DS6J
-Debug mode (server): true
-File Descriptors: 22
-Goroutines: 36
-System Time: 2015-07-11T00:16:34.29965306Z
-EventsListeners: 1
-Init SHA1:
-Init Path: /usr/local/bin/docker
-Docker Root Dir: /mnt/sda1/var/lib/docker
-Username: arungupta
-Registry: https://index.docker.io/v1/
-Labels:
- provider=virtualbox</code></pre>
+Total Memory: 1.021 GiB
+Name: d074fd97682e</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This cluster has one node and that one node has two containers.</p>
+</div>
+</li>
+<li>
+<p>Create a new Machine to join this cluster:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">docker-machine create -d virtualbox --virtualbox-disk-size "5000" --swarm --swarm-discovery="consul://$(docker-machine ip consul-machine):8500" --engine-opt="cluster-store=consul://$(docker-machine ip consul-machine):8500" --engine-opt="cluster-advertise=eth1:2376" swarm-node-01
+Running pre-create checks...
+Creating machine...
+Waiting for machine to be running, this may take a few minutes...
+Machine is running, waiting for SSH to be available...
+Detecting operating system of created instance...
+Provisioning created instance...
+Copying certs to the local machine directory...
+Copying certs to the remote machine...
+Setting Docker configuration on the remote daemon...
+Configuring swarm...
+To see how to connect Docker to this machine, run: docker-machine env swarm-node-01</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Notice no <code>--swarm-master</code> is specified in this command. This ensure that the created Machines are <em>worker</em> nodes.</p>
+</div>
+</li>
+<li>
+<p>Create a second Swarm node to join this cluster:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">docker-machine create -d virtualbox --virtualbox-disk-size "5000" --swarm --swarm-discovery="consul://$(docker-machine ip consul-machine):8500" --engine-opt="cluster-store=consul://$(docker-machine ip consul-machine):8500" --engine-opt="cluster-advertise=eth1:2376" swarm-node-02
+Running pre-create checks...
+Creating machine...
+Waiting for machine to be running, this may take a few minutes...
+Machine is running, waiting for SSH to be available...
+Detecting operating system of created instance...
+Provisioning created instance...
+Copying certs to the local machine directory...
+Copying certs to the remote machine...
+Setting Docker configuration on the remote daemon...
+Configuring swarm...
+To see how to connect Docker to this machine, run: docker-machine env swarm-node-02</code></pre>
 </div>
 </div>
 </li>
 <li>
-<p>Create a Swarm node</p>
-<div class="literalblock">
-<div class="content">
-<pre>docker-machine create -d virtualbox --swarm --swarm-discovery token://&lt;TOKEN&gt; swarm-node-01</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Replace <code>&lt;TOKEN&gt;</code> with the cluster id obtained in an earlier step.</p>
-</div>
-<div class="paragraph">
-<p>Node creation talks to the hosted service at Docker Hub and joins the previously created cluster. This is specified by <code>--swarm-discovery token://&#8230;&#8203;</code> and specifying the cluster id obtained earlier.</p>
-</div>
-</li>
-<li>
-<p>To make it a real cluster, let&#8217;s create a second node:</p>
-<div class="literalblock">
-<div class="content">
-<pre>docker-machine create -d virtualbox --swarm --swarm-discovery token://&lt;TOKEN&gt; swarm-node-02</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Replace <code>&lt;TOKEN&gt;</code> with the cluster id obtained in the previous step.</p>
-</div>
-</li>
-<li>
-<p>List all the nodes created so far:</p>
-<div class="literalblock">
-<div class="content">
-<pre>docker-machine ls</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This shows the output similar to the one below:</p>
-</div>
+<p>List all the created Machines:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-text" data-lang="text">docker-machine ls
-NAME            ACTIVE   DRIVER       STATE     URL                         SWARM
-default         -        virtualbox   Running   tcp://192.168.99.100:2376
-swarm-master    *        virtualbox   Running   tcp://192.168.99.102:2376   swarm-master (master)
-swarm-node-01   -        virtualbox   Running   tcp://192.168.99.103:2376   swarm-master
-swarm-node-02   -        virtualbox   Running   tcp://192.168.99.104:2376   swarm-master</code></pre>
+NAME             ACTIVE   DRIVER       STATE     URL                         SWARM
+consul-machine   -        virtualbox   Running   tcp://192.168.99.100:2376
+swarm-master     *        virtualbox   Running   tcp://192.168.99.101:2376   swarm-master (master)
+swarm-node-01    -        virtualbox   Running   tcp://192.168.99.102:2376   swarm-master
+swarm-node-02    -        virtualbox   Running   tcp://192.168.99.103:2376   swarm-master</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The machines that are part of the cluster have the cluster’s name in the SWARM column, blank otherwise. For example, &#8220;default&#8221; is standalone machines where as all other machines are part of the &#8220;swarm-master&#8221; cluster. The Swarm master is also identified by (master) in the SWARM column.</p>
+<p>The machines that are part of the cluster have cluster’s name in the SWARM column, blank otherwise. For example, &#8220;consul-machine&#8221; is a standalone machine where as all other machines are part of the &#8220;swarm-master&#8221; cluster. The Swarm master is also identified by (master) in the SWARM column.</p>
 </div>
 </li>
 <li>
@@ -3694,56 +3788,52 @@ docker info</pre>
 </div>
 </div>
 <div class="paragraph">
+<p>Note, <code>--swarm</code> is specified to connect to the Swarm cluster. Otherwise the command will connect to <code>swarm-master</code> only.</p>
+</div>
+<div class="paragraph">
 <p>This shows the output as:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">&gt; docker info
+<pre class="highlight"><code class="language-text" data-lang="text">docker info
 Containers: 4
 Images: 3
 Role: primary
 Strategy: spread
-Filters: affinity, health, constraint, port, dependency
+Filters: health, port, dependency, affinity, constraint
 Nodes: 3
  swarm-master: 192.168.99.102:2376
   └ Containers: 2
   └ Reserved CPUs: 0 / 1
-  └ Reserved Memory: 0 B / 1.022 GiB
-  └ Labels: executiondriver=native-0.2, kernelversion=4.0.5-boot2docker, operatingsystem=Boot2Docker 1.7.0 (TCL 6.3); master : 7960f90 - Thu Jun 18 18:31:45 UTC 2015, provider=virtualbox, storagedriver=aufs
+  └ Reserved Memory: 0 B / 1.021 GiB
+  └ Labels: executiondriver=native-0.2, kernelversion=4.1.13-boot2docker, operatingsystem=Boot2Docker 1.9.1 (TCL 6.4.1); master : cef800b - Fri Nov 20 19:33:59 UTC 2015, provider=virtualbox, storagedriver=aufs
  swarm-node-01: 192.168.99.103:2376
   └ Containers: 1
   └ Reserved CPUs: 0 / 1
-  └ Reserved Memory: 0 B / 1.022 GiB
-  └ Labels: executiondriver=native-0.2, kernelversion=4.0.5-boot2docker, operatingsystem=Boot2Docker 1.7.0 (TCL 6.3); master : 7960f90 - Thu Jun 18 18:31:45 UTC 2015, provider=virtualbox, storagedriver=aufs
+  └ Reserved Memory: 0 B / 1.021 GiB
+  └ Labels: executiondriver=native-0.2, kernelversion=4.1.13-boot2docker, operatingsystem=Boot2Docker 1.9.1 (TCL 6.4.1); master : cef800b - Fri Nov 20 19:33:59 UTC 2015, provider=virtualbox, storagedriver=aufs
  swarm-node-02: 192.168.99.104:2376
   └ Containers: 1
   └ Reserved CPUs: 0 / 1
-  └ Reserved Memory: 0 B / 1.022 GiB
-  └ Labels: executiondriver=native-0.2, kernelversion=4.0.5-boot2docker, operatingsystem=Boot2Docker 1.7.0 (TCL 6.3); master : 7960f90 - Thu Jun 18 18:31:45 UTC 2015, provider=virtualbox, storagedriver=aufs
+  └ Reserved Memory: 0 B / 1.021 GiB
+  └ Labels: executiondriver=native-0.2, kernelversion=4.1.13-boot2docker, operatingsystem=Boot2Docker 1.9.1 (TCL 6.4.1); master : cef800b - Fri Nov 20 19:33:59 UTC 2015, provider=virtualbox, storagedriver=aufs
 CPUs: 3
-Total Memory: 3.065 GiB</code></pre>
+Total Memory: 3.064 GiB
+Name: d074fd97682e</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>There are 3 nodes – one Swarm master and 2 Swarm nodes. There is a total of 4 containers running in this cluster – one Swarm agent on master and each node, and there is an additional swarm-agent-master running on the master. This can be verified by connecting to the master and listing all the containers.</p>
+<p>There are 3 nodes – one Swarm master and 2 Swarm <em>worker</em> nodes. There is a total of 4 containers running in this cluster – one Swarm agent on master and each node, and there is an additional swarm-agent-master running on the master. This can be verified by connecting to the master and listing all the containers.</p>
 </div>
 </li>
 <li>
 <p>List nodes in the cluster with the following command:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">docker run swarm list token://&lt;TOKEN&gt;</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This shows the output as:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">&gt; docker run swarm list token://1d528bf0568099a452fef5c029f39b85
+<pre class="highlight"><code class="language-text" data-lang="text">docker run swarm list consul://$(docker-machine ip consul-machine):8500
+192.168.99.102:2376
 192.168.99.103:2376
-192.168.99.104:2376
-192.168.99.102:2376</code></pre>
+192.168.99.104:2376</code></pre>
 </div>
 </div>
 </li>
@@ -3751,214 +3841,331 @@ Total Memory: 3.065 GiB</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_deploy_java_ee_application_to_docker_swarm_cluster">Deploy Java EE Application to Docker Swarm Cluster</h3>
+<h3 id="_deploy_application_to_docker_swarm_cluster">Deploy Application to Docker Swarm Cluster</h3>
 <div class="paragraph">
-<p>The complete cluster is in place now, and we need to deploy the Java EE application to it.</p>
+<p>The cluster is now ready and we need to deploy our application to it.</p>
 </div>
 <div class="paragraph">
-<p>Swarm takes care for the distribution of deployments across the nodes. The only thing, we need to do is to deploy the application as already explained in <a href="#JavaEE7_Container_Linking">Deploy Java EE 7 Application (Container Linking)</a>.</p>
+<p>This application will provide a CRUD/REST interface on a data bucket in Couchbase. This is achieved by using a Java EE application deployed on WildFly and accessing the database. Follow the steps to deploy and access the application:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Start MySQL server as:</p>
+<p>Start application environment using Docker Compose (WildFly and Couchbase)</p>
+</li>
+<li>
+<p>Configure Couchbase server and install <code>travel-sample</code> bucket</p>
+</li>
+<li>
+<p>Deploy the application</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Swarm takes care of distribution of deployments across the nodes.</p>
+</div>
+<div class="sect3">
+<h4 id="_start_application_environment_using_docker_compose">Start Application Environment Using Docker Compose</h4>
+<div class="paragraph">
+<p>Make sure you are connected to the cluster by giving the command <code>eval "$(docker-machine env --swarm swarm-master)"</code>.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>List all the networks created by Docker so far:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">docker run --name mysqldb -e MYSQL_USER=mysql -e MYSQL_PASSWORD=mysql -e MYSQL_DATABASE=sample -e MYSQL_ROOT_PASSWORD=supersecret -p 3306:3306 -d mysql</code></pre>
+<pre class="highlight"><code class="language-text" data-lang="text">docker network ls
+NETWORK ID          NAME                   DRIVER
+33a619ddc5d2        swarm-node-02/bridge   bridge
+e0b73c96ffec        swarm-node-02/none     null
+b315e67f0363        swarm-node-02/host     host
+879d6167be47        swarm-master/bridge    bridge
+f771ddc7d957        swarm-node-01/none     null
+e042754df336        swarm-node-01/host     host
+d2f3b512f9dc        swarm-node-01/bridge   bridge
+5b5bcf135d7b        swarm-master/none      null
+fffc34eae907        swarm-master/host      host</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p><code>-e</code> define environment variables that are read by the database at startup and allow us to access the database with this user and password.</p>
+<p>Docker create three networks for each host automatically:</p>
+</div>
+<table class="tableblock frame-all grid-all" style="width: 80%;">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Network Name</th>
+<th class="tableblock halign-left valign-top">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bridge</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Default network that containers connect to. This is <code>docker0</code> network in all Docker installations.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>none</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Container-specific networking stack</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>host</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Adds a container on hosts networking stack. Network configuration is identical to the host.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>This explains a total of nine networks, three for each node, as shown in this Swarm cluster.</p>
 </div>
 </li>
 <li>
-<p>Start WildFly and deploy Java EE 7 application as:</p>
+<p>Use Compose file to start WildFly and Couchbase:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">docker run -d --name mywildfly --link mysqldb:db -p 8080:8080 arungupta/wildfly-mysql-javaee7</code></pre>
+<pre class="highlight"><code class="language-text" data-lang="text">mycouchbase:
+  container_name: "db"
+  image: couchbase/server
+  ports:
+    - 8091:8091
+    - 8092:8092
+    - 8093:8093
+    - 11210:11210
+mywildfly:
+  image: arungupta/wildfly-admin
+  environment:
+    - COUCHBASE_URI=db
+  ports:
+    - 8080:8080
+    - 9990:9990</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This is using the <a href="https://docs.docker.com/userguide/dockerlinks/">Docker Container Linking</a> explained earlier.</p>
+<p>In this Compose file:</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Couchbase service has a custom container name defined by <code>container_name</code>. This name is used when creating a new environment variable <code>COUCHBASE_URI</code> during WildFly startup.</p>
+</li>
+<li>
+<p><code>arungupta/wildfly-admin</code> image is used as it binds WildFly’s management to all network interfaces, and in addition also exposes port 9990. This enables WildFly Maven Plugin to be used to deploy the application.</p>
+<div class="paragraph">
+<p>Source for this file is at <a href="https://github.com/arun-gupta/docker-images/blob/master/wildfly-couchbase-javaee7/docker-compose.yml" class="bare">https://github.com/arun-gupta/docker-images/blob/master/wildfly-couchbase-javaee7/docker-compose.yml</a>.</p>
+</div>
+<div class="paragraph">
+<p>This application environment can be started as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">docker-compose --x-networking up -d
+Creating network "wildflycouchbasejavaee7" with driver "None"
+Pulling mywildfly (arungupta/wildfly-admin:latest)...
+swarm-node-02: Pulling arungupta/wildfly-admin:latest... : downloaded
+swarm-master: Pulling arungupta/wildfly-admin:latest... : downloaded
+swarm-node-01: Pulling arungupta/wildfly-admin:latest... : downloaded
+Creating wildflycouchbasejavaee7_mywildfly_1
+Pulling mycouchbase (couchbase/server:latest)...
+swarm-node-02: Pulling couchbase/server:latest... : downloaded
+swarm-master: Pulling couchbase/server:latest... : downloaded
+swarm-node-01: Pulling couchbase/server:latest... : downloaded
+Creating db</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>--x-networking</code> creates an overlay network for the Swarm cluster. This can be verified by listing networks again:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">docker network ls
+NETWORK ID          NAME                            DRIVER
+5e93fc34b4d9        swarm-node-01/docker_gwbridge   bridge
+1c041242f51d        wildflycouchbasejavaee7         overlay
+cc8697c6ce13        swarm-master/docker_gwbridge    bridge
+f771ddc7d957        swarm-node-01/none              null
+879d6167be47        swarm-master/bridge             bridge
+5b5bcf135d7b        swarm-master/none               null
+fffc34eae907        swarm-master/host               host
+e042754df336        swarm-node-01/host              host
+d2f3b512f9dc        swarm-node-01/bridge            bridge
+33a619ddc5d2        swarm-node-02/bridge            bridge
+e0b73c96ffec        swarm-node-02/none              null
+b315e67f0363        swarm-node-02/host              host</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Three new networks are created:</p>
+</div>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>Containers connected to the multi-host network are automatically connected to the <code>docker_gwbridge</code> network. This network allows the containers to have external connectivity outside of their cluster, and is created on each worker node.</p>
+</li>
+<li>
+<p>A new overlay network <code>wildflycouchbasejavaee7</code> is created. Connect to different Swarm nodes and check that the overlay network exists on them.</p>
+<div class="paragraph">
+<p>Lets begin with master:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">eval "$(docker-machine env swarm-master)"
+docker network ls
+NETWORK ID          NAME                      DRIVER
+1c041242f51d        wildflycouchbasejavaee7   overlay
+879d6167be47        bridge                    bridge
+5b5bcf135d7b        none                      null
+fffc34eae907        host                      host
+cc8697c6ce13        docker_gwbridge           bridge</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Next, with <code>swarm-node-01</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">eval "$(docker-machine env swarm-node-01)"
+docker network ls
+NETWORK ID          NAME                      DRIVER
+1c041242f51d        wildflycouchbasejavaee7   overlay
+d2f3b512f9dc        bridge                    bridge
+f771ddc7d957        none                      null
+e042754df336        host                      host
+5e93fc34b4d9        docker_gwbridge           bridge</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Finally with <code>swarm-node-02</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">eval "$(docker-machine env swarm-node-02)"
+docker network ls
+NETWORK ID          NAME                      DRIVER
+1c041242f51d        wildflycouchbasejavaee7   overlay
+e0b73c96ffec        none                      null
+b315e67f0363        host                      host
+33a619ddc5d2        bridge                    bridge</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As seen, <code>wildflycouchbasejavaee7</code> overlay network exists on all Machines. This confirms that the overlay network created for Swarm cluster was added to each host in the cluster. <code>docker_gwbridge</code> only exists on Machines that have application containers running.</p>
+</div>
+<div class="paragraph">
+<p>Read more about <a href="https://docs.docker.com/engine/userguide/networking/dockernetworks/">Docker Networks</a>.</p>
+</div>
+</li>
+</ol>
+</div>
+</li>
+</ol>
 </div>
 </li>
 <li>
-<p>Check state of the cluster as:</p>
+<p>Verify that WildFly and Couchbase are running:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">&gt; docker info
-Containers: 7
-Images: 5
-Role: primary
-Strategy: spread
-Filters: affinity, health, constraint, port, dependency
-Nodes: 3
- swarm-master: 192.168.99.102:2376
-  └ Containers: 2
-  └ Reserved CPUs: 0 / 1
-  └ Reserved Memory: 0 B / 1.022 GiB
-  └ Labels: executiondriver=native-0.2, kernelversion=4.0.5-boot2docker, operatingsystem=Boot2Docker 1.7.0 (TCL 6.3); master : 7960f90 - Thu Jun 18 18:31:45 UTC 2015, provider=virtualbox, storagedriver=aufs
- swarm-node-01: 192.168.99.103:2376
-  └ Containers: 2
-  └ Reserved CPUs: 0 / 1
-  └ Reserved Memory: 0 B / 1.022 GiB
-  └ Labels: executiondriver=native-0.2, kernelversion=4.0.5-boot2docker, operatingsystem=Boot2Docker 1.7.0 (TCL 6.3); master : 7960f90 - Thu Jun 18 18:31:45 UTC 2015, provider=virtualbox, storagedriver=aufs
- swarm-node-02: 192.168.99.104:2376
-  └ Containers: 3
-  └ Reserved CPUs: 0 / 1
-  └ Reserved Memory: 0 B / 1.022 GiB
-  └ Labels: executiondriver=native-0.2, kernelversion=4.0.5-boot2docker, operatingsystem=Boot2Docker 1.7.0 (TCL 6.3); master : 7960f90 - Thu Jun 18 18:31:45 UTC 2015, provider=virtualbox, storagedriver=aufs
-CPUs: 3
-Total Memory: 3.065 GiB</code></pre>
+<pre class="highlight"><code class="language-text" data-lang="text">docker ps
+CONTAINER ID        IMAGE                     COMMAND                  CREATED             STATUS              PORTS                                                                                                             NAMES
+23a581295a2b        couchbase/server          "/entrypoint.sh couch"   9 seconds ago       Up 8 seconds        192.168.99.102:8091-8093-&gt;8091-8093/tcp, 11207/tcp, 11211/tcp, 192.168.99.102:11210-&gt;11210/tcp, 18091-18092/tcp   swarm-master/db
+7a8a885b23f3        arungupta/wildfly-admin   "/opt/jboss/wildfly/b"   9 seconds ago       Up 8 seconds        192.168.99.103:8080-&gt;8080/tcp, 192.168.99.103:9990-&gt;9990/tcp                                                      swarm-node-01/wildflycouchbasejavaee7_mywildfly_1</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>&#8220;swarm-node-02&#8221; is running three containers and so lets look at the list of running containers:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">&gt; eval "$(docker-machine env swarm-node-02)"
-&gt; docker ps -a
-CONTAINER ID        IMAGE                             COMMAND                CREATED              STATUS              PORTS                    NAMES
-805f3587f5df        arungupta/wildfly-mysql-javaee7   "/opt/jboss/wildfly/   About a minute ago   Up About a minute   0.0.0.0:8080-&gt;8080/tcp   mywildfly
-ababc544df97        mysql                             "/entrypoint.sh mysq   5 minutes ago        Up 5 minutes        0.0.0.0:3306-&gt;3306/tcp   mysqldb
-45b015bc79f4        swarm:latest                      "/swarm join --addr    17 minutes ago       Up 17 minutes       2375/tcp                 swarm-agent</code></pre>
-</div>
+<p>Note that Couchbase server is running on <code>swarm-master</code> node and WildFly is running on <code>swarm-node-01</code>.</p>
 </div>
 </li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_configure_couchbase_server">Configure Couchbase server</h4>
+<div class="olist arabic">
+<ol class="arabic">
 <li>
-<p>Access the application as:</p>
+<p>Clone <a href="https://github.com/arun-gupta/couchbase-javaee.git" class="bare">https://github.com/arun-gupta/couchbase-javaee.git</a>. This workspace contains a simple Java EE application that is deployed on WildFly and provides a REST API over <code>travel-sample</code> bucket in Couchbase.</p>
+</li>
+<li>
+<p>Couchbase server can be configured using <a href="http://developer.couchbase.com/documentation/server/4.0/rest-api/rest-endpoints-all.html">REST API</a>. The application contains a Maven profile that allows to configure Couchbase server with <code>travel-sample</code> bucket. This can be invoked as:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">curl http://$(docker-machine ip swarm-node-02):8080/employees/resources/employees</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>to see the output as:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;collection&gt;&lt;employee&gt;&lt;id&gt;1&lt;/id&gt;&lt;name&gt;Penny&lt;/name&gt;&lt;/employee&gt;&lt;employee&gt;&lt;id&gt;2&lt;/id&gt;&lt;name&gt;Sheldon&lt;/name&gt;&lt;/employee&gt;&lt;employee&gt;&lt;id&gt;3&lt;/id&gt;&lt;name&gt;Amy&lt;/name&gt;&lt;/employee&gt;&lt;employee&gt;&lt;id&gt;4&lt;/id&gt;&lt;name&gt;Leonard&lt;/name&gt;&lt;/employee&gt;&lt;employee&gt;&lt;id&gt;5&lt;/id&gt;&lt;name&gt;Bernadette&lt;/name&gt;&lt;/employee&gt;&lt;employee&gt;&lt;id&gt;6&lt;/id&gt;&lt;name&gt;Raj&lt;/name&gt;&lt;/employee&gt;&lt;employee&gt;&lt;id&gt;7&lt;/id&gt;&lt;name&gt;Howard&lt;/name&gt;&lt;/employee&gt;&lt;employee&gt;&lt;id&gt;8&lt;/id&gt;&lt;name&gt;Priya&lt;/name&gt;&lt;/employee&gt;&lt;/collection&gt;</code></pre>
+<pre class="highlight"><code class="language-text" data-lang="text">mvn install -Pcouchbase -Ddocker.host=$(docker-machine ip swarm-master)
+
+. . .
+
+* Server auth using Basic with user 'Administrator'
+&gt; POST /sampleBuckets/install HTTP/1.1
+&gt; Authorization: Basic QWRtaW5pc3RyYXRvcjpwYXNzd29yZA==
+
+. . .
+
+} [data not shown]
+* upload completely sent off: 17 out of 17 bytes
+&lt; HTTP/1.1 202 Accepted
+* Server Couchbase Server is not blacklisted
+&lt; Server: Couchbase Server
+
+. . .</code></pre>
 </div>
 </div>
 </li>
 </ol>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_deploy_java_ee_application_to_docker_swarm_cluster_using_docker_compose">Deploy Java EE Application to Docker Swarm Cluster using Docker Compose</h3>
+<div class="sect3">
+<h4 id="_deploy_application">Deploy Application</h4>
 <div class="paragraph">
-<p><a href="#Docker_Compose">Multiple Containers Using Docker Compose</a> explains how multi container applications can be easily started using Docker Compose.</p>
+<p>Deploy the application to WildFly by specifying three parameters:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Connect to &#8216;swarm-node-02&#8217;:</p>
-<div class="literalblock">
-<div class="content">
-<pre>eval "$(docker-machine env swarm-node-02)"</pre>
-</div>
-</div>
+<p>Host IP address where WildFly is running</p>
 </li>
 <li>
-<p>Stop the MySQL and WildFly containers:</p>
-<div class="literalblock">
-<div class="content">
-<pre>docker ps -a | grep wildfly | awk '{print $1}' | xargs docker rm -f
-docker ps -a | grep mysql | awk '{print $1}' | xargs docker rm -f</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Use the <code>docker-compose.yml</code> file explained in <a href="#Docker_Compose">Multiple Containers Using Docker Compose</a> to start the containers as:</p>
-<div class="literalblock">
-<div class="content">
-<pre>docker-compose up -d
-Creating wildflymysqljavaee7_mysqldb_1...
-Creating wildflymysqljavaee7_mywildfly_1...</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Check the containers running in the cluster as:</p>
-<div class="literalblock">
-<div class="content">
-<pre>eval "$(docker-machine env --swarm swarm-master)"
-docker info</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>to see the output as:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">docker info
-Containers: 7
-Images: 5
-Role: primary
-Strategy: spread
-Filters: affinity, health, constraint, port, dependency
-Nodes: 3
- swarm-master: 192.168.99.102:2376
-  └ Containers: 2
-  └ Reserved CPUs: 0 / 1
-  └ Reserved Memory: 0 B / 1.022 GiB
-  └ Labels: executiondriver=native-0.2, kernelversion=4.0.5-boot2docker, operatingsystem=Boot2Docker 1.7.0 (TCL 6.3); master : 7960f90 - Thu Jun 18 18:31:45 UTC 2015, provider=virtualbox, storagedriver=aufs
- swarm-node-01: 192.168.99.103:2376
-  └ Containers: 2
-  └ Reserved CPUs: 0 / 1
-  └ Reserved Memory: 0 B / 1.022 GiB
-  └ Labels: executiondriver=native-0.2, kernelversion=4.0.5-boot2docker, operatingsystem=Boot2Docker 1.7.0 (TCL 6.3); master : 7960f90 - Thu Jun 18 18:31:45 UTC 2015, provider=virtualbox, storagedriver=aufs
- swarm-node-02: 192.168.99.104:2376
-  └ Containers: 3
-  └ Reserved CPUs: 0 / 1
-  └ Reserved Memory: 0 B / 1.022 GiB
-  └ Labels: executiondriver=native-0.2, kernelversion=4.0.5-boot2docker, operatingsystem=Boot2Docker 1.7.0 (TCL 6.3); master : 7960f90 - Thu Jun 18 18:31:45 UTC 2015, provider=virtualbox, storagedriver=aufs
-CPUs: 3
-Total Memory: 3.065 GiB</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>Connect to &#8216;swarm-node-02&#8217; again:</p>
-<div class="literalblock">
-<div class="content">
-<pre>eval "$(docker-machine env swarm-node-02)"</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>and see the list of running containers as:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">docker ps -a
-CONTAINER ID        IMAGE                             COMMAND                CREATED             STATUS              PORTS                    NAMES
-b1e7d9bd2c09        arungupta/wildfly-mysql-javaee7   "/opt/jboss/wildfly/   38 seconds ago      Up 37 seconds       0.0.0.0:8080-&gt;8080/tcp   wildflymysqljavaee7_mywildfly_1
-ac9c967e4b1d        mysql:latest                      "/entrypoint.sh mysq   38 seconds ago      Up 38 seconds       3306/tcp                 wildflymysqljavaee7_mysqldb_1
-45b015bc79f4        swarm:latest                      "/swarm join --addr    20 minutes ago      Up 20 minutes       2375/tcp                 swarm-agent</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>Application can then be accessed again using:</p>
-<div class="literalblock">
-<div class="content">
-<pre>curl http://$(docker-machine ip swarm-node-02):8080/employees/resources/employees</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>and shows the output as:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;collection&gt;&lt;employee&gt;&lt;id&gt;1&lt;/id&gt;&lt;name&gt;Penny&lt;/name&gt;&lt;/employee&gt;&lt;employee&gt;&lt;id&gt;2&lt;/id&gt;&lt;name&gt;Sheldon&lt;/name&gt;&lt;/employee&gt;&lt;employee&gt;&lt;id&gt;3&lt;/id&gt;&lt;name&gt;Amy&lt;/name&gt;&lt;/employee&gt;&lt;employee&gt;&lt;id&gt;4&lt;/id&gt;&lt;name&gt;Leonard&lt;/name&gt;&lt;/employee&gt;&lt;employee&gt;&lt;id&gt;5&lt;/id&gt;&lt;name&gt;Bernadette&lt;/name&gt;&lt;/employee&gt;&lt;employee&gt;&lt;id&gt;6&lt;/id&gt;&lt;name&gt;Raj&lt;/name&gt;&lt;/employee&gt;&lt;employee&gt;&lt;id&gt;7&lt;/id&gt;&lt;name&gt;Howard&lt;/name&gt;&lt;/employee&gt;&lt;employee&gt;&lt;id&gt;8&lt;/id&gt;&lt;name&gt;Priya&lt;/name&gt;&lt;/employee&gt;&lt;/collection&gt;</code></pre>
-</div>
-</div>
+<p>Username and password of a user in WildFly&#8217;s administrative realm</p>
 </li>
 </ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">mvn install -Pwildfly -Dwildfly.hostname=$(docker-machine ip swarm-node-01) -Dwildfly.username=admin -Dwildfly.password=Admin#007
+
+. . .
+
+Nov 29, 2015 12:11:14 AM org.xnio.Xnio &lt;clinit&gt;
+INFO: XNIO version 3.3.1.Final
+Nov 29, 2015 12:11:14 AM org.xnio.nio.NioXnio &lt;clinit&gt;
+INFO: XNIO NIO Implementation Version 3.3.1.Final
+Nov 29, 2015 12:11:15 AM org.jboss.remoting3.EndpointImpl &lt;clinit&gt;
+INFO: JBoss Remoting version 4.0.9.Final
+[INFO] Authenticating against security realm: ManagementRealm
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+
+. . .</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_access_application">Access Application</h4>
+<div class="paragraph">
+<p>Now that WildFly and Couchbase server have started, lets access the application. You need to specify IP address of the Machine where WildFly is running:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">curl http://$(docker-machine ip swarm-node-01):8080/couchbase-javaee/resources/airline
+[{"travel-sample":{"id":10123,"iata":"TQ","icao":"TXW","name":"Texas Wings","callsign":"TXW","type":"airline","country":"United States"}}, {"travel-sample":{"id":10642,"iata":null,"icao":"JRB","name":"Jc royal.britannica","callsign":null,"type":"airline","country":"United Kingdom"}}, {"travel-sample":{"id":112,"iata":"5W","icao":"AEU","name":"Astraeus","callsign":"FLYSTAR","type":"airline","country":"United Kingdom"}}, {"travel-sample":{"id":1355,"iata":"BA","icao":"BAW","name":"British Airways","callsign":"SPEEDBIRD","type":"airline","country":"United Kingdom"}}, {"travel-sample":{"id":10765,"iata":"K5","icao":"SQH","name":"SeaPort Airlines","callsign":"SASQUATCH","type":"airline","country":"United States"}}, {"travel-sample":{"id":13633,"iata":"WQ","icao":"PQW","name":"PanAm World Airways","callsign":null,"type":"airline","country":"United States"}}, {"travel-sample":{"id":139,"iata":"SB","icao":"ACI","name":"Air Caledonie International","callsign":"AIRCALIN","type":"airline","country":"France"}}, {"travel-sample":{"id":13391,"iata":"-+","icao":"--+","name":"U.S. Air","callsign":null,"type":"airline","country":"United States"}}, {"travel-sample":{"id":1191,"iata":"UU","icao":"REU","name":"Air Austral","callsign":"REUNION","type":"airline","country":"France"}}, {"travel-sample":{"id":1316,"iata":"FL","icao":"TRS","name":"AirTran Airways","callsign":"CITRUS","type":"airline","country":"United States"}}]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Check state of the cluster by connecting to different nodes.</p>
 </div>
 <div class="paragraph">
 <p>Add container visualiation using <a href="https://github.com/javaee-samples/docker-java/issues/55" class="bare">https://github.com/javaee-samples/docker-java/issues/55</a>.</p>
+</div>
 </div>
 </div>
 </div>
@@ -4778,6 +4985,165 @@ wildfly-rc-bgtkg   1/1       Running   0          9m</code></pre>
 </div>
 </li>
 </ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_couchbase_cluster_and_persistent_volumes">Couchbase Cluster and Persistent Volumes</h3>
+<div class="paragraph">
+<p>A <em>Kubernetes Volume</em> outlives any containers that run within the Pod, and data is preserved across Container restarts. However the volume will cease to exist when a Pod ceases to exist. This is solved by <em>Persistent Volumes</em> that provide persistent, cluster-scoped storage for applications that require long lived data.</p>
+</div>
+<div class="paragraph">
+<p>Creating and using a persistent volume is a three step process:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Administrator provision a <em>networked storage in the cluster</em>. This is called as <code>PersistentVolume</code>.</p>
+</li>
+<li>
+<p>User requests storage for pods by using <em>claims</em>. Claims can specify levels of resources (CPU and memory), specific sizes and access modes (e.g. can be mounted once read/write or many times write only). This is called as <code>PersistentVolumeClaim</code>.</p>
+</li>
+<li>
+<p>Claims are mounted as volumes and used in pods for storage.</p>
+</li>
+</ol>
+</div>
+<div class="sect3">
+<h4 id="_create_kubernetes_resources">Create Kubernetes resources</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Create persistent volume:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-console" data-lang="console">./cluster/kubectl.sh create -f ~/workspaces/docker-java/attendees/kubernetes/couchbase-pv.yaml
+persistentvolume "pv001" created</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Create a claim for volume:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-console" data-lang="console">./cluster/kubectl.sh create -f ~/workspaces/docker-java/attendees/kubernetes/couchbase-pvc.yaml
+persistentvolumeclaim "pvc001" created</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Start the Couchbase Replication Controller (claim is used in Pod&#8217;s definition):</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-console" data-lang="console">./cluster/kubectl.sh create -f ~/workspaces/docker-java/attendees/kubernetes/couchbase-rc.yaml
+replicationcontroller "couchbase-rc" created</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Check status of Replication Controller:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-console" data-lang="console">./cluster/kubectl.sh get -w po
+NAME                 READY     STATUS    RESTARTS   AGE
+couchbase-rc-s5o22   0/1       Pending   0          9s
+NAME                 READY     STATUS    RESTARTS   AGE
+couchbase-rc-s5o22   0/1       Running   0          47s
+couchbase-rc-s5o22   1/1       Running   0         47s</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Start Couchbase Service:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-console" data-lang="console">./cluster/kubectl.sh create -f ~/workspaces/docker-java/attendees/kubernetes/couchbase-service.yaml
+service "couchbase-service" created</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_initialize_couchbase_cluster">Initialize Couchbase Cluster</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Set data and index memory quota for Couchbase:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-console" data-lang="console">./cluster/kubectl.sh exec couchbase-rc-s5o22 -- curl -v -X POST http://localhost:8091/pools/default -d memoryQuota=300 -d indexMemoryQuota=300</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Configure Data and Query service on Couchbase server:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-console" data-lang="console">./cluster/kubectl.sh exec couchbase-rc-s5o22 -- /opt/couchbase/bin/couchbase-cli cluster-init -u Administrator -p password -c localhost:8091 --cluster-ramsize=256 --cluster-index-ramsize=256 --services=index,data,query
+SUCCESS: init/edit localhost</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Install travel-sample bucket:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-console" data-lang="console">./cluster/kubectl.sh exec couchbase-rc-s5o22 -- curl -v -u Administrator:password -X POST http://localhost:8091/sampleBuckets/install -d '["travel-sample"]'
+*   Trying ::1...
+* connect to ::1 port 8091 failed: Connection refused
+*   Trying 127.0.0.1...
+* Connected to localhost (127.0.0.1) port 8091 (#0)
+* Server auth using Basic with user 'Administrator'
+&gt; POST /sampleBuckets/install HTTP/1.1
+&gt; Authorization: Basic QWRtaW5pc3RyYXRvcjpwYXNzd29yZA==
+&gt; User-Agent: curl/7.40.0-DEV
+&gt; Host: localhost:8091
+&gt; Accept: */*
+&gt; Content-Length: 17
+&gt; Content-Type: application/x-www-form-urlencoded
+&gt;
+* upload completely sent off: 17 out of 17 bytes
+&lt; HTTP/1.1 202 Accepted
+&lt; Server: Couchbase Server
+&lt; Pragma: no-cache
+&lt; Date: Mon, 23 Nov 2015 04:31:22 GMT
+&lt; Content-Type: application/json
+&lt; Content-Length: 2
+&lt; Cache-Control: no-cache
+&lt;
+* Connection #0 to host localhost left intact</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Query using <code>cbq</code> gives error:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-console" data-lang="console">./cluster/kubectl.sh exec -it couchbase-rc-s5o22 -- /opt/couchbase/bin/cbq</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>shows the message:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-console" data-lang="console">Couchbase query shell connected to http://localhost:8093/ . Type Ctrl-D to exit.</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_add_a_new_couchbase_server_to_the_cluster">Add a new Couchbase server to the cluster</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Scale using RC</p>
+</li>
+</ol>
+</div>
 </div>
 </div>
 <div class="sect2">
