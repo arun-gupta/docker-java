@@ -3646,10 +3646,16 @@ To see how to connect Docker to this machine, run: docker-machine env swarm-mast
 </div>
 </div>
 <div class="paragraph">
-<p>Four options to look here:</p>
+<p>Few options to look here:</p>
 </div>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
+<li>
+<p><code>--swarm</code> configures the Machine with Swarm</p>
+</li>
+<li>
+<p><code>--swarm-master</code> configures the created Machine to be Swarm master</p>
+</li>
 <li>
 <p><code>--swarm-discovery</code> defines address of the discovery service</p>
 </li>
@@ -3661,9 +3667,6 @@ To see how to connect Docker to this machine, run: docker-machine env swarm-mast
 </li>
 <li>
 <p><code>--virtualbox-disk-size</code> sets the disk size for the created Machine to 5GB. This is required so that WildFly and Couchbase image can be downloaded on any of the nodes.</p>
-<div class="paragraph">
-<p><code>--swarm</code> configures the Machine with Swarm, <code>--swarm-master</code> configures the created Machine to be Swarm master.</p>
-</div>
 </li>
 </ol>
 </div>

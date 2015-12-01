@@ -119,14 +119,14 @@ Configuring swarm...
 To see how to connect Docker to this machine, run: docker-machine env swarm-master
 ----
 +
-Four options to look here:
+Few options to look here:
 +
+.. `--swarm` configures the Machine with Swarm
+.. `--swarm-master` configures the created Machine to be Swarm master
 .. `--swarm-discovery` defines address of the discovery service
 .. `--cluster-advertise` advertise the machine on the network
 .. `--cluster-store` designate a distributed k/v storage backend for the cluster
 .. `--virtualbox-disk-size` sets the disk size for the created Machine to 5GB. This is required so that WildFly and Couchbase image can be downloaded on any of the nodes.
-+
-`--swarm` configures the Machine with Swarm, `--swarm-master` configures the created Machine to be Swarm master.
 +
 . Find some information about this machine:
 +
