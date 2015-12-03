@@ -544,14 +544,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_key_components_of_docker_swarm">Key Components of Docker Swarm</a></li>
 <li><a href="#_create_discovery_service">Create Discovery Service</a></li>
 <li><a href="#_create_docker_swarm_cluster_2">Create Docker Swarm Cluster</a></li>
-<li><a href="#_deploy_application_to_docker_swarm_cluster">Deploy Application to Docker Swarm Cluster</a>
-<ul class="sectlevel3">
 <li><a href="#_start_application_environment_using_docker_compose">Start Application Environment Using Docker Compose</a></li>
 <li><a href="#_configure_couchbase_server">Configure Couchbase server</a></li>
 <li><a href="#_deploy_application">Deploy Application</a></li>
 <li><a href="#_access_application">Access Application</a></li>
-</ul>
-</li>
 </ul>
 </li>
 <li><a href="#_deploy_application_on_kubernetes_cluster">Deploy Application on Kubernetes Cluster</a>
@@ -3528,6 +3524,9 @@ mywildfly:
 <div class="paragraph">
 <p>There are a lots of other concepts but these are the main ones.</p>
 </div>
+<div class="paragraph">
+<p>This section will deploy an application that will provide a CRUD/REST interface on a data bucket in Couchbase. This is achieved by using a Java EE application deployed on WildFly and accessing the database.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_create_discovery_service">Create Discovery Service</h3>
@@ -3684,7 +3683,7 @@ To see how to connect Docker to this machine, run: docker-machine env swarm-mast
 </div>
 </li>
 <li>
-<p>Connecting to the master by using the command:</p>
+<p>Connect to the master by using the command:</p>
 <div class="literalblock">
 <div class="content">
 <pre>eval "$(docker-machine env --swarm swarm-master)"</pre>
@@ -3847,31 +3846,7 @@ Name: d074fd97682e</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_deploy_application_to_docker_swarm_cluster">Deploy Application to Docker Swarm Cluster</h3>
-<div class="paragraph">
-<p>The cluster is now ready and we need to deploy our application to it.</p>
-</div>
-<div class="paragraph">
-<p>This application will provide a CRUD/REST interface on a data bucket in Couchbase. This is achieved by using a Java EE application deployed on WildFly and accessing the database. Follow the steps to deploy and access the application:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Start application environment using Docker Compose (WildFly and Couchbase)</p>
-</li>
-<li>
-<p>Configure Couchbase server and install <code>travel-sample</code> bucket</p>
-</li>
-<li>
-<p>Deploy the application</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>Swarm takes care of distribution of deployments across the nodes.</p>
-</div>
-<div class="sect3">
-<h4 id="_start_application_environment_using_docker_compose">Start Application Environment Using Docker Compose</h4>
+<h3 id="_start_application_environment_using_docker_compose">Start Application Environment Using Docker Compose</h3>
 <div class="paragraph">
 <p>Make sure you are connected to the cluster by giving the command <code>eval "$(docker-machine env --swarm swarm-master)"</code>.</p>
 </div>
@@ -4085,8 +4060,8 @@ CONTAINER ID        IMAGE                     COMMAND                  CREATED  
 </ol>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_configure_couchbase_server">Configure Couchbase server</h4>
+<div class="sect2">
+<h3 id="_configure_couchbase_server">Configure Couchbase server</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -4119,8 +4094,8 @@ CONTAINER ID        IMAGE                     COMMAND                  CREATED  
 </ol>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_deploy_application">Deploy Application</h4>
+<div class="sect2">
+<h3 id="_deploy_application">Deploy Application</h3>
 <div class="paragraph">
 <p>Deploy the application to WildFly by specifying three parameters:</p>
 </div>
@@ -4158,8 +4133,8 @@ INFO: JBoss Remoting version 4.0.9.Final
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_access_application">Access Application</h4>
+<div class="sect2">
+<h3 id="_access_application">Access Application</h3>
 <div class="paragraph">
 <p>Now that WildFly and Couchbase server have started, lets access the application. You need to specify IP address of the Machine where WildFly is running:</p>
 </div>
@@ -4174,7 +4149,6 @@ INFO: JBoss Remoting version 4.0.9.Final
 </div>
 <div class="paragraph">
 <p>Add container visualiation using <a href="https://github.com/javaee-samples/docker-java/issues/55" class="bare">https://github.com/javaee-samples/docker-java/issues/55</a>.</p>
-</div>
 </div>
 </div>
 </div>

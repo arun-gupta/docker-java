@@ -20,6 +20,8 @@ image::docker-swarm-components.png[]
 
 There are a lots of other concepts but these are the main ones.
 
+This section will deploy an application that will provide a CRUD/REST interface on a data bucket in Couchbase. This is achieved by using a Java EE application deployed on WildFly and accessing the database. 
+
 ### Create Discovery Service
 
 . Create a Machine that will host discovery service:
@@ -138,7 +140,7 @@ docker-machine inspect --format='{{json .Driver}}'  swarm-master
 +
 Note that the disk size is 5GB.
 +
-. Connecting to the master by using the command:
+. Connect to the master by using the command:
 +
   eval "$(docker-machine env --swarm swarm-master)"
 +
@@ -269,19 +271,7 @@ docker run swarm list consul://$(docker-machine ip consul-machine):8500
 192.168.99.104:2376
 ----
 
-### Deploy Application to Docker Swarm Cluster
-
-The cluster is now ready and we need to deploy our application to it. 
-
-This application will provide a CRUD/REST interface on a data bucket in Couchbase. This is achieved by using a Java EE application deployed on WildFly and accessing the database. Follow the steps to deploy and access the application:
-
-. Start application environment using Docker Compose (WildFly and Couchbase)
-. Configure Couchbase server and install `travel-sample` bucket
-. Deploy the application
-
-Swarm takes care of distribution of deployments across the nodes.
-
-#### Start Application Environment Using Docker Compose
+### Start Application Environment Using Docker Compose
 
 Make sure you are connected to the cluster by giving the command `eval "$(docker-machine env --swarm swarm-master)"`.
 
@@ -442,7 +432,7 @@ CONTAINER ID        IMAGE                     COMMAND                  CREATED  
 +
 Note that Couchbase server is running on `swarm-master` node and WildFly is running on `swarm-node-01`.
 
-#### Configure Couchbase server
+### Configure Couchbase server
 
 . Clone https://github.com/arun-gupta/couchbase-javaee.git. This workspace contains a simple Java EE application that is deployed on WildFly and provides a REST API over `travel-sample` bucket in Couchbase.
 . Couchbase server can be configured using http://developer.couchbase.com/documentation/server/4.0/rest-api/rest-endpoints-all.html[REST API]. The application contains a Maven profile that allows to configure Couchbase server with `travel-sample` bucket. This can be invoked as:
@@ -468,7 +458,7 @@ mvn install -Pcouchbase -Ddocker.host=$(docker-machine ip swarm-master)
 . . .
 ----
 
-#### Deploy Application
+### Deploy Application
 
 Deploy the application to WildFly by specifying three parameters:
 
@@ -496,7 +486,7 @@ INFO: JBoss Remoting version 4.0.9.Final
 . . .
 ----
 
-#### Access Application
+### Access Application
 
 Now that WildFly and Couchbase server have started, lets access the application. You need to specify IP address of the Machine where WildFly is running:
 
