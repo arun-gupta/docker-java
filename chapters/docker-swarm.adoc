@@ -1,26 +1,26 @@
 [[Docker_Swarm]]
 ## Deploy Application on Docker Swarm Cluster
 
-Docker Swarm is native clustering for Docker. It allows you create and access to a pool of Docker hosts using the full suite of Docker tools. Because Docker Swarm serves the standard Docker API, any tool that already communicates with a Docker daemon can use Swarm to transparently scale to multiple hosts.
+Docker Swarm is native clustering for Docker. It allows you to create and access a pool of Docker hosts using the full suite of Docker tools. Because Docker Swarm serves the standard Docker API, any tool that already communicates with a Docker daemon can use Swarm to transparently scale to multiple hosts.
 
 ### Key Components of Docker Swarm
 
 .Key Components of Docker Swarm
 image::docker-swarm-components.png[]
 
-*Swarm Manager*: Docker Swarm has a Manager, that is a pre-defined Docker Host, and is a single point for all administration. Swarm manager orchestrates and schedules containers on the entire cluster. Swarm Manager can be configured in https://docs.docker.com/swarm/multi-manager-setup/[High Availability].
+*Swarm Manager*: Docker Swarm has a Manager that is a pre-defined Docker Host and is a single point for all administration. Swarm manager orchestrates and schedules containers in the entire cluster. Swarm Manager can be configured to enable https://docs.docker.com/swarm/multi-manager-setup/[High Availability].
 
 *Swarm Nodes*: The containers are deployed on Nodes that are additional Docker Hosts. Each Swarm Node must be accessible by the manager, each node must listen to the same network interface (TCP port). Each node runs a Docker Swarm agent that registers the referenced Docker daemon, monitors it, and updates the discovery backend with the node’s status. The containers run on a node.
 
 *Scheduler Strategy*: Different scheduler strategies ("`binpack`", "`spread`" (default), and "`random`") can be applied to pick the best node to run your container. The default strategy optimizes the node for least number of running containers. There are multiple kinds of filters, such as constraints and affinity.  This should allow for a decent scheduling algorithm.
 
-*Node Discovery Service*: Swarm manager talks to a hosted discovery service. This service maintains a list of IPs in Swarm cluster. Docker Hub hosts a discovery service that can be used during development. In production, this is replaced by other services such as `etcd`, `consul`, or `zookeeper`. You can even use a static file. This is particularly useful if there is no access to Internet, or you are running the setup in a closed network.
+*Node Discovery Service*: Swarm manager talks to a hosted discovery service. This service maintains a list of IPs in the Swarm cluster. Docker Hub hosts a discovery service that can be used during development. In production, this is replaced by other services such as `etcd`, `consul`, or `zookeeper`. You can even use a static file. This is particularly useful if there is no Internet access or you are running in a closed network.
 
-**Standard Docker API:** Docker Swarm serves the standard Docker API and thus any tool that talks to a single Docker host will seamlessly scale to multiple hosts now. That means that if you were using shell scripts using Docker CLI to configure multiple Docker hosts, the same CLI would can now talk to Swarm cluster.
+*Standard Docker API*: Docker Swarm serves the standard Docker API and thus any tool that talks to a single Docker host will seamlessly scale to multiple hosts now. That means that if you were using shell scripts using Docker CLI to configure multiple Docker hosts, the same CLI could now talk to the Swarm cluster.
 
 There are a lots of other concepts but these are the main ones.
 
-This section will deploy an application that will provide a CRUD/REST interface on a data bucket in Couchbase. This is achieved by using a Java EE application deployed on WildFly and accessing the database. 
+This section will deploy an application that will provide a CRUD/REST interface on a data bucket in Couchbase. This is achieved by using a Java EE application deployed on WildFly to access the database.
 
 ### Create Discovery Service
 
@@ -140,13 +140,13 @@ docker-machine inspect --format='{{json .Driver}}'  swarm-master
 +
 Note that the disk size is 5GB.
 +
-. Connect to the master by using the command:
+. Connect to the Swarm cluster by using the command:
 +
   eval "$(docker-machine env --swarm swarm-master)"
 +
-NOTE: If you're on Windows, use the `docker-machine env swarm-master` command only and copy the output into an editor to replace all appearances of EXPORT with SET and issue the three commands at your command prompt, remove the quotes and all duplicate appearences of "/".
+NOTE: `--swarm` is specified to connect to the Swarm cluster. Otherwise the command will connect to `swarm-master` Machine only. However, if you're on Windows, then use the `docker-machine env swarm-master` command only. Then copy the output into an editor to replace all appearances of EXPORT with SET, remove the quotes, and all appearances of "/" with "\". Finally, issue the three commands at your command prompt.
 +
-. Find some information about the cluster:
+. Get information about the cluster:
 +
 [source, text]
 ----
@@ -169,7 +169,7 @@ Name: d074fd97682e
 +
 This cluster has one node and that node has two containers.
 +
-. Create a new Machine to join this cluster:
+. Create the first Swarm node to join this cluster:
 +
 [source, text]
 ----
@@ -219,16 +219,9 @@ swarm-node-01    -        virtualbox   Running   tcp://192.168.99.102:2376   swa
 swarm-node-02    -        virtualbox   Running   tcp://192.168.99.103:2376   swarm-master
 ----
 +
-The machines that are part of the cluster have cluster’s name in the SWARM column, blank otherwise. For example, `consul-machine` is a standalone machine where as all other machines are part of the `swarm-master` cluster. The Swarm master is also identified by (master) in the SWARM column.
+The machines that are part of the cluster have cluster’s name in the SWARM column. If the SWARM column is blank, then it is a standalone machine. For example, `consul-machine` is a standalone machine as opposed to all other machines which are part of the `swarm-master` cluster. The Swarm master is identified by (master) in the SWARM column.
 +
-. Connect to the Swarm cluster and find some information about it:
-
-  eval "$(docker-machine env --swarm swarm-master)"
-  docker info
-+
-Note, `--swarm` is specified to connect to the Swarm cluster. Otherwise the command will connect to `swarm-master` Machine only.
-+
-This shows the output as:
+. Get information about the cluster again:
 +
 [source, text]
 ----
@@ -259,9 +252,18 @@ Total Memory: 3.064 GiB
 Name: d074fd97682e
 ----
 +
-There are 3 nodes – one Swarm master and 2 Swarm _worker_ nodes. There is a total of 4 containers running in this cluster – one Swarm agent on master and each node, and there is an additional swarm-agent-master running on the master. This can be verified by connecting to the master and listing all the containers.
+Now there are 3 nodes – one Swarm master and 2 Swarm _worker_ nodes. There are a total of 4 containers running in this cluster – a swarm-agent on each node and an additional swarm-agent-master running on the master. This can be verified by connecting to the master Machine (without specifying `--swarm`) and listing all the containers:
 +
-. List nodes in the cluster with the following command:
+[source, text]
+----
+eval "$(docker-machine env swarm-master)"
+docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                              NAMES
+cf5edbf4ada7        swarm:latest        "/swarm join --advert"   49 seconds ago      Up 49 seconds       2375/tcp                           swarm-agent
+c7c3b80bceb4        swarm:latest        "/swarm manage --tlsv"   49 seconds ago      Up 49 seconds       2375/tcp, 0.0.0.0:3376->3376/tcp   swarm-agent-master
+----
++
+. You can also query the Consul discovery service while connected to the Swarm cluster, master, or any worker node in the cluster to list the nodes in the cluster:
 +
 [source, text]
 ----
@@ -273,8 +275,10 @@ docker run swarm list consul://$(docker-machine ip consul-machine):8500
 
 ### Start Application Environment Using Docker Compose
 
-Make sure you are connected to the cluster by giving the command `eval "$(docker-machine env --swarm swarm-master)"`.
-
+. Connect to the Swarm cluster:
++
+  eval "$(docker-machine env --swarm swarm-master)"
++
 . List all the networks created by Docker so far:
 +
 [source, text]
@@ -292,7 +296,7 @@ d2f3b512f9dc        swarm-node-01/bridge   bridge
 fffc34eae907        swarm-master/host      host
 ----
 +
-Docker create three networks for each host automatically:
+Docker creates three networks for each host automatically:
 +
 [options="header", cols="1,3", width="80%"]
 |====
@@ -302,7 +306,7 @@ Docker create three networks for each host automatically:
 | `host` | Adds a container on hosts networking stack. Network configuration is identical to the host.
 |====
 +
-This explains a total of nine networks, three for each node, as shown in this Swarm cluster.
+A total of nine networks are created for this three-node Swarm cluster because three networks are created for each node.
 +
 . Use Compose file to start WildFly and Couchbase:
 +
@@ -420,22 +424,23 @@ As seen, `wildflycouchbasejavaee7` overlay network exists on all Machines. This 
 +
 Read more about https://docs.docker.com/engine/userguide/networking/dockernetworks/[Docker Networks].
 +
-. Verify that WildFly and Couchbase are running:
+. Connect to the Swarm cluster and verify that WildFly and Couchbase are running:
 +
 [source, text]
 ----
+eval "$(docker-machine env --swarm swarm-master)"
 docker ps
 CONTAINER ID        IMAGE                     COMMAND                  CREATED             STATUS              PORTS                                                                                                             NAMES
 23a581295a2b        couchbase/server          "/entrypoint.sh couch"   9 seconds ago       Up 8 seconds        192.168.99.102:8091-8093->8091-8093/tcp, 11207/tcp, 11211/tcp, 192.168.99.102:11210->11210/tcp, 18091-18092/tcp   swarm-master/db
 7a8a885b23f3        arungupta/wildfly-admin   "/opt/jboss/wildfly/b"   9 seconds ago       Up 8 seconds        192.168.99.103:8080->8080/tcp, 192.168.99.103:9990->9990/tcp                                                      swarm-node-01/wildflycouchbasejavaee7_mywildfly_1
 ----
 +
-Note that Couchbase server is running on `swarm-master` node and WildFly is running on `swarm-node-01`.
+Note that, in this example, the Couchbase server is running on `swarm-master` node and WildFly is running on `swarm-node-01`. Take a note on which nodes your Couchbase and WildFly servers are running and update the following commands accordingly.
 
 ### Configure Couchbase server
 
 . Clone https://github.com/arun-gupta/couchbase-javaee.git. This workspace contains a simple Java EE application that is deployed on WildFly and provides a REST API over `travel-sample` bucket in Couchbase.
-. Couchbase server can be configured using http://developer.couchbase.com/documentation/server/4.0/rest-api/rest-endpoints-all.html[REST API]. The application contains a Maven profile that allows to configure Couchbase server with `travel-sample` bucket. This can be invoked as:
+. Couchbase server can be configured using http://developer.couchbase.com/documentation/server/4.0/rest-api/rest-endpoints-all.html[REST API]. The application contains a Maven profile that allows to configure the Couchbase server with `travel-sample` bucket. This can be invoked as: (Note that you may need to replace `swarm-master` with the node in your cluster that is running Couchbase)
 +
 [source, text]
 ----
@@ -462,7 +467,7 @@ mvn install -Pcouchbase -Ddocker.host=$(docker-machine ip swarm-master)
 
 Deploy the application to WildFly by specifying three parameters:
 
-. Host IP address where WildFly is running
+. Host IP address where WildFly is running (swarm-node-01 in this example but update as needed for your cluster)
 . Username of a user in WildFly's administrative realm
 . Password of the user specified in WildFly's administrative realm
 
@@ -488,7 +493,7 @@ INFO: JBoss Remoting version 4.0.9.Final
 
 ### Access Application
 
-Now that WildFly and Couchbase server have started, lets access the application. You need to specify IP address of the Machine where WildFly is running:
+Now that the WildFly and Couchbase servers have started, lets access the application. You need to specify the IP address of the Machine where WildFly is running (swarm-node-01 in this example but update as needed for your cluster):
 
 [source, text]
 ----
@@ -498,4 +503,4 @@ curl http://$(docker-machine ip swarm-node-01):8080/couchbase-javaee/resources/a
 
 Check state of the cluster by connecting to different nodes.
 
-Add container visualiation using https://github.com/javaee-samples/docker-java/issues/55.
+Add container visualization using https://github.com/javaee-samples/docker-java/issues/55.
