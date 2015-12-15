@@ -108,6 +108,8 @@ FROM jboss/wildfly
 . Run the container:
 +
   docker run -it mywildfly
++
+NOTE: On Windows, you may have to use `winpty` so that TTY can be attached. The updated command will be `winpty docker run -it mywildfly`.
 
 === Java EE 7 Application Image
 

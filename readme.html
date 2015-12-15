@@ -562,8 +562,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#Deploy_JavaEE_Kubernetes_Multiple_Config">Deploy Java EE Application (multiple configuration files)</a>
 <ul class="sectlevel3">
-<li><a href="#_start_mysql_pod">Start MySQL Pod</a></li>
-<li><a href="#_start_mysql_service">Start MySQL service</a></li>
+<li><a href="#_start_couchbase_pod">Start Couchbase Pod</a></li>
+<li><a href="#_start_couchbase_service">Start Couchbase service</a></li>
 <li><a href="#_start_wildfly_replication_controller">Start WildFly Replication Controller</a></li>
 <li><a href="#Access_Kubernetes_Application_Node">Access the application (using node)</a></li>
 <li><a href="#Access_Kubernetes_Application_Proxy">Access the application (using proxy)</a></li>
@@ -708,7 +708,7 @@ For Mac and Windows, this commands need to be issued from the Docker shell or Co
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-console" data-lang="console">docker-compose pull -f docker-compose-pull-images.yml</code></pre>
+<pre class="highlight"><code class="language-console" data-lang="console">docker-compose -f docker-compose-pull-images.yml pull</code></pre>
 </div>
 </div>
 </div>
@@ -1382,6 +1382,18 @@ busybox             latest              3d5bcd78e074        4 days ago          
 <div class="content">
 <pre>docker run -it mywildfly</pre>
 </div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+On Windows, you may have to use <code>winpty</code> so that TTY can be attached. The updated command will be <code>winpty docker run -it mywildfly</code>.
+</td>
+</tr>
+</table>
 </div>
 </li>
 </ol>
@@ -4368,7 +4380,7 @@ Installation successful!</code></pre>
 <p>Verify the Kubernetes cluster as:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">kubernetes&gt; vagrant status
+<pre class="highlight"><code class="language-text" data-lang="text">vagrant status
 Current machine states:
 
 master                    running (virtualbox)
@@ -4426,8 +4438,8 @@ By default, only one node is created. This can be manipulated by setting an envi
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-text" data-lang="text">./cluster/kubectl.sh get nodes
-NAME         LABELS                              STATUS
-10.245.1.3   kubernetes.io/hostname=10.245.1.3   Ready</code></pre>
+NAME         LABELS                              STATUS    AGE
+10.245.1.3   kubernetes.io/hostname=10.245.1.3   Ready     1m</code></pre>
 </div>
 </div>
 </li>
@@ -4446,7 +4458,7 @@ NAME      READY     STATUS    RESTARTS   AGE</code></pre>
 <div class="content">
 <pre class="highlight"><code class="language-text" data-lang="text">./cluster/kubectl.sh get svc
 NAME         CLUSTER_IP   EXTERNAL_IP   PORT(S)   SELECTOR   AGE
-kubernetes   10.247.0.1   &lt;none&gt;        443/TCP   &lt;none&gt;     29m</code></pre>
+kubernetes   10.247.0.1   &lt;none&gt;        443/TCP   &lt;none&gt;     3m</code></pre>
 </div>
 </div>
 </li>
@@ -4496,15 +4508,15 @@ In this case, all the pods are running on a single node. This is because, that i
 <p>The order of Service and the targeted Pods does not matter. However Service needs to be started before any other Pods consuming the Service are started.</p>
 </div>
 <div class="sect3">
-<h4 id="_start_mysql_pod">Start MySQL Pod</h4>
+<h4 id="_start_couchbase_pod">Start Couchbase Pod</h4>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Start MySQL Pod:</p>
+<p>Start Couchbase Pod:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">./cluster/kubectl.sh create -f ~/workspaces/docker-java/attendees/kubernetes/app-mysql-pod.yaml
-pod "mysql-pod" created</code></pre>
+<pre class="highlight"><code class="language-text" data-lang="text">./cluster/kubectl.sh create -f ~/workspaces/docker-java/attendees/kubernetes/app-couchbase-pod.yaml
+pod "couchbase-pod" created</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4515,31 +4527,21 @@ pod "mysql-pod" created</code></pre>
 <pre class="highlight"><code class="language-yaml" data-lang="yaml">apiVersion: v1
 kind: Pod
 metadata:
-  name: mysql-pod
+  name: couchbase-pod
   labels:
-    name: mysql-pod
+    name: couchbase-pod
     context: docker-k8s-lab
 spec:
   containers:
     -
-      name: mysql
-      image: mysql:latest
-      env:
-        -
-          name: "MYSQL_USER"
-          value: "mysql"
-        -
-          name: "MYSQL_PASSWORD"
-          value: "mysql"
-        -
-          name: "MYSQL_DATABASE"
-          value: "sample"
-        -
-          name: "MYSQL_ROOT_PASSWORD"
-          value: "supersecret"
+      name: couchbase
+      image: couchbase/server:latest
       ports:
         -
-          containerPort: 3306</code></pre>
+          containerPort: 8091
+          containerPort: 8092
+          containerPort: 8093
+          containerPort: 11210</code></pre>
 </div>
 </div>
 </li>
@@ -4548,30 +4550,33 @@ spec:
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-text" data-lang="text">./cluster/kubectl.sh get -w po
-NAME        READY     STATUS    RESTARTS   AGE
-mysql-pod   0/1       Pending   0          16s
-NAME        READY     STATUS    RESTARTS   AGE
-mysql-pod   0/1       Running   0          53s
-mysql-pod   1/1       Running   0         53s</code></pre>
+NAME            READY     STATUS    RESTARTS   AGE
+couchbase-pod   0/1       Pending   0          16s
+NAME            READY     STATUS    RESTARTS   AGE
+couchbase-pod   0/1       Running   0          40s
+couchbase-pod   1/1       Running   0         40s</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p><code>-w</code> watches for changes to the requested object. Wait for the MySQL pod to be in Running status.</p>
+<p><code>-w</code> watches for changes to the requested object. Wait for the Couchbase pod to be in Running status.</p>
+</div>
+<div class="paragraph">
+<p>Hit <code>Ctrl</code> + <code>C</code> to terminate the watch.</p>
 </div>
 </li>
 </ol>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_start_mysql_service">Start MySQL service</h4>
+<h4 id="_start_couchbase_service">Start Couchbase service</h4>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
 <p>Start MySQL Service:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">./cluster/kubectl.sh create -f ~/workspaces/docker-java/attendees/kubernetes/app-mysql-service.yaml
-service "mysql-service" created</code></pre>
+<pre class="highlight"><code class="language-text" data-lang="text">./cluster/kubectl.sh create -f ~/workspaces/docker-java/attendees/kubernetes/app-couchbase-service.yaml
+service "couchbase-service" created</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4582,17 +4587,24 @@ service "mysql-service" created</code></pre>
 <pre class="highlight"><code class="language-yaml" data-lang="yaml">apiVersion: v1
 kind: Service
 metadata:
-  name: mysql-service
+  name: couchbase-service
   labels:
-    name: mysql-pod
+    name: couchbase-pod
     context: docker-k8s-lab
 spec:
   ports:
     # the port that this service should serve on
-    - port: 3306
+    - name: admin
+      port: 8091
+    - name: run-queries
+      port: 8092
+    - name: rest-http
+      port: 8093
+    - name: nodes
+      port: 11210
   # label keys and values that must match in order to receive traffic for this service
   selector:
-    name: mysql-pod
+    name: couchbase-pod
     context: docker-k8s-lab</code></pre>
 </div>
 </div>
@@ -4605,9 +4617,9 @@ spec:
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-text" data-lang="text">./cluster/kubectl.sh get svc
-NAME            CLUSTER_IP       EXTERNAL_IP   PORT(S)    SELECTOR                                AGE
-kubernetes      10.247.0.1       &lt;none&gt;        443/TCP    &lt;none&gt;                                  32m
-mysql-service   10.247.241.209   &lt;none&gt;        3306/TCP   context=docker-k8s-lab,name=mysql-pod   34s</code></pre>
+NAME                CLUSTER_IP      EXTERNAL_IP   PORT(S)                                SELECTOR                                    AGE
+couchbase-service   10.247.202.53   &lt;none&gt;        8091/TCP,8092/TCP,8093/TCP,11210/TCP   context=docker-k8s-lab,name=couchbase-pod   1m
+kubernetes          10.247.0.1      &lt;none&gt;        443/TCP                                &lt;none&gt;                                      32m</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4615,9 +4627,9 @@ mysql-service   10.247.241.209   &lt;none&gt;        3306/TCP   context=docker-k
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">./cluster/kubectl.sh get svc -l context=docker-k8s-lab,name=mysql-pod
-NAME            CLUSTER_IP       EXTERNAL_IP   PORT(S)    SELECTOR                                AGE
-mysql-service   10.247.241.209   &lt;none&gt;        3306/TCP   context=docker-k8s-lab,name=mysql-pod   1m</code></pre>
+<pre class="highlight"><code class="language-text" data-lang="text">./cluster/kubectl.sh get svc -l context=docker-k8s-lab,name=couchbase-pod
+NAME                CLUSTER_IP      EXTERNAL_IP   PORT(S)                                SELECTOR                                    AGE
+couchbase-service   10.247.202.53   &lt;none&gt;        8091/TCP,8092/TCP,8093/TCP,11210/TCP   context=docker-k8s-lab,name=couchbase-pod   1m</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4627,7 +4639,7 @@ mysql-service   10.247.241.209   &lt;none&gt;        3306/TCP   context=docker-k
 <p>When a Service is run on a node, the kubelet adds a set of environment variables for each active Service. It supports both Docker links compatible variables and simpler <code>{SVCNAME}_SERVICE_HOST</code> and <code>{SVCNAME}_SERVICE_PORT</code> variables, where the Service name is upper-cased and dashes are converted to underscores.</p>
 </div>
 <div class="paragraph">
-<p>Our service name is &#8220;mysql-service&#8221; and so <code>MYSQL_SERVICE_SERVICE_HOST</code> and <code>MYSQL_SERVICE_SERVICE_PORT</code> variables are available to other pods.</p>
+<p>Our service name is &#8220;couchbase-service&#8221; and so <code>COUCHBASE_SERVICE_SERVICE_HOST</code> and <code>COUCHBASE_SERVICE_SERVICE_PORT</code> variables are available to other pods.</p>
 </div>
 </li>
 </ol>

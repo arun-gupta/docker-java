@@ -34,7 +34,7 @@ git clone https://github.com/javaee-samples/docker-java
 IMPORTANT: For Mac and Windows, this commands need to be issued from the Docker shell or Command Prompt where `eval $(docker-machine env default)` command was issued. This command need to be issued in the `attendees` directory of `docker-java` workspace.
 
 ```console
-docker-compose pull -f docker-compose-pull-images.yml
+docker-compose -f docker-compose-pull-images.yml pull
 ```
 
 #### Create Docker Host Mapping
