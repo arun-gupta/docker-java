@@ -93,7 +93,7 @@ Follow the on-screen instructions to complete the installation process.
 Kubernetes requires Vagrant >= 1.6.2. So if you have an older version then make sure you install the latest one.
 +
 . If you've not installed Docker Toolbox, then you need to additionally download Virtual Box 5.0.8 from https://www.virtualbox.org/wiki/Downloads.
-. Download Kubernetes (1.1.2) from https://github.com/kubernetes/kubernetes/releases/download/v1.1.2/kubernetes.tar.gz.
+. Download Kubernetes (1.1.2) from https://github.com/kubernetes/kubernetes/releases/download/v1.1.3/kubernetes.tar.gz.
 . On Windows, Python interpreter needs to be installed and included in the `%PATH%`. Download from https://www.python.org/downloads/windows/ and setup `%PATH%` in Control Panel.
 . Extract the archive and install it:
 +
@@ -105,10 +105,52 @@ cd kubernetes
 +
 NOTE: Vagrant provider should be included in the path. For example, for VirtualBox, `vboxmanage` command should work from the shell or command prompt where `./cluster/kube-up.sh` script is invoked.
 +
-If you installed more than one Vagrant provider (such as VirtualBox and Parallels), Kubernetes will usually pick the appropriate one. You can override which one Kubernetes will use by setting the VAGRANT_DEFAULT_PROVIDER environment variable:
+If more than one Vagrant provider (such as VirtualBox and Parallels) are installed, Kubernetes will usually pick the appropriate one. You can override by setting the VAGRANT_DEFAULT_PROVIDER environment variable:
 +
 ```console
 export VAGRANT_DEFAULT_PROVIDER=virtualbox
 export KUBERNETES_PROVIDER=vagrant
 ./cluster/kube-up.sh
 ```
++
+NOTE: This will take a few minutes, so be patience! Vagrant will provision each machine in the cluster with all the necessary components to run Kubernetes.
++
++
+It shows the output as:
++
+[source, text]
+----
+kubernetes > ./cluster/kube-up.sh 
+... Starting cluster using provider: vagrant
+... calling verify-prereqs
+... calling kube-up
+Bringing machine 'master' up with 'virtualbox' provider...
+Bringing machine 'minion-1' up with 'virtualbox' provider...
+==> master: Importing base box 'kube-fedora21'...
+==> master: Matching MAC address for NAT networking...
+==> master: Setting the name of the VM: kubernetes_master_1450804087843_75902
+
+. . .
+
+... calling validate-cluster
+Found 1 node(s).
+NAME         LABELS                              STATUS    AGE
+10.245.1.3   kubernetes.io/hostname=10.245.1.3   Ready     5s
+Validate output:
+NAME                 STATUS    MESSAGE              ERROR
+controller-manager   Healthy   ok                   nil
+scheduler            Healthy   ok                   nil
+etcd-0               Healthy   {"health": "true"}   nil
+etcd-1               Healthy   {"health": "true"}   nil
+Cluster validation succeeded
+Done, listing cluster services:
+
+Kubernetes master is running at https://10.245.1.2
+Heapster is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/heapster
+KubeDNS is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/kube-dns
+KubeUI is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/kube-ui
+Grafana is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/monitoring-grafana
+InfluxDB is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/monitoring-influxdb
+----
++
+Note down the address for Kubernetes master, `https://10.245.1.2` in this case.

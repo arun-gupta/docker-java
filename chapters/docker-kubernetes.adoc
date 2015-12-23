@@ -36,110 +36,7 @@ Label is an arbitrary key/value pair in a distributed watchable storage that the
 
 ### Start Kubernetes Cluster
 
-Kubernetes cluster can be easily started using Vagrant. There are two options to start the cluster - first using a downloaded Kubernetes distribution bundle and second by downloading the latest bundle as part of the install.
-
-#### Using Previously Downloaded Kubernetes Distribution
-
-. Setup a Kubernetes cluster using a previously configured Kubernetes distribution as explained in <<Kubernetes_Setup>>:
-+
-[source, text]
-----
-cd kubernetes
-export KUBERNETES_PROVIDER=vagrant
-./cluster/kube-up.sh
-----
-+
-The `KUBERNETES_PROVIDER` environment variable tells all of the various cluster management scripts which variant to use.
-+
-NOTE: This will take a few minutes, so be patience! Vagrant will provision each machine in the cluster with all the necessary components to run Kubernetes.
-+
-It shows the output as:
-+
-[source, text]
-----
-... Starting cluster using provider: vagrant
-... calling verify-prereqs
-... calling kube-up
-Bringing machine 'master' up with 'virtualbox' provider...
-Bringing machine 'minion-1' up with 'virtualbox' provider...
-==> master: Importing base box 'kube-fedora21'...
-==> master: Matching MAC address for NAT networking...
-==> master: Setting the name of the VM: kubernetes-112_master_1447998973006_60233
-
-. . .
-
-... calling validate-cluster
-Found 1 node(s).
-NAME         LABELS                              STATUS    AGE
-10.245.1.3   kubernetes.io/hostname=10.245.1.3   Ready     11s
-Validate output:
-NAME                 STATUS    MESSAGE              ERROR
-controller-manager   Healthy   ok                   nil
-scheduler            Healthy   ok                   nil
-etcd-0               Healthy   {"health": "true"}   nil
-etcd-1               Healthy   {"health": "true"}   nil
-Cluster validation succeeded
-Done, listing cluster services:
-
-Kubernetes master is running at https://10.245.1.2
-Heapster is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/heapster
-KubeDNS is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/kube-dns
-KubeUI is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/kube-ui
-Grafana is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/monitoring-grafana
-InfluxDB is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/monitoring-influxdb
-----
-+
-Note down the address for Kubernetes master, `https://10.245.1.2` in this case.
-
-#### Download and Start the Kubernetes Cluster
-
-. Alternatively, the cluster can also be started as:
-+
-[source, text]
-----
-export KUBERNETES_PROVIDER=vagrant
-curl -sS https://get.k8s.io | bash
-Downloading kubernetes release v1.1.1 to /Users/arungupta/tmp/kubernetes.tar.gz
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-100  182M  100  182M    0     0  1158k      0  0:02:41  0:02:41 --:--:-- 1383k
-Unpacking kubernetes release v1.1.1
-Creating a kubernetes on vagrant...
-... Starting cluster using provider: vagrant
-... calling verify-prereqs
-... calling kube-up
-Bringing machine 'master' up with 'virtualbox' provider...
-Bringing machine 'minion-1' up with 'virtualbox' provider...
-==> master: Importing base box 'kube-fedora21'...
-==> master: Matching MAC address for NAT networking...
-==> master: Setting the name of the VM: kubernetes_master_1447999746508_72335
-
-. . .
-
-... calling validate-cluster
-Found 1 node(s).
-NAME         LABELS                              STATUS    AGE
-10.245.1.3   kubernetes.io/hostname=10.245.1.3   Ready     5s
-Validate output:
-NAME                 STATUS    MESSAGE              ERROR
-controller-manager   Healthy   ok                   nil
-scheduler            Healthy   ok                   nil
-etcd-0               Healthy   {"health": "true"}   nil
-etcd-1               Healthy   {"health": "true"}   nil
-Cluster validation succeeded
-Done, listing cluster services:
-
-Kubernetes master is running at https://10.245.1.2
-Heapster is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/heapster
-KubeDNS is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/kube-dns
-KubeUI is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/kube-ui
-Grafana is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/monitoring-grafana
-InfluxDB is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/monitoring-influxdb
-
-Kubernetes binaries at /Users/arungupta/tmp/kubernetes/cluster/
-You may want to add this directory to your PATH in $HOME/.profile
-Installation successful!
-----
+Kubernetes cluster can be easily started using Vagrant. Start a Kubernetes cluster as explained in <<Kubernetes_Setup>>.
 
 #### Verify the Cluster
 
@@ -147,7 +44,7 @@ Installation successful!
 +
 [source, text]
 ----
-kubernetes> vagrant status
+vagrant status
 Current machine states:
 
 master                    running (virtualbox)
@@ -181,8 +78,8 @@ Check the list of nodes as:
 [source, text]
 ----
 ./cluster/kubectl.sh get nodes
-NAME         LABELS                              STATUS
-10.245.1.3   kubernetes.io/hostname=10.245.1.3   Ready
+NAME         LABELS                              STATUS    AGE
+10.245.1.3   kubernetes.io/hostname=10.245.1.3   Ready     1m
 ----
 +
 . Check the list of pods:
@@ -199,7 +96,7 @@ NAME      READY     STATUS    RESTARTS   AGE
 ----
 ./cluster/kubectl.sh get svc
 NAME         CLUSTER_IP   EXTERNAL_IP   PORT(S)   SELECTOR   AGE
-kubernetes   10.247.0.1   <none>        443/TCP   <none>     29m
+kubernetes   10.247.0.1   <none>        443/TCP   <none>     3m
 ----
 +
 . Check the list of replication controllers:
@@ -215,7 +112,7 @@ CONTROLLER   CONTAINER(S)   IMAGE(S)   SELECTOR   REPLICAS
 
 Pods, and the IP addresses assigned to them, are ephemeral. If a pod dies then Kubernetes will recreate that pod because of its self-healing features, but it might recreate it on a different host. Even if it is on the same host, a different IP address could be assigned to it. And so any application cannot rely upon the IP address of the pod.
 
-Kubernetes services is an abstraction which defines a logical set of pods. A service is typically back-ended by one or more physical pods (associated using labels), and it has a permanent IP address that can be used by other pods/applications. For example, WildFly pod can not directly connect to a MySQL pod but can connect to MySQL service. In essence, Kubernetes service offers clients an IP and port pair which, when accessed, redirects to the appropriate backends.
+Kubernetes services is an abstraction which defines a logical set of pods. A service is typically back-ended by one or more physical pods (associated using labels), and it has a permanent IP address that can be used by other pods/applications. For example, WildFly pod can not directly connect to a Couchbase pod but can connect to Couchbase service. In essence, Kubernetes service offers clients an IP and port pair which, when accessed, redirects to the appropriate backends.
 
 .Kubernetes Service
 image::kubernetes-service.png[]
@@ -226,14 +123,14 @@ Any Service that a Pod wants to access must be created before the Pod itself, or
 
 The order of Service and the targeted Pods does not matter. However Service needs to be started before any other Pods consuming the Service are started.
 
-#### Start MySQL Pod
+#### Start Couchbase Pod
 
-. Start MySQL Pod:
+. Start Couchbase Pod:
 +
 [source, text]
 ----
-./cluster/kubectl.sh create -f ~/workspaces/docker-java/attendees/kubernetes/app-mysql-pod.yaml
-pod "mysql-pod" created
+./cluster/kubectl.sh create -f ~/workspaces/docker-java/attendees/kubernetes/app-couchbase-pod.yaml
+pod "couchbase-pod" created
 ----
 +
 It uses the following configuration file:
@@ -243,55 +140,49 @@ It uses the following configuration file:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: mysql-pod
+  name: couchbase-pod
   labels:
-    name: mysql-pod
+    name: couchbase-pod
     context: docker-k8s-lab
 spec:
-  containers:
-    -
-      name: mysql
-      image: mysql:latest
-      env:
-        -
-          name: "MYSQL_USER"
-          value: "mysql"
-        -
-          name: "MYSQL_PASSWORD"
-          value: "mysql"
-        -
-          name: "MYSQL_DATABASE"
-          value: "sample"
-        -
-          name: "MYSQL_ROOT_PASSWORD"
-          value: "supersecret"
-      ports:
-        -
-          containerPort: 3306
+  containers: 
+    - 
+      name: couchbase
+      image: arungupta/couchbase
+      ports: 
+        - 
+          containerPort: 8091
+          containerPort: 8092
+          containerPort: 8093
+          containerPort: 11210
 ----
++
+`arungupta/couchbase` image starts Couchbase server, configures it using http://developer.couchbase.com/documentation/server/4.0/rest-api/rest-endpoints-all.html[Couchbase REST API], and loads a sample data bucket.
 +
 . Get status of the Pod:
 +
 [source, text]
 ----
 ./cluster/kubectl.sh get -w po
-NAME        READY     STATUS    RESTARTS   AGE
-mysql-pod   0/1       Pending   0          16s
-NAME        READY     STATUS    RESTARTS   AGE
-mysql-pod   0/1       Running   0          53s
-mysql-pod   1/1       Running   0         53s
+NAME            READY     STATUS    RESTARTS   AGE
+couchbase-pod   0/1       Pending   0          16s
+NAME            READY     STATUS    RESTARTS   AGE
+couchbase-pod   0/1       Running   0          40s
+couchbase-pod   1/1       Running   0         40s
 ----
 +
-`-w` watches for changes to the requested object. Wait for the MySQL pod to be in Running status.
+`-w` watches for changes to the requested object. Wait for the Couchbase pod to be in Running status.
++
+Hit `Ctrl` + `C` to terminate the watch.
 
-#### Start MySQL service
+#### Start Couchbase service
 
-. Start MySQL Service:
+. Start Couchbase Service:
 +
 [source, text]
 ----
-./cluster/kubectl.sh create -f ~/workspaces/docker-java/attendees/kubernetes/app-mysql-service.yaml
-service "mysql-service" created
+./cluster/kubectl.sh create -f ~/workspaces/docker-java/attendees/kubernetes/app-couchbase-service.yaml
+service "couchbase-service" created
 ----
 +
 It uses the following configuration file:
@@ -300,18 +191,25 @@ It uses the following configuration file:
 ----
 apiVersion: v1
 kind: Service
-metadata:
-  name: mysql-service
-  labels:
-    name: mysql-pod
+metadata: 
+  name: couchbase-service
+  labels: 
+    name: couchbase-pod
     context: docker-k8s-lab
-spec:
+spec: 
   ports:
     # the port that this service should serve on
-    - port: 3306
+    - name: admin
+      port: 8091
+    - name: queries
+      port: 8092
+    - name: rest
+      port: 8093
+    - name: nodes
+      port: 11210
   # label keys and values that must match in order to receive traffic for this service
-  selector:
-    name: mysql-pod
+  selector: 
+    name: couchbase-pod
     context: docker-k8s-lab
 ----
 +
@@ -321,26 +219,26 @@ Once again, the label "`context: docker-k8s-lab`" is used. This simplifies query
 +
 [source, text]
 ----
-./cluster/kubectl.sh get svc
-NAME            CLUSTER_IP       EXTERNAL_IP   PORT(S)    SELECTOR                                AGE
-kubernetes      10.247.0.1       <none>        443/TCP    <none>                                  32m
-mysql-service   10.247.241.209   <none>        3306/TCP   context=docker-k8s-lab,name=mysql-pod   34s
+./cluster/kubectl.sh get svc 
+NAME                CLUSTER_IP      EXTERNAL_IP   PORT(S)                                SELECTOR                                    AGE
+couchbase-service   10.247.202.53   <none>        8091/TCP,8092/TCP,8093/TCP,11210/TCP   context=docker-k8s-lab,name=couchbase-pod   1m
+kubernetes          10.247.0.1      <none>        443/TCP                                <none>                                      32m
 ----
 +
 If multiple services are running, then it can be narrowed by specifying the labels:
 +
 [source, text]
 ----
-./cluster/kubectl.sh get svc -l context=docker-k8s-lab,name=mysql-pod
-NAME            CLUSTER_IP       EXTERNAL_IP   PORT(S)    SELECTOR                                AGE
-mysql-service   10.247.241.209   <none>        3306/TCP   context=docker-k8s-lab,name=mysql-pod   1m
+./cluster/kubectl.sh get svc -l context=docker-k8s-lab,name=couchbase-pod
+NAME                CLUSTER_IP      EXTERNAL_IP   PORT(S)                                SELECTOR                                    AGE
+couchbase-service   10.247.202.53   <none>        8091/TCP,8092/TCP,8093/TCP,11210/TCP   context=docker-k8s-lab,name=couchbase-pod   1m
 ----
 +
 This is also the selector label used by Service to target Pods.
 +
 When a Service is run on a node, the kubelet adds a set of environment variables for each active Service. It supports both Docker links compatible variables and simpler `{SVCNAME}_SERVICE_HOST` and `{SVCNAME}_SERVICE_PORT` variables, where the Service name is upper-cased and dashes are converted to underscores.
 +
-Our service name is "`mysql-service`" and so `MYSQL_SERVICE_SERVICE_HOST` and `MYSQL_SERVICE_SERVICE_PORT` variables are available to other pods.
+Our service name is "`couchbase-service`" and so `COUCHBASE_SERVICE_SERVICE_HOST` and `COUCHBASE_SERVICE_SERVICE_PORT` variables are available to other pods.
 
 Kubernetes also allows services to be resolved using DNS configuration. Send a Pull Request for adding this functionality to the lab as explained in https://github.com/javaee-samples/docker-java/issues/62[#62].
 
@@ -374,7 +272,10 @@ spec:
     spec:
       containers:
       - name: wildfly-rc-pod
-        image: arungupta/wildfly-mysql-javaee7:k8s
+        image: arungupta/wildfly-couchbase-javaee7
+        env:
+          - name: COUCHBASE_URI
+            value: $COUCHBASE_SERVICE_SERVICE_HOST
         ports:
         - containerPort: 8080
 ----
