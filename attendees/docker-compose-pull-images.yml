@@ -8,6 +8,8 @@ javaee7-hol:
   image: arungupta/javaee7-hol
 swarm:
   image: swarm
-wildfly-mysql-javaee7:
-  image: arungupta/wildfly-mysql-javaee7
+wildfly-couchbase-javaee7:
+  image: arungupta/wildfly-couchbase-javaee7
+couchbase:
+  image: arungupta/couchbase
 
