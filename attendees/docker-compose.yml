@@ -1,12 +1,16 @@
-mysqldb:
-  image: mysql
-  environment:
-    MYSQL_DATABASE: sample
-    MYSQL_USER: mysql
-    MYSQL_PASSWORD: mysql
-    MYSQL_ROOT_PASSWORD: supersecret
+mycouchbase:
+  container_name: "db"
+  image: arungupta/couchbase
+  ports:
+    - 8091:8091
+    - 8092:8092 
+    - 8093:8093 
+    - 11210:11210
 mywildfly:
-  image: arungupta/wildfly-mysql-javaee7
-  links:
-    - mysqldb:db
-  
+  image: arungupta/wildfly-couchbase-javaee7
+  environment:
+    - COUCHBASE_URI=db
+  ports:
+    - 8080:8080
+    - 9990:9990
+
