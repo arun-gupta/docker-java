@@ -115,7 +115,6 @@ export KUBERNETES_PROVIDER=vagrant
 +
 NOTE: This will take a few minutes, so be patience! Vagrant will provision each machine in the cluster with all the necessary components to run Kubernetes.
 +
-+
 It shows the output as:
 +
 [source, text]
