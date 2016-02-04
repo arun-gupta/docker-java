@@ -52,6 +52,8 @@ include::chapters/docker-mod-cluster.adoc[]
 
 include::chapters/docker-swarm.adoc[]
 
+include::chapters/docker-tutum.adoc[]
+
 include::chapters/docker-kubernetes.adoc[]
 
 ////

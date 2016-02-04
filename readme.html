@@ -486,7 +486,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_run_container_with_specified_port">Run Container with Specified Port</a></li>
 <li><a href="#_stop_container">Stop Container</a></li>
 <li><a href="#_remove_container">Remove Container</a></li>
-<li><a href="#Enabling_WildFly_Administration">Enable WildFly Administration</a>
+<li><a href="#Enabling_WildFly_Administration">Enable WildFly Administration (Optional)</a>
 <ul class="sectlevel3">
 <li><a href="#_default_port_mapping">Default Port Mapping</a></li>
 <li><a href="#Management_Fixed_Port_Mapping">Fixed Port Mapping</a></li>
@@ -496,7 +496,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#JavaEE7_PreBuilt_WAR">Deploy Java EE 7 Application (Pre-Built WAR)</a></li>
 <li><a href="#JavaEE7_Container_Linking">Deploy Java EE 7 Application (Container Linking)</a></li>
-<li><a href="#_build_and_deploy_java_ee_7_application">Build and Deploy Java EE 7 Application</a>
+<li><a href="#_build_and_deploy_java_ee_7_application_optional">Build and Deploy Java EE 7 Application (Optional)</a>
 <ul class="sectlevel2">
 <li><a href="#Build_Application">Build Application</a></li>
 <li><a href="#_start_application_server">Start Application Server</a></li>
@@ -513,7 +513,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_understand_plugin_configuration">Understand Plugin Configuration</a></li>
 </ul>
 </li>
-<li><a href="#_docker_tools_in_eclipse">Docker Tools in Eclipse</a>
+<li><a href="#_docker_tools_in_eclipse_optional">Docker Tools in Eclipse (Optional)</a>
 <ul class="sectlevel2">
 <li><a href="#_install_docker_tools_plugins">Install Docker Tools Plugins</a></li>
 <li><a href="#_docker_explorer">Docker Explorer</a></li>
@@ -522,7 +522,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_details_on_images_and_containers">Details on Images and Containers</a></li>
 </ul>
 </li>
-<li><a href="#_test_java_ee_applications_on_docker">Test Java EE Applications on Docker</a></li>
+<li><a href="#_test_java_ee_applications_on_docker_optional">Test Java EE Applications on Docker (Optional)</a></li>
 <li><a href="#Docker_Compose">Multiple Containers Using Docker Compose</a>
 <ul class="sectlevel2">
 <li><a href="#_the_application">The Application</a></li>
@@ -543,6 +543,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_configure_couchbase_server">Configure Couchbase server</a></li>
 <li><a href="#_deploy_application">Deploy Application</a></li>
 <li><a href="#_access_application">Access Application</a></li>
+</ul>
+</li>
+<li><a href="#_deploy_docker_containers_to_amazon_using_tutum">Deploy Docker Containers to Amazon using Tutum</a>
+<ul class="sectlevel2">
+<li><a href="#_key_concepts">Key Concepts</a></li>
+<li><a href="#_deploy_couchbase_docker_container_on_amazon_using_tutum">Deploy Couchbase Docker Container on Amazon using Tutum</a></li>
+<li><a href="#_create_access_sample_bucket_on_couchbase">Create/Access Sample Bucket on Couchbase</a></li>
+<li><a href="#_access_couchbase_using_java_application">Access Couchbase using Java application</a></li>
 </ul>
 </li>
 <li><a href="#_deploy_application_on_kubernetes_cluster">Deploy Application on Kubernetes Cluster</a>
@@ -861,18 +869,11 @@ This will take a few minutes, so be patience! Vagrant will provision each machin
 </table>
 </div>
 <div class="paragraph">
-<p>+
-It shows the output as:</p>
-</div>
-<div class="paragraph">
-<p>+</p>
-</div>
-</li>
-</ol>
+<p>It shows the output as:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>kubernetes &gt; ./cluster/kube-up.sh
+<pre class="highlight"><code class="language-text" data-lang="text">kubernetes &gt; ./cluster/kube-up.sh
 ... Starting cluster using provider: vagrant
 ... calling verify-prereqs
 ... calling kube-up
@@ -902,12 +903,14 @@ Heapster is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/se
 KubeDNS is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/kube-dns
 KubeUI is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/kube-ui
 Grafana is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/monitoring-grafana
-InfluxDB is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/monitoring-influxdb</pre>
+InfluxDB is running at https://10.245.1.2/api/v1/proxy/namespaces/kube-system/services/monitoring-influxdb</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>+
-Note down the address for Kubernetes master, <code><a href="https://10.245.1.2" class="bare">https://10.245.1.2</a></code> in this case.</p>
+<p>Note down the address for Kubernetes master, <code><a href="https://10.245.1.2" class="bare">https://10.245.1.2</a></code> in this case.</p>
+</div>
+</li>
+</ol>
 </div>
 </div>
 </div>
@@ -1886,7 +1889,7 @@ See more about networking on the Docker website <a href="https://docs.docker.com
 </div>
 </div>
 <div class="sect2">
-<h3 id="Enabling_WildFly_Administration">Enable WildFly Administration</h3>
+<h3 id="Enabling_WildFly_Administration">Enable WildFly Administration (Optional)</h3>
 <div class="paragraph">
 <p>Default WildFly image exposes only port 8080 and thus is not available for administration using either the CLI or Admin Console. Lets expose the ports in different ways.</p>
 </div>
@@ -2177,7 +2180,7 @@ Exact port number may be different in your case.
 </div>
 </div>
 <div class="sect1">
-<h2 id="_build_and_deploy_java_ee_7_application">Build and Deploy Java EE 7 Application</h2>
+<h2 id="_build_and_deploy_java_ee_7_application_optional">Build and Deploy Java EE 7 Application (Optional)</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p><a href="https://github.com/javaee-samples/javaee7-simple-sample">Java EE 7 Simple Sample</a> is a trivial Java EE 7 sample application.</p>
@@ -2422,7 +2425,7 @@ Windows users, please make sure to use <code>-v /c/Users/</code> notation for dr
 <div class="sect2">
 <h3 id="_deploy_application_using_web_console">Deploy Application Using Web Console</h3>
 <div class="paragraph">
-<p>WildFly comes with a web-based administration console. It also relies on the same management APIs that are used by JBoss Developer Tools and the CLI. It provides a simple and easy to use web-based console to manage WildFly instance. For a Docker image, it needs to be explicitly enabled as explained in <a href="#Enabling_WildFly_Administration">Enable WildFly Administration</a>. Once enabled, it can be accessed at <a href="http://dockerhost:9990" class="bare">http://dockerhost:9990</a>.</p>
+<p>WildFly comes with a web-based administration console. It also relies on the same management APIs that are used by JBoss Developer Tools and the CLI. It provides a simple and easy to use web-based console to manage WildFly instance. For a Docker image, it needs to be explicitly enabled as explained in <a href="#Enabling_WildFly_Administration">Enable WildFly Administration (Optional)</a>. Once enabled, it can be accessed at <a href="http://dockerhost:9990" class="bare">http://dockerhost:9990</a>.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -2767,7 +2770,7 @@ arungupta/javaee7-docker-maven    latest              2e51b3fca40f        4 seco
 </div>
 </div>
 <div class="sect1">
-<h2 id="_docker_tools_in_eclipse">Docker Tools in Eclipse</h2>
+<h2 id="_docker_tools_in_eclipse_optional">Docker Tools in Eclipse (Optional)</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The Docker tooling is aimed at providing at minimum the same basic level features as the command-line interface, but also provide some advantages by having access to a full fledged UI.</p>
@@ -3039,7 +3042,7 @@ arungupta/javaee7-docker-maven    latest              2e51b3fca40f        4 seco
 </div>
 </div>
 <div class="sect1">
-<h2 id="_test_java_ee_applications_on_docker">Test Java EE Applications on Docker</h2>
+<h2 id="_test_java_ee_applications_on_docker_optional">Test Java EE Applications on Docker (Optional)</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Testing Java EE applications is a very important aspect. Especially when it comes to in-container tests, <a href="http://www.arquillian.org">JBoss Arquillian</a> is well known to make this very easy for Java EE application servers. Picking up where unit tests leave off, Arquillian handles all the plumbing of container management, deployment and framework initialization so you can focus on the task at hand, writing your tests.</p>
@@ -3274,8 +3277,7 @@ mywildfly:
   environment:
     - COUCHBASE_URI=db
   ports:
-    - 8080:8080
-    - 9990:9990</code></pre>
+    - 8080:8080</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4284,6 +4286,231 @@ INFO: JBoss Remoting version 4.0.9.Final
 </div>
 <div class="paragraph">
 <p>Add container visualization using <a href="https://github.com/javaee-samples/docker-java/issues/55" class="bare">https://github.com/javaee-samples/docker-java/issues/55</a>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_deploy_docker_containers_to_amazon_using_tutum">Deploy Docker Containers to Amazon using Tutum</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_key_concepts">Key Concepts</h3>
+<div class="paragraph">
+<p>Docker Tutum is a SaaS that allows you to build, deploy and manage Docker containers in a variety of clouds.</p>
+</div>
+<div class="paragraph">
+<p>There are three main features:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Build</strong> and run your code using Tutum&#8217;s free private registry</p>
+</li>
+<li>
+<p><strong>Deploy</strong> applications using Tutum to manage Clusters that are fault tolerant and scalable. Tutum handles the orchestration of your infrastructure and application containers.</p>
+</li>
+<li>
+<p><strong>Manage</strong> your applications through Tutum&#8217;s intuitive Dashboard, simple API, or CLI tool. With built-in logs and data monitoring, all the info you need is at your fingertips.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The main concepts of Docker Tutum are explained below:</p>
+</div>
+<div class="paragraph">
+<div class="title">Tutum Architecture</div>
+<p><span class="image"><img src="./chapters/images/images/docker-tutum-architecture.png" alt="docker tutum architecture"></span></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>(A) Node clusters are logical groups of nodes of the same type. Tutum pools your nodes resources, so your apps can run together thereby reducing complexity and waste. Node Clusters can be easily scaled with a drag of the slider.</p>
+</li>
+<li>
+<p>(B) Nodes are individual Linux hosts/VMs used to deploy and run your applications. New nodes can be provisioned right from within Tutum to increase the capacity of your Node Clusters.</p>
+</li>
+<li>
+<p>&#169; Containers, (D) Links and (E) Volumes are Docker concepts.</p>
+</li>
+<li>
+<p>(F) Services are logical groups of Docker containers from the same image. Services make it simple to scale your application across different nodes. Simply drag a slider to increase or decrease the availability, performance, and redundancy of your application.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_deploy_couchbase_docker_container_on_amazon_using_tutum">Deploy Couchbase Docker Container on Amazon using Tutum</h3>
+<div class="paragraph">
+<p><a href="https://support.tutum.co/support/solutions/5000042949">Docker Tutum Getting Started</a> provides detailed steps on how to get started. Here are the steps that you need to follow to run Couchbase Docker container in Amazon using Docker Tutum.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Get started for free (at least while its in beta) by <a href="https://dashboard.tutum.co/accounts/login/">logging in</a> using Docker Hub account.</p>
+</li>
+<li>
+<p>Link <a href="https://support.tutum.co/support/solutions/articles/5000224910-link-your-amazon-web-services-account">Amazon Web Services credentials with Tutum</a>. I just had to specify Access Key Id and Secret Access Key.If you create a new account for this then you may have to attach a policy to enable privileges such that new instances can be provisioned on your behalf.</p>
+</li>
+<li>
+<p>Create a new node cluster at dashboard.tutum.co/node/launch/</p>
+<div class="paragraph">
+<p><span class="image"><img src="./chapters/images/images/docker-tutum-new-node-cluster.png" alt="docker tutum new node cluster"></span></p>
+</div>
+<div class="paragraph">
+<p>The values that need to be specified/changed:</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Node cluster name</p>
+</li>
+<li>
+<p>Deploy tags (optional)</p>
+</li>
+<li>
+<p>Type/size to t2.medium</p>
+</li>
+<li>
+<p>Disk size reduce from 60 to 20 GB (optional)</p>
+<div class="paragraph">
+<p>Takes a few minutes to provision the AMI. Updated status could be seen on <a href="https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#Instances:sort=instanceId">AWS Console</a>:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="./chapters/images/images/docker-tutum-aws-console.png" alt="docker tutum aws console"></span></p>
+</div>
+<div class="paragraph">
+<p>Tutum dashboard shows the following status after the node is created:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="./chapters/images/images/docker-tutum-node-created.png" alt="docker tutum node created"></span></p>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Create your first service at <a href="http://dashboard.tutum.co/container/launch/" class="bare">http://dashboard.tutum.co/container/launch/</a>. Select &#8220;Public Repositories&#8221; and search for &#8220;arungupta/couchbase-node&#8221;.</p>
+<div class="paragraph">
+<p><span class="image"><img src="./chapters/images/images/docker-tutum-new-service.png" alt="docker tutum new service"></span></p>
+</div>
+<div class="paragraph">
+<p>This image is created from <a href="http://github.com/arun-gupta/docker-images/tree/master/couchbase-node" class="bare">http://github.com/arun-gupta/docker-images/tree/master/couchbase-node</a>. This image performs the following:</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Starts Couchbase server</p>
+</li>
+<li>
+<p>Configures the server using <a href="http://developer.couchbase.com/documentation/server/current/rest-api/rest-endpoints-all.html">Couchbase REST API</a></p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Click on &#8220;Select&#8221; and configure. You only need to override the ports and take all other defaults:</p>
+<div class="paragraph">
+<p><span class="image"><img src="./chapters/images/images/docker-tutum-couchbase-configuration.png" alt="docker tutum couchbase configuration"></span></p>
+</div>
+<div class="paragraph">
+<p>Click on &#8220;Create and Deploy&#8221;.</p>
+</div>
+</li>
+<li>
+<p>Dashboard is updated after the service is deployed:</p>
+<div class="paragraph">
+<p><span class="image"><img src="./chapters/images/images/docker-tutum-couchbase-service.png" alt="docker tutum couchbase service"></span></p>
+</div>
+</li>
+<li>
+<p>Click on &#8220;Logs&#8221; to see logs from the Couchbase Docker container:</p>
+<div class="paragraph">
+<p><span class="image"><img src="./chapters/images/images/docker-tutum-couchbase-logs.png" alt="docker tutum couchbase logs"></span></p>
+</div>
+</li>
+<li>
+<p>Find IP address from the AWS Console:</p>
+<div class="paragraph">
+<p><span class="image"><img src="./chapters/images/images/docker-tutum-aws-console-ipaddress.png" alt="docker tutum aws console ipaddress"></span></p>
+</div>
+</li>
+<li>
+<p>Access Couchbase Console at &lt;IP-ADDRESS&gt;:8091, in our case <a href="http://54.67.111.235:8091" class="bare">http://54.67.111.235:8091</a>. This will show the login screen of Couchbase:</p>
+<div class="paragraph">
+<p><span class="image"><img src="./chapters/images/images/docker-tutum-couchbase-console-login.png" alt="docker tutum couchbase console login"></span></p>
+</div>
+<div class="paragraph">
+<p>Enter the username &#8220;Administrator&#8221; and password &#8220;password&#8221;.</p>
+</div>
+</li>
+<li>
+<p>This shows the Couchbase Console:</p>
+<div class="paragraph">
+<p><span class="image"><img src="./chapters/images/images/docker-tutum-couchbase-console.png" alt="docker tutum couchbase console"></span></p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_create_access_sample_bucket_on_couchbase">Create/Access Sample Bucket on Couchbase</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Click on &#8220;Settings&#8221;, &#8220;Sample Buckets&#8221;. This shows the list of sample buckets that can be installed.</p>
+</li>
+<li>
+<p>Select &#8220;travel-sample&#8221; and click on &#8220;Create&#8221;. The updated console looks like:</p>
+<div class="paragraph">
+<p><span class="image"><img src="./chapters/images/images/docker-tutum-couchbase-travel-sample.png" alt="docker tutum couchbase travel sample"></span></p>
+</div>
+</li>
+<li>
+<p>If you&#8217;ve downloaded Couchbase server locally, then you can use <a href="http://developer.couchbase.com/documentation/server/current/cli/cbq-tool.html">Couchbase Query CLI Tool</a> (cbq) to connect and query:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">bin &gt; ./cbq -engine=http://54.67.111.235:8093
+Couchbase query shell connected to http://54.67.111.235:8093/ . Type Ctrl-D to exit.
+cbq&gt; select * from `travel-sample` limit 1;
+{
+    "requestID": "aec63fba-a85a-4763-9453-1d7ea0c5409c",
+    "signature": {
+        "*": "*"
+    },
+    "results": [
+        {
+            "travel-sample": {
+                "callsign": "MILE-AIR",
+                "country": "United States",
+                "iata": "Q5",
+                "icao": "MLA",
+                "id": 10,
+                "name": "40-Mile Air",
+                "type": "airline"
+            }
+        }
+    ],
+    "status": "success",
+    "metrics": {
+        "elapsedTime": "10.135335ms",
+        "executionTime": "10.091507ms",
+        "resultCount": 1,
+        "resultSize": 300
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Couchbase allows to query document database using <a href="http://www.couchbase.com/n1ql">SQL-like syntax</a>, aka N1QL.</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_access_couchbase_using_java_application">Access Couchbase using Java application</h3>
+<div class="paragraph">
+<p>Use instructions from <a href="https://github.com/arun-gupta/couchbase-javaee" class="bare">https://github.com/arun-gupta/couchbase-javaee</a>.</p>
 </div>
 </div>
 </div>
@@ -5595,7 +5822,7 @@ token</a> and pass it to Docker Machine using the global <code>--github-api-toke
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-11-05 12:45:27 PST
+Last updated 2016-02-03 17:44:59 PST
 </div>
 </div>
 </body>
