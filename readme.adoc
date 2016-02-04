@@ -1,5 +1,5 @@
 # Docker and Kubernetes for Java Developers
-v1.4, Nov 5, 2015
+v1.5, Feb 3, 2016
 :toc:
 :toc-title: Table of Contents
 :toclevels: 3
