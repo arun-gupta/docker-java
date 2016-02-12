@@ -1,4 +1,4 @@
-## Test Java EE Applications on Docker
+## Test Java EE Applications on Docker (Optional)
 
 Testing Java EE applications is a very important aspect. Especially when it comes to in-container tests, http://www.arquillian.org[JBoss Arquillian] is well known to make this very easy for Java EE application servers. Picking up where unit tests leave off, Arquillian handles all the plumbing of container management, deployment and framework initialization so you can focus on the task at hand, writing your tests.
 
