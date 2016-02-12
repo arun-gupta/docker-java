@@ -1,4 +1,4 @@
-## Docker Tools in Eclipse
+## Docker Tools in Eclipse (Optional)
 
 The Docker tooling is aimed at providing at minimum the same basic level features as the command-line interface, but also provide some advantages by having access to a full fledged UI.
 
