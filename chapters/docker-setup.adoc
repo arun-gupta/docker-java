@@ -1,3 +1,5 @@
+:imagesdir: images
+
 ## Setup Environments
 
 This section describes the software needed for this workshop. This workshop is designed for a BYOL (Brying Your Own Laptop) style hands-on-lab.
@@ -15,8 +17,8 @@ Docker runs natively on Linux. Because the Docker daemon uses Linux-specific ker
 
 Follow the instructions to install Docker:
 
-. https://github.com/docker/toolbox/releases/download/v1.9.0/DockerToolbox-1.9.0.pkg[Docker Tool Box 1.9.0 for Mac]
-. https://github.com/docker/toolbox/releases/download/v1.9.0/DockerToolbox-1.9.0.exe[Docker Toolbox 1.9.0 for Windows]
+. https://github.com/docker/toolbox/releases/download/v1.10.0/DockerToolbox-1.10.0.pkg[Docker Tool Box 1.10.0 for Mac]
+. https://github.com/docker/toolbox/releases/download/v1.10.0/DockerToolbox-1.10.0.exe[Docker Toolbox 1.10.0 for Windows]
 . http://docs.docker.com/engine/installation/ubuntulinux/[Docker on Ubuntu]
 . http://docs.docker.com/engine/installation/centos/[Docker on Centos]
 . http://docs.docker.com/engine/installation/fedora/[Docker on Fedora]
@@ -69,7 +71,7 @@ The following software needs to be downloaded if you want to build/deploy a Java
 
 ##### WildFly
 
-. Download WildFly 9.0 from http://download.jboss.org/wildfly/9.0.0.Final/wildfly-9.0.0.Final.zip.
+. Download WildFly 10.0 from http://download.jboss.org/wildfly/10.0.0.Final/wildfly-10.0.0.Final.zip.
 . Install it by extracting the archive.
 
 ##### JBoss Developer Studio 9.0
