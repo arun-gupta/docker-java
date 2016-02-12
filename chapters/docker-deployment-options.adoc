@@ -1,4 +1,4 @@
-## Build and Deploy Java EE 7 Application
+## Build and Deploy Java EE 7 Application (Optional)
 
 https://github.com/javaee-samples/javaee7-simple-sample[Java EE 7 Simple Sample] is a trivial Java EE 7 sample application.
 
