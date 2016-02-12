@@ -247,7 +247,7 @@ docker rm $(docker ps -aq)
 ----
 
 [[Enabling_WildFly_Administration]]
-### Enable WildFly Administration
+### Enable WildFly Administration (Optional)
 
 Default WildFly image exposes only port 8080 and thus is not available for administration using either the CLI or Admin Console. Lets expose the ports in different ways.
 
