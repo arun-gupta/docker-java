@@ -52,7 +52,6 @@ mywildfly:
     - COUCHBASE_URI=db
   ports:
     - 8080:8080
-    - 9990:9990
 ----
 +
 This file is available in https://github.com/javaee-samples/docker-java/raw/master/attendees/docker-compose.yml[] and shows:
