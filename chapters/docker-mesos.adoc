@@ -1,3 +1,5 @@
+:imagesdir: images
+
 ## Java EE Application on Mesos + Marathon Cluster
 
 [quote, mesos.apache.org/]

@@ -1,3 +1,5 @@
+:imagesdir: images
+
 ## Deploy Application on Kubernetes Cluster
 
 [quote, github.com/GoogleCloudPlatform/kubernetes/]

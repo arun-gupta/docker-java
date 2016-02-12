@@ -1,4 +1,6 @@
-== Build an Image
+:imagesdir: images
+
+== Build a Docker Image
 
 *PURPOSE*: This chapter explains how to create a Docker image.
 

@@ -1,3 +1,5 @@
+:imagesdir: images
+
 ## Run a Container
 
 The first step in running any application on Docker is to run a container from an image. There are plenty of images available from the official Docker registry (aka https://hub.docker.com[Docker Hub]). To run any of them, you just have to ask the Docker Client to run it. The client will check if the image already exists on Docker Host. If it exists then it'll run it, otherwise the host will download the image and then run it.

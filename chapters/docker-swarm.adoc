@@ -1,3 +1,5 @@
+:imagesdir: images
+
 [[Docker_Swarm]]
 ## Deploy Application on Docker Swarm Cluster
 

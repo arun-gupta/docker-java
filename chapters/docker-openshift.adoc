@@ -1,3 +1,5 @@
+:imagesdir: images
+
 ## OpenShift v3 (Optional Part, No Windows?)
 
 [quote, github.com/openshift/origin]

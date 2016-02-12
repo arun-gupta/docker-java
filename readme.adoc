@@ -1,69 +1,56 @@
 # Docker and Kubernetes for Java Developers
-v1.5, Feb 3, 2016
+v1.6, Feb 12, 2016
 :toc:
 :toc-title: Table of Contents
 :toclevels: 3
 :toc-placement!:
-:imagesdir: ./chapters/images
-
-Latest HTML:
-https://htmlpreview.github.io/?https://github.com/javaee-samples/docker-java/blob/master/readme.html
 
 toc::[]
 
-include::chapters/docker-preface.adoc[]
+link:chapters/docker-preface.adoc[Preface]
 
-include::chapters/docker-setup.adoc[]
+link:chapters/docker-setup.adoc[Setup Environments]
 
-include::chapters/docker-basics.adoc[]
+link:chapters/docker-basics.adoc[Docker Basics]
 
-include::chapters/docker-image.adoc[]
+link:chapters/docker-image.adoc[Build a Docker Image]
 
-include::chapters/docker-container.adoc[]
+link:chapters/docker-container.adoc[Run a Docker Container]
 
-include::chapters/docker-javaee7.adoc[]
+link:chapters/docker-javaee7.adoc[Deploy and Test Java EE 7 Application]
 
-include::chapters/docker-container-linking.adoc[]
+link:chapters/docker-deployment-options.adoc[Build and Deploy Java EE 7 Application]
 
-include::chapters/docker-deployment-options.adoc[]
+link:chapters/docker-maven.adoc[Docker Maven Plugin]
 
-////
-include::chapters/docker-ticket-monster.adoc[]
-////
-
-include::chapters/docker-maven.adoc[]
-
-include::chapters/docker-eclipse.adoc[]
+link:chapters/docker-eclipse.adoc[Docker Tools in Eclipse]
 
 ////
-include::chapters/docker-netbeans.adoc[]
+link:chapters/docker-netbeans.adoc[]
 
-include::chapters/docker-intellij.adoc[]
+link:chapters/docker-intellij.adoc[]
 ////
 
-include::chapters/docker-testing.adoc[]
-
-include::chapters/docker-compose.adoc[]
-
+link:chapters/docker-compose.adoc[Multiple Containers Using Docker Compose]
 
 ////
-include::chapters/docker-mod-cluster.adoc[]
+link:chapters/docker-mod-cluster.adoc[]
 ////
 
-include::chapters/docker-swarm.adoc[]
+link:chapters/docker-swarm.adoc[Deploy Application on Docker Swarm Cluster]
 
-include::chapters/docker-tutum.adoc[]
+link:chapters/docker-tutum.adoc[Deploy Docker Containers to Amazon using Tutum]
 
-include::chapters/docker-kubernetes.adoc[]
+link:chapters/docker-kubernetes.adoc[Deploy Application on Kubernetes Cluster]
 
 ////
-include::chapters/docker-continuous-delivery.adoc[]
+link:chapters/docker-continuous-delivery.adoc[]
 
-include::chapters/docker-openshift.adoc[]
+link:chapters/docker-openshift.adoc[]
 ////
 
-include::chapters/docker-commands.adoc[]
+link:chapters/docker-commands.adoc[Common Docker Commands]
 
-include::chapters/docker-troubleshooting.adoc[]
+link:chapters/docker-troubleshooting.adoc[Troubleshooting]
 
-include::chapters/docker-references.adoc[]
+link:chapters/docker-references.adoc[References]

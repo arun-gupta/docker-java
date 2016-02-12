@@ -1,3 +1,5 @@
+:imagesdir: images
+
 ## Java EE Application on Lattice Cluster
 
 [quote, github.com/cloudfoundry-incubator/lattice]

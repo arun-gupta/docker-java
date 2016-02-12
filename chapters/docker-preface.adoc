@@ -1,3 +1,5 @@
+:imagesdir: images
+
 ## Preface
 
 Containers are enabling developers to package their applications (and underlying dependencies) in new ways that are portable and work consistently everywhere? On your machine, in production, in your data center, and in the cloud. And Docker has become the de facto standard for those portable containers in the cloud.

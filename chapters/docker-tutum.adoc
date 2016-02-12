@@ -1,3 +1,5 @@
+:imagesdir: images
+
 == Deploy Docker Containers to Amazon using Tutum
 
 === Key Concepts

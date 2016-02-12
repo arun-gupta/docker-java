@@ -1,3 +1,5 @@
+:imagesdir: images
+
 == Kubernetes and Fabric8
 Fabric8 is a set of tools and services geared toward middleware and application developers that make it easy to develop microervices using Docker and Kubernetes.
 

@@ -1,3 +1,5 @@
+:imagesdir: images
+
 [[JavaEE_Application_Docker_Cluster]]
 ## Java EE Application on Mod Cluster
 

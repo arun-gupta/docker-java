@@ -1,0 +1,5 @@
+:imagesdir: images
+
+= Docker Universal Control Plane
+
+Docker Universal Control Plane (DUCP) offers an on-premises management solution for Docker apps - regardless of where they run. DUCP can deployed to any private infrastructure and public clouds including Microsoft Azure, Digital Ocean, Amazon Web Services, and SoftLayer.

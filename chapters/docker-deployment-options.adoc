@@ -1,4 +1,6 @@
-## Build and Deploy Java EE 7 Application (Optional)
+:imagesdir: images
+
+## Build and Deploy Java EE 7 Application
 
 https://github.com/javaee-samples/javaee7-simple-sample[Java EE 7 Simple Sample] is a trivial Java EE 7 sample application.
 
