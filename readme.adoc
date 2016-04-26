@@ -1,45 +1,7 @@
 # Docker and Kubernetes for Java Developers
-v1.6, Feb 12, 2016
-:toc:
-:toc-title: Table of Contents
-:toclevels: 3
-:toc-placement!:
+v2.0, Apr 26, 2016
 
-toc::[]
-
-link:chapters/docker-preface.adoc[Preface]
-
-link:chapters/docker-setup.adoc[Setup Environments]
-
-link:chapters/docker-basics.adoc[Docker Basics]
-
-link:chapters/docker-image.adoc[Build a Docker Image]
-
-link:chapters/docker-container.adoc[Run a Docker Container]
-
-link:chapters/docker-javaee7.adoc[Deploy and Test Java EE 7 Application]
-
-link:chapters/docker-deployment-options.adoc[Build and Deploy Java EE 7 Application]
-
-link:chapters/docker-maven.adoc[Docker Maven Plugin]
-
-link:chapters/docker-eclipse.adoc[Docker Tools in Eclipse]
-
-////
-link:chapters/docker-netbeans.adoc[]
-
-link:chapters/docker-intellij.adoc[]
-////
-
-link:chapters/docker-compose.adoc[Multiple Containers Using Docker Compose]
-
-////
-link:chapters/docker-mod-cluster.adoc[]
-////
-
-link:chapters/docker-swarm.adoc[Deploy Application on Docker Swarm Cluster]
-
-link:chapters/docker-tutum.adoc[Deploy Docker Containers to Amazon using Tutum]
+https://github.com/docker/community/tree/master/tutorials/java[Docker for Java developers]
 
 link:chapters/docker-kubernetes.adoc[Deploy Application on Kubernetes Cluster]
 
@@ -49,8 +11,3 @@ link:chapters/docker-continuous-delivery.adoc[]
 link:chapters/docker-openshift.adoc[]
 ////
 
-link:chapters/docker-commands.adoc[Common Docker Commands]
-
-link:chapters/docker-troubleshooting.adoc[Troubleshooting]
-
-link:chapters/docker-references.adoc[References]
