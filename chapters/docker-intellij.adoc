@@ -1,5 +1,0 @@
-:imagesdir: images
-
-## Docker Tools in IntelliJ
-
-http://blog.jetbrains.com/idea/2015/03/docker-support-in-intellij-idea-14-1/

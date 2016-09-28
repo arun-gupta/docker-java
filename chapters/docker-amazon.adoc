@@ -1,5 +1,0 @@
-## Deploy Application on Amazon Container Service
-
-[quote, docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html]
-Amazon EC2 Container Service (Amazon ECS) is a highly scalable, fast, container management service that makes it easy to run, stop, and manage Docker containers on a cluster of Amazon EC2 instances.
-
