@@ -1,6 +1,7 @@
-:imagesdir: images
+= Docker vs Kubernetes
 
-== Docker Swarm vs Kubernetes
+This document compares the two orchestration frameworks: http://github.com/docker/docker[Docker] and https://github.com/kubernetes/kubernetes[Kubernetes].
+
 
 [width="100%", options="header"]
 |==================
