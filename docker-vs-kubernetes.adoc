@@ -1,13 +1,13 @@
 = Docker vs Kubernetes
 
-This document compares the two orchestration frameworks: http://github.com/docker/docker[Docker] and https://github.com/kubernetes/kubernetes[Kubernetes].
+This document compares the two container orchestration frameworks: http://github.com/docker/docker[Docker] and https://github.com/kubernetes/kubernetes[Kubernetes].
 
 
 [width="100%", options="header"]
 |==================
 | Feature | Docker Swarm | Kubernetes
-| Development | Docker for Mac/Windows | minikube
-| Deployment | Docker for AWS/Azure, other cloud providers | Different cloud providers
+| Development | https://www.docker.com/products/overview[Docker for Mac/Windows] | https://github.com/kubernetes/minikube[minikube]
+| Deployment | https://www.docker.com/products/overview[Docker for AWS/Azure], other cloud providers | Different cloud providers
 | Multiple Master | Yes | No
 | Multi-host networking | Yes | Yes
 | Multiple clouds | https://docs.docker.com/docker-cloud/overview/[Docker Cloud], https://docs.docker.com/machine/drivers/[Docker Machine Drivers] | http://kubernetes.io/docs/getting-started-guides/#turn-key-cloud-solutions
