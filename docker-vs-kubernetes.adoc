@@ -8,6 +8,7 @@ This document compares the two container orchestration frameworks: http://github
 | Feature | Docker Swarm | Kubernetes
 | Development | https://www.docker.com/products/overview[Docker for Mac/Windows] | https://github.com/kubernetes/minikube[minikube]
 | Deployment | https://www.docker.com/products/overview[Docker for AWS/Azure], other cloud providers | Different cloud providers
+| On-premise | Yes | Yes
 | Multiple clouds | https://docs.docker.com/docker-cloud/overview/[Docker Cloud], https://docs.docker.com/machine/drivers/[Docker Machine Drivers] | http://kubernetes.io/docs/getting-started-guides/#turn-key-cloud-solutions
 | Cluster across multiple clouds | Yes | Yes? when using cross-cloud network solution
 | Service Discovery | Yes | `Service`
@@ -22,7 +23,7 @@ This document compares the two container orchestration frameworks: http://github
 | Rolling Update | https://github.com/arun-gupta/docker-scripts/blob/master/rolling-updates.adoc | https://github.com/arun-gupta/kubernetes-java-sample/tree/master/rolling-update
 | Container distribution strategies | Automatic? | Automatic, but custom schedulers supported.
 | Affinity | Labels | Node (1.2) and Pod (1.4) affinity http://kubernetes.io/docs/user-guide/node-selection/ 
-| Constraits | `-c`, `-m` | `Labels`
+| Constraints | `-c`, `-m` | `Labels`
 | Commercially supported | https://www.docker.com/products/docker-datacenter[Docker Data Center] and others | Google, Apprenda, Canonical, CoreOS, link:http://cloud-rti.com[Cloud RTI] others?
 | Creating Couchbase Cluster | http://blog.couchbase.com/2016/may/couchbase-cluster-docker-swarm-compose-machine | http://blog.kubernetes.io/2016/08/create-couchbase-cluster-using-kubernetes.html
 |==================
