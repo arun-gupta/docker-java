@@ -14,7 +14,7 @@ This document compares the two container orchestration frameworks: http://github
 | Service Discovery | Yes | `Service`
 | Dynamic Scaling | http://blog.couchbase.com/2016/july/docker-services-stack-distributed-application-bundle[Services, Distribued Application Bundle, Stack] | `Replica Set`, `Replication Controller`, `Deployment`, `Horizontal Pod Autoscaling`
 | Exposing a service | Routing mesh | `type=LoadBalancer` in `Deployment`
-| Run-once job | ? | `Job`
+| Run-once job | `docker run` | `Job`
 | Namespace | `docker-compose -p <namespace>` | `Namespace`
 | Maven | https://github.com/fabric8io/docker-maven-plugin[fabric8-maven-plugin] | https://github.com/fabric8io/docker-maven-plugin[fabric8-maven-plugin]
 | Volumes | https://docs.docker.com/engine/tutorials/dockervolumes/[Docker Volumes] | http://kubernetes.io/docs/user-guide/persistent-volumes/[Persistent Volumes]
