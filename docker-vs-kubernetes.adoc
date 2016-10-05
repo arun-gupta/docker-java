@@ -16,6 +16,7 @@ This document compares the two container orchestration frameworks: http://github
 | Exposing a service | Routing mesh | `type=LoadBalancer` in `Deployment`
 | Run-once job | `docker run` | `Job`
 | Namespace | `docker-compose -p <namespace>` | `Namespace`
+| Global service| `--mode=global` | `DaemonSet`
 | Maven | https://github.com/fabric8io/docker-maven-plugin[fabric8-maven-plugin] | https://github.com/fabric8io/docker-maven-plugin[fabric8-maven-plugin]
 | Volumes | https://docs.docker.com/engine/tutorials/dockervolumes/[Docker Volumes] | http://kubernetes.io/docs/user-guide/persistent-volumes/[Persistent Volumes]
 | Multiple Master | Yes | link:http://kubernetes.io/docs/admin/high-availability/#replicated-api-servers[Yes] 
