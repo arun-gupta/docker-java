@@ -5,7 +5,7 @@ This document compares the two container orchestration frameworks: http://github
 
 [width="100%", options="header"]
 |==================
-| Feature | Docker Swarm | Kubernetes
+| Feature | Docker Engine w/swarm mode | Kubernetes
 | Development | https://www.docker.com/products/overview[Docker for Mac/Windows] | https://github.com/kubernetes/minikube[minikube]
 | Deployment | https://www.docker.com/products/overview[Docker for AWS/Azure], other cloud providers | Different cloud providers
 | On-premise | Yes | Yes
