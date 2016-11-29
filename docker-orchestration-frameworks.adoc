@@ -5,7 +5,7 @@ This document compares the three container orchestration frameworks: http://gith
 
 [width="100%", options="header"]
 |==================
-| Feature | Docker Swarm | Kubernetes | DC/OS
+| Feature | Docker Engine w/ Swarm mode | Kubernetes | DC/OS
 | Development | https://www.docker.com/products/overview[Docker for Mac/Windows] | https://github.com/kubernetes/minikube[minikube] | https://dcos.io/docs/1.8/administration/installing/local[DC/OS Vagrant]
 | Enterprise Offering | Docker Datacenter | Multiple Vendors | Mesosphere Enterprise DC/OS
 | Multiple clouds | https://docs.docker.com/docker-cloud/overview/[Docker Cloud], https://docs.docker.com/machine/drivers/[Docker Machine Drivers], https://www.docker.com/products/overview[Docker for AWS/Azure] | http://kubernetes.io/docs/getting-started-guides/#turn-key-cloud-solutions[Turn Key Cloud] | https://dcos.io/install/[Mulitple clouds]
