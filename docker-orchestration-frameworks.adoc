@@ -1,6 +1,6 @@
-= Docker vs Kubernetes vs DC/OS
+= Docker Engine w/ Swarm Mode vs Kubernetes vs DC/OS
 
-This document compares the three container orchestration frameworks: http://github.com/docker/docker[Docker], https://github.com/kubernetes/kubernetes[Kubernetes] and https://github.com/dcos/dcos[DC/OS].
+This document compares the three container orchestration frameworks: http://github.com/docker/docker[Docker Engine w/ Swarm Mode], https://github.com/kubernetes/kubernetes[Kubernetes] and https://github.com/dcos/dcos[DC/OS].
 
 
 [width="100%", options="header"]
