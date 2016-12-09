@@ -1,6 +1,6 @@
 = Docker and Kubernetes for Java Developers
 
-https://github.com/docker/labs/tree/master/java[Docker for Java developers]
+https://github.com/docker/labs/tree/master/developer-tools/java[Docker for Java developers]
 
 https://github.com/arun-gupta/kubernetes-java-sample/[Kubernetes for Java developers]
 
