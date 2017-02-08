@@ -1,0 +1,10 @@
+= Managed Container Service
+
+This document compares managed container services.
+
+
+[width="100%", options="header"]
+|==================
+| Feature | Docker for AWS/Azure | GCE | DC/OS | Oracle Cloud | Azure | Amazon ECS | OpenShift
+| Orchestration Framework | Docker Engine | Kubernetes | Apache Mesos | Closed source | Kubernetes | Closed source | Kubernetes
+|==================
