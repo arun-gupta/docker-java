@@ -2,13 +2,13 @@
 
 This document compares managed container services.
 
-. Docker - Docker for AWS and Azure
-. GCE - Google Container Engine
-. DC/OS by Mesosphere
-. Azure - Azure Container Service
-. Amazon - Amazon Elastic Container Service
-. OpenShift by Red Hat
-. Oracle Cloud Container Service
+. Docker - ihttps://docs.docker.com/docker-for-aws/[Docker for AWS] and https://docs.docker.com/docker-for-azure/[Azure]
+. GCE - https://cloud.google.com/container-engine/[Google Container Engine]
+. https://dcos.io/[DC/OS]
+. Azure - https://azure.microsoft.com/en-us/services/container-service/[Azure Container Service]
+. Amazon - https://aws.amazon.com/ecs/[Elastic Container Service]
+. https://www.openshift.org/[Red Hat OpenShift]
+. https://cloud.oracle.com/container[Oracle Cloud Container Service]
 
 [width="100%", options="header"]
 |==================
