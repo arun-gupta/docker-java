@@ -12,7 +12,7 @@ This document compares managed container services.
 
 [width="100%", options="header"]
 |==================
-| Feature | Docker | GCE | DC/OS | Azure | Amazon | OpenShift | Oracle
+| Feature | Docker | GCE | DC/OS | Azure | ECS | OpenShift | Oracle
 | Company | Docker | Google | Mesosphere | Microsoft | Amazon | Red Hat | Oracle
 | Orchestration Framework | Docker Engine | Kubernetes | Apache Mesos | Kubernetes | Closed source | Kubernetes | Closed source
 | Docker version | LATEST | | | | | | 
