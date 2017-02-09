@@ -2,11 +2,11 @@
 
 This document compares managed container services.
 
-. Docker - ihttps://docs.docker.com/docker-for-aws/[Docker for AWS] and https://docs.docker.com/docker-for-azure/[Azure]
-. GCE - https://cloud.google.com/container-engine/[Google Container Engine]
+. https://www.docker.com/products/docker-datacenter[Docker Data Center] or https://docs.docker.com/docker-for-aws/[Docker for AWS] / https://docs.docker.com/docker-for-azure/[Azure]
+. https://cloud.google.com/container-engine/[Google Container Engine] (GCE)
 . https://dcos.io/[DC/OS]
-. Azure - https://azure.microsoft.com/en-us/services/container-service/[Azure Container Service]
-. Amazon - https://aws.amazon.com/ecs/[Elastic Container Service]
+. https://azure.microsoft.com/en-us/services/container-service/[Azure Container Service] (Azure)
+. https://aws.amazon.com/ecs/[Amazon Elastic Container Service] (ECS)
 . https://www.openshift.org/[Red Hat OpenShift]
 . https://cloud.oracle.com/container[Oracle Cloud Container Service]
 
@@ -15,7 +15,7 @@ This document compares managed container services.
 | Feature | Docker | GCE | DC/OS | Azure | ECS | OpenShift | Oracle
 | Company | Docker | Google | Mesosphere | Microsoft | Amazon | Red Hat | Oracle
 | Orchestration Framework | Docker Engine | Kubernetes | Apache Mesos | Kubernetes | Closed source | Kubernetes | Closed source
-| Docker version | LATEST | | | | | | 
+| Docker version | | | | | | | 
 | CI/CD | | | | | | | 
 | REST API | | | | | | | 
 | Console | | | | | | | 
