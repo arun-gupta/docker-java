@@ -7,7 +7,6 @@ This document compares the three container orchestration frameworks: http://gith
 |==================
 | Feature | Docker | Kubernetes | DC/OS | ECS
 | Local Development | https://www.docker.com/products/overview[Docker for Mac/Windows] | https://github.com/kubernetes/minikube[minikube] | https://dcos.io/docs/1.8/administration/installing/local[DC/OS Vagrant] | https://github.com/blox/blox[Blox]
-| Enterprise Offering | Docker Datacenter | Multiple Vendors | Mesosphere Enterprise DC/OS | AWS
 | Multiple clouds | https://docs.docker.com/docker-cloud/overview/[Docker Cloud], https://docs.docker.com/machine/drivers/[Docker Machine Drivers], https://www.docker.com/products/overview[Docker for AWS/Azure] | http://kubernetes.io/docs/getting-started-guides/#turn-key-cloud-solutions[Turn Key Cloud] | https://dcos.io/install/[Mulitple clouds] | AWS
 | On-premise | Yes | Yes | Yes | No
 | Cluster across multiple clouds | Yes | Yes (http://kubernetes.io/docs/admin/multiple-zones/[partly]) | Yes (agents) | No (Can span multiple AZ)
@@ -25,6 +24,6 @@ This document compares the three container orchestration frameworks: http://gith
 | Container distribution strategies | Automatic? | Automatic, but custom schedulers supported. | Automatic | http://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-placement-strategies.html[Task Placement Strategies]
 | Affinity | Labels | Node (1.2) and Pod (1.4) affinity http://kubernetes.io/docs/user-guide/node-selection/  | https://mesosphere.github.io/marathon/docs/constraints.html[Marathon constraints] and pods (in 1.9) | Via Task Placement Strategies and Constraints
 | Constraints | `-c`, `-m` | `Labels` | https://mesosphere.github.io/marathon/docs/constraints.html[Marathon constraints] | http://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-placement-constraints.html[Task Placement Constraints]
-| Commercially supported | https://www.docker.com/products/docker-datacenter[Docker Data Center] and others | Google, Apprenda, Canonical, CoreOS, link:http://cloud-rti.com[Cloud RTI] others? | Mesosphere | https://aws.amazon.com/premiumsupport/[AWS Support]
+| Commercially supported | https://www.docker.com/enterprise-edition[Docker Enterprise Edition] | Google, Apprenda, Canonical, CoreOS, link:http://cloud-rti.com[Cloud RTI] others? | https://mesosphere.com/product/[Mesosphere Enterprise DC/OS] | https://aws.amazon.com/premiumsupport/[AWS Support]
 | Creating Couchbase Cluster | http://blog.couchbase.com/2016/may/couchbase-cluster-docker-swarm-compose-machine[blog] | http://blog.kubernetes.io/2016/08/create-couchbase-cluster-using-kubernetes.html[blog] | http://blog.couchbase.com/2016/november/couchbase-cluster-mesos-dcos[blog] | https://blog.couchbase.com/couchbase-docker-container-amazon-ecs/[blog] (one node)
 |==================
