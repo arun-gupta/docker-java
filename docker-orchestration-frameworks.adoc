@@ -1,16 +1,17 @@
 = Docker vs Kubernetes vs DC/OS vs ECS
 
-This document compares the three container orchestration frameworks: http://github.com/docker/docker[Docker Engine w/ Swarm Mode], https://github.com/kubernetes/kubernetes[Kubernetes] and https://github.com/dcos/dcos[DC/OS].
+This document compares the four container orchestration frameworks: http://github.com/docker/docker[Docker Engine w/ Swarm Mode], https://github.com/kubernetes/kubernetes[Kubernetes], https://github.com/dcos/dcos[DC/OS], and https://aws.amazon.com/ecs/[ECS].
 
 
 [width="100%", options="header"]
 |==================
-| Feature | Docker | Kubernetes | DC/OS | ECS
-| Local Development | https://www.docker.com/products/overview[Docker for Mac/Windows] | https://github.com/kubernetes/minikube[minikube] | https://dcos.io/docs/1.8/administration/installing/local[DC/OS Vagrant] | https://github.com/blox/blox[Blox]
+| Feature | http://github.com/docker/docker[Docker] | https://github.com/kubernetes/kubernetes[Kubernetes] | https://github.com/dcos/dcos[DC/OS] | https://aws.amazon.com/ecs/[ECS]
+| Local Development | https://www.docker.com/community-edition[Docker Community Edition] | https://github.com/kubernetes/minikube[minikube] | https://dcos.io/docs/1.8/administration/installing/local[DC/OS Vagrant] | https://github.com/blox/blox[Blox]
 | Multiple clouds | https://docs.docker.com/docker-cloud/overview/[Docker Cloud], https://docs.docker.com/machine/drivers/[Docker Machine Drivers], https://www.docker.com/products/overview[Docker for AWS/Azure] | http://kubernetes.io/docs/getting-started-guides/#turn-key-cloud-solutions[Turn Key Cloud] | https://dcos.io/install/[Mulitple clouds] | AWS
 | On-premise | Yes | Yes | Yes | No
 | Cluster across multiple clouds | Yes | Yes (http://kubernetes.io/docs/admin/multiple-zones/[partly]) | Yes (agents) | No (Can span multiple AZ)
-| Service Discovery | Yes | `Service` | Yes (https://dcos.io/docs/1.8/usage/service-discovery/[multiple]: DNS-based and proxy-based/L4 load balancer) | https://github.com/awslabs/service-discovery-ecs-dns[DNS-based], https://github.com/awslabs/ecs-refarch-service-discovery[ELB-based], https://github.com/awslabs/ecs-refarch-cloudformation[ALB-based]
+| Service Discovery and Load Balancer | Docker-compse: DNS + 
+Docker Swarm: (https://docs.docker.com/engine/swarm/services/[Service]) | `Service` | Yes (https://dcos.io/docs/1.8/usage/service-discovery/[multiple]: DNS-based and proxy-based/L4 load balancer) | https://github.com/awslabs/service-discovery-ecs-dns[DNS-based], https://github.com/awslabs/ecs-refarch-service-discovery[ELB-based], https://github.com/awslabs/ecs-refarch-cloudformation[ALB-based]
 | Dynamic Scaling | http://blog.couchbase.com/2016/july/docker-services-stack-distributed-application-bundle[Services, Distributed Application Bundle, Stack] | `Replica Set`, `Replication Controller`, `Deployment`, `Horizontal Pod Autoscaling` | Marathon app spec (instance count) and https://dcos.io/docs/1.8/usage/tutorials/autoscaling/[multiple options] | http://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-auto-scaling.html[Service Auto Scaling]
 | Exposing a service | Routing mesh | `type=LoadBalancer` in `Deployment` | Multiple (direct placement on public agent or, preferred, via https://dcos.io/docs/1.8/usage/service-discovery/marathon-lb/marathon-lb-basic-tutorial/[Marathon-LB] | http://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-load-balancing.html[Classic and Application Load Balancer]
 | Run-once job | `docker run` | `Job` | https://docs.mesosphere.com/1.8/usage/jobs/[Jobs] | http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs_run_task.html[Tasks]
