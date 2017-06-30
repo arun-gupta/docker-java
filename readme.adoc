@@ -6,7 +6,7 @@ https://github.com/arun-gupta/kubernetes-java-sample/[Kubernetes for Java develo
 
 == Software Requirements
 
-. Docker for Java: https://github.com/docker/labs/blob/master/java/chapters/ch01-setup.adoc
+. Docker for Java: https://github.com/docker/labs/blob/master/developer-tools/java/chapters/ch01-setup.adoc
 . Kubernetes for Java
 .. Install: https://github.com/arun-gupta/kubernetes-java-sample/blob/master/workshop.adoc#initial-setup
 .. An Amazon Web Services account
